@@ -15,16 +15,17 @@ describe("Navbar", () => {
   });
 
   it("Should render the Navbar", () => {
-    render(<Navbar />);
-
     const navbar = screen.getByTestId("navbar");
     expect(navbar).toBeInTheDocument();
   });
 
   it("Should contain the left navbar", () => {
-    render(<Navbar />);
-
     const navbarLeft = screen.getByTestId("navbarleft");
     expect(navbarLeft).toBeInTheDocument();
+  });
+
+  it("Should contain the right navbar", () => {
+    const navbarRight = screen.getByTestId("navbarright");
+    expect(navbarRight).toBeInTheDocument();
   });
 });

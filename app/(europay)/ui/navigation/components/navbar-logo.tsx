@@ -1,6 +1,7 @@
 "use client";
 
-// import { useProgressBar } from "@/app/hooks/use-progress-bar";
+import { useProgressBar } from "@/hooks/use-progress-bar";
+import { absoluteUrl } from "@/lib/functions";
 // import { absoluteUrl } from "@/app/lib/util";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -9,21 +10,21 @@ import React, { startTransition } from "react";
 const logofile: string = "/images/Europay.png";
 
 const NavbarLogo = () => {
-  // const progress = useProgressBar();
+  const progress = useProgressBar();
   const { push } = useRouter();
 
-  // const redirect = (href: string) => {
-  //   progress.start(); // show the indicator
+  const redirect = (href: string) => {
+    progress.start(); // show the indicator
 
-  //   startTransition(() => {
-  //     push(href);
-  //     progress.done(); // only runs when the destination page is fully loaded
-  //   });
-  // };
+    startTransition(() => {
+      push(href);
+      progress.done(); // only runs when the destination page is fully loaded
+    });
+  };
 
-  // const goHome = (): void => {
-  //   redirect(absoluteUrl("/"));
-  // };
+  const goHome = (): void => {
+    redirect(absoluteUrl("/"));
+  };
 
   return (
     <div className="hover:cursor-pointer">
@@ -35,7 +36,7 @@ const NavbarLogo = () => {
         height={35}
         src={logofile}
         alt="Europay"
-        // onClick={goHome}
+        onClick={goHome}
       />
     </div>
   );
