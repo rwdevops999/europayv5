@@ -40,7 +40,7 @@ const NavbarUserProfile = () => {
         role="button"
         className="btn btn-ghost btn-circle avatar"
       >
-        <div className="w-10 rounded-full">
+        <div className="w-8 rounded-full">
           {/* {(!user || !user.avatar) && ( */}
           <img alt="User" src="/avatars/john.doe.png" />
           {/* )}
