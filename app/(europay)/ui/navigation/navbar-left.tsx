@@ -1,5 +1,11 @@
+import NavbarLogo from "./components/navbar-logo";
+
 const NavbarLeft = () => {
-  return <div>NavbarLeft</div>;
+  return (
+    <div data-testid="navbarleft">
+      <NavbarLogo />
+    </div>
+  );
 };
 
 export default NavbarLeft;

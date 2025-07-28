@@ -4,7 +4,7 @@ import NavbarRight from "./navbar-right";
 
 const Navbar = () => {
   return (
-    <div className="navbar justify-between">
+    <div data-testid="navbar" className="navbar justify-between">
       <NavbarLeft />
       <NavbarCenter />
       <NavbarRight />
