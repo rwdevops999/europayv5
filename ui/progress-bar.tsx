@@ -18,7 +18,7 @@ const ProgressBar = ({ children }: { children: any }) => {
     <ProgressBarContext.Provider value={progress}>
       {progress.state !== "initial" && (
         <div
-          className="fixed top-0 z-50 h-1 bg-gradient-to-r from-blue-500 to-blue-300 duration-300 transition-all ease-in-out"
+          className="fixed top-0 z-50 h-1 bg-gradient-to-r from-red-600 to-red-300 duration-300 transition-all ease-in-out"
           style={{ width: `${progress.value}%` }}
         />
       )}
