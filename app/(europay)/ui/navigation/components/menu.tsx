@@ -1,7 +1,7 @@
 import { absoluteUrl } from "@/lib/functions";
 import { FcServices } from "react-icons/fc";
 import { IoIosKey } from "react-icons/io";
-import { LuLayoutDashboard } from "react-icons/lu";
+import { LuClipboardList, LuLayoutDashboard } from "react-icons/lu";
 
 export interface MenuItem {
   title: string;
@@ -159,15 +159,15 @@ export let menu: MenuItem[] = [
         subItems: [],
         parent: "IAM",
       },
-      // {
-      //   title: "Statements",
-      //   url: absoluteUrl("/iam/statements/id"),
-      //   disabled: false,
-      //   visible: true,
-      //   icon: <LuClipboardList size={16} />,
-      //   subItems: [],
-      //   parent: "IAM",
-      // },
+      {
+        title: "Statements",
+        url: absoluteUrl("/iam/statements/id"),
+        disabled: false,
+        visible: true,
+        icon: <LuClipboardList size={16} />,
+        subItems: [],
+        parent: "IAM",
+      },
       // {
       //   title: "Policies",
       //   url: absoluteUrl("/iam/policies/id"),

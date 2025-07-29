@@ -14,7 +14,7 @@ model Service {
 
   serviceactions ServiceAction[]
 
-  // servicestatements ServiceStatement[]
+  servicestatements ServiceStatement[]
 }
 
 model ServiceAction {
@@ -23,6 +23,66 @@ model ServiceAction {
 
   services Service[]
 
-  // serviceStatementActions ServiceStatementAction[]
+  serviceStatementActions ServiceStatementAction[]
 }
 
+model ServiceStatementAction {
+  id Int @id @default(autoincrement())
+  ssactionname String
+
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+
+  servicestatement ServiceStatement @relation(fields: [statementid], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  statementid Int
+
+  serviceaction ServiceAction @relation(fields: [serviceactionid], references: [id])
+  serviceactionid Int
+}
+
+enum Permission {
+  ALLOW
+  DENY
+}
+
+model ServiceStatement {
+  id Int @id @default(autoincrement())
+
+  ssname String @unique
+  description String? @default("")
+
+  permission Permission? @default(ALLOW)
+  managed Boolean? @default(false)
+
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+
+  service Service @relation(fields: [serviceid], references: [id])
+  serviceid Int
+
+  servicestatementactions ServiceStatementAction[]
+
+  // policies Policy[]
+}
+
+model Template {
+  id Int @id @default(autoincrement())
+  role TemplateRole? @default(ALL)
+  name String @unique
+  description String? @default("")
+  content String
+  asHtml Boolean? @default(false)
+  fromFile Boolean? @default(false)
+  parameters String? @default("")
+  managed Boolean? @default(false)
+}
+
+enum TemplateRole {
+  ALL
+  ALERT
+  EMAIL
+  HISTORY
+  LOGIN
+  TASK
+  NOTIFICATION
+}
