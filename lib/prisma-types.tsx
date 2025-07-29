@@ -79,7 +79,7 @@ const cSelectNameAndIdOnly: SelectNameAndIdOnly = {
 
 type WhatToSelectFromServiceStatement = {
   include: {
-    // policies: SelectNameAndIdOnly;
+    policies: SelectNameAndIdOnly;
     service: WhatToSelectFromService;
     servicestatementactions: WhatToSelectFromServiceStatementAction;
   };
@@ -88,7 +88,7 @@ type WhatToSelectFromServiceStatement = {
 export const cWhatToSelectFromServiceStatement: WhatToSelectFromServiceStatement =
   {
     include: {
-      // policies: cSelectNameAndIdOnly,
+      policies: cSelectNameAndIdOnly,
       service: cWhatToSelectFromService,
       servicestatementactions: cWhatToSelectFromServiceStatementAction,
     },
@@ -103,3 +103,41 @@ export type tServiceStatementUpdate =
 
 /* == TEMPLATE ========== */
 export type tTemplate = Prisma.TemplateGetPayload<{}>;
+
+/* == POLICY ========== */
+type SelectUserScalarOnly = {
+  select: {
+    id: boolean;
+    firstname: boolean;
+    lastname: boolean;
+  };
+};
+const cSelectUserScalarOnly: SelectUserScalarOnly = {
+  select: {
+    id: true,
+    firstname: true,
+    lastname: true,
+  },
+};
+
+type WhatToSelectFromPolicy = {
+  include: {
+    // groups: SelectNameAndIdOnly;
+    // users: SelectUserScalarOnly;
+    // roles: SelectNameAndIdOnly;
+    servicestatements: WhatToSelectFromServiceStatement;
+  };
+};
+
+export const cWhatToSelectFromPolicy: WhatToSelectFromPolicy = {
+  include: {
+    // groups: cSelectNameAndIdOnly,
+    // users: cSelectUserScalarOnly,
+    // roles: cSelectNameAndIdOnly,
+    servicestatements: cWhatToSelectFromServiceStatement,
+  },
+};
+
+export type tPolicy = Prisma.PolicyGetPayload<WhatToSelectFromPolicy>;
+export type tPolicyCreate = Prisma.PolicyUncheckedCreateInput;
+export type tPolicyUpdate = Prisma.PolicyUncheckedUpdateInput;

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as RadixScrollArea from "@radix-ui/react-scroll-area";
-import { cn } from "@/app/lib/util";
+import { cn } from "@/lib/functions";
 
 export const ScrollArea = ({
   className,

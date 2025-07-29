@@ -1,0 +1,465 @@
+"use client";
+
+import { mapServiceStatements } from "@/app/client/mapping";
+import { ValidationConflict } from "@/app/server/data/validation-data";
+import { createPolicy, updatePolicy } from "@/app/server/policies";
+import { validateData } from "@/app/server/validate";
+import { absoluteUrl, cn } from "@/lib/functions";
+import { displayPrismaErrorCode } from "@/lib/prisma-errors";
+import {
+  tPolicyCreate,
+  tPolicyUpdate,
+  tService,
+  tServiceStatement,
+} from "@/lib/prisma-types";
+import { Data } from "@/lib/types";
+import Button from "@/ui/button";
+import { DataTable } from "@/ui/datatable/data-table";
+import ServiceSelect from "@/ui/service-select";
+import { Row } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
+import { JSX, useEffect, useRef, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { columns, initialTableState } from "./table/dialog-columns";
+import { DataTableToolbar } from "./table/dialog-data-table-toolbar";
+import ValidationConflictsDialog from "@/ui/validation-conflicts-dialog";
+
+export interface PolicyEntity {
+  id?: number; // statement id
+  policyname: string;
+  description: string;
+  managed: boolean;
+  serviceid: number | undefined;
+}
+
+export const defaultPolicyEntity: PolicyEntity = {
+  policyname: "",
+  description: "",
+  managed: false,
+  serviceid: undefined,
+};
+
+export interface PolicyFormProps {
+  services: tService[];
+  servicestatements: tServiceStatement[];
+  entity: PolicyEntity;
+  linkedstatements: number[];
+}
+
+const PolicyForm = (props: PolicyFormProps) => {
+  const { push } = useRouter();
+  // const { getToastDuration } = useToastSettings();
+
+  const formMethods = useForm({
+    defaultValues: props.entity,
+  });
+
+  const {
+    reset,
+    handleSubmit,
+    register,
+    formState: { errors },
+    setValue,
+    getValues,
+  } = formMethods;
+
+  const provisionPolicyForCreate = (_entity: PolicyEntity): tPolicyCreate => {
+    const result: tPolicyCreate = {
+      name: _entity.policyname,
+      description: _entity.description,
+      managed: _entity.managed,
+      servicestatements: {
+        connect: selectedStatements.current.map((_statement: Data) => {
+          return {
+            id: _statement.id,
+          };
+        }),
+      },
+    };
+
+    return result;
+  };
+
+  const provisionPolicyForUpdate = (_entity: PolicyEntity): tPolicyUpdate => {
+    const result: tPolicyUpdate = {
+      id: _entity.id,
+      name: _entity.policyname,
+      description: _entity.description,
+      managed: _entity.managed,
+      servicestatements: {
+        set: selectedStatements.current.map((statement: Data) => {
+          return {
+            id: statement.id,
+          };
+        }),
+      },
+    };
+
+    return result;
+  };
+
+  const handleCreatePolicy = async (_entity: PolicyEntity): Promise<void> => {
+    const policy: tPolicyCreate = provisionPolicyForCreate(_entity);
+    await createPolicy(policy).then((errorcode: string | undefined) => {
+      if (errorcode) {
+        // showToast(
+        //   ToastType.ERROR,
+        //   `Policy create error ${displayPrismaErrorCode(errorcode)}`,
+        //   getToastDuration()
+        // );
+        // show a toast here about error
+        displayPrismaErrorCode(errorcode);
+      } else {
+        // showToast(
+        //   ToastType.SUCCESS,
+        //   `Policy ${policy.name} created`,
+        //   getToastDuration()
+        // );
+        push(absoluteUrl(`/iam/policies/id`));
+      }
+      handleCancelClick();
+    });
+  };
+
+  const handleUpdatePolicy = async (_entity: PolicyEntity): Promise<void> => {
+    const policy: tPolicyUpdate = provisionPolicyForUpdate(_entity);
+
+    await updatePolicy(policy).then((errorcode: string | undefined) => {
+      if (errorcode) {
+        // showToast(
+        //   ToastType.ERROR,
+        //   `Policy update error ${displayPrismaErrorCode(errorcode)}`,
+        //   getToastDuration()
+        // );
+        // show a toast here about error
+        displayPrismaErrorCode(errorcode);
+      } else {
+        // showToast(
+        //   ToastType.SUCCESS,
+        //   `Policy ${policy.name} updated`,
+        //   getToastDuration()
+        // );
+        push(absoluteUrl(`/iam/policies/id`));
+      }
+      handleCancelClick();
+    });
+  };
+
+  const onSubmit: SubmitHandler<PolicyEntity> = (formData: PolicyEntity) => {
+    formData = { ...formData, serviceid: selectedServiceId.current! };
+
+    if (formData.id) {
+      handleUpdatePolicy(formData);
+    } else {
+      handleCreatePolicy(formData);
+    }
+  };
+
+  const handleCancelClick = (): void => {
+    const dialog: HTMLDialogElement = document.getElementById(
+      "policydialog"
+    ) as HTMLDialogElement;
+
+    dialog.close();
+  };
+
+  const processTableData = (_serviceId: number | undefined): void => {
+    let affectedStatements: tServiceStatement[] = props.servicestatements;
+
+    if (_serviceId) {
+      const service: tService | undefined = props.services.find(
+        (_service: tService) => _service.id === _serviceId
+      );
+      if (service) {
+        affectedStatements = props.servicestatements.filter(
+          (_statement: tServiceStatement) => _statement.serviceid === _serviceId
+        );
+      }
+    }
+
+    setTableData(mapServiceStatements(affectedStatements));
+  };
+
+  const linkedStatements = useRef<number[]>([]);
+
+  useEffect(() => {
+    if (props.entity.serviceid) {
+      selectedServiceId.current = props.entity.serviceid;
+      processTableData(props.entity.serviceid);
+    } else {
+      if (props.services && props.services.length > 0) {
+        selectedServiceId.current = props.services[0].id;
+        processTableData(props.services[0].id);
+      }
+    }
+
+    linkedStatements.current = props.linkedstatements;
+    setValidateButtonEnabled(props.linkedstatements.length >= 2);
+    setPersistButtonEnabled(props.linkedstatements.length === 1);
+    reset(props.entity);
+    // setManaged(getValues("managed"));
+  }, [props]);
+
+  const selectedServiceId = useRef<number | undefined>(undefined);
+
+  const handleChangeService = (_serviceId: number | undefined): void => {
+    selectedServiceId.current = _serviceId;
+    processTableData(_serviceId);
+  };
+
+  // const [managed, setManaged] = useState<boolean>(false);
+
+  const [persistButtonEnabled, setPersistButtonEnabled] =
+    useState<boolean>(false);
+  const [validateButtonEnabled, setValidateButtonEnabled] =
+    useState<boolean>(false);
+
+  const Select = (): JSX.Element => {
+    return (
+      <div>
+        <ServiceSelect
+          label="Service:"
+          services={props.services}
+          defaultService={selectedServiceId.current}
+          changeServiceHandler={handleChangeService}
+          className="w-[20%] ml-8"
+        />
+      </div>
+    );
+  };
+
+  const FormDetails = (): JSX.Element => {
+    return (
+      <div className="ml-1 grid grid-rows-[25%_25%_25%_25%] gap-y-1 mt-0.75">
+        <div className="grid grid-cols-[10%_40%_10%_40%] gap-y-1 mt-0.75">
+          <label className="mt-1">Name:</label>
+          <input
+            type="text"
+            placeholder="name..."
+            className={cn(
+              "rounded-sm",
+              "input input-sm validator w-[95%]",
+              "border-1 border-base-content/30"
+            )}
+            required
+            minLength={3}
+            maxLength={25}
+            {...register("policyname")}
+          />
+          <label className="mt-1">Description:</label>
+          <input
+            type="text"
+            placeholder="description..."
+            className={cn(
+              "rounded-sm",
+              "input input-sm validator w-[95%]",
+              "border-1 border-base-content/30"
+            )}
+            required
+            minLength={3}
+            maxLength={50}
+            {...register("description")}
+          />
+        </div>
+        <div className="grid grid-cols-[10%_40%_10%_40%] mt-5">
+          <label className="flex items-center">Managed:</label>
+          <div className="flex items-center mt-1">
+            <input
+              type="checkbox"
+              className="checkbox checkbox-md rounded-sm"
+              {...register("managed")}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const FormContent = (): JSX.Element => {
+    return (
+      <div className="relative w-[100%] h-[100%] grid grid-rows-[20%_80%]">
+        <div>
+          <Select />
+        </div>
+        <div className="mt-2">
+          <FormDetails />
+        </div>
+      </div>
+    );
+  };
+
+  const formValid = useRef<boolean>(true);
+
+  const [conflicts, setConflicts] = useState<ValidationConflict[]>([]);
+  const [validationConflictDialogOpen, setValidationConflictDialogOpen] =
+    useState<boolean>(false);
+
+  const validateLinkedStatements = async (): Promise<void> => {
+    const _entity: PolicyEntity = getValues();
+
+    let data: Data = {
+      id: -1,
+      description: "",
+      name: _entity.policyname,
+      children: selectedStatements.current,
+      extra: {
+        subject: "Policy",
+      },
+    };
+
+    await validateData(data).then((conflicts: ValidationConflict[]) => {
+      if (conflicts.length > 0) {
+        // handleCancelClick();
+        setConflicts(conflicts);
+        setValidationConflictDialogOpen(true);
+      }
+
+      formValid.current = conflicts.length === 0;
+      handleButtonsVisibiliy(
+        selectedStatements.current,
+        conflicts.length === 0
+      );
+    });
+  };
+
+  const FormButtons = (): JSX.Element => {
+    return (
+      <div className="flex flex-col">
+        <Button
+          name="Cancel"
+          intent={"neutral"}
+          style={"soft"}
+          size={"small"}
+          onClick={handleCancelClick}
+          className="bg-cancel mb-1"
+          type="button"
+        />
+        {!props.entity.id && (
+          <Button
+            name="Create"
+            intent={"neutral"}
+            style={"soft"}
+            size={"small"}
+            className="bg-custom mb-1"
+            type="submit"
+            disabled={!persistButtonEnabled}
+          />
+        )}
+        {props.entity.id && (
+          <Button
+            name="Update"
+            intent={"neutral"}
+            style={"soft"}
+            size={"small"}
+            className="bg-custom mb-1"
+            type="submit"
+            disabled={!persistButtonEnabled}
+          />
+        )}
+        <Button
+          name="Validate"
+          intent={"neutral"}
+          style={"soft"}
+          size={"small"}
+          className="bg-custom"
+          type="button"
+          disabled={!validateButtonEnabled}
+          onClick={validateLinkedStatements}
+        />
+      </div>
+    );
+  };
+
+  const Form = (): JSX.Element => {
+    return (
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="relative w-[100%] h-[100%] grid grid-cols-[90%_10%]"
+      >
+        <div>
+          <FormContent />
+        </div>
+        <div>
+          <FormButtons />
+        </div>
+      </form>
+    );
+  };
+
+  const [tableData, setTableData] = useState<Data[]>([]);
+
+  const selectedStatements = useRef<Data[]>([]);
+
+  const handleChangeStatementSelection = (_selection: Row<Data>[]) => {
+    const selectionData: Data[] = _selection.map((row) => row.original);
+
+    selectedStatements.current = selectionData;
+
+    const mappedStatements = selectionData.map((data: Data) => data.id);
+    const equal: boolean =
+      mappedStatements.length === linkedStatements.current.length &&
+      mappedStatements.every(function (value, index) {
+        return value === linkedStatements.current[index];
+      });
+    if (!equal) {
+      linkedStatements.current = mappedStatements;
+
+      const valid: boolean = selectionData.length < 2;
+
+      formValid.current = valid;
+      handleButtonsVisibiliy(selectionData, valid);
+    }
+  };
+
+  const handleButtonsVisibiliy = (
+    selectionData: Data[],
+    validFlag: boolean
+  ): void => {
+    setPersistButtonEnabled(selectionData.length >= 1 && validFlag);
+    setValidateButtonEnabled(selectionData.length > 1 && !validFlag);
+  };
+
+  const Data = (): JSX.Element => {
+    return (
+      <>
+        <DataTable
+          data={tableData}
+          columns={columns}
+          initialTableState={initialTableState}
+          Toolbar={DataTableToolbar}
+          selectedItems={linkedStatements.current}
+          selectionType="data"
+          handleChangeSelection={handleChangeStatementSelection}
+        />
+      </>
+    );
+  };
+
+  const renderComponent = () => {
+    return (
+      <div className="form relative w-[100%] h-[450px] grid grid-rows-[30%_70%]">
+        <div>
+          <Form />
+        </div>
+        <div>
+          <Data />
+        </div>
+        <ValidationConflictsDialog
+          open={validationConflictDialogOpen}
+          conflicts={conflicts}
+        >
+          <Button
+            name="Close"
+            onClick={() => setValidationConflictDialogOpen(false)}
+            className="bg-custom"
+            size="small"
+          />
+        </ValidationConflictsDialog>
+      </div>
+    );
+  };
+
+  return <>{renderComponent()}</>;
+};
+
+export default PolicyForm;

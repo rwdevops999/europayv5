@@ -1,4 +1,5 @@
 import {
+  tPolicy,
   tService,
   tServiceAction,
   tServiceStatement,
@@ -131,6 +132,45 @@ export const mapServiceStatements = (
           servicename: statement.service.servicename,
           managed: statement.managed ?? undefined,
           access: statement.permission ?? undefined,
+        },
+      };
+    });
+  }
+
+  return result;
+};
+
+/**
+ * map policies to Data[]. the children are the service statements
+ *
+ * @param _policies the policies
+ * @param _services the services
+ *
+ * @returns a Data[] array
+ */
+export const mapPolicies = (
+  _policies: tPolicy[],
+  _services?: tService[]
+): Data[] => {
+  let result: Data[] = [];
+
+  if (_policies) {
+    let servicename: string;
+
+    result = _policies.map((_policy: tPolicy) => {
+      if (_policy.servicestatements.length >= 0) {
+        servicename = _policy.servicestatements[0].service.servicename;
+      }
+
+      return {
+        id: _policy.id,
+        name: _policy.name!,
+        description: _policy.description,
+        children: mapServiceStatements(_policy.servicestatements),
+        extra: {
+          subject: "Policy",
+          servicename: servicename,
+          managed: _policy.managed ?? undefined,
         },
       };
     });

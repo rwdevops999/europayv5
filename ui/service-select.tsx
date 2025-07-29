@@ -77,9 +77,11 @@ const ServiceSelect = (props: ServiceSelectProps) => {
     } else if (props.addAllItem) {
       setSelectedService("All");
     } else {
-      setSelectedService(
-        services.current ? services.current[0].servicename : "Select service"
-      );
+      if (services.current && services.current.length > 0) {
+        setSelectedService(
+          services.current ? services.current[0].servicename : "Select service"
+        );
+      }
     }
 
     if (props.initialFeedback && props.changeServiceHandler) {

@@ -16,8 +16,28 @@ import ServiceSelect from "@/ui/service-select";
 import Button from "@/ui/button";
 import Dialog from "@/ui/dialog";
 import { DataTable } from "@/ui/datatable/data-table";
-import { columns } from "./table/page-colums";
-import { DataTableToolbar } from "./table/page-data-table-toolbar";
+import { columns } from "./table/dialog-columns";
+import { DataTableToolbar } from "./table/dialog-data-table-toolbar";
+
+// import { Data, ToastType } from "@/app/lib/types";
+// import { absoluteUrl, json, showToast } from "@/app/lib/util";
+// import Button from "@/app/ui/button";
+// import PageItemContainer from "@/app/ui/page-item-container";
+// import ServiceSelect from "@/app/ui/service-select";
+// import { useEffect, useState } from "react";
+// import { mapPolicies } from "../../scripts/client/mappings";
+// import { DataTable } from "@/app/ui/datatable/data-table";
+// import { columns } from "./table/page-colums";
+// import { TableMeta } from "@tanstack/react-table";
+// import { DataTableToolbar } from "./table/page-data-table-toolbar";
+// import { useRouter } from "next/navigation";
+// import PolicyForm, { defaultPolicyEntity, PolicyEntity } from "./policy-form";
+// import Dialog from "@/app/ui/dialog";
+// import { DATATABLE_ACTION_DELETE } from "@/app/ui/datatable/data-table-row-actions";
+// import { deletePolicy } from "../../scripts/server/iam/policies";
+// import { tPolicy, tService, tServiceStatement } from "@/app/lib/prisma-types";
+// import AlertWithTemplate, { tAlert } from "@/app/ui/alert-with-template";
+// import { useToastSettings } from "@/app/hooks/use-toast-settings";
 
 /**
  * is called to providing the UI for handling the policies.

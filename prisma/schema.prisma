@@ -62,7 +62,7 @@ model ServiceStatement {
 
   servicestatementactions ServiceStatementAction[]
 
-  // policies Policy[]
+  policies Policy[]
 }
 
 model Template {
@@ -86,3 +86,22 @@ enum TemplateRole {
   TASK
   NOTIFICATION
 }
+
+model Policy {
+  id Int @id @default(autoincrement())
+
+  name String @unique
+  description String? @default("")
+
+  managed Boolean? @default(false)
+
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+
+  servicestatements ServiceStatement[]
+
+  // roles Role[]
+  // users User[]
+  // groups Group[]
+}
+
