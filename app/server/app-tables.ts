@@ -1,0 +1,39 @@
+"use server";
+
+import prisma from "@/lib/prisma";
+import { dbTables, linkedDbTables } from "./data/db-tables";
+
+/**
+ * clears the table and resets the sequence generator
+ *
+ * @param _table the table in the DB
+ */
+const resetTable = async (_table: string): Promise<void> => {
+  await prisma.$executeRawUnsafe(
+    `TRUNCATE \"${_table}\" RESTART IDENTITY CASCADE`
+  );
+};
+
+/**
+ * clear the tables in the db
+ *
+ * @param _tables array of table names (as stated in dbTables)
+ * @param checklinked handle also the tables linked to that table.
+ */
+export const cleanDbTables = async (
+  _tables: string[],
+  checklinked: boolean = true
+): Promise<void> => {
+  for (let i = 0; i < _tables.length; i++) {
+    const tableToClean: string = _tables[i];
+    const tableName = dbTables[tableToClean];
+
+    await resetTable(tableName);
+    if (checklinked) {
+      const linked: string[] | undefined = linkedDbTables[tableToClean];
+      if (linked) {
+        await cleanDbTables(linked, false);
+      }
+    }
+  }
+};

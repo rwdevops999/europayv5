@@ -14,3 +14,11 @@ export const absoluteUrl = (path: string, useEnv: boolean = true): string => {
 export const cn = (...inputs: ClassValue[]): string => {
   return twMerge(clsx(inputs));
 };
+
+export const isNumber = (val: any): boolean => {
+  return !(val instanceof Array) && val - parseFloat(val) + 1 >= 0;
+};
+
+export const CreatePromise = (_value: any | any[]): Promise<any | any[]> => {
+  return new Promise<any>((resolve, reject) => resolve(_value));
+};

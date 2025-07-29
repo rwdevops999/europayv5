@@ -7,3 +7,22 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Service {
+  id Int @id @default(autoincrement())
+  servicename String @unique  
+
+  serviceactions ServiceAction[]
+
+  // servicestatements ServiceStatement[]
+}
+
+model ServiceAction {
+  id Int @id @default(autoincrement())
+  serviceactionname String @unique
+
+  services Service[]
+
+  // serviceStatementActions ServiceStatementAction[]
+}
+
