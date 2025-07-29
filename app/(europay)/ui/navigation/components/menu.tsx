@@ -2,6 +2,7 @@ import { absoluteUrl } from "@/lib/functions";
 import { FcServices } from "react-icons/fc";
 import { IoIosKey } from "react-icons/io";
 import { LuClipboardList, LuLayoutDashboard } from "react-icons/lu";
+import { RiPoliceBadgeLine } from "react-icons/ri";
 
 export interface MenuItem {
   title: string;
@@ -168,15 +169,15 @@ export let menu: MenuItem[] = [
         subItems: [],
         parent: "IAM",
       },
-      // {
-      //   title: "Policies",
-      //   url: absoluteUrl("/iam/policies/id"),
-      //   disabled: false,
-      //   visible: true,
-      //   icon: <RiPoliceBadgeLine size={16} />,
-      //   subItems: [],
-      //   parent: "IAM",
-      // },
+      {
+        title: "Policies",
+        url: absoluteUrl("/iam/policies/id"),
+        disabled: false,
+        visible: true,
+        icon: <RiPoliceBadgeLine size={16} />,
+        subItems: [],
+        parent: "IAM",
+      },
       // {
       //   title: "Roles",
       //   url: absoluteUrl("/iam/roles/id"),
