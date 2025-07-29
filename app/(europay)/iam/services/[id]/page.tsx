@@ -2,6 +2,7 @@ import { URL_ENCODING_ASSIGNMENT } from "@/lib/constants";
 import { CreatePromise, isNumber } from "@/lib/functions";
 import LoadingSpinner from "@/ui/loading-spinner";
 import { Suspense } from "react";
+import IamServicesPage from "../page";
 
 const ServicesWithId = async ({
   params,
@@ -31,7 +32,7 @@ const ServicesWithId = async ({
 
     return (
       <Suspense fallback={<LoadingSpinner label="Loading..." />}>
-        {/* <IamServicesPage params={promise} /> */}
+        <IamServicesPage params={promise} />
       </Suspense>
     );
   };

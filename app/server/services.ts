@@ -3,7 +3,9 @@ import prisma from "@/lib/prisma";
 import { cleanDbTables } from "./app-tables";
 import { desctructureServiceActions } from "./service-actions";
 import { Prisma } from "@/generated/prisma";
+import { cWhatToSelectFromService, tService } from "@/lib/prisma-types";
 
+// === DB functions =================================
 /**
  * Count the services in the DB
  *
@@ -17,6 +19,22 @@ export const countServices = async (): Promise<number> => {
   return result;
 };
 
+export const loadServices = async (): Promise<tService[]> => {
+  let result: tService[] = [];
+
+  await prisma.service
+    .findMany({
+      orderBy: {
+        servicename: "asc",
+      },
+      ...cWhatToSelectFromService,
+    })
+    .then((values: tService[]) => (result = values));
+
+  return result;
+};
+
+// === Other functions =================================
 /**
  * Creates the service in the DB and link the serviceactions to it.
  *
