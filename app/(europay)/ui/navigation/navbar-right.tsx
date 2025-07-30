@@ -6,11 +6,13 @@ import EmptyNode from "./components/empty-node";
 import ThemeToggle from "./components/theme-toggle";
 import NavbarUserProfile from "./components/navbar-user-profile";
 import { useToastSettings } from "@/hooks/use-toast-settings";
+import { useWifi } from "@/hooks/use-wifi";
 
 const renderDevItems: boolean = process.env.NODE_ENV === "development";
 
 const NavbarRight = () => {
   const { getToastNode } = useToastSettings();
+  const { getConnectNode } = useWifi();
 
   return (
     <div data-testid="navbarright" className="flex items-center space-x-2">
@@ -22,7 +24,7 @@ const NavbarRight = () => {
           { "grid-cols-4": !renderDevItems }
         )}
       >
-        <EmptyNode />
+        {getConnectNode()}
         <EmptyNode />
         <EmptyNode />
         <EmptyNode />

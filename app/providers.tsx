@@ -1,12 +1,15 @@
 import { ToastSettingsProvider } from "@/hooks/use-toast-settings";
+import { WifiProvider } from "@/hooks/use-wifi";
 import ProgressBar from "@/ui/progress-bar";
 import { ReactNode } from "react";
 
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
-    <ToastSettingsProvider>
-      <ProgressBar>{children}</ProgressBar>;
-    </ToastSettingsProvider>
+    <WifiProvider>
+      <ToastSettingsProvider>
+        <ProgressBar>{children}</ProgressBar>;
+      </ToastSettingsProvider>
+    </WifiProvider>
   );
 };
 
