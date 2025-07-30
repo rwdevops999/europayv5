@@ -3,3 +3,5 @@ export const URL_ENCODING_AMPERSAND = "%26";
 
 export const DATATABLE_ACTION_DELETE = "DTA_DELETE";
 export const DATATABLE_ACTION_UPDATE = "DTA_UPDATE";
+
+export const DEFAULT_TOAST_DURATION: number = 1500;

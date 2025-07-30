@@ -141,3 +141,7 @@ export const cWhatToSelectFromPolicy: WhatToSelectFromPolicy = {
 export type tPolicy = Prisma.PolicyGetPayload<WhatToSelectFromPolicy>;
 export type tPolicyCreate = Prisma.PolicyUncheckedCreateInput;
 export type tPolicyUpdate = Prisma.PolicyUncheckedUpdateInput;
+
+/* == SETTINGS ========== */
+export type tSetting = Prisma.SettingGetPayload<{}>;
+export type tSettingCreate = Prisma.SettingUncheckedCreateInput;
