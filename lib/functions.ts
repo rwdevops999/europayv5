@@ -75,3 +75,12 @@ export const splitURLParams = (_params: string): Record<string, string> => {
 
   return collected;
 };
+
+/**
+ * Sleep for some time
+ *
+ * @param ms the delay in milliseconds
+ */
+export const SLEEP = async (ms: number): Promise<void> => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
