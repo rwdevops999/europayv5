@@ -1,5 +1,6 @@
 import {
   tPolicy,
+  tRole,
   tService,
   tServiceAction,
   tServiceStatement,
@@ -171,6 +172,27 @@ export const mapPolicies = (
           subject: "Policy",
           servicename: servicename,
           managed: _policy.managed ?? undefined,
+        },
+      };
+    });
+  }
+
+  return result;
+};
+
+export const mapRoles = (roles: tRole[]): Data[] => {
+  let result: Data[] = [];
+
+  if (roles) {
+    result = roles.map((role) => {
+      return {
+        id: role.id,
+        name: role.name!,
+        description: role.description!,
+        children: mapPolicies(role.policies),
+        extra: {
+          subject: "Role",
+          managed: role.managed ?? undefined,
         },
       };
     });

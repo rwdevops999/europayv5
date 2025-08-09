@@ -1,21 +1,16 @@
 "use client";
 
-import { mapServiceStatements } from "@/app/client/mapping";
+import { mapPolicies } from "@/app/client/mapping";
 import { ValidationConflict } from "@/app/server/data/validation-data";
-import { createPolicy, updatePolicy } from "@/app/server/policies";
+import { createRole, updateRole } from "@/app/server/roles";
 import { validateData } from "@/app/server/validate";
+import { useToastSettings } from "@/hooks/use-toast-settings";
 import { absoluteUrl, cn, showToast } from "@/lib/functions";
 import { displayPrismaErrorCode } from "@/lib/prisma-errors";
-import {
-  tPolicyCreate,
-  tPolicyUpdate,
-  tService,
-  tServiceStatement,
-} from "@/lib/prisma-types";
+import { tPolicy, tRoleCreate, tRoleUpdate } from "@/lib/prisma-types";
 import { Data, ToastType } from "@/lib/types";
 import Button from "@/ui/button";
 import { DataTable } from "@/ui/datatable/data-table";
-import ServiceSelect from "@/ui/service-select";
 import { Row } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { JSX, useEffect, useRef, useState } from "react";
@@ -23,31 +18,27 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { columns, initialTableState } from "./table/dialog-columns";
 import { DataTableToolbar } from "./table/dialog-data-table-toolbar";
 import ValidationConflictsDialog from "@/ui/validation-conflicts-dialog";
-import { useToastSettings } from "@/hooks/use-toast-settings";
 
-export interface PolicyEntity {
-  id?: number; // statement id
-  policyname: string;
+export interface RoleEntity {
+  id?: number; // role id
+  rolename: string;
   description: string;
   managed: boolean;
-  serviceid: number | undefined;
 }
 
-export const defaultPolicyEntity: PolicyEntity = {
-  policyname: "",
+export const defaultRoleEntity: RoleEntity = {
+  rolename: "",
   description: "",
   managed: false,
-  serviceid: undefined,
 };
 
-export interface PolicyFormProps {
-  services: tService[];
-  servicestatements: tServiceStatement[];
-  entity: PolicyEntity;
-  linkedstatements: number[];
+export interface RoleFormProps {
+  policies: tPolicy[];
+  entity: RoleEntity;
+  linkedpolicies: number[];
 }
 
-const PolicyForm = (props: PolicyFormProps) => {
+const RoleForm = (props: RoleFormProps) => {
   const { push } = useRouter();
   const { getToastDuration } = useToastSettings();
 
@@ -64,15 +55,15 @@ const PolicyForm = (props: PolicyFormProps) => {
     getValues,
   } = formMethods;
 
-  const provisionPolicyForCreate = (_entity: PolicyEntity): tPolicyCreate => {
-    const result: tPolicyCreate = {
-      name: _entity.policyname,
+  const provisionRoleForCreate = (_entity: RoleEntity): tRoleCreate => {
+    const result: tRoleCreate = {
+      name: _entity.rolename,
       description: _entity.description,
       managed: _entity.managed,
-      servicestatements: {
-        connect: selectedStatements.current.map((_statement: Data) => {
+      policies: {
+        connect: selectedPolicies.current.map((_policy: Data) => {
           return {
-            id: _statement.id,
+            id: _policy.id,
           };
         }),
       },
@@ -81,16 +72,16 @@ const PolicyForm = (props: PolicyFormProps) => {
     return result;
   };
 
-  const provisionPolicyForUpdate = (_entity: PolicyEntity): tPolicyUpdate => {
-    const result: tPolicyUpdate = {
+  const provisionRoleForUpdate = (_entity: RoleEntity): tRoleUpdate => {
+    const result: tRoleUpdate = {
       id: _entity.id,
-      name: _entity.policyname,
+      name: _entity.rolename,
       description: _entity.description,
       managed: _entity.managed,
-      servicestatements: {
-        set: selectedStatements.current.map((statement: Data) => {
+      policies: {
+        set: selectedPolicies.current.map((policy: Data) => {
           return {
-            id: statement.id,
+            id: policy.id,
           };
         }),
       },
@@ -99,13 +90,13 @@ const PolicyForm = (props: PolicyFormProps) => {
     return result;
   };
 
-  const handleCreatePolicy = async (_entity: PolicyEntity): Promise<void> => {
-    const policy: tPolicyCreate = provisionPolicyForCreate(_entity);
-    await createPolicy(policy).then((errorcode: string | undefined) => {
+  const handleCreateRole = async (_entity: RoleEntity): Promise<void> => {
+    const role: tRoleCreate = provisionRoleForCreate(_entity);
+    await createRole(role).then((errorcode: string | undefined) => {
       if (errorcode) {
         showToast(
           ToastType.ERROR,
-          `Policy create error ${displayPrismaErrorCode(errorcode)}`,
+          `Role create error ${displayPrismaErrorCode(errorcode)}`,
           getToastDuration()
         );
         // show a toast here about error
@@ -113,23 +104,23 @@ const PolicyForm = (props: PolicyFormProps) => {
       } else {
         showToast(
           ToastType.SUCCESS,
-          `Policy ${policy.name} created`,
+          `Role ${role.name} created`,
           getToastDuration()
         );
-        push(absoluteUrl(`/iam/policies/id`));
+        push(absoluteUrl(`/iam/roles/id`));
       }
       handleCancelClick();
     });
   };
 
-  const handleUpdatePolicy = async (_entity: PolicyEntity): Promise<void> => {
-    const policy: tPolicyUpdate = provisionPolicyForUpdate(_entity);
+  const handleUpdateRole = async (_entity: RoleEntity): Promise<void> => {
+    const role: tRoleUpdate = provisionRoleForUpdate(_entity);
 
-    await updatePolicy(policy).then((errorcode: string | undefined) => {
+    await updateRole(role).then((errorcode: string | undefined) => {
       if (errorcode) {
         showToast(
           ToastType.ERROR,
-          `Policy update error ${displayPrismaErrorCode(errorcode)}`,
+          `Role update error ${displayPrismaErrorCode(errorcode)}`,
           getToastDuration()
         );
         // show a toast here about error
@@ -137,132 +128,99 @@ const PolicyForm = (props: PolicyFormProps) => {
       } else {
         showToast(
           ToastType.SUCCESS,
-          `Policy ${policy.name} updated`,
+          `Role ${role.name} updated`,
           getToastDuration()
         );
-        push(absoluteUrl(`/iam/policies/id`));
+        push(absoluteUrl(`/iam/roles/id`));
       }
       handleCancelClick();
     });
   };
 
-  const onSubmit: SubmitHandler<PolicyEntity> = (formData: PolicyEntity) => {
-    formData = { ...formData, serviceid: selectedServiceId.current! };
-
+  const onSubmit: SubmitHandler<RoleEntity> = (formData: RoleEntity) => {
     if (formData.id) {
-      handleUpdatePolicy(formData);
+      handleUpdateRole(formData);
     } else {
-      handleCreatePolicy(formData);
+      handleCreateRole(formData);
     }
   };
 
   const handleCancelClick = (): void => {
     const dialog: HTMLDialogElement = document.getElementById(
-      "policydialog"
+      "roledialog"
     ) as HTMLDialogElement;
 
     dialog.close();
   };
 
-  const processTableData = (_serviceId: number | undefined): void => {
-    let affectedStatements: tServiceStatement[] = props.servicestatements;
+  const processTableData = (): void => {
+    let affectedPolicies: tPolicy[] = props.policies;
 
-    if (_serviceId) {
-      const service: tService | undefined = props.services.find(
-        (_service: tService) => _service.id === _serviceId
-      );
-      if (service) {
-        affectedStatements = props.servicestatements.filter(
-          (_statement: tServiceStatement) => _statement.serviceid === _serviceId
-        );
-      }
-    }
+    // const service: tService | undefined = props.services.find(
+    //   (_service: tService) => _service.id === _serviceId
+    // );
+    // if (service) {
+    //   affectedPolicies = props.policies.filter(
+    //     (_policy: tPolicy) =>
+    //       _policy.servicestatements[0].serviceid === _serviceId
+    //   );
+    // }
 
-    setTableData(mapServiceStatements(affectedStatements));
+    setTableData(mapPolicies(affectedPolicies));
   };
 
-  const linkedStatements = useRef<number[]>([]);
+  const linkedPolicies = useRef<number[]>([]);
 
   useEffect(() => {
-    if (props.entity.serviceid) {
-      selectedServiceId.current = props.entity.serviceid;
-      processTableData(props.entity.serviceid);
-    } else {
-      if (props.services && props.services.length > 0) {
-        selectedServiceId.current = props.services[0].id;
-        processTableData(props.services[0].id);
-      }
-    }
+    processTableData();
 
-    linkedStatements.current = props.linkedstatements;
-    setValidateButtonEnabled(props.linkedstatements.length >= 2);
-    setPersistButtonEnabled(props.linkedstatements.length === 1);
+    linkedPolicies.current = props.linkedpolicies;
+    setValidateButtonEnabled(props.linkedpolicies.length >= 2);
+    setPersistButtonEnabled(props.linkedpolicies.length === 1);
     reset(props.entity);
-    // setManaged(getValues("managed"));
   }, [props]);
-
-  const selectedServiceId = useRef<number | undefined>(undefined);
-
-  const handleChangeService = (_serviceId: number | undefined): void => {
-    selectedServiceId.current = _serviceId;
-    processTableData(_serviceId);
-  };
-
-  // const [managed, setManaged] = useState<boolean>(false);
 
   const [persistButtonEnabled, setPersistButtonEnabled] =
     useState<boolean>(false);
   const [validateButtonEnabled, setValidateButtonEnabled] =
     useState<boolean>(false);
 
-  const Select = (): JSX.Element => {
-    return (
-      <div>
-        <ServiceSelect
-          label="Service:"
-          services={props.services}
-          defaultService={selectedServiceId.current}
-          changeServiceHandler={handleChangeService}
-          className="w-[20%] ml-8"
-        />
-      </div>
-    );
-  };
-
   const FormDetails = (): JSX.Element => {
     return (
       <div className="ml-1 grid grid-rows-[25%_25%_25%_25%] gap-y-1 mt-0.75">
-        <div className="grid grid-cols-[10%_40%_10%_40%] gap-y-1 mt-0.75">
+        <div className="grid grid-cols-[10%_40%_10%_40%] gap-y-1 mt-0.75 mb-15">
           <label className="mt-1">Name:</label>
           <input
-            type="text"
-            placeholder="name..."
+            id="name"
             className={cn(
               "rounded-sm",
-              "input input-sm validator w-[95%]",
+              "input validator input-sm w-[95%]",
               "border-1 border-base-content/30"
             )}
+            type="text"
             required
+            placeholder="name..."
             minLength={3}
             maxLength={25}
-            {...register("policyname")}
+            {...register("rolename")}
           />
           <label className="mt-1">Description:</label>
           <input
-            type="text"
-            placeholder="description..."
+            id="description"
             className={cn(
               "rounded-sm",
-              "input input-sm validator w-[95%]",
+              "input validator input-sm w-[95%]",
               "border-1 border-base-content/30"
             )}
+            type="text"
             required
+            placeholder="description..."
             minLength={3}
             maxLength={50}
             {...register("description")}
           />
         </div>
-        <div className="grid grid-cols-[10%_40%_10%_40%] mt-5">
+        <div className="grid grid-cols-[10%_40%_10%_40%] gap-y-1">
           <label className="flex items-center">Managed:</label>
           <div className="flex items-center mt-1">
             <input
@@ -279,9 +237,7 @@ const PolicyForm = (props: PolicyFormProps) => {
   const FormContent = (): JSX.Element => {
     return (
       <div className="relative w-[100%] h-[100%] grid grid-rows-[20%_80%]">
-        <div>
-          <Select />
-        </div>
+        <div></div>
         <div className="mt-2">
           <FormDetails />
         </div>
@@ -295,14 +251,14 @@ const PolicyForm = (props: PolicyFormProps) => {
   const [validationConflictDialogOpen, setValidationConflictDialogOpen] =
     useState<boolean>(false);
 
-  const validateLinkedStatements = async (): Promise<void> => {
-    const _entity: PolicyEntity = getValues();
+  const validateLinkedPolicies = async (): Promise<void> => {
+    const _entity: RoleEntity = getValues();
 
     let data: Data = {
       id: -1,
       description: "",
-      name: _entity.policyname,
-      children: selectedStatements.current,
+      name: _entity.rolename,
+      children: selectedPolicies.current,
       extra: {
         subject: "Policy",
       },
@@ -316,10 +272,7 @@ const PolicyForm = (props: PolicyFormProps) => {
       }
 
       formValid.current = conflicts.length === 0;
-      handleButtonsVisibiliy(
-        selectedStatements.current,
-        conflicts.length === 0
-      );
+      handleButtonsVisibiliy(selectedPolicies.current, conflicts.length === 0);
     });
   };
 
@@ -365,7 +318,7 @@ const PolicyForm = (props: PolicyFormProps) => {
           className="bg-custom"
           type="button"
           disabled={!validateButtonEnabled}
-          onClick={validateLinkedStatements}
+          onClick={validateLinkedPolicies}
         />
       </div>
     );
@@ -389,21 +342,21 @@ const PolicyForm = (props: PolicyFormProps) => {
 
   const [tableData, setTableData] = useState<Data[]>([]);
 
-  const selectedStatements = useRef<Data[]>([]);
+  const selectedPolicies = useRef<Data[]>([]);
 
-  const handleChangeStatementSelection = (_selection: Row<Data>[]) => {
+  const handleChangePolicySelection = (_selection: Row<Data>[]) => {
     const selectionData: Data[] = _selection.map((row) => row.original);
 
-    selectedStatements.current = selectionData;
+    selectedPolicies.current = selectionData;
 
-    const mappedStatements = selectionData.map((data: Data) => data.id);
+    const mappedPolicies = selectionData.map((data: Data) => data.id);
     const equal: boolean =
-      mappedStatements.length === linkedStatements.current.length &&
-      mappedStatements.every(function (value, index) {
-        return value === linkedStatements.current[index];
+      mappedPolicies.length === linkedPolicies.current.length &&
+      mappedPolicies.every(function (value, index) {
+        return value === linkedPolicies.current[index];
       });
     if (!equal) {
-      linkedStatements.current = mappedStatements;
+      linkedPolicies.current = mappedPolicies;
 
       const valid: boolean = selectionData.length < 2;
 
@@ -428,9 +381,9 @@ const PolicyForm = (props: PolicyFormProps) => {
           columns={columns}
           initialTableState={initialTableState}
           Toolbar={DataTableToolbar}
-          selectedItems={linkedStatements.current}
+          selectedItems={linkedPolicies.current}
           selectionType="data"
-          handleChangeSelection={handleChangeStatementSelection}
+          handleChangeSelection={handleChangePolicySelection}
         />
       </>
     );
@@ -441,9 +394,6 @@ const PolicyForm = (props: PolicyFormProps) => {
       <div className="form relative w-[100%] h-[450px] grid grid-rows-[30%_70%]">
         <div>
           <Form />
-        </div>
-        <div>
-          <Data />
         </div>
         <ValidationConflictsDialog
           open={validationConflictDialogOpen}
@@ -456,6 +406,9 @@ const PolicyForm = (props: PolicyFormProps) => {
             size="small"
           />
         </ValidationConflictsDialog>
+        <div>
+          <Data />
+        </div>
       </div>
     );
   };
@@ -463,4 +416,4 @@ const PolicyForm = (props: PolicyFormProps) => {
   return <>{renderComponent()}</>;
 };
 
-export default PolicyForm;
+export default RoleForm;

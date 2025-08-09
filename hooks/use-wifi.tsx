@@ -37,7 +37,6 @@ export const WifiProvider = ({ children }: { children: ReactNode }) => {
     const timeoutId = setTimeout(() => {
       let connect: Wifi = { connection: "searching" };
 
-      console.log("Checking WiFi");
       if (!navigator.onLine) {
         connect.connection = "not connected";
       } else {

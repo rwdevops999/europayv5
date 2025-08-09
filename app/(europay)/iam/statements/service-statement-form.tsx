@@ -6,14 +6,14 @@ import {
   updateServiceStatement,
 } from "@/app/server/service-statements";
 import { Permission } from "@/generated/prisma";
-import { absoluteUrl, cn } from "@/lib/functions";
+import { absoluteUrl, cn, showToast } from "@/lib/functions";
 import { displayPrismaErrorCode } from "@/lib/prisma-errors";
 import {
   tService,
   tServiceStatementCreate,
   tServiceStatementUpdate,
 } from "@/lib/prisma-types";
-import { Data } from "@/lib/types";
+import { Data, ToastType } from "@/lib/types";
 import AllowDenySwitch from "@/ui/allow-deny-switch";
 import Button from "@/ui/button";
 import { DataTable } from "@/ui/datatable/data-table";
@@ -24,6 +24,7 @@ import { columns, initialTableState } from "./table/dialog-columns";
 import { DataTableToolbar } from "./table/dialog-data-table-toolbar";
 import { Row } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
+import { useToastSettings } from "@/hooks/use-toast-settings";
 
 export interface StatementEntity {
   id?: number; // statement id
@@ -50,7 +51,7 @@ export interface StatementFormProps {
 
 const ServiceStatementForm = (props: StatementFormProps) => {
   const { push } = useRouter();
-  // const { getToastDuration } = useToastSettings();
+  const { getToastDuration } = useToastSettings();
 
   const formMethods = useForm({
     defaultValues: props.entity,
@@ -129,19 +130,19 @@ const ServiceStatementForm = (props: StatementFormProps) => {
     await createServiceStatement(statement).then(
       (errorcode: string | undefined) => {
         if (errorcode) {
-          // showToast(
-          //   ToastType.ERROR,
-          //   `Statement create error ${displayPrismaErrorCode(errorcode)}`,
-          //   getToastDuration()
-          // );
+          showToast(
+            ToastType.ERROR,
+            `Statement create error ${displayPrismaErrorCode(errorcode)}`,
+            getToastDuration()
+          );
           // show a toast here about error
           displayPrismaErrorCode(errorcode);
         } else {
-          // showToast(
-          //   ToastType.SUCCESS,
-          //   `Statement ${statement.ssname} created`,
-          //   getToastDuration()
-          // );
+          showToast(
+            ToastType.SUCCESS,
+            `Statement ${statement.ssname} created`,
+            getToastDuration()
+          );
           push(absoluteUrl(`/iam/statements/id`));
           handleCancelClick();
         }
@@ -158,19 +159,19 @@ const ServiceStatementForm = (props: StatementFormProps) => {
     await updateServiceStatement(statement).then(
       (errorcode: string | undefined) => {
         if (errorcode) {
-          // showToast(
-          //   ToastType.ERROR,
-          //   `Statement update error ${displayPrismaErrorCode(errorcode)}`,
-          //   getToastDuration()
-          // );
+          showToast(
+            ToastType.ERROR,
+            `Statement update error ${displayPrismaErrorCode(errorcode)}`,
+            getToastDuration()
+          );
           // show a toast here about error
           displayPrismaErrorCode(errorcode);
         } else {
-          // showToast(
-          //   ToastType.SUCCESS,
-          //   `Statement ${statement.ssname} updated`,
-          //   getToastDuration()
-          // );
+          showToast(
+            ToastType.SUCCESS,
+            `Statement ${statement.ssname} updated`,
+            getToastDuration()
+          );
           push(absoluteUrl(`/iam/statements/id`));
           handleCancelClick();
         }

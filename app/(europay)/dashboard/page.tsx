@@ -4,6 +4,7 @@ import PageItemContainer from "@/ui/page-item-container";
 import AppVersion from "./components/app-version";
 import AppEnvironment from "./components/app-environement";
 import AppInternet from "./components/app-internet";
+import AppCountry from "./components/app-country";
 
 const Dashboard = () => {
   return (
@@ -29,9 +30,9 @@ const Dashboard = () => {
           </PageItemContainer>
         </div>
         <div className="group relative flex flex-col overflow-hidden rounded-md shadow transition-all duration-200 ease-in-out hover:z-30 space-y-2">
-          {/* <PageItemContainer border title="Country">
+          <PageItemContainer border title="Country">
             <AppCountry />
-          </PageItemContainer> */}
+          </PageItemContainer>
           {/* <PageItemContainer border title="Jobs">
             <AppJobs />
           </PageItemContainer> */}

@@ -1,8 +1,11 @@
 import { absoluteUrl } from "@/lib/functions";
 import { FcServices } from "react-icons/fc";
+import { GiScrollUnfurled } from "react-icons/gi";
+import { GrTest } from "react-icons/gr";
 import { IoIosKey } from "react-icons/io";
 import { LuClipboardList, LuLayoutDashboard } from "react-icons/lu";
 import { RiPoliceBadgeLine } from "react-icons/ri";
+import { TbTestPipe } from "react-icons/tb";
 
 export interface MenuItem {
   title: string;
@@ -178,15 +181,15 @@ export let menu: MenuItem[] = [
         subItems: [],
         parent: "IAM",
       },
-      // {
-      //   title: "Roles",
-      //   url: absoluteUrl("/iam/roles/id"),
-      //   disabled: false,
-      //   visible: true,
-      //   icon: <GiScrollUnfurled size={16} />,
-      //   subItems: [],
-      //   parent: "IAM",
-      // },
+      {
+        title: "Roles",
+        url: absoluteUrl("/iam/roles/id"),
+        disabled: false,
+        visible: true,
+        icon: <GiScrollUnfurled size={16} />,
+        subItems: [],
+        parent: "IAM",
+      },
       // {
       //   title: "Users",
       //   url: absoluteUrl("/iam/users/id"),
@@ -215,58 +218,58 @@ export let menu: MenuItem[] = [
   //   icon: <GiBookCover size={16} />,
   //   subItems: [],
   // },
-  // {
-  //   url: "#",
-  //   title: "Tests",
-  //   disabled: false,
-  //   visible: process.env.NODE_ENV !== "production",
-  //   icon: <GrTest size={16} />,
-  //   subItems: [
-  //     {
-  //       title: "TestPage1",
-  //       url: absoluteUrl("/tests/testpage1"),
-  //       disabled: false,
-  //       visible: true,
-  //       icon: <TbTestPipe size={16} />,
-  //       subItems: [],
-  //       parent: "Tests",
-  //     },
-  //     {
-  //       title: "TestUI",
-  //       url: absoluteUrl("/tests/testui"),
-  //       disabled: false,
-  //       visible: true,
-  //       icon: <TbTestPipe size={16} />,
-  //       subItems: [],
-  //       parent: "Tests",
-  //     },
-  //     {
-  //       title: "TestComponents",
-  //       url: absoluteUrl("/tests/testcomponents"),
-  //       disabled: false,
-  //       visible: true,
-  //       icon: <TbTestPipe size={16} />,
-  //       subItems: [],
-  //       parent: "Tests",
-  //     },
-  //     {
-  //       title: "TestCharts",
-  //       url: absoluteUrl("/tests/testcharts"),
-  //       disabled: false,
-  //       visible: true,
-  //       icon: <TbTestPipe size={16} />,
-  //       subItems: [],
-  //       parent: "Tests",
-  //     },
-  //     {
-  //       title: "TestMail",
-  //       url: absoluteUrl("/tests/testmail"),
-  //       disabled: false,
-  //       visible: true,
-  //       icon: <TbTestPipe size={16} />,
-  //       subItems: [],
-  //       parent: "Tests",
-  //     },
-  //   ],
-  // },
+  {
+    url: "#",
+    title: "Tests",
+    disabled: false,
+    visible: process.env.NODE_ENV !== "production",
+    icon: <GrTest size={16} />,
+    subItems: [
+      {
+        title: "TestPage1",
+        url: absoluteUrl("/tests/testpage1"),
+        disabled: false,
+        visible: true,
+        icon: <TbTestPipe size={16} />,
+        subItems: [],
+        parent: "Tests",
+      },
+      // {
+      //   title: "TestUI",
+      //   url: absoluteUrl("/tests/testui"),
+      //   disabled: false,
+      //   visible: true,
+      //   icon: <TbTestPipe size={16} />,
+      //   subItems: [],
+      //   parent: "Tests",
+      // },
+      // {
+      //   title: "TestComponents",
+      //   url: absoluteUrl("/tests/testcomponents"),
+      //   disabled: false,
+      //   visible: true,
+      //   icon: <TbTestPipe size={16} />,
+      //   subItems: [],
+      //   parent: "Tests",
+      // },
+      // {
+      //   title: "TestCharts",
+      //   url: absoluteUrl("/tests/testcharts"),
+      //   disabled: false,
+      //   visible: true,
+      //   icon: <TbTestPipe size={16} />,
+      //   subItems: [],
+      //   parent: "Tests",
+      // },
+      // {
+      //   title: "TestMail",
+      //   url: absoluteUrl("/tests/testmail"),
+      //   disabled: false,
+      //   visible: true,
+      //   icon: <TbTestPipe size={16} />,
+      //   subItems: [],
+      //   parent: "Tests",
+      // },
+    ],
+  },
 ];

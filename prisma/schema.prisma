@@ -100,7 +100,7 @@ model Policy {
 
   servicestatements ServiceStatement[]
 
-  // roles Role[]
+  roles Role[]
   // users User[]
   // groups Group[]
 }
@@ -112,3 +112,31 @@ model Setting {
   key String
   value String
 }
+
+model Role {
+  id Int @id @default(autoincrement())
+
+  name String @unique
+  description String? @default("")
+
+  managed Boolean? @default(false)
+
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+
+  policies Policy[]
+  // users User[]
+  // groups Group[]
+}
+
+model Country {
+  id Int @id @default(autoincrement())
+  name String @unique
+  dialCode String? @default("")
+  code String? @default("")
+  currency String? @default("")
+  currencycode String? @default("")
+  symbol String? @default("")
+  // addresses Address[]
+}
+

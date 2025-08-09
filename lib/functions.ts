@@ -1,7 +1,12 @@
 import clsx from "clsx";
 import { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { URL_ENCODING_AMPERSAND, URL_ENCODING_ASSIGNMENT } from "./constants";
+import {
+  ToastTypes,
+  URL_ENCODING_AMPERSAND,
+  URL_ENCODING_ASSIGNMENT,
+} from "./constants";
+import { Zoom } from "react-toastify";
 
 /**
  * create an abosulte url
@@ -83,4 +88,50 @@ export const splitURLParams = (_params: string): Record<string, string> => {
  */
 export const SLEEP = async (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
+/**
+ * display a toast
+ *
+ * @param _type the type of toast (info, error, ...)
+ * @param _message the message to display
+ * @param _durationms the duration in milliseconds
+ * @param _position the postion where to place the toast
+ */
+export const showToast = (
+  _type: string,
+  _message: string,
+  _durationms: number,
+  _position?: string
+): void => {
+  ToastTypes[_type](_message, {
+    position: _position ?? "top-center",
+    autoClose: _durationms,
+    hideProgressBar: false,
+    closeOnClick: false,
+    pauseOnHover: false,
+    draggable: false,
+    progress: undefined,
+    theme: "dark",
+    transition: Zoom,
+  });
+};
+
+/**
+ * consvert string value to boolean
+ *
+ * @param _value the string value
+ * @param _default returned default value (if _value === undefined)
+ *
+ * @returns true or false
+ */
+export const stringToBoolean = (
+  _value: string | undefined,
+  _default: boolean = false
+): boolean => {
+  if (_value) {
+    return /true/.test(_value.toLocaleLowerCase());
+  } else {
+    return _default;
+  }
 };

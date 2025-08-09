@@ -6,7 +6,6 @@ import LoadingSpinner from "@/ui/loading-spinner";
 import ProcessSettings from "./process-settings";
 
 const ServiceCreator = async () => {
-  console.log("ServiceCreator", "createSettings");
   await createSettings(appsettings);
 
   return (
@@ -18,8 +17,6 @@ const ServiceCreator = async () => {
 };
 
 const SetupSettingsWithSuspense = async ({ _loaded }: { _loaded: boolean }) => {
-  console.log("SetupSettingsWithSuspense", "_loaded", _loaded);
-
   if (_loaded) {
     return (
       <>

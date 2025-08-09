@@ -6,11 +6,16 @@ import TemplateLoaderWithSuspense from "./templates-loader-with-suspense";
 import { countSettings, createSettings } from "@/app/server/settings";
 import { appsettings } from "@/app/server/data/setting-data";
 import SetupSettingsWithSuspense from "./setup-settings-with-suspense";
+import RenderBackground from "./render-background";
+import { countCountries, defineCountries } from "@/app/server/country";
+import SetupCountriesWithSuspense from "./setup-countries-with-suspense";
 
 const InitialiseApplication = async () => {
   let loadServices: boolean = false;
   const nrOfServices: number = await countServices();
   const nrOfSettings: number = await countSettings();
+  let loadCountries: boolean = false;
+  const nrOfCountries: number = await countCountries();
 
   if (
     (nrOfServices === 0 && Object.keys(servicesandactions).length > 0) ||
@@ -19,9 +24,18 @@ const InitialiseApplication = async () => {
     loadServices = true;
   }
 
+  if (nrOfCountries === 0) {
+    loadCountries = true;
+  }
+
   let servicesLoaded = false;
   if (loadServices) {
     servicesLoaded = await defineServices(servicesandactions, nrOfServices > 0);
+  }
+
+  let countriesLoaded = false;
+  if (loadCountries) {
+    countriesLoaded = (await defineCountries(true)) > 0;
   }
 
   const templatesloaded = await uploadTemplates(
@@ -34,11 +48,14 @@ const InitialiseApplication = async () => {
     settingsLoaded = await createSettings(appsettings);
   }
 
-  console.log("InitialiseApplication", "loadSettings", loadSettings);
-
   return (
     <>
+      <RenderBackground />
+
       {loadServices && <SetupServicesWithSuspense _loaded={servicesLoaded} />}
+      {loadCountries && (
+        <SetupCountriesWithSuspense _loaded={countriesLoaded} />
+      )}
       <TemplateLoaderWithSuspense _loaded={templatesloaded} />
       {loadSettings && <SetupSettingsWithSuspense _loaded={settingsLoaded} />}
     </>

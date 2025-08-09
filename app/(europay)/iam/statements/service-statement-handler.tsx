@@ -4,13 +4,13 @@ import { mapServiceStatements } from "@/app/client/mapping";
 import { deleteServiceStatement } from "@/app/server/service-statements";
 import { Permission } from "@/generated/prisma";
 import { DATATABLE_ACTION_DELETE } from "@/lib/constants";
-import { absoluteUrl } from "@/lib/functions";
+import { absoluteUrl, showToast } from "@/lib/functions";
 import {
   tService,
   tServiceStatement,
   tServiceStatementAction,
 } from "@/lib/prisma-types";
-import { Data } from "@/lib/types";
+import { Data, ToastType } from "@/lib/types";
 import Button from "@/ui/button";
 import PageItemContainer from "@/ui/page-item-container";
 import ServiceSelect from "@/ui/service-select";
@@ -26,6 +26,7 @@ import ServiceStatementForm, {
   StatementEntity,
 } from "./service-statement-form";
 import Dialog from "@/ui/dialog";
+import { useToastSettings } from "@/hooks/use-toast-settings";
 
 /**
  * is called to providing the UI for handling the statements.
@@ -48,7 +49,7 @@ const ServiceStatementHandler = ({
   services: tService[];
 }) => {
   const { push } = useRouter();
-  // const { getToastDuration } = useToastSettings();
+  const { getToastDuration } = useToastSettings();
 
   const [tableData, setTableData] = useState<Data[]>([]);
 
@@ -133,11 +134,11 @@ const ServiceStatementHandler = ({
   const [alert, setAlert] = useState<tAlert | undefined>(undefined);
 
   const processDeletedStatement = (_ssname: string): void => {
-    // showToast(
-    //   ToastType.SUCCESS,
-    //   `Deleted statement ${_ssname}`,
-    //   getToastDuration()
-    // );
+    showToast(
+      ToastType.SUCCESS,
+      `Deleted statement ${_ssname}`,
+      getToastDuration()
+    );
 
     if (tableData.length === 1) {
       push(absoluteUrl(`/iam/statements/id`));

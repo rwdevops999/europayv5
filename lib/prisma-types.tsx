@@ -41,7 +41,7 @@ export const cWhatToSelectFromService: WhatToSelectFromService = {
 
 export type tService = Prisma.ServiceGetPayload<WhatToSelectFromService>;
 
-/* == ServiceStatementAction ========== */
+/* == SERVICE STATEMENT ACTION ========== */
 type WhatToSelectFromServiceStatementAction = {
   select: {
     id: boolean;
@@ -63,7 +63,7 @@ const cWhatToSelectFromServiceStatementAction: WhatToSelectFromServiceStatementA
 export type tServiceStatementAction =
   Prisma.ServiceStatementActionGetPayload<WhatToSelectFromServiceStatementAction>;
 
-/* == ServiceStatement ========== */
+/* == SERVICE STATEMENT ========== */
 type SelectNameAndIdOnly = {
   select: {
     id: boolean;
@@ -124,7 +124,7 @@ type WhatToSelectFromPolicy = {
   include: {
     // groups: SelectNameAndIdOnly;
     // users: SelectUserScalarOnly;
-    // roles: SelectNameAndIdOnly;
+    roles: SelectNameAndIdOnly;
     servicestatements: WhatToSelectFromServiceStatement;
   };
 };
@@ -133,7 +133,7 @@ export const cWhatToSelectFromPolicy: WhatToSelectFromPolicy = {
   include: {
     // groups: cSelectNameAndIdOnly,
     // users: cSelectUserScalarOnly,
-    // roles: cSelectNameAndIdOnly,
+    roles: cSelectNameAndIdOnly,
     servicestatements: cWhatToSelectFromServiceStatement,
   },
 };
@@ -145,3 +145,56 @@ export type tPolicyUpdate = Prisma.PolicyUncheckedUpdateInput;
 /* == SETTINGS ========== */
 export type tSetting = Prisma.SettingGetPayload<{}>;
 export type tSettingCreate = Prisma.SettingUncheckedCreateInput;
+
+/* == ROLE ========== */
+type WhatToSelectFromRole = {
+  include: {
+    // groups: SelectNameAndIdOnly;
+    // users: SelectUserScalarOnly;
+    policies: WhatToSelectFromPolicy;
+  };
+};
+export const cWhatToSelectFromRole: WhatToSelectFromRole = {
+  include: {
+    // groups: cSelectNameAndIdOnly,
+    // users: cSelectUserScalarOnly,
+    policies: cWhatToSelectFromPolicy,
+  },
+};
+
+export type tRole = Prisma.RoleGetPayload<WhatToSelectFromRole>;
+export type tRoleCreate = Prisma.RoleUncheckedCreateInput;
+export type tRoleUpdate = Prisma.RoleUncheckedUpdateInput;
+
+/* == USER ========== */
+
+/* == GROUP ========== */
+
+/* == COUNTRY ========== */
+export type WhatToSelectFromCountry = {
+  select: {
+    id: boolean;
+    name: boolean;
+    dialCode: boolean;
+    currency: boolean;
+    currencycode: boolean;
+    symbol: boolean;
+    code: boolean;
+    // addresses: boolean;
+  };
+};
+export const cWhatToSelectFromCountry: WhatToSelectFromCountry = {
+  select: {
+    id: true,
+    name: true,
+    dialCode: true,
+    currency: true,
+    currencycode: true,
+    symbol: true,
+    code: false,
+    // addresses: false,
+  },
+};
+
+export type tCountry = Prisma.CountryGetPayload<WhatToSelectFromCountry>;
+export type tCountryCreate = Prisma.CountryUncheckedCreateInput;

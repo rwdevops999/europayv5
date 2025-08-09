@@ -20,3 +20,22 @@ const dataScheme = z.object({
 });
 
 export type Data = z.infer<typeof dataScheme>;
+
+export type ToastFn = (_message: string, _options: any) => void;
+
+export enum ToastType {
+  DEFAULT = "default",
+  INFO = "info",
+  SUCCESS = "success",
+  WARNING = "warning",
+  ERROR = "error",
+}
+
+export type tCountryFile = {
+  name: string;
+  dial_code: string;
+  code: string;
+  currency: string;
+  currencycode: string;
+  symbol: string;
+};

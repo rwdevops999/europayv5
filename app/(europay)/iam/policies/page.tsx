@@ -4,10 +4,10 @@ import { tPolicy, tService, tServiceStatement } from "@/lib/prisma-types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import PolicyForm, { defaultPolicyEntity, PolicyEntity } from "./policy-form";
-import { Data } from "@/lib/types";
+import { Data, ToastType } from "@/lib/types";
 import { mapPolicies } from "@/app/client/mapping";
 import TemplateAlert, { tAlert } from "@/ui/template-alert";
-import { absoluteUrl } from "@/lib/functions";
+import { absoluteUrl, showToast } from "@/lib/functions";
 import { DATATABLE_ACTION_DELETE } from "@/lib/constants";
 import { deletePolicy } from "@/app/server/policies";
 import { TableMeta } from "@tanstack/react-table";
@@ -18,6 +18,7 @@ import Dialog from "@/ui/dialog";
 import { DataTable } from "@/ui/datatable/data-table";
 import { columns } from "./table/page-colums";
 import { DataTableToolbar } from "./table/page-data-table-toolbar";
+import { useToastSettings } from "@/hooks/use-toast-settings";
 
 /**
  * is called to providing the UI for handling the policies.
@@ -43,7 +44,7 @@ const PolicyHandler = ({
   servicestatements: tServiceStatement[];
 }) => {
   const { push } = useRouter();
-  // const { getToastDuration } = useToastSettings();
+  const { getToastDuration } = useToastSettings();
 
   const [entity, setEntity] = useState<PolicyEntity>(defaultPolicyEntity);
   const [linkedStatements, setLinkedStatements] = useState<number[]>([]);
@@ -81,7 +82,7 @@ const PolicyHandler = ({
   const [alert, setAlert] = useState<tAlert | undefined>(undefined);
 
   const processDeletedPolicy = (_name: string): void => {
-    // showToast(ToastType.SUCCESS, `Deleted policy ${_name}`, getToastDuration());
+    showToast(ToastType.SUCCESS, `Deleted policy ${_name}`, getToastDuration());
 
     if (tableData.length === 1) {
       push(absoluteUrl(`/iam/policies/id`));
