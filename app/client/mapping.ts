@@ -5,6 +5,7 @@ import {
   tServiceAction,
   tServiceStatement,
   tServiceStatementAction,
+  tUser,
 } from "@/lib/prisma-types";
 import { Data } from "@/lib/types";
 
@@ -199,4 +200,28 @@ export const mapRoles = (roles: tRole[]): Data[] => {
   }
 
   return result;
+};
+
+export const mapUsers = (users: tUser[]): Data[] => {
+  let data: Data[] = [];
+
+  data = users.map((user: tUser) => {
+    return {
+      id: user.id!,
+      name: user.lastname === "" ? user.email : user.lastname,
+      description: user.firstname === "" ? "" : user.firstname,
+      children: [
+        ...mapPolicies(user.policies),
+        ...mapRoles(user.roles),
+        // ...mapGroupsSimple(user.groups),
+      ],
+      extra: {
+        subject: "User",
+        additional: user.blocked,
+        managed: user.managed ?? undefined,
+      },
+    };
+  });
+
+  return data;
 };

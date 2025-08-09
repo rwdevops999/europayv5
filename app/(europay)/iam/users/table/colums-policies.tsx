@@ -1,11 +1,7 @@
-import { Data } from "@/app/lib/types";
-import { cn } from "@/app/lib/util";
-import Button from "@/app/ui/button";
-import { DataTableColumnHeader } from "@/app/ui/datatable/data-table-column-header";
-import { DataTableRowActions } from "@/app/ui/datatable/data-table-row-actions";
-import IndeterminateCheckbox from "@/app/ui/indeterminate-checkbox";
+import { Data } from "@/lib/types";
+import { DataTableColumnHeader } from "@/ui/datatable/data-table-column-header";
+import IndeterminateCheckbox from "@/ui/indeterminate-checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
 
 export const columnsPolicies: ColumnDef<Data>[] = [
   {

@@ -101,7 +101,7 @@ model Policy {
   servicestatements ServiceStatement[]
 
   roles Role[]
-  // users User[]
+  users User[]
   // groups Group[]
 }
 
@@ -125,7 +125,7 @@ model Role {
   updateDate DateTime? @updatedAt
 
   policies Policy[]
-  // users User[]
+  users User[]
   // groups Group[]
 }
 
@@ -137,6 +137,51 @@ model Country {
   currency String? @default("")
   currencycode String? @default("")
   symbol String? @default("")
-  // addresses Address[]
+  addresses Address[]
 }
 
+model Address {
+  id Int @id @default(autoincrement())
+  street String? @default("")
+  number  String? @default("")
+  box String? @default("")
+  city String? @default("")
+  postalcode String @default("")
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+  county String? @default("")
+  country Country? @relation(fields: [countryId], references: [id], onDelete: NoAction)
+  countryId Int?
+  user User? @relation(fields: [userId], references: [id])
+  userId Int? @unique
+}
+
+model User {
+  id Int @unique @id @default(autoincrement())
+  username String? @unique
+  lastname String
+  firstname String
+  avatar String? @default("")
+  phone String? @default("")
+  email String @unique
+  password String
+  passwordless Boolean? @default(false)
+  attemps Int? @default(0)
+  blocked Boolean? @default(false)
+  managed Boolean? @default(false)
+  loggedinDate DateTime?
+  type UserType @default(EUROPAY)
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+  address Address?
+  policies Policy[]
+  roles Role[]
+  @@unique([firstname, lastname])
+  // groups Group[]
+  // account Account?
+}
+
+enum UserType {
+  EUROPAY
+  GUEST
+}

@@ -1,12 +1,9 @@
-import AppLink from "@/app/(europay)/tests/testui/testcases/app-link";
-import { Data } from "@/app/lib/types";
-import { cn, json } from "@/app/lib/util";
-import Button from "@/app/ui/button";
-import { DataTableColumnHeader } from "@/app/ui/datatable/data-table-column-header";
-import { DataTableRowActions } from "@/app/ui/datatable/data-table-row-actions";
+import AppLink from "@/app/(europay)/ui/navigation/components/app-link";
+import { Data } from "@/lib/types";
+import Button from "@/ui/button";
+import { DataTableColumnHeader } from "@/ui/datatable/data-table-column-header";
+import { DataTableRowActions } from "@/ui/datatable/data-table-row-actions";
 import { ColumnDef } from "@tanstack/react-table";
-import clsx from "clsx";
-import { FaUserLock } from "react-icons/fa";
 
 export const columns: ColumnDef<Data>[] = [
   {

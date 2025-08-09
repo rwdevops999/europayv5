@@ -1,30 +1,23 @@
 "use client";
 
-import { Data, ToastType } from "@/app/lib/types";
-import Button from "@/app/ui/button";
-import PageItemContainer from "@/app/ui/page-item-container";
-import { useEffect, useState } from "react";
-import { mapUsers } from "../../scripts/client/mappings";
-import { DataTable } from "@/app/ui/datatable/data-table";
-import { columns } from "./table/page-colums";
-import { TableMeta } from "@tanstack/react-table";
-import { DataTableToolbar } from "./table/page-data-table-toolbar";
-import UserCarrousel, { defaultUserEntity, UserEntity } from "./user-carrousel";
-import Dialog from "@/app/ui/dialog";
-import { DATATABLE_ACTION_DELETE } from "@/app/ui/datatable/data-table-row-actions";
-import { deleteUser } from "../../scripts/server/iam/users";
-import { absoluteUrl, json, showToast } from "@/app/lib/util";
+import { useToastSettings } from "@/hooks/use-toast-settings";
+import { tCountry, tPolicy, tRole, tUser } from "@/lib/prisma-types";
+import { Data, ToastType } from "@/lib/types";
 import { useRouter } from "next/navigation";
-import {
-  tCountry,
-  tGroup,
-  tPolicy,
-  tRole,
-  tUser,
-} from "@/app/lib/prisma-types";
-import AlertWithTemplate, { tAlert } from "@/app/ui/alert-with-template";
-import { Group } from "@/generated/prisma";
-import { useToastSettings } from "@/app/hooks/use-toast-settings";
+import { useEffect, useState } from "react";
+import UserCarrousel, { defaultUserEntity, UserEntity } from "./user-carrousel";
+import { mapUsers } from "@/app/client/mapping";
+import { absoluteUrl, showToast } from "@/lib/functions";
+import TemplateAlert, { tAlert } from "@/ui/template-alert";
+import { DATATABLE_ACTION_DELETE } from "@/lib/constants";
+import { deleteUser } from "@/app/server/users";
+import { TableMeta } from "@tanstack/react-table";
+import PageItemContainer from "@/ui/page-item-container";
+import Button from "@/ui/button";
+import Dialog from "@/ui/dialog";
+import { DataTable } from "@/ui/datatable/data-table";
+import { columns } from "./table/page-colums";
+import { DataTableToolbar } from "./table/page-data-table-toolbar";
 
 /**
  * is called to providing the UI for handling the users.
@@ -36,7 +29,7 @@ const UserHandler = ({
   linkedpolicies,
   roles,
   linkedroles,
-  groups,
+  // groups,
   linkedgroups,
   countries,
 }: {
@@ -45,7 +38,7 @@ const UserHandler = ({
   linkedpolicies: number[];
   roles: tRole[];
   linkedroles: number[];
-  groups: tGroup[];
+  // groups: tGroup[];
   linkedgroups: number[];
   countries: tCountry[];
 }) => {
@@ -73,8 +66,6 @@ const UserHandler = ({
   };
 
   const [alert, setAlert] = useState<tAlert | undefined>(undefined);
-
-  // const [openDialog, setOpenDialog] = useState<number>(0);
 
   const [openDialog, setOpenDialog] = useState<number>(0);
 
@@ -106,15 +97,15 @@ const UserHandler = ({
       (_user: tUser) => _user.id === _userId
     );
 
-    if (user !== undefined && user.groups && user.groups.length > 0) {
-      alert = {
-        template: _template,
-        params: {
-          iamType: "User",
-          linkedType: `Group ${user.groups[0].name}`,
-        },
-      };
-    }
+    // if (user !== undefined && user.groups && user.groups.length > 0) {
+    //   alert = {
+    //     template: _template,
+    //     params: {
+    //       iamType: "User",
+    //       linkedType: `Group ${user.groups[0].name}`,
+    //     },
+    //   };
+    // }
 
     return alert;
   };
@@ -213,8 +204,8 @@ const UserHandler = ({
           linked = appuser.roles.map((_role: tRole) => _role.id);
           setLinkedRoles(linked);
 
-          linked = appuser.groups.map((_group: Group) => _group.id);
-          setLinkedGroups(linked);
+          // linked = appuser.groups.map((_group: Group) => _group.id);
+          // setLinkedGroups(linked);
 
           setEntity(entity);
           openTheDialog();
@@ -270,8 +261,8 @@ const UserHandler = ({
                   linkedpolicies={linkedPolicies}
                   roles={roles}
                   linkedroles={linkedRoles}
-                  groups={groups}
-                  linkedgroups={linkedGroups}
+                  // groups={groups}
+                  // linkedgroups={linkedGroups}
                   countries={countries}
                 />
               }
@@ -288,7 +279,7 @@ const UserHandler = ({
           />
         </PageItemContainer>
         <div className="flex justify-center">
-          <AlertWithTemplate
+          <TemplateAlert
             open={alert ? true : false}
             template={alert ? alert.template : ""}
             parameters={alert ? alert.params : {}}
@@ -303,7 +294,7 @@ const UserHandler = ({
                 onClick={() => setAlert(undefined)}
               />
             </div>
-          </AlertWithTemplate>
+          </TemplateAlert>
         </div>
       </div>
     );

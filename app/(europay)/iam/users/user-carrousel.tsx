@@ -1,9 +1,5 @@
 "use client";
 
-import { absoluteUrl, json, showToast } from "@/app/lib/util";
-import AvatarSelect from "@/app/ui/avatar-select";
-import Button from "@/app/ui/button";
-import CountrySelect from "@/app/ui/country-select";
 import React, { JSX, useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { BiSolidUserDetail } from "react-icons/bi";
@@ -12,41 +8,34 @@ import { FaPeopleGroup } from "react-icons/fa6";
 import { GiScrollUnfurled } from "react-icons/gi";
 import { MdPolicy } from "react-icons/md";
 import { PiPassword } from "react-icons/pi";
-import {
-  createUser,
-  loadUserById,
-  updateUser,
-} from "../../scripts/server/iam/users";
-import { Data, ToastType } from "@/app/lib/types";
-import { displayPrismaErrorCode } from "@/app/lib/prisma-error";
 import { useRouter } from "next/navigation";
-import {
-  mapGroups,
-  mapPolicies,
-  mapRoles,
-} from "../../scripts/client/mappings";
-import { DataTable } from "@/app/ui/datatable/data-table";
 import { columnsPolicies } from "./table/colums-policies";
 import { columnsRoles } from "./table/colums-roles";
 import { columnsGroups } from "./table/colums-groups";
 import { DataTableToolbar } from "./table/page-data-table-toolbar";
 import {
   tCountry,
-  tGroup,
   tPolicy,
   tRole,
   tUser,
   tUserCreate,
   tUserUpdate,
-} from "@/app/lib/prisma-types";
-import { DEFAULT_COUNTRY } from "@/app/lib/constants";
-import {
-  validateData,
-  ValidationConflict,
-} from "../../scripts/server/validate";
-import ValidationConflictsDialog from "@/app/ui/validation-conflicts-dialog";
-import { useUser } from "@/app/hooks/use-user";
-import { useToastSettings } from "@/app/hooks/use-toast-settings";
+} from "@/lib/prisma-types";
+import { useUser } from "@/hooks/use-user";
+import { useToastSettings } from "@/hooks/use-toast-settings";
+import { Data, ToastType } from "@/lib/types";
+import { mapPolicies, mapRoles } from "@/app/client/mapping";
+import { DEFAULT_COUNTRY } from "@/lib/constants";
+import AvatarSelect from "@/ui/avatar-select";
+import CountrySelect from "@/ui/country-select";
+import { DataTable } from "@/ui/datatable/data-table";
+import { createUser, loadUserById, updateUser } from "@/app/server/users";
+import { absoluteUrl, showToast } from "@/lib/functions";
+import { displayPrismaErrorCode } from "@/lib/prisma-errors";
+import { ValidationConflict } from "@/app/server/data/validation-data";
+import { validateData } from "@/app/server/validate";
+import Button from "@/ui/button";
+import ValidationConflictsDialog from "@/ui/validation-conflicts-dialog";
 
 export interface CountryEntity {
   id?: number;
@@ -99,8 +88,8 @@ export interface UserCarrouselProps {
   linkedpolicies: number[];
   roles: tRole[];
   linkedroles: number[];
-  groups: tGroup[];
-  linkedgroups: number[];
+  // groups: tGroup[];
+  // linkedgroups: number[];
   countries: tCountry[];
 }
 
@@ -148,7 +137,7 @@ const UserCarrousel = (props: UserCarrouselProps) => {
   ): void => {
     setTableDataPolicies(mapPolicies(_policies));
     setTableDataRoles(mapRoles(_roles));
-    setTableDataGroups(mapGroups(_groups));
+    // setTableDataGroups(mapGroups(_groups));
   };
 
   const linkedPolicies = useRef<number[]>([]);
@@ -173,12 +162,13 @@ const UserCarrousel = (props: UserCarrouselProps) => {
 
     linkedPolicies.current = props.linkedpolicies;
     linkedRoles.current = props.linkedroles;
-    linkedGroups.current = props.linkedgroups;
+    // linkedGroups.current = props.linkedgroups;
 
     setValid(
       props.linkedpolicies.length +
-        props.linkedroles.length +
-        props.linkedgroups.length <
+        // props.linkedroles.length +
+        // props.linkedgroups.length <
+        props.linkedroles.length <
         2
     );
 
@@ -395,7 +385,6 @@ const UserCarrousel = (props: UserCarrouselProps) => {
             selected={country}
             handleSetCountry={handleSelectCountry}
             className="w-11/12"
-            // register={register("address.country.name")}
           />
         </div>
       </div>
@@ -730,11 +719,11 @@ const UserCarrousel = (props: UserCarrouselProps) => {
           return { id: _id };
         }),
       },
-      groups: {
-        connect: linkedGroups.current.map((_id: number) => {
-          return { id: _id };
-        }),
-      },
+      // groups: {
+      //   connect: linkedGroups.current.map((_id: number) => {
+      //     return { id: _id };
+      //   }),
+      // },
     };
 
     return result;
@@ -808,11 +797,11 @@ const UserCarrousel = (props: UserCarrouselProps) => {
           return { id: _id };
         }),
       },
-      groups: {
-        set: linkedGroups.current.map((_id: number) => {
-          return { id: _id };
-        }),
-      },
+      // groups: {
+      //   set: linkedGroups.current.map((_id: number) => {
+      //     return { id: _id };
+      //   }),
+      // },
     };
 
     return result;
@@ -881,16 +870,17 @@ const UserCarrousel = (props: UserCarrouselProps) => {
     );
     const _mappedRoles: Data[] = mapRoles(_selectedRoles);
 
-    const _selectedGroups: tGroup[] = props.groups.filter((_group: tGroup) =>
-      linkedGroups.current.includes(_group.id)
-    );
-    const _mappedGroups: Data[] = mapGroups(_selectedGroups);
+    // const _selectedGroups: tGroup[] = props.groups.filter((_group: tGroup) =>
+    //   linkedGroups.current.includes(_group.id)
+    // );
+    // const _mappedGroups: Data[] = mapGroups(_selectedGroups);
 
     let data: Data = {
       id: -1,
       description: "",
       name: _entity.lastname,
-      children: [..._mappedPolicies, ..._mappedRoles, ..._mappedGroups],
+      // children: [..._mappedPolicies, ..._mappedRoles, ..._mappedGroups],
+      children: [..._mappedPolicies, ..._mappedRoles],
       extra: {
         subject: "User",
       },

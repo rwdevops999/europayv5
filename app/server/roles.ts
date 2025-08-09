@@ -1,6 +1,11 @@
 "use server";
 
-import { tRoleCreate, tRoleUpdate } from "@/lib/prisma-types";
+import {
+  cWhatToSelectFromRole,
+  tRole,
+  tRoleCreate,
+  tRoleUpdate,
+} from "@/lib/prisma-types";
 import prisma from "@/lib/prisma";
 /**
  * create a role
@@ -54,4 +59,16 @@ export const deleteRole = async (_id: number): Promise<void> => {
       id: _id,
     },
   });
+};
+
+export const loadRoles = async (): Promise<tRole[]> => {
+  let result: tRole[] = [];
+
+  await prisma.role
+    .findMany({
+      ...cWhatToSelectFromRole,
+    })
+    .then((values: tRole[]) => (result = values));
+
+  return result;
 };

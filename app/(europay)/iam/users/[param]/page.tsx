@@ -1,7 +1,7 @@
-import { CreatePromise, isNumber, splitURL } from "@/app/lib/util";
-import LoadingSpinner from "@/app/ui/loading-spinner";
 import { Suspense } from "react";
 import IamUsersPage from "../page";
+import { CreatePromise, isNumber, splitURLParams } from "@/lib/functions";
+import LoadingSpinner from "@/ui/loading-spinner";
 
 /**
  * this component is called throught the menu (id = undefined) or e.g through groups (id = number)
@@ -24,7 +24,7 @@ const UsersWithId = async ({
    * @param _param : the url param string
    */
   const parseURLParams = (_param: string) => {
-    const params: Record<string, string> = splitURL(_param);
+    const params: Record<string, string> = splitURLParams(_param);
 
     if (isNumber(params["id"])) {
       userId = parseInt(params["id"]) as number;
