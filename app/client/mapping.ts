@@ -1,3 +1,4 @@
+import { Group } from "@/generated/prisma";
 import {
   tGroup,
   tPolicy,
@@ -203,6 +204,24 @@ export const mapRoles = (roles: tRole[]): Data[] => {
   return result;
 };
 
+const mapGroupsSimple = (groups: Group[]): Data[] => {
+  let data: Data[] = [];
+
+  data = groups.map((group: Group) => {
+    return {
+      id: group.id!,
+      name: group.name ?? "",
+      description: group.description,
+      children: [],
+      extra: {
+        subject: "Group",
+      },
+    };
+  });
+
+  return data;
+};
+
 export const mapUsers = (users: tUser[]): Data[] => {
   let data: Data[] = [];
 
@@ -214,7 +233,7 @@ export const mapUsers = (users: tUser[]): Data[] => {
       children: [
         ...mapPolicies(user.policies),
         ...mapRoles(user.roles),
-        // ...mapGroupsSimple(user.groups),
+        ...mapGroupsSimple(user.groups),
       ],
       extra: {
         subject: "User",
