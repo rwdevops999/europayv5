@@ -1,6 +1,11 @@
 "use server";
 
-import { tGroupCreate, tGroupUpdate } from "@/lib/prisma-types";
+import {
+  cWhatToSelectFromGroup,
+  tGroup,
+  tGroupCreate,
+  tGroupUpdate,
+} from "@/lib/prisma-types";
 import prisma from "@/lib/prisma";
 
 export const createGroup = async (
@@ -40,4 +45,16 @@ export const deleteGroup = async (_id: number): Promise<void> => {
       id: _id,
     },
   });
+};
+
+export const loadGroups = async (): Promise<tGroup[]> => {
+  let result: tGroup[] = [];
+
+  await prisma.group
+    .findMany({
+      ...cWhatToSelectFromGroup,
+    })
+    .then((values: tGroup[]) => (result = values));
+
+  return result;
 };

@@ -1,7 +1,7 @@
 "use client";
 
 import { useToastSettings } from "@/hooks/use-toast-settings";
-import { tCountry, tPolicy, tRole, tUser } from "@/lib/prisma-types";
+import { tCountry, tGroup, tPolicy, tRole, tUser } from "@/lib/prisma-types";
 import { Data, ToastType } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -18,6 +18,7 @@ import Dialog from "@/ui/dialog";
 import { DataTable } from "@/ui/datatable/data-table";
 import { columns } from "./table/page-colums";
 import { DataTableToolbar } from "./table/page-data-table-toolbar";
+import { Group } from "@/generated/prisma";
 
 /**
  * is called to providing the UI for handling the users.
@@ -29,7 +30,7 @@ const UserHandler = ({
   linkedpolicies,
   roles,
   linkedroles,
-  // groups,
+  groups,
   linkedgroups,
   countries,
 }: {
@@ -38,7 +39,7 @@ const UserHandler = ({
   linkedpolicies: number[];
   roles: tRole[];
   linkedroles: number[];
-  // groups: tGroup[];
+  groups: tGroup[];
   linkedgroups: number[];
   countries: tCountry[];
 }) => {
@@ -97,15 +98,15 @@ const UserHandler = ({
       (_user: tUser) => _user.id === _userId
     );
 
-    // if (user !== undefined && user.groups && user.groups.length > 0) {
-    //   alert = {
-    //     template: _template,
-    //     params: {
-    //       iamType: "User",
-    //       linkedType: `Group ${user.groups[0].name}`,
-    //     },
-    //   };
-    // }
+    if (user !== undefined && user.groups && user.groups.length > 0) {
+      alert = {
+        template: _template,
+        params: {
+          iamType: "User",
+          linkedType: `Group ${user.groups[0].name}`,
+        },
+      };
+    }
 
     return alert;
   };
@@ -204,8 +205,8 @@ const UserHandler = ({
           linked = appuser.roles.map((_role: tRole) => _role.id);
           setLinkedRoles(linked);
 
-          // linked = appuser.groups.map((_group: Group) => _group.id);
-          // setLinkedGroups(linked);
+          linked = appuser.groups.map((_group: Group) => _group.id);
+          setLinkedGroups(linked);
 
           setEntity(entity);
           openTheDialog();
@@ -261,8 +262,8 @@ const UserHandler = ({
                   linkedpolicies={linkedPolicies}
                   roles={roles}
                   linkedroles={linkedRoles}
-                  // groups={groups}
-                  // linkedgroups={linkedGroups}
+                  groups={groups}
+                  linkedgroups={linkedGroups}
                   countries={countries}
                 />
               }

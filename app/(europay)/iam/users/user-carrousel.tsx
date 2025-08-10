@@ -15,6 +15,7 @@ import { columnsGroups } from "./table/colums-groups";
 import { DataTableToolbar } from "./table/page-data-table-toolbar";
 import {
   tCountry,
+  tGroup,
   tPolicy,
   tRole,
   tUser,
@@ -24,7 +25,7 @@ import {
 import { useUser } from "@/hooks/use-user";
 import { useToastSettings } from "@/hooks/use-toast-settings";
 import { Data, ToastType } from "@/lib/types";
-import { mapPolicies, mapRoles } from "@/app/client/mapping";
+import { mapGroups, mapPolicies, mapRoles } from "@/app/client/mapping";
 import { DEFAULT_COUNTRY } from "@/lib/constants";
 import AvatarSelect from "@/ui/avatar-select";
 import CountrySelect from "@/ui/country-select";
@@ -88,8 +89,8 @@ export interface UserCarrouselProps {
   linkedpolicies: number[];
   roles: tRole[];
   linkedroles: number[];
-  // groups: tGroup[];
-  // linkedgroups: number[];
+  groups: tGroup[];
+  linkedgroups: number[];
   countries: tCountry[];
 }
 
@@ -137,7 +138,7 @@ const UserCarrousel = (props: UserCarrouselProps) => {
   ): void => {
     setTableDataPolicies(mapPolicies(_policies));
     setTableDataRoles(mapRoles(_roles));
-    // setTableDataGroups(mapGroups(_groups));
+    setTableDataGroups(mapGroups(_groups));
   };
 
   const linkedPolicies = useRef<number[]>([]);
@@ -162,13 +163,12 @@ const UserCarrousel = (props: UserCarrouselProps) => {
 
     linkedPolicies.current = props.linkedpolicies;
     linkedRoles.current = props.linkedroles;
-    // linkedGroups.current = props.linkedgroups;
+    linkedGroups.current = props.linkedgroups;
 
     setValid(
       props.linkedpolicies.length +
-        // props.linkedroles.length +
-        // props.linkedgroups.length <
-        props.linkedroles.length <
+        props.linkedroles.length +
+        props.linkedgroups.length <
         2
     );
 
@@ -537,7 +537,6 @@ const UserCarrousel = (props: UserCarrouselProps) => {
     setValid(sum < 2);
   };
 
-  // TODO => GROUPS
   const handleChangePolicySelection = (_ids: number[]) => {
     const equal: boolean =
       _ids.length === linkedPolicies.current.length &&
@@ -719,11 +718,11 @@ const UserCarrousel = (props: UserCarrouselProps) => {
           return { id: _id };
         }),
       },
-      // groups: {
-      //   connect: linkedGroups.current.map((_id: number) => {
-      //     return { id: _id };
-      //   }),
-      // },
+      groups: {
+        connect: linkedGroups.current.map((_id: number) => {
+          return { id: _id };
+        }),
+      },
     };
 
     return result;
@@ -797,11 +796,11 @@ const UserCarrousel = (props: UserCarrouselProps) => {
           return { id: _id };
         }),
       },
-      // groups: {
-      //   set: linkedGroups.current.map((_id: number) => {
-      //     return { id: _id };
-      //   }),
-      // },
+      groups: {
+        set: linkedGroups.current.map((_id: number) => {
+          return { id: _id };
+        }),
+      },
     };
 
     return result;
@@ -870,17 +869,16 @@ const UserCarrousel = (props: UserCarrouselProps) => {
     );
     const _mappedRoles: Data[] = mapRoles(_selectedRoles);
 
-    // const _selectedGroups: tGroup[] = props.groups.filter((_group: tGroup) =>
-    //   linkedGroups.current.includes(_group.id)
-    // );
-    // const _mappedGroups: Data[] = mapGroups(_selectedGroups);
+    const _selectedGroups: tGroup[] = props.groups.filter((_group: tGroup) =>
+      linkedGroups.current.includes(_group.id)
+    );
+    const _mappedGroups: Data[] = mapGroups(_selectedGroups);
 
     let data: Data = {
       id: -1,
       description: "",
       name: _entity.lastname,
-      // children: [..._mappedPolicies, ..._mappedRoles, ..._mappedGroups],
-      children: [..._mappedPolicies, ..._mappedRoles],
+      children: [..._mappedPolicies, ..._mappedRoles, ..._mappedGroups],
       extra: {
         subject: "User",
       },
