@@ -7,12 +7,14 @@ import ThemeToggle from "./components/theme-toggle";
 import NavbarUserProfile from "./components/navbar-user-profile";
 import { useToastSettings } from "@/hooks/use-toast-settings";
 import { useWifi } from "@/hooks/use-wifi";
+import { useMarkdownSettings } from "@/hooks/use-markdown-settings";
 
 const renderDevItems: boolean = process.env.NODE_ENV === "development";
 
 const NavbarRight = () => {
   const { getToastNode } = useToastSettings();
   const { getConnectNode } = useWifi();
+  const { getMarkdownNode } = useMarkdownSettings();
 
   return (
     <div data-testid="navbarright" className="flex items-center space-x-2">
@@ -32,7 +34,7 @@ const NavbarRight = () => {
           <>
             <EmptyNode />
             {getToastNode()}
-            <EmptyNode />
+            {getMarkdownNode()}
             <EmptyNode />
           </>
         )}

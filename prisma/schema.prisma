@@ -197,3 +197,12 @@ model Group {
   roles Role[]
   users User[]
 }
+
+model Export {
+  id Int @id @default(autoincrement())
+  name String @unique
+  content Json
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+}
+

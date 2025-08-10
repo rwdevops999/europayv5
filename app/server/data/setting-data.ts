@@ -13,4 +13,10 @@ export const appsettings: tSettingCreate[] = [
     key: "ToastDuration",
     value: process.env.NEXT_PUBLIC_SETTINGS_TOAST_DURATION ?? "1500",
   },
+  {
+    type: "General",
+    subtype: "Application",
+    key: "Markdown",
+    value: process.env.NEXT_PUBLIC_SETTINGS_MARKDOWN_ON ?? "true",
+  },
 ];

@@ -2,12 +2,12 @@ import { absoluteUrl } from "@/lib/functions";
 import { FaUser } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { FcServices } from "react-icons/fc";
-import { GiScrollUnfurled } from "react-icons/gi";
+import { GiScrollUnfurled, GiSettingsKnobs } from "react-icons/gi";
 import { GrTest } from "react-icons/gr";
 import { IoIosKey } from "react-icons/io";
 import { LuClipboardList, LuLayoutDashboard } from "react-icons/lu";
 import { RiPoliceBadgeLine } from "react-icons/ri";
-import { TbTestPipe } from "react-icons/tb";
+import { TbDatabaseExport, TbTestPipe } from "react-icons/tb";
 
 export interface MenuItem {
   title: string;
@@ -79,60 +79,60 @@ export let menu: MenuItem[] = [
   //     },
   //   ],
   // },
-  // {
-  //   url: "#",
-  //   title: "Settings",
-  //   disabled: false,
-  //   visible: true,
-  //   icon: <GiSettingsKnobs size={16} />,
-  //   subItems: [
-  //     {
-  //       title: "General",
-  //       url: absoluteUrl("/settings/general"),
-  //       disabled: false,
-  //       visible: true,
-  //       icon: <MdSettingsAccessibility size={16} />,
-  //       subItems: [],
-  //       parent: "Settings",
-  //     },
-  //     {
-  //       title: "Storage",
-  //       url: absoluteUrl("/settings/storage"),
-  //       disabled: false,
-  //       visible: true,
-  //       icon: <GrStorage size={16} />,
-  //       subItems: [],
-  //       parent: "Settings",
-  //     },
-  //     {
-  //       title: "Limits",
-  //       url: absoluteUrl("/settings/limits"),
-  //       disabled: false,
-  //       visible: true,
-  //       icon: <PiSpeedometerDuotone size={16} />,
-  //       subItems: [],
-  //       parent: "Settings",
-  //     },
-  //     {
-  //       title: "Export",
-  //       url: absoluteUrl("/settings/export"),
-  //       disabled: false,
-  //       visible: true,
-  //       icon: <TbDatabaseExport size={16} />,
-  //       subItems: [],
-  //       parent: "Settings",
-  //     },
-  //     {
-  //       title: "Import",
-  //       url: absoluteUrl("/settings/import"),
-  //       disabled: false,
-  //       visible: true,
-  //       icon: <TbDatabaseImport size={16} />,
-  //       subItems: [],
-  //       parent: "Settings",
-  //     },
-  //   ],
-  // },
+  {
+    url: "#",
+    title: "Settings",
+    disabled: false,
+    visible: true,
+    icon: <GiSettingsKnobs size={16} />,
+    subItems: [
+      // {
+      //   title: "General",
+      //   url: absoluteUrl("/settings/general"),
+      //   disabled: false,
+      //   visible: true,
+      //   icon: <MdSettingsAccessibility size={16} />,
+      //   subItems: [],
+      //   parent: "Settings",
+      // },
+      // {
+      //   title: "Storage",
+      //   url: absoluteUrl("/settings/storage"),
+      //   disabled: false,
+      //   visible: true,
+      //   icon: <GrStorage size={16} />,
+      //   subItems: [],
+      //   parent: "Settings",
+      // },
+      // {
+      //   title: "Limits",
+      //   url: absoluteUrl("/settings/limits"),
+      //   disabled: false,
+      //   visible: true,
+      //   icon: <PiSpeedometerDuotone size={16} />,
+      //   subItems: [],
+      //   parent: "Settings",
+      // },
+      {
+        title: "Export",
+        url: absoluteUrl("/settings/export"),
+        disabled: false,
+        visible: true,
+        icon: <TbDatabaseExport size={16} />,
+        subItems: [],
+        parent: "Settings",
+      },
+      // {
+      //   title: "Import",
+      //   url: absoluteUrl("/settings/import"),
+      //   disabled: false,
+      //   visible: true,
+      //   icon: <TbDatabaseImport size={16} />,
+      //   subItems: [],
+      //   parent: "Settings",
+      // },
+    ],
+  },
   // {
   //   title: "Admin",
   //   url: absoluteUrl("/admin"),
