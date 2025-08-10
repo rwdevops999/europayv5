@@ -1,5 +1,6 @@
 import { absoluteUrl } from "@/lib/functions";
 import { FaUser } from "react-icons/fa";
+import { FaUserGroup } from "react-icons/fa6";
 import { FcServices } from "react-icons/fc";
 import { GiScrollUnfurled } from "react-icons/gi";
 import { GrTest } from "react-icons/gr";
@@ -200,15 +201,15 @@ export let menu: MenuItem[] = [
         subItems: [],
         parent: "IAM",
       },
-      // {
-      //   title: "Groups",
-      //   url: absoluteUrl("/iam/groups/id"),
-      //   disabled: false,
-      //   visible: true,
-      //   icon: <FaUserGroup size={16} />,
-      //   subItems: [],
-      //   parent: "IAM",
-      // },
+      {
+        title: "Groups",
+        url: absoluteUrl("/iam/groups/id"),
+        disabled: false,
+        visible: true,
+        icon: <FaUserGroup size={16} />,
+        subItems: [],
+        parent: "IAM",
+      },
     ],
   },
   // {

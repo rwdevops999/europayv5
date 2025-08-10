@@ -102,7 +102,7 @@ model Policy {
 
   roles Role[]
   users User[]
-  // groups Group[]
+  groups Group[]
 }
 
 model Setting {
@@ -126,7 +126,7 @@ model Role {
 
   policies Policy[]
   users User[]
-  // groups Group[]
+  groups Group[]
 }
 
 model Country {
@@ -177,11 +177,23 @@ model User {
   policies Policy[]
   roles Role[]
   @@unique([firstname, lastname])
-  // groups Group[]
+  groups Group[]
   // account Account?
 }
 
 enum UserType {
   EUROPAY
   GUEST
+}
+
+model Group {
+  id Int @id @default(autoincrement())
+  name String @unique
+  description String? @default("")
+  managed Boolean? @default(false)
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+  policies Policy[]
+  roles Role[]
+  users User[]
 }

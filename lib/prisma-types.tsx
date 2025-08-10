@@ -122,7 +122,7 @@ const cSelectUserScalarOnly: SelectUserScalarOnly = {
 
 type WhatToSelectFromPolicy = {
   include: {
-    // groups: SelectNameAndIdOnly;
+    groups: SelectNameAndIdOnly;
     users: SelectUserScalarOnly;
     roles: SelectNameAndIdOnly;
     servicestatements: WhatToSelectFromServiceStatement;
@@ -131,7 +131,7 @@ type WhatToSelectFromPolicy = {
 
 export const cWhatToSelectFromPolicy: WhatToSelectFromPolicy = {
   include: {
-    // groups: cSelectNameAndIdOnly,
+    groups: cSelectNameAndIdOnly,
     users: cSelectUserScalarOnly,
     roles: cSelectNameAndIdOnly,
     servicestatements: cWhatToSelectFromServiceStatement,
@@ -149,14 +149,14 @@ export type tSettingCreate = Prisma.SettingUncheckedCreateInput;
 /* == ROLE ========== */
 type WhatToSelectFromRole = {
   include: {
-    // groups: SelectNameAndIdOnly;
+    groups: SelectNameAndIdOnly;
     users: SelectUserScalarOnly;
     policies: WhatToSelectFromPolicy;
   };
 };
 export const cWhatToSelectFromRole: WhatToSelectFromRole = {
   include: {
-    // groups: cSelectNameAndIdOnly,
+    groups: cSelectNameAndIdOnly,
     users: cSelectUserScalarOnly,
     policies: cWhatToSelectFromPolicy,
   },
@@ -165,8 +165,6 @@ export const cWhatToSelectFromRole: WhatToSelectFromRole = {
 export type tRole = Prisma.RoleGetPayload<WhatToSelectFromRole>;
 export type tRoleCreate = Prisma.RoleUncheckedCreateInput;
 export type tRoleUpdate = Prisma.RoleUncheckedUpdateInput;
-
-/* == GROUP ========== */
 
 /* == COUNTRY ========== */
 export type WhatToSelectFromCountry = {
@@ -244,3 +242,23 @@ export const cWhatToSelectFromUser: WhatToSelectFromUser = {
 export type tUser = Prisma.UserGetPayload<WhatToSelectFromUser>;
 export type tUserCreate = Prisma.UserUncheckedCreateInput;
 export type tUserUpdate = Prisma.UserUncheckedUpdateInput;
+
+/* == GROUP ========== */
+type WhatToSelectFromGroup = {
+  include: {
+    roles: WhatToSelectFromRole;
+    policies: WhatToSelectFromPolicy;
+    users: WhatToSelectFromUser;
+  };
+};
+export const cWhatToSelectFromGroup: WhatToSelectFromGroup = {
+  include: {
+    roles: cWhatToSelectFromRole,
+    policies: cWhatToSelectFromPolicy,
+    users: cWhatToSelectFromUser,
+  },
+};
+
+export type tGroup = Prisma.GroupGetPayload<WhatToSelectFromGroup>;
+export type tGroupCreate = Prisma.GroupUncheckedCreateInput;
+export type tGroupUpdate = Prisma.GroupUncheckedUpdateInput;

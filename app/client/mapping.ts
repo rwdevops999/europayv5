@@ -1,4 +1,5 @@
 import {
+  tGroup,
   tPolicy,
   tRole,
   tService,
@@ -224,4 +225,45 @@ export const mapUsers = (users: tUser[]): Data[] => {
   });
 
   return data;
+};
+
+const mapUsersSimple = (users: tUser[]): Data[] => {
+  let data: Data[] = [];
+
+  data = users.map((user: tUser) => {
+    return {
+      id: user.id!,
+      name: user.lastname === "" ? user.email : user.lastname,
+      description: user.firstname === "" ? "" : user.firstname,
+      children: [],
+      extra: {
+        subject: "User",
+      },
+    };
+  });
+
+  return data;
+};
+
+export const mapGroups = (groups: tGroup[]): Data[] => {
+  let result: Data[] = [];
+
+  result = groups.map((group: tGroup) => {
+    return {
+      id: group.id,
+      name: group.name!,
+      description: group.description!,
+      children: [
+        ...mapPolicies(group.policies),
+        ...mapRoles(group.roles),
+        ...mapUsersSimple(group.users),
+      ],
+      extra: {
+        subject: "Group",
+        managed: group.managed ?? undefined,
+      },
+    };
+  });
+
+  return result;
 };
