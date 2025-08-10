@@ -157,19 +157,19 @@ const ServiceStatementHandler = ({
 
     let alert: tAlert | undefined = undefined;
 
-    // if (
-    //   _statement !== undefined &&
-    //   _statement.policies &&
-    //   _statement.policies.length > 0
-    // ) {
-    //   alert = {
-    //     template: _template,
-    //     params: {
-    //       iamType: "Service Statement",
-    //       linkedType: `Policy ${_statement.policies[0].name}`,
-    //     },
-    //   };
-    // }
+    if (
+      _statement !== undefined &&
+      _statement.policies &&
+      _statement.policies.length > 0
+    ) {
+      alert = {
+        template: _template,
+        params: {
+          iamType: "Service Statement",
+          linkedType: `Policy ${_statement.policies[0].name}`,
+        },
+      };
+    }
 
     return alert;
   };
