@@ -58,3 +58,24 @@ export const loadGroups = async (): Promise<tGroup[]> => {
 
   return result;
 };
+
+export const loadGroupById = async (
+  _groupId: number
+): Promise<tGroup | null> => {
+  let result: tGroup | null = null;
+
+  await prisma.group
+    .findFirst({
+      where: {
+        id: _groupId,
+      },
+      ...cWhatToSelectFromGroup,
+    })
+    .then(async (value: tGroup | null) => {
+      if (value) {
+        result = value;
+      }
+    });
+
+  return result;
+};

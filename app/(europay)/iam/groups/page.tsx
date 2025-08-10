@@ -1,10 +1,10 @@
-import { tGroup, tPolicy, tRole, tUser } from "@/app/lib/prisma-types";
-import { loadAllPolicies } from "../../scripts/server/iam/policies";
-import { loadAllRoles } from "../../scripts/server/iam/roles";
-import { loadAllUsers } from "../../scripts/server/iam/users";
-import { loadAllGroups, loadGroupById } from "../../scripts/server/iam/groups";
-import PageContent from "@/app/ui/page-content";
-import { absoluteUrl } from "@/app/lib/util";
+import { loadGroupById, loadGroups } from "@/app/server/groups";
+import { loadPolicies } from "@/app/server/policies";
+import { loadRoles } from "@/app/server/roles";
+import { loadUsers } from "@/app/server/users";
+import { absoluteUrl } from "@/lib/functions";
+import { tGroup, tPolicy, tRole, tUser } from "@/lib/prisma-types";
+import PageContent from "@/ui/page-content";
 import GroupHandler from "./group-handler";
 
 const IamGroupsPage = async ({ params }: { params: Promise<any> }) => {
@@ -20,13 +20,13 @@ const IamGroupsPage = async ({ params }: { params: Promise<any> }) => {
   let linkedUsers: number[] = [];
 
   const loadAdditionalData = async (): Promise<void> => {
-    await loadAllPolicies()
+    await loadPolicies()
       .then((_policies: tPolicy[]) => (policies = _policies))
       .then(async () => {
-        await loadAllRoles()
+        await loadRoles()
           .then((_roles: tRole[]) => (roles = _roles))
           .then(async () => {
-            await loadAllUsers().then((_users: tUser[]) => (users = _users));
+            await loadUsers().then((_users: tUser[]) => (users = _users));
           });
       });
   };
@@ -49,7 +49,7 @@ const IamGroupsPage = async ({ params }: { params: Promise<any> }) => {
         await loadAdditionalData();
       });
     } else {
-      await loadAllGroups().then(async (_groups: tGroup[]) => {
+      await loadGroups().then(async (_groups: tGroup[]) => {
         groups = _groups;
         await loadAdditionalData();
       });

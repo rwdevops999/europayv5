@@ -235,7 +235,6 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
     setValid(sum < 2);
   };
 
-  // TODO => GROUPS
   const handleChangePolicySelection = (_ids: number[]) => {
     const equal: boolean =
       _ids.length === linkedPolicies.current.length &&
