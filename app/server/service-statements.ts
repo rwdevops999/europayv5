@@ -1,4 +1,6 @@
 "use server";
+import { Permission } from "@/generated/prisma";
+import { capitalize, json } from "@/lib/functions";
 import prisma from "@/lib/prisma";
 import {
   cWhatToSelectFromServiceStatement,
@@ -6,6 +8,12 @@ import {
   tServiceStatementCreate,
   tServiceStatementUpdate,
 } from "@/lib/prisma-types";
+import {
+  ServiceStatementInfo,
+  servicestatements,
+} from "./setup/services-and-actions";
+import { getServiceIdByName } from "./services";
+import { getServiceActionIdByName } from "./service-actions";
 
 export const loadServiceStatements = async (): Promise<tServiceStatement[]> => {
   let result: tServiceStatement[] = [];
@@ -56,4 +64,46 @@ export const updateServiceStatement = async (
     });
 
   return errorcode;
+};
+
+const defineServiceStatementsForPermission = async (
+  _permission: string,
+  _statements: Record<string, ServiceStatementInfo>
+): Promise<void> => {
+  for (let i = 0; i < Object.keys(_statements).length; i++) {
+    const ssname: string =
+      capitalize(_permission) + Object.keys(_statements)[i];
+    const ssvalue: ServiceStatementInfo = Object.values(_statements)[i];
+
+    const _serviceId: number = await getServiceIdByName(ssvalue.service);
+    const _serviceAcionId: number = await getServiceActionIdByName(
+      ssvalue.action
+    );
+
+    const _statement: tServiceStatementCreate = {
+      ssname: ssname,
+      managed: true,
+      description: `${ssname} (MANAGED)`,
+      permission: Permission[_permission as keyof typeof Permission],
+      serviceid: _serviceId,
+      servicestatementactions: {
+        create: [
+          {
+            ssactionname: ssname,
+            serviceactionid: _serviceAcionId,
+          },
+        ],
+      },
+    };
+
+    await createServiceStatement(_statement);
+  }
+};
+
+export const defineServiceStatements = async (): Promise<void> => {
+  for (let i = 0; i < Object.values(Permission).length; i++) {
+    const permission = Object.values(Permission)[i];
+
+    defineServiceStatementsForPermission(permission, servicestatements);
+  }
 };

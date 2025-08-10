@@ -118,7 +118,7 @@ export const showToast = (
 };
 
 /**
- * consvert string value to boolean
+ * convert string value to boolean
  *
  * @param _value the string value
  * @param _default returned default value (if _value === undefined)
@@ -134,4 +134,26 @@ export const stringToBoolean = (
   } else {
     return _default;
   }
+};
+
+/**
+ * Capitalize a word (which is first converted to lowerCase)
+ *
+ * @param str the string to capitalize
+ *
+ * @returns the capitalized word
+ */
+export const capitalize = (str: string): string => {
+  return str.toLowerCase().charAt(0).toUpperCase() + str.toLowerCase().slice(1);
+};
+
+/**
+ * Convert a value (any object) to JSON string
+ *
+ * @param _value the object to convert
+ *
+ * @returns a JSON string
+ */
+export const json = (_value: any): string => {
+  return JSON.stringify(_value);
 };

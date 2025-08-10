@@ -9,6 +9,8 @@ import SetupSettingsWithSuspense from "./setup-settings-with-suspense";
 import RenderBackground from "./render-background";
 import { countCountries, defineCountries } from "@/app/server/country";
 import SetupCountriesWithSuspense from "./setup-countries-with-suspense";
+import { provisionManagedIAM } from "@/app/server/managed";
+import SetupManagedWithSuspense from "./setup-managed-with-suspense";
 
 const InitialiseApplication = async () => {
   let loadServices: boolean = false;
@@ -48,6 +50,12 @@ const InitialiseApplication = async () => {
     settingsLoaded = await createSettings(appsettings);
   }
 
+  const loadManaged: boolean = true;
+  let managedLoaded = false;
+  if (loadManaged) {
+    managedLoaded = await provisionManagedIAM(true);
+  }
+
   return (
     <>
       <RenderBackground />
@@ -58,6 +66,8 @@ const InitialiseApplication = async () => {
       )}
       <TemplateLoaderWithSuspense _loaded={templatesloaded} />
       {loadSettings && <SetupSettingsWithSuspense _loaded={settingsLoaded} />}
+
+      {loadManaged && <SetupManagedWithSuspense _loaded={managedLoaded} />}
     </>
   );
 };

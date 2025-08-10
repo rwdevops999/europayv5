@@ -1,6 +1,34 @@
 "use server";
 
 import { Prisma } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
+
+export const getServiceActionIdByName = async (
+  _name: string
+): Promise<number> => {
+  let result: number = -1;
+
+  await prisma.serviceAction
+    .findFirst({
+      where: {
+        serviceactionname: _name,
+      },
+      select: {
+        id: true,
+      },
+    })
+    .then((value: any | null) => {
+      if (value) {
+        result = value.id;
+      }
+    });
+
+  if (result === -1) {
+    console.log("ERROR: YOU LOOKED UP AN UNKNOW SERVICE ACTION", _name);
+  }
+
+  return result;
+};
 
 /**
  * destructures the service actions to an array containing {serviceactionname: serviceaction}

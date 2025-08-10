@@ -6,6 +6,33 @@ import { Prisma } from "@/generated/prisma";
 import { cWhatToSelectFromService, tService } from "@/lib/prisma-types";
 
 // === DB functions =================================
+export const getServiceIdByName = async (
+  _servicename: string
+): Promise<number> => {
+  let result: number = -1;
+
+  await prisma.service
+    .findFirst({
+      where: {
+        servicename: _servicename,
+      },
+      select: {
+        id: true,
+      },
+    })
+    .then((value: any | null) => {
+      if (value) {
+        result = value.id;
+      }
+    });
+
+  if (result === -1) {
+    console.log("ERROR: YOU LOOKED UP AN UNKNOW SERVICE", _servicename);
+  }
+
+  return result;
+};
+
 /**
  * Count the services in the DB
  *
