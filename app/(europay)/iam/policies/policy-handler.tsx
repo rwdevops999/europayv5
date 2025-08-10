@@ -121,33 +121,33 @@ const PolicyHandler = ({
       (policy: tPolicy) => policy.id === _policyId
     );
 
-    // if (_policy !== undefined) {
-    //   if (_policy.roles && _policy.roles.length > 0) {
-    //     alert = {
-    //       template: _template,
-    //       params: {
-    //         iamType: "Policy",
-    //         linkedType: `Role ${_policy.roles[0].name}`,
-    //       },
-    //     };
-    //   } else if (_policy.users && _policy.users.length > 0) {
-    //     alert = {
-    //       template: _template,
-    //       params: {
-    //         iamType: "Policy",
-    //         linkedType: `User ${_policy.users[0].firstname} ${_policy.users[0].lastname}`,
-    //       },
-    //     };
-    //   } else if (_policy.groups && _policy.groups.length > 0) {
-    //     alert = {
-    //       template: _template,
-    //       params: {
-    //         iamType: "Policy",
-    //         linkedType: `Group ${_policy.groups[0].name}`,
-    //       },
-    //     };
-    //   }
-    // }
+    if (_policy !== undefined) {
+      if (_policy.roles && _policy.roles.length > 0) {
+        alert = {
+          template: _template,
+          params: {
+            iamType: "Policy",
+            linkedType: `Role ${_policy.roles[0].name}`,
+          },
+        };
+      } else if (_policy.users && _policy.users.length > 0) {
+        alert = {
+          template: _template,
+          params: {
+            iamType: "Policy",
+            linkedType: `User ${_policy.users[0].firstname} ${_policy.users[0].lastname}`,
+          },
+        };
+      } else if (_policy.groups && _policy.groups.length > 0) {
+        alert = {
+          template: _template,
+          params: {
+            iamType: "Policy",
+            linkedType: `Group ${_policy.groups[0].name}`,
+          },
+        };
+      }
+    }
 
     return alert;
   };
