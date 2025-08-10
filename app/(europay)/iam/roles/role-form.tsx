@@ -7,7 +7,12 @@ import { validateData } from "@/app/server/validate";
 import { useToastSettings } from "@/hooks/use-toast-settings";
 import { absoluteUrl, cn, showToast } from "@/lib/functions";
 import { displayPrismaErrorCode } from "@/lib/prisma-errors";
-import { tPolicy, tRoleCreate, tRoleUpdate } from "@/lib/prisma-types";
+import {
+  tPolicy,
+  tRoleCreate,
+  tRoleUpdate,
+  tService,
+} from "@/lib/prisma-types";
 import { Data, ToastType } from "@/lib/types";
 import Button from "@/ui/button";
 import { DataTable } from "@/ui/datatable/data-table";

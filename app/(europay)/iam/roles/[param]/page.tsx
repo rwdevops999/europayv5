@@ -1,6 +1,7 @@
 import { CreatePromise, isNumber, splitURLParams } from "@/lib/functions";
 import LoadingSpinner from "@/ui/loading-spinner";
 import { Suspense } from "react";
+import IamRolesPage from "../page";
 
 /**
  * this component is called throught the menu (id = undefined) or e.g through roles (id = number)

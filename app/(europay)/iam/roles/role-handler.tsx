@@ -82,25 +82,25 @@ const RoleHandler = ({
       (role: tRole) => role.id === _roleId
     );
 
-    // if (_role !== undefined) {
-    //   if (_role.users && _role.users.length > 0) {
-    //     alert = {
-    //       template: _template,
-    //       params: {
-    //         iamType: "Role",
-    //         linkedType: `User ${_role.users[0].firstname} ${_role.users[0].lastname}`,
-    //       },
-    //     };
-    //   } else if (_role.groups && _role.groups.length > 0) {
-    //     alert = {
-    //       template: _template,
-    //       params: {
-    //         iamType: "Role",
-    //         linkedType: `Group ${_role.groups[0].name}`,
-    //       },
-    //     };
-    //   }
-    // }
+    if (_role !== undefined) {
+      if (_role.users && _role.users.length > 0) {
+        alert = {
+          template: _template,
+          params: {
+            iamType: "Role",
+            linkedType: `User ${_role.users[0].firstname} ${_role.users[0].lastname}`,
+          },
+        };
+      } else if (_role.groups && _role.groups.length > 0) {
+        alert = {
+          template: _template,
+          params: {
+            iamType: "Role",
+            linkedType: `Group ${_role.groups[0].name}`,
+          },
+        };
+      }
+    }
 
     return alert;
   };
