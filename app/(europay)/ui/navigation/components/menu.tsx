@@ -7,7 +7,7 @@ import { GrTest } from "react-icons/gr";
 import { IoIosKey } from "react-icons/io";
 import { LuClipboardList, LuLayoutDashboard } from "react-icons/lu";
 import { RiPoliceBadgeLine } from "react-icons/ri";
-import { TbDatabaseExport, TbTestPipe } from "react-icons/tb";
+import { TbDatabaseExport, TbDatabaseImport, TbTestPipe } from "react-icons/tb";
 
 export interface MenuItem {
   title: string;
@@ -122,15 +122,15 @@ export let menu: MenuItem[] = [
         subItems: [],
         parent: "Settings",
       },
-      // {
-      //   title: "Import",
-      //   url: absoluteUrl("/settings/import"),
-      //   disabled: false,
-      //   visible: true,
-      //   icon: <TbDatabaseImport size={16} />,
-      //   subItems: [],
-      //   parent: "Settings",
-      // },
+      {
+        title: "Import",
+        url: absoluteUrl("/settings/import"),
+        disabled: false,
+        visible: true,
+        icon: <TbDatabaseImport size={16} />,
+        subItems: [],
+        parent: "Settings",
+      },
     ],
   },
   // {

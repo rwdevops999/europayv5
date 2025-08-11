@@ -21,7 +21,7 @@ export const servicesandactions: Record<string, string[]> = {
 
   "Dashboard.Country": ["Change"],
 
-  Settings: ["Export"],
+  Settings: ["Export", "Import"],
 
   "Settings.Export": [
     "ToViewSS",
@@ -38,6 +38,8 @@ export const servicesandactions: Record<string, string[]> = {
     "ToDbExport",
     "Clipboard",
   ],
+
+  "Settings.Import": ["DbName", "FromDbImport"],
 
   IAM: ["Services", "Statements", "Policies", "Roles", "Users", "Groups"],
 

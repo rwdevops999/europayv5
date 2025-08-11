@@ -25,6 +25,7 @@ import {
 import { Export, Permission } from "@/generated/prisma";
 import { DEFAULT_COUNTRY } from "@/lib/constants";
 import prisma from "@/lib/prisma";
+import { JsonValue } from "@/generated/prisma/runtime/library";
 
 const exportServiceStatementActions = (
   _actions: tServiceStatementAction[],
@@ -397,4 +398,49 @@ export const exportDataToDB = async (
   } else {
     createExportData(_name, _data);
   }
+};
+
+export const loadExportNames = async (): Promise<string[]> => {
+  let result: string[] = [];
+
+  await prisma.export
+    .findMany({
+      select: {
+        name: true,
+      },
+    })
+    .then((values: any[]) => {
+      result = values.reduce<string[]>((acc: string[], value: any) => {
+        if (!acc.includes(value.name)) {
+          acc.push(value.name);
+        }
+
+        return acc;
+      }, []);
+    });
+
+  return result;
+};
+
+export const loadExportedData = async (
+  _name: string
+): Promise<JsonValue | null> => {
+  let result: JsonValue | null = null;
+
+  await prisma.export
+    .findUnique({
+      where: {
+        name: _name,
+      },
+      select: {
+        content: true,
+      },
+    })
+    .then((value: any | null) => {
+      if (value) {
+        result = value.content;
+      }
+    });
+
+  return result;
 };
