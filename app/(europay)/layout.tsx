@@ -2,7 +2,9 @@
 // import Footer from "./components/footer/footer";
 // import Navbar from "./components/navbar/navbar";
 
+import { ToastContainer } from "react-toastify";
 import Navbar from "./ui/navigation/navbar";
+import Footer from "./ui/navigation/components/footer/footer";
 
 interface EuropayLayoutProps {
   children: React.ReactNode;
@@ -18,8 +20,8 @@ const EuropayLayout = ({ children }: EuropayLayoutProps) => {
           <div className="h-screen">
             <Navbar />
             <div style={{ height: dynamicHeight }}>{children}</div>
-            {/* <Footer /> */}
-            {/* <ToastContainer newestOnTop /> */}
+            <Footer />
+            <ToastContainer newestOnTop />
           </div>
         </div>
       </div>

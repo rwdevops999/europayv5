@@ -1,0 +1,26 @@
+[
+  {
+    "role": "ALERT",
+    "name": "UNABLE_TO_DELETE_MANAGED",
+    "description": "Unable to delete managed",
+    "content": "Unable to delete managed ${iamType}.",
+    "managed": true,
+    "parameters": "{iamType:  #variable}"
+  },
+  {
+    "role": "ALERT",
+    "name": "UNABLE_TO_DELETE_LINKED",
+    "description": "Unable to delete linked",
+    "content": "Unable to delete ${iamType}. It is used in ${linkedType}",
+    "managed": true,
+    "parameters": "{iamType:  #variable, linkedType: #variable}"
+  },
+  {
+    "role": "ALERT",
+    "name": "UNABLE_TO_UPDATE_LINKED",
+    "description": "Unable to update linked",
+    "content": "Unable to update ${iamType}. It is used in ${linkedType}",
+    "managed": true,
+    "parameters": "{iamType:  #variable, linkedType: #variable}"
+  }
+]

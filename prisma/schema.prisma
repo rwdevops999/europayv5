@@ -7,3 +7,202 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Service {
+  id Int @id @default(autoincrement())
+  servicename String @unique  
+
+  serviceactions ServiceAction[]
+
+  servicestatements ServiceStatement[]
+}
+
+model ServiceAction {
+  id Int @id @default(autoincrement())
+  serviceactionname String @unique
+
+  services Service[]
+
+  serviceStatementActions ServiceStatementAction[]
+}
+
+model ServiceStatementAction {
+  id Int @id @default(autoincrement())
+  ssactionname String
+
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+
+  servicestatement ServiceStatement @relation(fields: [statementid], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  statementid Int
+
+  serviceaction ServiceAction @relation(fields: [serviceactionid], references: [id])
+  serviceactionid Int
+}
+
+enum Permission {
+  ALLOW
+  DENY
+}
+
+model ServiceStatement {
+  id Int @id @default(autoincrement())
+
+  ssname String @unique
+  description String? @default("")
+
+  permission Permission? @default(ALLOW)
+  managed Boolean? @default(false)
+
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+
+  service Service @relation(fields: [serviceid], references: [id])
+  serviceid Int
+
+  servicestatementactions ServiceStatementAction[]
+
+  policies Policy[]
+}
+
+model Template {
+  id Int @id @default(autoincrement())
+  role TemplateRole? @default(ALL)
+  name String @unique
+  description String? @default("")
+  content String
+  asHtml Boolean? @default(false)
+  fromFile Boolean? @default(false)
+  parameters String? @default("")
+  managed Boolean? @default(false)
+}
+
+enum TemplateRole {
+  ALL
+  ALERT
+  EMAIL
+  HISTORY
+  LOGIN
+  TASK
+  NOTIFICATION
+}
+
+model Policy {
+  id Int @id @default(autoincrement())
+
+  name String @unique
+  description String? @default("")
+
+  managed Boolean? @default(false)
+
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+
+  servicestatements ServiceStatement[]
+
+  roles Role[]
+  users User[]
+  groups Group[]
+}
+
+model Setting {
+  id Int @id @default(autoincrement())
+  type String
+  subtype String
+  key String
+  value String
+}
+
+model Role {
+  id Int @id @default(autoincrement())
+
+  name String @unique
+  description String? @default("")
+
+  managed Boolean? @default(false)
+
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+
+  policies Policy[]
+  users User[]
+  groups Group[]
+}
+
+model Country {
+  id Int @id @default(autoincrement())
+  name String @unique
+  dialCode String? @default("")
+  code String? @default("")
+  currency String? @default("")
+  currencycode String? @default("")
+  symbol String? @default("")
+  addresses Address[]
+}
+
+model Address {
+  id Int @id @default(autoincrement())
+  street String? @default("")
+  number  String? @default("")
+  box String? @default("")
+  city String? @default("")
+  postalcode String @default("")
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+  county String? @default("")
+  country Country? @relation(fields: [countryId], references: [id], onDelete: NoAction)
+  countryId Int?
+  user User? @relation(fields: [userId], references: [id])
+  userId Int? @unique
+}
+
+model User {
+  id Int @unique @id @default(autoincrement())
+  username String? @unique
+  lastname String
+  firstname String
+  avatar String? @default("")
+  phone String? @default("")
+  email String @unique
+  password String
+  passwordless Boolean? @default(false)
+  attemps Int? @default(0)
+  blocked Boolean? @default(false)
+  managed Boolean? @default(false)
+  loggedinDate DateTime?
+  type UserType @default(EUROPAY)
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+  address Address?
+  policies Policy[]
+  roles Role[]
+  @@unique([firstname, lastname])
+  groups Group[]
+  // account Account?
+}
+
+enum UserType {
+  EUROPAY
+  GUEST
+}
+
+model Group {
+  id Int @id @default(autoincrement())
+  name String @unique
+  description String? @default("")
+  managed Boolean? @default(false)
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+  policies Policy[]
+  roles Role[]
+  users User[]
+}
+
+model Export {
+  id Int @id @default(autoincrement())
+  name String @unique
+  content Json
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+}
+

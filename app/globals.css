@@ -16,8 +16,7 @@
 }
 
 @theme {
-  --color-menuborder: oklch(0.4834 0.0121 61);
-  /* --color-cancel: oklch(0.4457 0.0096 48.04);
+  --color-cancel: oklch(0.6004 0.0096 48.04);
   --color-custom: oklch(0.7 0.1946 48.04);
   --color-status-created: oklch(0.628 0.2577 29.23);
   --color-status-open: oklch(0.7593 0.1959 59.69);
@@ -34,16 +33,16 @@
     rgb(18, 177, 209) 100%
   );
   --shadow-login-shadow: rgba(133, 189, 215, 0.8784313725) 0px 30px 30px -20px;
-  --color-ep-button: oklch(0.7 0.1872 58.63); */
+  --color-ep-button: oklch(0.7 0.1872 58.63);
 }
 
 @plugin "daisyui/theme" {
   name: "light";
-  /* --color-cancel: oklch(0.4457 0.0096 48.04);
-  --color-custom: oklch(0.7 0.1946 48.04); */
+  --color-cancel: oklch(0.6004 0.0096 48.04);
+  --color-custom: oklch(0.7 0.1946 48.04);
 }
 @plugin "daisyui/theme" {
   name: "dark";
-  /* --color-cancel: oklch(0.4457 0.0096 48.04);
-  --color-custom: oklch(0.7 0.1946 48.04); */
+  --color-cancel: oklch(0.6004 0.0096 48.04);
+  --color-custom: oklch(0.7 0.1946 48.04);
 }
