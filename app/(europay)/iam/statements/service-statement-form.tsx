@@ -6,7 +6,7 @@ import {
   updateServiceStatement,
 } from "@/app/server/service-statements";
 import { Permission } from "@/generated/prisma";
-import { absoluteUrl, cn, showToast } from "@/lib/functions";
+import { absoluteUrl, cn, json, showToast } from "@/lib/functions";
 import { displayPrismaErrorCode } from "@/lib/prisma-errors";
 import {
   tService,
@@ -102,7 +102,7 @@ const ServiceStatementForm = (props: StatementFormProps) => {
       serviceid: _entity.serviceid,
       servicestatementactions: {
         deleteMany: {
-          ssactionname: _entity.ssname,
+          statementid: _entity.id,
         },
         create: selectedActions.current.map((_action: Data) => {
           return {
@@ -185,8 +185,10 @@ const ServiceStatementForm = (props: StatementFormProps) => {
     formData = { ...formData, serviceid: selectedServiceId.current! };
 
     if (formData.id) {
+      console.log("UPDATE SS");
       await handleUpdateStatement(formData);
     } else {
+      console.log("CREATE SS");
       await handleCreateStatement(formData);
     }
   };

@@ -54,7 +54,7 @@ export const columns: ColumnDef<Data>[] = [
                   className="text-blue-400 underline"
                   href={`http://localhost:3000/iam/services/id=${row.original.extra?.serviceId}`}
                 >
-                  {row.original.name} ({row.original.extra?.action})
+                  {row.original.extra?.action}
                 </AppLink>
               </>
             ) : (

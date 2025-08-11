@@ -15,35 +15,35 @@ export const servicesandactions: Record<string, string[]> = {
     "Social Media",
   ],
 
-  "Social Media": ["Execute"],
+  // "Social Media": ["Execute"],
 
   Dashboard: ["Environment", "Version", "Wifi", "Country"],
 
-  "Dashboard.Country": ["Change"],
+  // "Dashboard.Country": ["Change"],
 
-  Settings: ["Export", "Import"],
+  // Settings: ["Export", "Import"],
 
-  "Settings.Export": [
-    "ToViewSS",
-    "ToViewP",
-    "ToViewR",
-    "ToViewU",
-    "ToViewG",
-    "DbName",
-    "ToDbSS",
-    "ToDbP",
-    "ToDbR",
-    "ToDbU",
-    "ToDbG",
-    "ToDbExport",
-    "Clipboard",
-  ],
+  // "Settings.Export": [
+  //   "ToViewSS",
+  //   "ToViewP",
+  //   "ToViewR",
+  //   "ToViewU",
+  //   "ToViewG",
+  //   "DbName",
+  //   "ToDbSS",
+  //   "ToDbP",
+  //   "ToDbR",
+  //   "ToDbU",
+  //   "ToDbG",
+  //   "ToDbExport",
+  //   "Clipboard",
+  // ],
 
-  "Settings.Import": ["DbName", "FromDbImport"],
+  // "Settings.Import": ["DbName", "FromDbImport"],
 
-  IAM: ["Services", "Statements", "Policies", "Roles", "Users", "Groups"],
+  // IAM: ["Services", "Statements", "Policies", "Roles", "Users", "Groups"],
 
-  Auth: ["Login", "Logout"],
+  // Auth: ["Login", "Logout"],
 };
 
 // Under here we set all service statements
