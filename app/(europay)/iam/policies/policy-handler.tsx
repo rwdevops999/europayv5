@@ -16,9 +16,9 @@ import ServiceSelect from "@/ui/service-select";
 import Button from "@/ui/button";
 import Dialog from "@/ui/dialog";
 import { DataTable } from "@/ui/datatable/data-table";
-import { columns } from "./table/dialog-columns";
 import { DataTableToolbar } from "./table/dialog-data-table-toolbar";
 import { useToastSettings } from "@/hooks/use-toast-settings";
+import { columns } from "./table/page-colums";
 
 // import { Data, ToastType } from "@/app/lib/types";
 // import { absoluteUrl, json, showToast } from "@/app/lib/util";

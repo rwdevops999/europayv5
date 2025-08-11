@@ -8,10 +8,7 @@ import {
   tServiceStatementCreate,
   tServiceStatementUpdate,
 } from "@/lib/prisma-types";
-import {
-  ServiceStatementInfo,
-  servicestatements,
-} from "./setup/services-and-actions";
+import { ServiceStatementInfo } from "./setup/services-and-actions";
 import { getServiceIdByName } from "./services";
 import { getServiceActionIdByName } from "./service-actions";
 
@@ -101,9 +98,8 @@ const defineServiceStatementsForPermission = async (
 };
 
 export const defineServiceStatements = async (): Promise<void> => {
-  for (let i = 0; i < Object.values(Permission).length; i++) {
-    const permission = Object.values(Permission)[i];
-
-    defineServiceStatementsForPermission(permission, servicestatements);
-  }
+  // for (let i = 0; i < Object.values(Permission).length; i++) {
+  //   const permission = Object.values(Permission)[i];
+  //   defineServiceStatementsForPermission(permission, servicestatements);
+  // }
 };
