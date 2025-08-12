@@ -69,8 +69,6 @@ const InitialiseApplication = async () => {
       {loadSettings && <SetupSettingsWithSuspense _loaded={settingsLoaded} />}
 
       {loadManaged && <SetupManagedWithSuspense _loaded={managedLoaded} />}
-
-      <FinalizeInitialisation />
     </>
   );
 };

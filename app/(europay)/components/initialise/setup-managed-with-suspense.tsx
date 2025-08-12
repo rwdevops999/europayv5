@@ -2,6 +2,7 @@ import { provisionManagedIAM } from "@/app/server/managed";
 import Loaded from "./loaded";
 import { Suspense } from "react";
 import LoadingSpinner from "@/ui/loading-spinner";
+import FinalizeInitialisation from "./finalize-initialisation";
 
 const ManagedCreator = async () => {
   await provisionManagedIAM(true);
@@ -17,7 +18,8 @@ const SetupManagedWithSuspense = async ({ _loaded }: { _loaded: boolean }) => {
   if (_loaded) {
     return (
       <>
-        <Loaded service="Initialised managed IAM" />
+        <Loaded service="Initialised managed IAM" final={true} />
+        <FinalizeInitialisation />
       </>
     );
   }
