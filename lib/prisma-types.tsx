@@ -335,3 +335,6 @@ export type tTaskCreate = Prisma.TaskUncheckedCreateInput;
 /* == OTP ========== */
 export type tOTP = Prisma.OTPGetPayload<{}>;
 export type tOTPCreate = Prisma.OTPUncheckedCreateInput;
+
+/* == HISTORY =========== */
+export type tHistory = Prisma.HistoryGetPayload<{}>;

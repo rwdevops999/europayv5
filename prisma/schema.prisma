@@ -288,3 +288,18 @@ enum OTPStatus {
   EXPIRED
 }
 
+model History {
+  id Int @id @default(autoincrement())
+  title String? @default("")
+  description String? @default("")
+  originator String? @default("")
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+  type HistoryType? @default(INFO)
+}
+
+enum HistoryType {
+  ALL
+  INFO
+  ACTION
+}

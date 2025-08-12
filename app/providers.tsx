@@ -1,3 +1,4 @@
+import { HistorySettingsProvider } from "@/hooks/use-history-settings";
 import { MarkdownSettingsProvider } from "@/hooks/use-markdown-settings";
 import { OTPSettingsProvider } from "@/hooks/use-otp-settings";
 import { TaskProvider } from "@/hooks/use-task";
@@ -9,19 +10,21 @@ import { ReactNode } from "react";
 
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
-    <OTPSettingsProvider>
-      <TaskProvider>
-        <MarkdownSettingsProvider>
-          <UserProvider>
-            <WifiProvider>
-              <ToastSettingsProvider>
-                <ProgressBar>{children}</ProgressBar>;
-              </ToastSettingsProvider>
-            </WifiProvider>
-          </UserProvider>
-        </MarkdownSettingsProvider>
-      </TaskProvider>
-    </OTPSettingsProvider>
+    <HistorySettingsProvider>
+      <OTPSettingsProvider>
+        <TaskProvider>
+          <MarkdownSettingsProvider>
+            <UserProvider>
+              <WifiProvider>
+                <ToastSettingsProvider>
+                  <ProgressBar>{children}</ProgressBar>;
+                </ToastSettingsProvider>
+              </WifiProvider>
+            </UserProvider>
+          </MarkdownSettingsProvider>
+        </TaskProvider>
+      </OTPSettingsProvider>
+    </HistorySettingsProvider>
   );
 };
 

@@ -25,4 +25,10 @@ export const appsettings: tSettingCreate[] = [
     key: "Timing",
     value: process.env.NEXT_PUBLIC_SETTINGS_OTP_TIMING ?? "5'",
   },
+  {
+    type: "General",
+    subtype: "Application",
+    key: "History",
+    value: process.env.NEXT_PUBLIC_SETTINGS_HISTORY_LEVEL ?? "All",
+  },
 ];

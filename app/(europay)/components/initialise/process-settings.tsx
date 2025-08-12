@@ -1,6 +1,8 @@
 "use client";
 
 import { loadSettings } from "@/app/server/settings";
+import { HistoryType } from "@/generated/prisma";
+import { useHistorySettings } from "@/hooks/use-history-settings";
 import { useMarkdownSettings } from "@/hooks/use-markdown-settings";
 import { useOTPSettings } from "@/hooks/use-otp-settings";
 import { useToastSettings } from "@/hooks/use-toast-settings";
@@ -12,6 +14,7 @@ const ProcessSettings = () => {
   const { setToast, setToastDuration } = useToastSettings();
   const { setMarkdown } = useMarkdownSettings();
   const { setTiming } = useOTPSettings();
+  const { setHistory } = useHistorySettings();
 
   const handleSettings = async (): Promise<void> => {
     let settings: tSetting[] = [];
@@ -29,6 +32,21 @@ const ProcessSettings = () => {
         process.env.NEXT_PUBLIC_SETTINGS_TOAST_ON
           ? process.env.NEXT_PUBLIC_SETTINGS_TOAST_ON.toLowerCase() === "true"
           : true
+      );
+    }
+
+    setting = settings.find((setting: tSetting) => setting.key === "History");
+
+    if (setting) {
+      setHistory(HistoryType[setting.value as keyof typeof HistoryType]);
+    } else {
+      setHistory(
+        process.env.NEXT_PUBLIC_SETTINGS_HISTORY_LEVEL
+          ? HistoryType[
+              process.env
+                .NEXT_PUBLIC_SETTINGS_HISTORY_LEVEL as keyof typeof HistoryType
+            ]
+          : HistoryType.ALL
       );
     }
 

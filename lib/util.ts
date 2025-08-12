@@ -7,6 +7,7 @@ import {
   URL_ENCODING_ASSIGNMENT,
 } from "./constants";
 import { Zoom } from "react-toastify";
+import moment from "moment";
 
 /**
  * create an abosulte url
@@ -183,3 +184,7 @@ export const padZero = (
   length: number,
   prefix: string = ""
 ): string => `${prefix}` + `${(num + "").padStart(length, "0")}`;
+
+export const convertDatabaseDateToString = (date: Date | null): string => {
+  return date ? moment(date).format("DD-MMM-YYYY (HH:mm:ss)") : "";
+};

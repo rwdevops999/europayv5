@@ -1,6 +1,7 @@
 import { Group } from "@/generated/prisma";
 import {
   tGroup,
+  tHistory,
   tPolicy,
   tRole,
   tService,
@@ -10,9 +11,9 @@ import {
   tTask,
   tUser,
 } from "@/lib/prisma-types";
-import { Data } from "@/lib/types";
+import { Data, tHistoryData } from "@/lib/types";
 import { tTaskData } from "../server/data/taskdata";
-import { padZero } from "@/lib/util";
+import { convertDatabaseDateToString, padZero } from "@/lib/util";
 
 /**
  * map serviceactions to Data
@@ -317,6 +318,27 @@ export const mapTasks = (tasks: tTask[], size: number = 0): tTaskData[] => {
       if (task.successorTask) {
         data.icons?.push("🆂");
       }
+
+      return data;
+    });
+  }
+
+  return result;
+};
+
+export const mapHistory = (history: tHistory[] | undefined): tHistoryData[] => {
+  let result: tHistoryData[] = [];
+
+  if (history) {
+    result = history.map((historyEntry: tHistory) => {
+      const data: tHistoryData = {
+        title: historyEntry.title ?? "",
+        type: historyEntry.type ?? "",
+        description: historyEntry.description ?? "",
+        originator: historyEntry.originator ?? "",
+        date: convertDatabaseDateToString(historyEntry.createDate),
+        children: [],
+      };
 
       return data;
     });

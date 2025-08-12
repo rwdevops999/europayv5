@@ -6,7 +6,7 @@ import { GiScrollUnfurled, GiSettingsKnobs } from "react-icons/gi";
 import { GrTest } from "react-icons/gr";
 import { IoIosKey } from "react-icons/io";
 import { IoListOutline } from "react-icons/io5";
-import { LuClipboardList, LuLayoutDashboard } from "react-icons/lu";
+import { LuClipboardList, LuHistory, LuLayoutDashboard } from "react-icons/lu";
 import { RiPoliceBadgeLine } from "react-icons/ri";
 import { TbDatabaseExport, TbDatabaseImport, TbTestPipe } from "react-icons/tb";
 
@@ -62,14 +62,14 @@ export let menu: MenuItem[] = [
       //   icon: <GrTransaction size={16} />,
       //   subItems: [],
       // },
-      // {
-      //   url: absoluteUrl("/history"),
-      //   title: "History",
-      //   disabled: false,
-      //   visible: true,
-      //   icon: <LuHistory size={16} />,
-      //   subItems: [],
-      // },
+      {
+        url: absoluteUrl("/history"),
+        title: "History",
+        disabled: false,
+        visible: true,
+        icon: <LuHistory size={16} />,
+        subItems: [],
+      },
       // {
       //   url: absoluteUrl("/exports"),
       //   title: "Exports",
