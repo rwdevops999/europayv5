@@ -157,3 +157,23 @@ export const capitalize = (str: string): string => {
 export const json = (_value: any): string => {
   return JSON.stringify(_value);
 };
+
+const AzertyMapping: Record<string, string[]> = {
+  KeyQ: ["a", "A"],
+  Semicolon: ["m", "M"],
+  KeyA: ["q", "Q"],
+  KeyZ: ["w", "W"],
+  KeyW: ["z", "Z"],
+};
+
+export const getKeyMapping = (_key: string): string => {
+  const index: number = Object.values(AzertyMapping).findIndex(
+    (arr: string[]) => arr.includes(_key)
+  );
+
+  if (index != -1) {
+    return Object.keys(AzertyMapping)[index];
+  }
+
+  return `Key${_key.toLocaleUpperCase()}`;
+};

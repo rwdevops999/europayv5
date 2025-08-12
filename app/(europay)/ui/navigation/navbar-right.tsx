@@ -8,6 +8,7 @@ import NavbarUserProfile from "./components/navbar-user-profile";
 import { useToastSettings } from "@/hooks/use-toast-settings";
 import { useWifi } from "@/hooks/use-wifi";
 import { useMarkdownSettings } from "@/hooks/use-markdown-settings";
+import { useTask } from "@/hooks/use-task";
 
 const renderDevItems: boolean = process.env.NODE_ENV === "development";
 
@@ -15,6 +16,7 @@ const NavbarRight = () => {
   const { getToastNode } = useToastSettings();
   const { getConnectNode } = useWifi();
   const { getMarkdownNode } = useMarkdownSettings();
+  const { getTaskNode } = useTask();
 
   return (
     <div data-testid="navbarright" className="flex items-center space-x-2">
@@ -27,7 +29,7 @@ const NavbarRight = () => {
         )}
       >
         {getConnectNode()}
-        <EmptyNode />
+        {getTaskNode()}
         <EmptyNode />
         <EmptyNode />
         {renderDevItems && (

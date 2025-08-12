@@ -178,7 +178,7 @@ model User {
   roles Role[]
   @@unique([firstname, lastname])
   groups Group[]
-  // account Account?
+  account Account?
 }
 
 enum UserType {
@@ -206,3 +206,67 @@ model Export {
   updateDate DateTime? @updatedAt
 }
 
+model Account {
+  id Int @id @default(autoincrement())
+  amount Float
+  status AccountStatus @default(OPEN)
+  user User? @relation(fields: [userId], references: [id])
+  userId Int? @unique
+  createDate DateTime @default(now())
+  updateDate DateTime @updatedAt
+  // sendertransactions Transaction[] @relation("Sender")
+  // receivertransactions Transaction[] @relation("Receiver")
+  // bankaccounts BankAccount[]
+}
+
+enum AccountStatus {
+  OPEN
+  CLOSED
+  BLOCKED
+}
+
+model AccountApply {
+  id Int @id @default(autoincrement())
+
+  username String?
+  firstname String
+  lastname String
+  password String
+  email String
+  country String
+  gender Gender? @default(MALE)
+  status AccountApplyStatus @default(CREATED)
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+}
+
+enum AccountApplyStatus {
+  CREATED
+  OPEN
+  CLOSED
+}
+
+enum Gender {
+  MALE
+  COMPLETE
+}
+
+model Task {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  status TaskStatus @default(CREATED)
+  params Json
+  fromStatus TaskStatus[]
+  predecessorTaskId Int? @unique
+  predecessorTask Task? @relation("linkedTask", fields: [predecessorTaskId], references: [id])
+  successorTask Task? @relation("linkedTask")
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+}
+
+enum TaskStatus {
+  CREATED
+  OPEN
+  COMPLETE
+}

@@ -22,5 +22,21 @@
     "content": "Unable to update ${iamType}. It is used in ${linkedType}",
     "managed": true,
     "parameters": "{iamType:  #variable, linkedType: #variable}"
+  },
+  {
+    "role": "TASK",
+    "name": "USER_APPLICATION_CREATE_USER",
+    "description": "User application",
+    "content": "User ${email} applied for an account. Create the user",
+    "managed": true,
+    "parameters": "{email:  #variable}"
+  },
+  {
+    "role": "TASK",
+    "name": "USER_APPLICATION_CREATE_ACCOUNT",
+    "description": "User application",
+    "content": "Create account from ${email}.",
+    "managed": true,
+    "parameters": "{email:  #variable}"
   }
 ]

@@ -15,6 +15,7 @@ export const dbTables: Record<string, string> = {
   // tasks: "Task",
   templates: "Template",
   users: "User",
+  accounts: "Account",
 };
 
 export const linkedDbTables: Record<string, string[]> = {

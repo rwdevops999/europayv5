@@ -1,4 +1,5 @@
 import { MarkdownSettingsProvider } from "@/hooks/use-markdown-settings";
+import { TaskProvider } from "@/hooks/use-task";
 import { ToastSettingsProvider } from "@/hooks/use-toast-settings";
 import { UserProvider } from "@/hooks/use-user";
 import { WifiProvider } from "@/hooks/use-wifi";
@@ -7,15 +8,17 @@ import { ReactNode } from "react";
 
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
-    <MarkdownSettingsProvider>
-      <UserProvider>
-        <WifiProvider>
-          <ToastSettingsProvider>
-            <ProgressBar>{children}</ProgressBar>;
-          </ToastSettingsProvider>
-        </WifiProvider>
-      </UserProvider>
-    </MarkdownSettingsProvider>
+    <TaskProvider>
+      <MarkdownSettingsProvider>
+        <UserProvider>
+          <WifiProvider>
+            <ToastSettingsProvider>
+              <ProgressBar>{children}</ProgressBar>;
+            </ToastSettingsProvider>
+          </WifiProvider>
+        </UserProvider>
+      </MarkdownSettingsProvider>
+    </TaskProvider>
   );
 };
 

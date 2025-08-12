@@ -208,6 +208,34 @@ const cWhatToSelectFromAddress: WhatToSelectFromAddress = {
 
 export type tAddress = Prisma.AddressGetPayload<WhatToSelectFromAddress>;
 
+/* == ACCOUNT ========== */
+type WhatToSelectFromAccount = {
+  include: {
+    user: boolean;
+    // sendertransactions: boolean;
+    // receivertransactions: boolean;
+    // bankaccounts: {
+    //   include: {
+    //     account: boolean;
+    //   };
+    // };
+  };
+};
+export const cWhatToSelectFromAccount: WhatToSelectFromAccount = {
+  include: {
+    user: true,
+    // sendertransactions: true,
+    // receivertransactions: true,
+    // bankaccounts: {
+    //   include: {
+    //     account: true,
+    //   },
+    // },
+  },
+};
+export type tAccount = Prisma.AccountGetPayload<WhatToSelectFromAccount>;
+export type tAccountCreate = Prisma.AccountUncheckedCreateInput;
+
 /* == USER ========== */
 type WhatToSelectFromUser = {
   include: {
@@ -221,7 +249,7 @@ type WhatToSelectFromUser = {
         users: boolean;
       };
     };
-    // account: WhatToSelectFromAccount;
+    account: WhatToSelectFromAccount;
   };
 };
 export const cWhatToSelectFromUser: WhatToSelectFromUser = {
@@ -236,7 +264,7 @@ export const cWhatToSelectFromUser: WhatToSelectFromUser = {
         users: false,
       },
     },
-    // account: cWhatToSelectFromAccount,
+    account: cWhatToSelectFromAccount,
   },
 };
 export type tUser = Prisma.UserGetPayload<WhatToSelectFromUser>;
@@ -262,3 +290,44 @@ export const cWhatToSelectFromGroup: WhatToSelectFromGroup = {
 export type tGroup = Prisma.GroupGetPayload<WhatToSelectFromGroup>;
 export type tGroupCreate = Prisma.GroupUncheckedCreateInput;
 export type tGroupUpdate = Prisma.GroupUncheckedUpdateInput;
+
+/* == ACCOUNT APPLY ========== */
+export type tAccountApply = Prisma.AccountApplyGetPayload<{}>;
+export type tAccountApplyCreate = Prisma.AccountApplyUncheckedCreateInput;
+
+/* == TASK ========== */
+type WhatToSelectFromTask = {
+  include: {
+    predecessorTask: {
+      include: {
+        predecessorTask: boolean;
+        successorTask: boolean;
+      };
+    };
+    successorTask: {
+      include: {
+        predecessorTask: boolean;
+        successorTask: boolean;
+      };
+    };
+  };
+};
+export const cWhatToSelectFromTask: WhatToSelectFromTask = {
+  include: {
+    predecessorTask: {
+      include: {
+        predecessorTask: true,
+        successorTask: true,
+      },
+    },
+    successorTask: {
+      include: {
+        predecessorTask: true,
+        successorTask: true,
+      },
+    },
+  },
+};
+
+export type tTask = Prisma.TaskGetPayload<WhatToSelectFromTask>;
+export type tTaskCreate = Prisma.TaskUncheckedCreateInput;

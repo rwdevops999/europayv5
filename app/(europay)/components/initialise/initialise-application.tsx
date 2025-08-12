@@ -11,6 +11,7 @@ import { countCountries, defineCountries } from "@/app/server/country";
 import SetupCountriesWithSuspense from "./setup-countries-with-suspense";
 import { provisionManagedIAM } from "@/app/server/managed";
 import SetupManagedWithSuspense from "./setup-managed-with-suspense";
+import FinalizeInitialisation from "./finalize-initialisation";
 
 const InitialiseApplication = async () => {
   let loadServices: boolean = false;
@@ -68,6 +69,8 @@ const InitialiseApplication = async () => {
       {loadSettings && <SetupSettingsWithSuspense _loaded={settingsLoaded} />}
 
       {loadManaged && <SetupManagedWithSuspense _loaded={managedLoaded} />}
+
+      <FinalizeInitialisation />
     </>
   );
 };
