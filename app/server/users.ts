@@ -8,6 +8,7 @@ import {
   tUserUpdate,
 } from "@/lib/prisma-types";
 import { decrypt, encrypt } from "./encrypt";
+import { UserType } from "@/generated/prisma";
 
 export const loadUserById = async (_userId: number): Promise<tUser | null> => {
   let result: tUser | null = null;
@@ -125,4 +126,82 @@ export const loadUserByNames = async (
     });
 
   return result;
+};
+
+export const loadUserByEmail = async (
+  _email: string
+): Promise<tUser | null> => {
+  let result: tUser | null = null;
+
+  await prisma.user
+    .findFirst({
+      where: {
+        email: _email,
+      },
+      ...cWhatToSelectFromUser,
+    })
+    .then(async (value: tUser | null) => {
+      if (value) {
+        if (value.password && value.password.length > 0) {
+          value.password = await decrypt(value.password);
+        }
+        result = value;
+      }
+    });
+
+  return result;
+};
+
+export const createUserAsGuest = async (
+  _email: string
+): Promise<tUser | null> => {
+  let result: tUser | null = null;
+
+  await prisma.user
+    .create({
+      data: {
+        email: _email,
+        passwordless: true,
+        attemps: 0,
+        blocked: false,
+        type: UserType.GUEST,
+        username: "",
+        lastname: "",
+        firstname: "",
+        avatar: "",
+        phone: "",
+        password: "",
+      },
+      ...cWhatToSelectFromUser,
+    })
+    .then((value: tUser) => {
+      result = value;
+    });
+
+  return result;
+};
+
+export const updateUserAttemps = async (
+  _id: number,
+  _attemps: number
+): Promise<void> => {
+  await prisma.user.update({
+    where: {
+      id: _id,
+    },
+    data: {
+      attemps: _attemps,
+    },
+  });
+};
+
+export const blockUser = async (_id: number): Promise<void> => {
+  await prisma.user.update({
+    where: {
+      id: _id,
+    },
+    data: {
+      blocked: true,
+    },
+  });
 };

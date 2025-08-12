@@ -19,4 +19,10 @@ export const appsettings: tSettingCreate[] = [
     key: "Markdown",
     value: process.env.NEXT_PUBLIC_SETTINGS_MARKDOWN_ON ?? "true",
   },
+  {
+    type: "General",
+    subtype: "OTP",
+    key: "Timing",
+    value: process.env.NEXT_PUBLIC_SETTINGS_OTP_TIMING ?? "5'",
+  },
 ];

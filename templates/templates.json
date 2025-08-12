@@ -46,5 +46,13 @@
     "content": "<div>Your account for <b>${email}</b> in Europay is created. You can login at <a href='${url}'>Europay</a></div><div>Greeting, the Europay team.</div>",
     "managed": true,
     "parameters": "{email:  #variable, url: #variable}"
+  },
+  {
+    "role": "EMAIL",
+    "name": "EMAIL_OTP",
+    "description": "OTP code for Europay",
+    "content": "<div>Your OTP code is <b>${OTPcode}</b>.This code is valid for: <b>${OTPvalid}</b></div><br/><div>Greeting, the Europay team.</div>",
+    "managed": true,
+    "parameters": "{OTPcode:  #variable, OTPvalid: #variable}"
   }
 ]

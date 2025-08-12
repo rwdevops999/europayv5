@@ -2,6 +2,7 @@
 
 import { loadSettings } from "@/app/server/settings";
 import { useMarkdownSettings } from "@/hooks/use-markdown-settings";
+import { useOTPSettings } from "@/hooks/use-otp-settings";
 import { useToastSettings } from "@/hooks/use-toast-settings";
 import { DEFAULT_TOAST_DURATION } from "@/lib/constants";
 import { tSetting } from "@/lib/prisma-types";
@@ -10,6 +11,7 @@ import { useEffect } from "react";
 const ProcessSettings = () => {
   const { setToast, setToastDuration } = useToastSettings();
   const { setMarkdown } = useMarkdownSettings();
+  const { setTiming } = useOTPSettings();
 
   const handleSettings = async (): Promise<void> => {
     let settings: tSetting[] = [];
@@ -56,6 +58,20 @@ const ProcessSettings = () => {
           ? process.env.NEXT_PUBLIC_SETTINGS_MARKDOWN_ON.toLowerCase() ===
               "true"
           : true
+      );
+    }
+
+    settings = await loadSettings(["General"], ["OTP"], []);
+
+    setting = settings.find((setting: tSetting) => setting.key === "Timing");
+
+    if (setting) {
+      setTiming(setting.value);
+    } else {
+      setTiming(
+        process.env.NEXT_PUBLIC_SETTINGS_OTP_TIMING
+          ? process.env.NEXT_PUBLIC_SETTINGS_OTP_TIMING
+          : "5'"
       );
     }
   };

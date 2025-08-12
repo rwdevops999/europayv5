@@ -270,3 +270,21 @@ enum TaskStatus {
   OPEN
   COMPLETE
 }
+
+model OTP {
+  id Int @id @default(autoincrement())
+  OTP String
+  email String
+  userId Int?
+  status OTPStatus @default(ONGOING)
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+  expirationDate DateTime @default(now())
+}
+
+enum OTPStatus {
+  ONGOING
+  USED
+  EXPIRED
+}
+

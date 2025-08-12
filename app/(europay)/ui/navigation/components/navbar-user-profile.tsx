@@ -1,10 +1,14 @@
 "use client";
 
+import { useUser } from "@/hooks/use-user";
+import UserAuth from "./user-auth";
+import UserInfo from "./user-info";
+
 // const JOB_NAME: string = "TransactionPoller";
 // const JOB_TIMING: number = 1 * 60 * 1000;
 
 const NavbarUserProfile = () => {
-  // const { user } = useUser();
+  const { user } = useUser();
   // const { setTransactionCount } = useTransaction();
   // const { jobCount, setJobCount } = useJob();
 
@@ -41,27 +45,27 @@ const NavbarUserProfile = () => {
         className="btn btn-ghost btn-circle avatar"
       >
         <div className="w-8 rounded-full">
-          {/* {(!user || !user.avatar) && ( */}
-          <img alt="User" src="/avatars/john.doe.png" />
-          {/* )}
+          {(!user || !user.avatar) && (
+            <img alt="User" src="/avatars/john.doe.png" />
+          )}
           {user && user.avatar && (
             <img alt="User" src={`/avatars/${user.avatar}`} />
-          )} */}
+          )}
         </div>
       </div>
       <ul
         tabIndex={0}
         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow border-1 border-menuborder"
       >
-        {/* <li>
+        <li>
           <UserInfo />
-        </li> */}
+        </li>
         <li>
           <a>Settings</a>
         </li>
-        {/* <li>
+        <li>
           <UserAuth />
-        </li> */}
+        </li>
       </ul>
     </div>
   );

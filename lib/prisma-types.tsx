@@ -331,3 +331,7 @@ export const cWhatToSelectFromTask: WhatToSelectFromTask = {
 
 export type tTask = Prisma.TaskGetPayload<WhatToSelectFromTask>;
 export type tTaskCreate = Prisma.TaskUncheckedCreateInput;
+
+/* == OTP ========== */
+export type tOTP = Prisma.OTPGetPayload<{}>;
+export type tOTPCreate = Prisma.OTPUncheckedCreateInput;
