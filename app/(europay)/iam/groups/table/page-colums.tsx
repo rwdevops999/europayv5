@@ -12,7 +12,7 @@ export const columns: ColumnDef<Data>[] = [
     size: 380,
 
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" className="ml-3.5" />
+      <DataTableColumnHeader column={column} title="Name" className="ml-4" />
     ),
 
     cell: ({ row, getValue }) => {
@@ -61,7 +61,7 @@ export const columns: ColumnDef<Data>[] = [
               )}
               {row.original.extra?.subject === "User" && (
                 <div className="flex items-center space-x-2">
-                  <label>🇬</label>
+                  <label>🇺</label>
                   <AppLink
                     className="text-blue-400 underline"
                     href={`http://localhost:3000/iam/users/id=${row.original.id}`}
