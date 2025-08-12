@@ -3,7 +3,7 @@
 import { loadServices } from "@/app/server/services";
 import { cn } from "@/lib/functions";
 import { tService } from "@/lib/prisma-types";
-import { useEffect, useRef, useState } from "react";
+import { JSX, useEffect, useRef, useState } from "react";
 
 /**
  * EXAMPLE
