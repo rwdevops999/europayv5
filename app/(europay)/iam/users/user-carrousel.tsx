@@ -73,6 +73,7 @@ export interface UserEntity {
 export const defaultUserEntity: UserEntity = {
   lastname: "",
   firstname: "",
+  username: "",
   email: "",
   password: "",
   managed: false,
