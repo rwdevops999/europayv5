@@ -4,7 +4,7 @@ import { IamData } from "@/app/server/data/exportdata";
 import { loadExportedData, loadExportNames } from "@/app/server/export";
 import { importIamData } from "@/app/server/import";
 import { JsonValue } from "@/generated/prisma/runtime/library";
-import { json } from "@/lib/functions";
+import { json } from "@/lib/util";
 import Button from "@/ui/button";
 import React, { useEffect, useRef, useState } from "react";
 import { BsDatabaseFillAdd } from "react-icons/bs";

@@ -1,4 +1,4 @@
-import { cn } from "@/lib/functions";
+import { cn } from "@/lib/util";
 import * as RadixDialog from "@radix-ui/react-dialog";
 
 export const Dialog = ({

@@ -2,7 +2,7 @@
 
 import { loadCountries } from "@/app/server/country";
 import { DEFAULT_COUNTRY } from "@/lib/constants";
-import { stringToBoolean } from "@/lib/functions";
+import { stringToBoolean } from "@/lib/util";
 import { tCountry } from "@/lib/prisma-types";
 import {
   Command,

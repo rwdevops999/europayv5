@@ -1,4 +1,4 @@
-import { CreatePromise, isNumber, splitURLParams } from "@/lib/functions";
+import { CreatePromise, isNumber, splitURLParams } from "@/lib/util";
 import LoadingSpinner from "@/ui/loading-spinner";
 import { Suspense } from "react";
 import IamStatementsPage from "../page";

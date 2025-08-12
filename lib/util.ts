@@ -177,3 +177,9 @@ export const getKeyMapping = (_key: string): string => {
 
   return `Key${_key.toLocaleUpperCase()}`;
 };
+
+export const padZero = (
+  num: number,
+  length: number,
+  prefix: string = ""
+): string => `${prefix}` + `${(num + "").padStart(length, "0")}`;

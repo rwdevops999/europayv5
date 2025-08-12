@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/functions";
+import { cn } from "@/lib/util";
 import { HTMLProps, useEffect, useRef } from "react";
 
 const IndeterminateCheckbox = ({

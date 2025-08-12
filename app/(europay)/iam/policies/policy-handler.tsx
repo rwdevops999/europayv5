@@ -7,7 +7,7 @@ import PolicyForm, { defaultPolicyEntity, PolicyEntity } from "./policy-form";
 import { Data, ToastType } from "@/lib/types";
 import { mapPolicies } from "@/app/client/mapping";
 import TemplateAlert, { tAlert } from "@/ui/template-alert";
-import { absoluteUrl, showToast } from "@/lib/functions";
+import { absoluteUrl, showToast } from "@/lib/util";
 import { DATATABLE_ACTION_DELETE } from "@/lib/constants";
 import { deletePolicy } from "@/app/server/policies";
 import { TableMeta } from "@tanstack/react-table";

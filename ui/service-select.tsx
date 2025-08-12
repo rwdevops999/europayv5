@@ -1,7 +1,7 @@
 "use client";
 
 import { loadServices } from "@/app/server/services";
-import { cn } from "@/lib/functions";
+import { cn } from "@/lib/util";
 import { tService } from "@/lib/prisma-types";
 import { JSX, useEffect, useRef, useState } from "react";
 

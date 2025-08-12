@@ -7,9 +7,12 @@ import {
   tServiceAction,
   tServiceStatement,
   tServiceStatementAction,
+  tTask,
   tUser,
 } from "@/lib/prisma-types";
 import { Data } from "@/lib/types";
+import { tTaskData } from "../server/data/taskdata";
+import { padZero } from "@/lib/util";
 
 /**
  * map serviceactions to Data
@@ -283,6 +286,41 @@ export const mapGroups = (groups: tGroup[]): Data[] => {
       },
     };
   });
+
+  return result;
+};
+
+export const mapTasks = (tasks: tTask[], size: number = 0): tTaskData[] => {
+  let result: tTaskData[] = [];
+
+  if (tasks.length > 0) {
+    let slicedTasks: tTask[] = tasks;
+    if (size > 0) {
+      slicedTasks = slicedTasks.slice(0, size);
+    }
+
+    result = slicedTasks.map((task: tTask) => {
+      const data: tTaskData = {
+        id: task.id,
+        taskId: padZero(task.id, 5, "TSK"),
+        name: task.name,
+        description: task.description,
+        status: task.status,
+        icons: [],
+        children: [],
+      };
+
+      if (task.predecessorTask) {
+        data.icons?.push("🅿");
+      }
+
+      if (task.successorTask) {
+        data.icons?.push("🆂");
+      }
+
+      return data;
+    });
+  }
 
   return result;
 };

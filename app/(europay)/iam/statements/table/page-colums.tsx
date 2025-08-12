@@ -1,5 +1,5 @@
 import AppLink from "@/app/(europay)/ui/navigation/components/app-link";
-import { cn } from "@/lib/functions";
+import { cn } from "@/lib/util";
 import { Data } from "@/lib/types";
 import Button from "@/ui/button";
 import { DataTableColumnHeader } from "@/ui/datatable/data-table-column-header";

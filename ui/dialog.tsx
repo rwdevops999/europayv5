@@ -1,7 +1,7 @@
 import React, { JSX, ReactNode, useEffect } from "react";
 import PageTitle from "./page-title";
 import { Separator } from "./radix/separator";
-import { cn } from "@/lib/functions";
+import { cn } from "@/lib/util";
 
 const Dialog = ({
   id,

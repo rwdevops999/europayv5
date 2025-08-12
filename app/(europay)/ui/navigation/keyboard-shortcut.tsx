@@ -1,4 +1,4 @@
-import { getKeyMapping } from "@/lib/functions";
+import { getKeyMapping } from "@/lib/util";
 import React, { JSX, useEffect, useRef } from "react";
 
 // You can find out the key mapping using event.code in keydown listener

@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/functions";
+import { cn } from "@/lib/util";
 import { tCountry } from "@/lib/prisma-types";
 import React, { useEffect, useState } from "react";
 import { UseFormRegister, UseFormRegisterReturn } from "react-hook-form";

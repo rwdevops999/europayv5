@@ -5,6 +5,7 @@ import { ApplyData } from "./data/apply-data";
 import prisma from "@/lib/prisma";
 import { encrypt } from "./encrypt";
 import { DEFAULT_COUNTRY } from "@/lib/constants";
+import { AccountApplyStatus } from "@/generated/prisma";
 
 export const applyForUserAccount = async (
   _data: ApplyData
@@ -26,4 +27,34 @@ export const applyForUserAccount = async (
     .then((value: tAccountApply) => (result = value));
 
   return result;
+};
+
+export const getAccountApplicationById = async (
+  _id: number
+): Promise<tAccountApply | null> => {
+  let result: tAccountApply | null = null;
+
+  await prisma.accountApply
+    .findFirst({
+      where: {
+        id: _id,
+      },
+    })
+    .then((value: tAccountApply | null) => (result = value));
+
+  return result;
+};
+
+export const updateAccountApplicationStatus = async (
+  _id: number,
+  _status: AccountApplyStatus
+): Promise<void> => {
+  await prisma.accountApply.update({
+    where: {
+      id: _id,
+    },
+    data: {
+      status: _status,
+    },
+  });
 };

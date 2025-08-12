@@ -5,7 +5,7 @@ import { ValidationConflict } from "@/app/server/data/validation-data";
 import { createRole, updateRole } from "@/app/server/roles";
 import { validateData } from "@/app/server/validate";
 import { useToastSettings } from "@/hooks/use-toast-settings";
-import { absoluteUrl, cn, showToast } from "@/lib/functions";
+import { absoluteUrl, cn, showToast } from "@/lib/util";
 import { displayPrismaErrorCode } from "@/lib/prisma-errors";
 import {
   tPolicy,

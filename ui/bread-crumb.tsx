@@ -1,7 +1,7 @@
 import { CgScreen } from "react-icons/cg";
 import { MdOutlineSnippetFolder } from "react-icons/md";
 import ProgressLink from "./progress-link";
-import { cn } from "@/lib/functions";
+import { cn } from "@/lib/util";
 
 const Breadcrumb = ({ className, ...props }: React.ComponentProps<"div">) => {
   return <div className={cn("breadcrumbs text-sm", className)} {...props} />;

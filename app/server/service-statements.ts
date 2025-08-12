@@ -1,6 +1,6 @@
 "use server";
 import { Permission } from "@/generated/prisma";
-import { capitalize, json } from "@/lib/functions";
+import { capitalize, json } from "@/lib/util";
 import prisma from "@/lib/prisma";
 import {
   cWhatToSelectFromServiceStatement,

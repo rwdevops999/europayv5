@@ -4,7 +4,7 @@ import { JSX, ReactNode, useEffect } from "react";
 import PageTitle from "./page-title";
 import { LuClipboardPlus } from "react-icons/lu";
 import ValidationConflictItem from "./validation-conflict-item";
-import { cn } from "@/lib/functions";
+import { cn } from "@/lib/util";
 import { ScrollArea, ScrollBar } from "./radix/scroll-area";
 
 const ValidationConflictsDialog = ({

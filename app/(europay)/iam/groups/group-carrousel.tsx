@@ -23,7 +23,7 @@ import { MdPolicy } from "react-icons/md";
 import { GiScrollUnfurled } from "react-icons/gi";
 import { FaUser } from "react-icons/fa";
 import { createGroup, updateGroup } from "@/app/server/groups";
-import { absoluteUrl, showToast } from "@/lib/functions";
+import { absoluteUrl, showToast } from "@/lib/util";
 import { displayPrismaErrorCode } from "@/lib/prisma-errors";
 import { ValidationConflict } from "@/app/server/data/validation-data";
 import { validateData } from "@/app/server/validate";

@@ -10,7 +10,7 @@ import {
   exportUsers,
 } from "@/app/server/export";
 import { useMarkdownSettings } from "@/hooks/use-markdown-settings";
-import { absoluteUrl } from "@/lib/functions";
+import { absoluteUrl } from "@/lib/util";
 import Button from "@/ui/button";
 import PageContent from "@/ui/page-content";
 import PageTitle from "@/ui/page-title";

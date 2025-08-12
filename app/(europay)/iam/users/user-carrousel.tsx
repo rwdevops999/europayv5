@@ -31,7 +31,7 @@ import AvatarSelect from "@/ui/avatar-select";
 import CountrySelect from "@/ui/country-select";
 import { DataTable } from "@/ui/datatable/data-table";
 import { createUser, loadUserById, updateUser } from "@/app/server/users";
-import { absoluteUrl, showToast } from "@/lib/functions";
+import { absoluteUrl, showToast } from "@/lib/util";
 import { displayPrismaErrorCode } from "@/lib/prisma-errors";
 import { ValidationConflict } from "@/app/server/data/validation-data";
 import { validateData } from "@/app/server/validate";

@@ -4,7 +4,7 @@ import { tTemplate } from "@/lib/prisma-types";
 import prisma from "@/lib/prisma";
 import path from "path";
 import * as fs from "fs";
-import { SLEEP } from "@/lib/functions";
+import { SLEEP } from "@/lib/util";
 
 /**
  * Clear template table and reset sequence generator

@@ -1,7 +1,7 @@
 import { loadPolicies } from "@/app/server/policies";
 import { loadRoles } from "@/app/server/roles";
 import { loadServices } from "@/app/server/services";
-import { absoluteUrl } from "@/lib/functions";
+import { absoluteUrl } from "@/lib/util";
 import { tPolicy, tRole, tService } from "@/lib/prisma-types";
 import PageContent from "@/ui/page-content";
 import RoleHandler from "./role-handler";

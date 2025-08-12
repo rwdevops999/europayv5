@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import UserCarrousel, { defaultUserEntity, UserEntity } from "./user-carrousel";
 import { mapUsers } from "@/app/client/mapping";
-import { absoluteUrl, showToast } from "@/lib/functions";
+import { absoluteUrl, showToast } from "@/lib/util";
 import TemplateAlert, { tAlert } from "@/ui/template-alert";
 import { DATATABLE_ACTION_DELETE } from "@/lib/constants";
 import { deleteUser } from "@/app/server/users";

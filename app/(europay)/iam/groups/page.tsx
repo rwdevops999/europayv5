@@ -2,7 +2,7 @@ import { loadGroupById, loadGroups } from "@/app/server/groups";
 import { loadPolicies } from "@/app/server/policies";
 import { loadRoles } from "@/app/server/roles";
 import { loadUsers } from "@/app/server/users";
-import { absoluteUrl } from "@/lib/functions";
+import { absoluteUrl } from "@/lib/util";
 import { tGroup, tPolicy, tRole, tUser } from "@/lib/prisma-types";
 import PageContent from "@/ui/page-content";
 import GroupHandler from "./group-handler";

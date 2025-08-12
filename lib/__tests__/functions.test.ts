@@ -1,4 +1,4 @@
-import { absoluteUrl, cn } from "../functions";
+import { absoluteUrl, cn } from "../util";
 
 test("testing absolute url from .env", () => {
   expect(absoluteUrl("/test")).toBe("http://localhost:3000/test");

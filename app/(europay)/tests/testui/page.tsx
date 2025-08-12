@@ -1,4 +1,4 @@
-import { absoluteUrl } from "@/lib/functions";
+import { absoluteUrl } from "@/lib/util";
 import PageContent from "@/ui/page-content";
 import ValidationDialogTest from "./tests/validation-dialog-test";
 

@@ -1,7 +1,7 @@
 import { Column } from "@tanstack/react-table";
 import { LuArrowDownUp } from "react-icons/lu";
 import Button from "../button";
-import { cn } from "@/lib/functions";
+import { cn } from "@/lib/util";
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {

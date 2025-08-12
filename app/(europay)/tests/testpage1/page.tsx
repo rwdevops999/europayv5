@@ -1,4 +1,4 @@
-import { absoluteUrl } from "@/lib/functions";
+import { absoluteUrl } from "@/lib/util";
 import PageContent from "@/ui/page-content";
 
 export const dynamic = "force-dynamic";

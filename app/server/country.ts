@@ -100,3 +100,20 @@ export const defineCountries = async (
 
   return count;
 };
+
+export const loadCountryByName = async (
+  _name: string
+): Promise<tCountry | null> => {
+  let result: tCountry | null = null;
+
+  await prisma.country
+    .findFirst({
+      where: {
+        name: _name,
+      },
+      ...cWhatToSelectFromCountry,
+    })
+    .then((value: tCountry | null) => (result = value));
+
+  return result;
+};

@@ -1,7 +1,7 @@
 "use client";
 
 import { Permission } from "@/generated/prisma";
-import { cn } from "@/lib/functions";
+import { cn } from "@/lib/util";
 
 const access: string = Permission.ALLOW;
 

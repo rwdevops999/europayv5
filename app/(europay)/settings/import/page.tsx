@@ -1,6 +1,6 @@
 import PageContent from "@/ui/page-content";
 import ImportIam from "./components/import-iam";
-import { absoluteUrl } from "@/lib/functions";
+import { absoluteUrl } from "@/lib/util";
 import PageItemContainer from "@/ui/page-item-container";
 
 const Import = () => {

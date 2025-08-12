@@ -1,10 +1,11 @@
-import { absoluteUrl } from "@/lib/functions";
-import { FaUser } from "react-icons/fa";
+import { absoluteUrl } from "@/lib/util";
+import { FaTasks, FaUser } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { FcServices } from "react-icons/fc";
 import { GiScrollUnfurled, GiSettingsKnobs } from "react-icons/gi";
 import { GrTest } from "react-icons/gr";
 import { IoIosKey } from "react-icons/io";
+import { IoListOutline } from "react-icons/io5";
 import { LuClipboardList, LuLayoutDashboard } from "react-icons/lu";
 import { RiPoliceBadgeLine } from "react-icons/ri";
 import { TbDatabaseExport, TbDatabaseImport, TbTestPipe } from "react-icons/tb";
@@ -29,56 +30,56 @@ export let menu: MenuItem[] = [
     subItems: [],
     icon: <LuLayoutDashboard size={16} />,
   },
-  // {
-  //   url: "#",
-  //   title: "Overviews",
-  //   disabled: false,
-  //   visible: true,
-  //   icon: <GrOverview size={16} />,
-  //   subItems: [
-  //     {
-  //       title: "Tasks",
-  //       url: absoluteUrl("/tasks"),
-  //       disabled: false,
-  //       visible: true,
-  //       icon: <FaTasks size={16} />,
-  //       subItems: [],
-  //       parent: "Overviews",
-  //     },
-  //     {
-  //       title: "Jobs",
-  //       url: absoluteUrl("/jobs"),
-  //       disabled: false,
-  //       visible: true,
-  //       icon: <GrTasks size={16} />,
-  //       subItems: [],
-  //     },
-  //     {
-  //       url: absoluteUrl("/transactions"),
-  //       title: "Transactions",
-  //       disabled: false,
-  //       visible: true,
-  //       icon: <GrTransaction size={16} />,
-  //       subItems: [],
-  //     },
-  //     {
-  //       url: absoluteUrl("/history"),
-  //       title: "History",
-  //       disabled: false,
-  //       visible: true,
-  //       icon: <LuHistory size={16} />,
-  //       subItems: [],
-  //     },
-  //     {
-  //       url: absoluteUrl("/exports"),
-  //       title: "Exports",
-  //       disabled: false,
-  //       visible: true,
-  //       icon: <PiExportFill size={16} />,
-  //       subItems: [],
-  //     },
-  //   ],
-  // },
+  {
+    url: "#",
+    title: "Lists",
+    disabled: false,
+    visible: true,
+    icon: <IoListOutline size={16} />,
+    subItems: [
+      {
+        title: "Tasks",
+        url: absoluteUrl("/tasks"),
+        disabled: false,
+        visible: true,
+        icon: <FaTasks size={16} />,
+        subItems: [],
+        parent: "Lists",
+      },
+      // {
+      //   title: "Jobs",
+      //   url: absoluteUrl("/jobs"),
+      //   disabled: false,
+      //   visible: true,
+      //   icon: <GrTasks size={16} />,
+      //   subItems: [],
+      // },
+      // {
+      //   url: absoluteUrl("/transactions"),
+      //   title: "Transactions",
+      //   disabled: false,
+      //   visible: true,
+      //   icon: <GrTransaction size={16} />,
+      //   subItems: [],
+      // },
+      // {
+      //   url: absoluteUrl("/history"),
+      //   title: "History",
+      //   disabled: false,
+      //   visible: true,
+      //   icon: <LuHistory size={16} />,
+      //   subItems: [],
+      // },
+      // {
+      //   url: absoluteUrl("/exports"),
+      //   title: "Exports",
+      //   disabled: false,
+      //   visible: true,
+      //   icon: <PiExportFill size={16} />,
+      //   subItems: [],
+      // },
+    ],
+  },
   {
     url: "#",
     title: "Settings",

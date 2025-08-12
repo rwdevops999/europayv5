@@ -1,7 +1,7 @@
 "use client";
 
 import { useProgressBar } from "@/hooks/use-progress-bar";
-import { absoluteUrl } from "@/lib/functions";
+import { absoluteUrl } from "@/lib/util";
 // import { absoluteUrl } from "@/app/lib/util";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

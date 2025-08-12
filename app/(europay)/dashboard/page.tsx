@@ -1,4 +1,4 @@
-import { absoluteUrl } from "@/lib/functions";
+import { absoluteUrl } from "@/lib/util";
 import PageContent from "@/ui/page-content";
 import PageItemContainer from "@/ui/page-item-container";
 import AppVersion from "./components/app-version";

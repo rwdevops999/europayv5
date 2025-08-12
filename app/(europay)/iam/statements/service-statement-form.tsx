@@ -6,7 +6,7 @@ import {
   updateServiceStatement,
 } from "@/app/server/service-statements";
 import { Permission } from "@/generated/prisma";
-import { absoluteUrl, cn, json, showToast } from "@/lib/functions";
+import { absoluteUrl, cn, json, showToast } from "@/lib/util";
 import { displayPrismaErrorCode } from "@/lib/prisma-errors";
 import {
   tService,

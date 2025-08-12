@@ -4,7 +4,7 @@ import { mapServiceStatements } from "@/app/client/mapping";
 import { ValidationConflict } from "@/app/server/data/validation-data";
 import { createPolicy, updatePolicy } from "@/app/server/policies";
 import { validateData } from "@/app/server/validate";
-import { absoluteUrl, cn, showToast } from "@/lib/functions";
+import { absoluteUrl, cn, showToast } from "@/lib/util";
 import { displayPrismaErrorCode } from "@/lib/prisma-errors";
 import {
   tPolicyCreate,

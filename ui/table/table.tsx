@@ -1,4 +1,4 @@
-import { cn } from "@/lib/functions";
+import { cn } from "@/lib/util";
 
 const Table = ({ className, ...props }: React.ComponentProps<"table">) => {
   return (

@@ -1,4 +1,4 @@
-import { cn } from "@/lib/functions";
+import { cn } from "@/lib/util";
 import { Command as CmdkCommand } from "cmdk";
 import { IoIosSearch } from "react-icons/io";
 

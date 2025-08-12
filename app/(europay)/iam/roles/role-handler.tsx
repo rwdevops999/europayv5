@@ -8,7 +8,7 @@ import RoleForm, { defaultRoleEntity, RoleEntity } from "./role-form";
 import { Data, ToastType } from "@/lib/types";
 import { mapRoles } from "@/app/client/mapping";
 import TemplateAlert, { tAlert } from "@/ui/template-alert";
-import { absoluteUrl, showToast } from "@/lib/functions";
+import { absoluteUrl, showToast } from "@/lib/util";
 import { DATATABLE_ACTION_DELETE } from "@/lib/constants";
 import { deleteRole } from "@/app/server/roles";
 import { TableMeta } from "@tanstack/react-table";

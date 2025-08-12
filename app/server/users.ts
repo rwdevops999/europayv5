@@ -101,3 +101,28 @@ export const updateUser = async (
 
   return errorcode;
 };
+
+export const loadUserByNames = async (
+  _firstname: string,
+  _lastname: string
+): Promise<tUser | null> => {
+  let result: tUser | null = null;
+
+  await prisma.user
+    .findFirst({
+      where: {
+        AND: {
+          firstname: _firstname,
+          lastname: _lastname,
+        },
+      },
+      ...cWhatToSelectFromUser,
+    })
+    .then(async (value: tUser | null) => {
+      if (value) {
+        result = value;
+      }
+    });
+
+  return result;
+};

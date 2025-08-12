@@ -4,7 +4,7 @@ import { mapServiceStatements } from "@/app/client/mapping";
 import { deleteServiceStatement } from "@/app/server/service-statements";
 import { Permission } from "@/generated/prisma";
 import { DATATABLE_ACTION_DELETE } from "@/lib/constants";
-import { absoluteUrl, showToast } from "@/lib/functions";
+import { absoluteUrl, showToast } from "@/lib/util";
 import {
   tService,
   tServiceStatement,

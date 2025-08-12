@@ -4,14 +4,9 @@ import {
   handleAccountCreation,
   handleUserCreation,
   handleUserCreationFinish,
-  taskApplicationComplete,
-  taskApplicationCreate,
-  taskApplicationOpen,
-  taskTest1,
-  taskTest2,
 } from "../taskactions";
 
-// Parametes used by the task execution. These parameters are passed to the task executable function.
+// Parameters used by the task execution. These parameters are passed to the task executable function.
 export type tTaskParams = Record<string, any>;
 
 // Structure to setup the task for creation
@@ -52,47 +47,6 @@ export type tTaskFunction = {
 // @param string: is the task name
 // @param tTaskFunction[]: an array of functions to be executed depending on statusses
 export const taskFunctions: Record<string, tTaskFunction[]> = {
-  TASK_APPLICATION: [
-    {
-      id: 1,
-      onStatus: TaskStatus.CREATED,
-      toStatus: TaskStatus.OPEN,
-      linkedStatus: [TaskStatus.CREATED],
-      action: taskApplicationOpen,
-    },
-    {
-      id: 2,
-      onStatus: TaskStatus.OPEN,
-      toStatus: TaskStatus.COMPLETE,
-      linkedStatus: [TaskStatus.COMPLETE],
-      action: taskApplicationComplete,
-    },
-  ],
-  TASK_APPLICATION_CREATE: [
-    {
-      id: 3,
-      onStatus: TaskStatus.CREATED,
-      toStatus: TaskStatus.COMPLETE,
-      linkedStatus: [TaskStatus.OPEN],
-      action: taskApplicationCreate,
-    },
-  ],
-  TEST_TASK: [
-    {
-      id: 4,
-      onStatus: TaskStatus.CREATED,
-      toStatus: TaskStatus.OPEN,
-      linkedStatus: [],
-      action: taskTest1,
-    },
-    {
-      id: 5,
-      onStatus: TaskStatus.OPEN,
-      toStatus: TaskStatus.COMPLETE,
-      linkedStatus: [],
-      action: taskTest2,
-    },
-  ],
   TASK_CREATE_USER: [
     {
       id: 6,

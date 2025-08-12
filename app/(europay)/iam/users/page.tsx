@@ -5,7 +5,7 @@ import { loadPolicies } from "@/app/server/policies";
 import { loadRoles } from "@/app/server/roles";
 import { loadUserById, loadUsers } from "@/app/server/users";
 import PageContent from "@/ui/page-content";
-import { absoluteUrl } from "@/lib/functions";
+import { absoluteUrl } from "@/lib/util";
 import { loadGroups } from "@/app/server/groups";
 import { Group } from "@/generated/prisma";
 

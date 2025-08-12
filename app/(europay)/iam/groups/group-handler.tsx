@@ -10,7 +10,7 @@ import GroupCarrousel, {
   GroupEntity,
 } from "./group-carrousel";
 import { mapGroups } from "@/app/client/mapping";
-import { absoluteUrl, showToast } from "@/lib/functions";
+import { absoluteUrl, showToast } from "@/lib/util";
 import TemplateAlert, { tAlert } from "@/ui/template-alert";
 import { DATATABLE_ACTION_DELETE } from "@/lib/constants";
 import { deleteGroup } from "@/app/server/groups";

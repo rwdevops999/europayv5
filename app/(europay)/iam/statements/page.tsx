@@ -1,6 +1,6 @@
 import { loadServiceStatements } from "@/app/server/service-statements";
 import { loadServices } from "@/app/server/services";
-import { absoluteUrl } from "@/lib/functions";
+import { absoluteUrl } from "@/lib/util";
 import { tService, tServiceStatement } from "@/lib/prisma-types";
 import PageContent from "@/ui/page-content";
 import ServiceStatementHandler from "./service-statement-handler";

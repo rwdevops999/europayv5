@@ -38,5 +38,13 @@
     "content": "Create account from ${email}.",
     "managed": true,
     "parameters": "{email:  #variable}"
+  },
+  {
+    "role": "EMAIL",
+    "name": "ACCOUNT_CREATED",
+    "description": "Account for Europay",
+    "content": "<div>Your account for <b>${email}</b> in Europay is created. You can login at <a href='${url}'>Europay</a></div><div>Greeting, the Europay team.</div>",
+    "managed": true,
+    "parameters": "{email:  #variable, url: #variable}"
   }
 ]

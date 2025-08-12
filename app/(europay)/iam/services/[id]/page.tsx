@@ -1,5 +1,5 @@
 import { URL_ENCODING_ASSIGNMENT } from "@/lib/constants";
-import { CreatePromise, isNumber } from "@/lib/functions";
+import { CreatePromise, isNumber } from "@/lib/util";
 import LoadingSpinner from "@/ui/loading-spinner";
 import { Suspense } from "react";
 import IamServicesPage from "../page";
