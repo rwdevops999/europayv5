@@ -1,11 +1,11 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { JSX, ReactNode, useEffect } from "react";
 import PageTitle from "./page-title";
 import { LuClipboardPlus } from "react-icons/lu";
 import ValidationConflictItem from "./validation-conflict-item";
-import { ScrollArea, ScrollBar } from "./radix/scroll-area";
 import { cn } from "@/lib/functions";
+import { ScrollArea, ScrollBar } from "./radix/scroll-area";
 
 const ValidationConflictsDialog = ({
   open = false,
@@ -59,9 +59,8 @@ const ValidationConflictsDialog = ({
     }
   }, [open]);
 
-  return (
-    <dialog id="validationdialog" className="modal">
-      {/* <div className="modal-box  border-1 border-red-500 bg-base-100"> */}
+  const DialogTitle = (): JSX.Element => {
+    return (
       <div className="flex justify-between">
         <PageTitle title="Validation Conflict" />
         <div
@@ -75,16 +74,33 @@ const ValidationConflictsDialog = ({
           />
         </div>
       </div>
-      <div className={cn("mt-1 grid grid-cols-6", className)}>
-        <ScrollArea className="overflow-auto col-span-6 h-[160px] min-h-[160px] max-h-[500px] border-1 border-neutral-content/30">
+    );
+  };
+
+  const DialogContent = (): JSX.Element => {
+    return (
+      <div>
+        <ScrollArea className="overflow-y-auto h-[150px] min-h-[150px] max-h-[5000px] border-1 border-neutral-content/30">
           {conflicts.map((conflict: any) => (
             <ValidationConflictItem key={conflict.id} conflict={conflict} />
           ))}
           <ScrollBar className="bg-content" />
         </ScrollArea>
       </div>
-      <div className="flex justify-end mt-2">{children}</div>
-      {/* </div> */}
+    );
+  };
+
+  return (
+    <dialog id="validationdialog" className="modal">
+      <div className="modal-box w-11/12 max-w-5xl">
+        <DialogTitle />
+        <DialogContent />
+        <div className="modal-action">
+          <form className="flex justify-end" method="dialog">
+            {children}
+          </form>
+        </div>
+      </div>
     </dialog>
   );
 };
