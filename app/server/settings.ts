@@ -93,3 +93,16 @@ export const loadSettings = async (
 
   return settings;
 };
+
+export const updateSetting = async (_setting: tSetting): Promise<void> => {
+  await prisma.setting.updateMany({
+    where: {
+      type: _setting.type,
+      subtype: _setting.subtype,
+      key: _setting.key,
+    },
+    data: {
+      value: _setting.value,
+    },
+  });
+};

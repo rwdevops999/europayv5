@@ -7,6 +7,7 @@ import { GrTest } from "react-icons/gr";
 import { IoIosKey } from "react-icons/io";
 import { IoListOutline } from "react-icons/io5";
 import { LuClipboardList, LuHistory, LuLayoutDashboard } from "react-icons/lu";
+import { MdSettingsAccessibility } from "react-icons/md";
 import { RiPoliceBadgeLine } from "react-icons/ri";
 import { TbDatabaseExport, TbDatabaseImport, TbTestPipe } from "react-icons/tb";
 
@@ -87,15 +88,15 @@ export let menu: MenuItem[] = [
     visible: true,
     icon: <GiSettingsKnobs size={16} />,
     subItems: [
-      // {
-      //   title: "General",
-      //   url: absoluteUrl("/settings/general"),
-      //   disabled: false,
-      //   visible: true,
-      //   icon: <MdSettingsAccessibility size={16} />,
-      //   subItems: [],
-      //   parent: "Settings",
-      // },
+      {
+        title: "General",
+        url: absoluteUrl("/settings/general"),
+        disabled: false,
+        visible: true,
+        icon: <MdSettingsAccessibility size={16} />,
+        subItems: [],
+        parent: "Settings",
+      },
       // {
       //   title: "Storage",
       //   url: absoluteUrl("/settings/storage"),

@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import { ToastFn } from "./types";
+import { tSetting } from "./prisma-types";
 
 export const URL_ENCODING_ASSIGNMENT = "%3D";
 export const URL_ENCODING_AMPERSAND = "%26";
@@ -18,3 +19,11 @@ export const ToastTypes: Record<string, ToastFn> = {
 };
 
 export const DEFAULT_COUNTRY: string = "Belgium";
+
+export const defaultSetting: tSetting = {
+  id: -1,
+  type: "General",
+  subtype: "Application",
+  key: "",
+  value: "",
+};
