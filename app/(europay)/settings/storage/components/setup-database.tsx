@@ -33,7 +33,16 @@ const SetupDatabase = () => {
   };
 
   const clearWorkDatabase = async (): Promise<void> => {
-    await cleanDbTables([""]);
+    await cleanDbTables([
+      "accounts",
+      "accountApply",
+      "exports",
+      "groups",
+      "policies",
+      "roles",
+      "servicestatements",
+      "users",
+    ]);
   };
 
   const loadServices = async (): Promise<void> => {

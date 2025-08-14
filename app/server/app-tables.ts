@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { dbTables, linkedDbTables } from "./data/db-tables";
+import { json } from "@/lib/util";
 
 /**
  * clears the table and resets the sequence generator

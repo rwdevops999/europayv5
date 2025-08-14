@@ -14,7 +14,7 @@ export const clearDatabaseTables = async (
     nrOfcountries: 0,
   };
 
-  await cleanDbTables(Object.values(dbTables));
+  await cleanDbTables(Object.keys(dbTables));
 
   if (provision) {
     if (await defineServices(servicesandactions)) {
