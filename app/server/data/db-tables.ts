@@ -1,25 +1,31 @@
 export const dbTables: Record<string, string> = {
-  countries: "Country",
-  services: "Service",
-  serviceactions: "ServiceAction",
+  accounts: "Account",
+  accountApply: "AccountApply",
   addresses: "Address",
+  countries: "Country",
+  exports: "Export",
   groups: "Group",
-  // history: "History",
-  // jobs: "Job",
-  // otp: "OTP",
+  history: "History",
+  otp: "OTP",
   policies: "Policy",
   roles: "Role",
+  services: "Service",
+  serviceactions: "ServiceAction",
   servicestatements: "ServiceStatement",
   servicestatementactions: "ServiceStatementAction",
   settings: "Setting",
-  // tasks: "Task",
+  tasks: "Task",
   templates: "Template",
   users: "User",
-  accounts: "Account",
 };
 
 export const linkedDbTables: Record<string, string[]> = {
   services: ["serviceactions"],
   servicestatements: ["servicestatementactions"],
-  users: ["addresses"],
+  users: ["addresses", "accounts"],
+};
+
+export type dbResult = {
+  nrOfservices: number;
+  nrOfcountries: number;
 };

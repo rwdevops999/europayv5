@@ -3,7 +3,7 @@ import { FaTasks, FaUser } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { FcServices } from "react-icons/fc";
 import { GiScrollUnfurled, GiSettingsKnobs } from "react-icons/gi";
-import { GrTest } from "react-icons/gr";
+import { GrStorage, GrTest } from "react-icons/gr";
 import { IoIosKey } from "react-icons/io";
 import { IoListOutline } from "react-icons/io5";
 import { LuClipboardList, LuHistory, LuLayoutDashboard } from "react-icons/lu";
@@ -97,15 +97,15 @@ export let menu: MenuItem[] = [
         subItems: [],
         parent: "Settings",
       },
-      // {
-      //   title: "Storage",
-      //   url: absoluteUrl("/settings/storage"),
-      //   disabled: false,
-      //   visible: true,
-      //   icon: <GrStorage size={16} />,
-      //   subItems: [],
-      //   parent: "Settings",
-      // },
+      {
+        title: "Storage",
+        url: absoluteUrl("/settings/storage"),
+        disabled: false,
+        visible: true,
+        icon: <GrStorage size={16} />,
+        subItems: [],
+        parent: "Settings",
+      },
       // {
       //   title: "Limits",
       //   url: absoluteUrl("/settings/limits"),
@@ -247,33 +247,6 @@ export let menu: MenuItem[] = [
         subItems: [],
         parent: "Tests",
       },
-      // {
-      //   title: "TestComponents",
-      //   url: absoluteUrl("/tests/testcomponents"),
-      //   disabled: false,
-      //   visible: true,
-      //   icon: <TbTestPipe size={16} />,
-      //   subItems: [],
-      //   parent: "Tests",
-      // },
-      // {
-      //   title: "TestCharts",
-      //   url: absoluteUrl("/tests/testcharts"),
-      //   disabled: false,
-      //   visible: true,
-      //   icon: <TbTestPipe size={16} />,
-      //   subItems: [],
-      //   parent: "Tests",
-      // },
-      // {
-      //   title: "TestMail",
-      //   url: absoluteUrl("/tests/testmail"),
-      //   disabled: false,
-      //   visible: true,
-      //   icon: <TbTestPipe size={16} />,
-      //   subItems: [],
-      //   parent: "Tests",
-      // },
     ],
   },
 ];
