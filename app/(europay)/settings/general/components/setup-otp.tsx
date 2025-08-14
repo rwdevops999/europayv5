@@ -5,8 +5,9 @@ import { updateSetting } from "@/app/server/settings";
 import { useOTPSettings } from "@/hooks/use-otp-settings";
 import { defaultSetting } from "@/lib/constants";
 import { tSetting } from "@/lib/prisma-types";
-import { JSX, useEffect } from "react";
+import { JSX, useEffect, useState } from "react";
 import ReactHtmlParser from "react-html-parser";
+import { CgPassword } from "react-icons/cg";
 
 const SetupOTP = () => {
   const { getTimings, setTiming, getTimingNotation } = useOTPSettings();
