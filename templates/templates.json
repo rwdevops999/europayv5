@@ -54,5 +54,37 @@
     "content": "<div>Your OTP code is <b>${OTPcode}</b>.This code is valid for: <b>${OTPvalid}</b></div><br/><div>Greeting, the Europay team.</div>",
     "managed": true,
     "parameters": "{OTPcode:  #variable, OTPvalid: #variable}"
+  },
+  {
+    "role": "NOTIFICATION",
+    "name": "ACCOUNT_BLOCKED",
+    "description": "Account blocked",
+    "content": "your account ${email} for accessing Europay is blocked. Please contact admin",
+    "managed": true,
+    "parameters": "{email:  #variable}"
+  },
+  {
+    "role": "NOTIFICATION",
+    "name": "OTP_EXPIRED",
+    "description": "OTP expired",
+    "content": "The OTP code ${otp} is expired. Resend?",
+    "managed": true,
+    "parameters": "{otp:  #variable}"
+  },
+  {
+    "role": "NOTIFICATION",
+    "name": "OTP_INCORRECT",
+    "description": "OTP incorrect",
+    "content": "The OTP code ${otp} is incorrect. Retry?",
+    "managed": true,
+    "parameters": "{otp:  #variable}"
+  },
+  {
+    "role": "NOTIFICATION",
+    "name": "OTP_ALREADY_USED",
+    "description": "OTP already used",
+    "content": "The OTP code ${otp} was already used. Retry?",
+    "managed": true,
+    "parameters": "{otp:  #variable}"
   }
 ]

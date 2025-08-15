@@ -3,6 +3,7 @@
 import { tEmail } from "@/app/server/data/email-data";
 import { sendEmail } from "@/app/server/email";
 import {
+  createOTP,
   loadOTPByOtpCode,
   otpHasValidCode,
   setOtpStatus,
@@ -129,17 +130,17 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
       updateDate: new Date(),
     };
 
-    // await createOTP(otp).then(async (id: number | null) => {
-    //   if (id) {
-    //     const jobCreated: boolean = await createJobOnServer(
-    //       `OTPCheck${id}`,
-    //       expirationvalue,
-    //       id,
-    //       `OTP expiration checker ${_user.email}`,
-    //       changeOTPStatus
-    //     );
-    //   }
-    // });
+    await createOTP(otp).then(async (id: number | null) => {
+      if (id) {
+        // const jobCreated: boolean = await createJobOnServer(
+        //   `OTPCheck${id}`,
+        //   expirationvalue,
+        //   id,
+        //   `OTP expiration checker ${_user.email}`,
+        //   changeOTPStatus
+        // );
+      }
+    });
 
     return otp.OTP;
   };

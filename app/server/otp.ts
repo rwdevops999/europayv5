@@ -2,7 +2,19 @@
 
 import { OTPStatus } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
-import { tOTP } from "@/lib/prisma-types";
+import { tOTP, tOTPCreate } from "@/lib/prisma-types";
+
+export const createOTP = async (_otp: tOTPCreate): Promise<number | null> => {
+  let result: number | null = null;
+
+  await prisma.oTP
+    .create({
+      data: _otp,
+    })
+    .then((otp: tOTP) => (result = otp.id));
+
+  return result;
+};
 
 export const otpHasValidCode = async (_email: string): Promise<boolean> => {
   let result: boolean = false;
