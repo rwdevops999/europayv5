@@ -1,12 +1,12 @@
+import React, { useEffect, useState } from "react";
+import TaskForm from "./task-form";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from "@/app/ui/radix/dialog";
-import React, { useEffect, useState } from "react";
-import { Root } from "@radix-ui/react-visually-hidden";
-import TaskForm from "./task-form";
+} from "@/ui/radix/dialog";
+import { Root } from "@radix-ui/react-dialog";
 
 const TaskDialog = ({
   _open,
