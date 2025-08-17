@@ -1,6 +1,7 @@
 "use client";
 
 import { timings, tTimingGroup } from "@/app/client/data/timings-data";
+import { json } from "@/lib/util";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 interface OTPSettingsContextInterface {
@@ -32,13 +33,16 @@ export const OTPSettingsProvider = ({ children }: { children: ReactNode }) => {
 
   const setTiming = (timing: string): void => {
     const chars = timing.split("");
+    const timingchar = chars[chars.length - 1];
 
     const group: tTimingGroup | undefined = timings.find(
-      (timing: tTimingGroup) => timing.char === chars[1]
+      (timing: tTimingGroup) => timing.char === timingchar
     );
+    console.log("OTP HOOK", "group", json(group));
 
     if (group) {
-      setTimingValue(parseInt(chars[0]) * group.accumulator);
+      const timingvalue: string = timing.split(timingchar)[0];
+      setTimingValue(parseInt(timingvalue) * group.accumulator);
     } else {
       setTimingValue(300000);
     }

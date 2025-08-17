@@ -4,7 +4,7 @@ import { tTemplate } from "@/lib/prisma-types";
 import prisma from "@/lib/prisma";
 import path from "path";
 import * as fs from "fs";
-import { SLEEP } from "@/lib/util";
+import { json, SLEEP } from "@/lib/util";
 
 /**
  * Clear template table and reset sequence generator
@@ -100,24 +100,25 @@ export const uploadTemplates = async (
   let loaded: boolean = false;
 
   if (_clearTable) {
-    await resetTemplateTable().then(() => SLEEP(1000));
-  }
-
-  if (filename) {
-    const csvFilePath = path.resolve(filename);
-    const fileContent = fs.readFileSync(csvFilePath);
-    var decoder = new TextDecoder("utf-8");
-    let str = decoder.decode(fileContent);
-    let templates: tTemplate[] = JSON.parse(str);
-    if (templates.length > 0) {
-      for (let i = 0; i < templates.length; i++) {
-        const template: tTemplate = templates[i];
-        await prisma.template.create({
-          data: template,
-        });
+    await resetTemplateTable().then(async () => {
+      if (filename) {
+        const csvFilePath = path.resolve(filename);
+        const fileContent = fs.readFileSync(csvFilePath);
+        var decoder = new TextDecoder("utf-8");
+        let str = decoder.decode(fileContent);
+        let templates: tTemplate[] = JSON.parse(str);
+        if (templates.length > 0) {
+          for (let i = 0; i < templates.length; i++) {
+            const template: tTemplate = templates[i];
+            console.log("CREATE TEMPLATE", json(template));
+            await prisma.template.create({
+              data: template,
+            });
+          }
+          loaded = true;
+        }
       }
-      loaded = true;
-    }
+    });
   }
 
   return loaded;

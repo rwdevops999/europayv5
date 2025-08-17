@@ -1,5 +1,8 @@
 import { absoluteUrl } from "@/lib/util";
 import PageContent from "@/ui/page-content";
+import TestOTPJobs from "./tests/testOTPJobs";
+import CharsSplit from "./tests/chars-split";
+import OtpJobHandling from "./tests/otp-job-handling";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +17,10 @@ const TestPage1 = () => {
       ]}
       className="border-1 border-blue-500"
     >
-      <h1>TEST PAGE1</h1>
+      {/* <CharsSplit /> */}
+      {/* <TestOTPJobs /> */}
+      {/* <CreateOtp /> */}
+      <OtpJobHandling />
     </PageContent>
   );
 };

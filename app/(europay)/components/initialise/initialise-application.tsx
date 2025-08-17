@@ -12,6 +12,8 @@ import SetupCountriesWithSuspense from "./setup-countries-with-suspense";
 import { provisionManagedIAM } from "@/app/server/managed";
 import SetupManagedWithSuspense from "./setup-managed-with-suspense";
 import FinalizeInitialisation from "./finalize-initialisation";
+import { countOngoingOTPs } from "@/app/server/otp";
+import SetupJobsWithSuspense from "./setup-jobs-with-suspense";
 
 const InitialiseApplication = async () => {
   let loadServices: boolean = false;
@@ -19,6 +21,9 @@ const InitialiseApplication = async () => {
   const nrOfSettings: number = await countSettings();
   let loadCountries: boolean = false;
   const nrOfCountries: number = await countCountries();
+
+  const nrOngoingOtps: number = await countOngoingOTPs();
+  const needProcessingOtps: boolean = nrOngoingOtps > 0;
 
   if (
     (nrOfServices === 0 && Object.keys(servicesandactions).length > 0) ||
@@ -45,8 +50,12 @@ const InitialiseApplication = async () => {
     process.env.NEXT_PUBLIC_TEMPLATE_FILE
   );
 
+  console.log("INIT APP(1)", nrOfSettings, appsettings.length);
+
   const loadSettings: boolean = nrOfSettings < appsettings.length;
-  let settingsLoaded = false;
+  console.log("INIT APP(2)", loadSettings);
+
+  let settingsLoaded = true;
   if (loadSettings) {
     settingsLoaded = await createSettings(appsettings);
   }
@@ -57,6 +66,9 @@ const InitialiseApplication = async () => {
     managedLoaded = await provisionManagedIAM(true);
   }
 
+  console.log("INIT EUROPAY");
+  console.log("need OTP processing", needProcessingOtps);
+
   return (
     <>
       <RenderBackground />
@@ -66,9 +78,11 @@ const InitialiseApplication = async () => {
         <SetupCountriesWithSuspense _loaded={countriesLoaded} />
       )}
       <TemplateLoaderWithSuspense _loaded={templatesloaded} />
-      {loadSettings && <SetupSettingsWithSuspense _loaded={settingsLoaded} />}
+      <SetupSettingsWithSuspense _loaded={settingsLoaded} />
 
-      {loadManaged && <SetupManagedWithSuspense _loaded={managedLoaded} />}
+      {/* {loadManaged && <SetupManagedWithSuspense _loaded={managedLoaded} />} */}
+
+      <SetupJobsWithSuspense _needprocessing={needProcessingOtps} />
     </>
   );
 };

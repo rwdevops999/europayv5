@@ -171,6 +171,7 @@ const ApplyForm = ({
             className="input-sm"
             placeholder="password"
             required
+            autoComplete="off"
           />
         </label>
         <select

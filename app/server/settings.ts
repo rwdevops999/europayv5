@@ -28,6 +28,8 @@ export const createSettings = async (
 ): Promise<boolean> => {
   let created: boolean = false;
 
+  console.log("CREATE SETTINGS IN DB");
+
   await prisma.setting.deleteMany({}).then(async () => {
     await prisma.setting
       .createMany({

@@ -452,7 +452,7 @@ const UserCarrousel = (props: UserCarrouselProps) => {
             <input
               id="password"
               type="password"
-              autoComplete="current-password"
+              autoComplete="off"
               placeholder="password..."
               className="input-sm w-11/12"
               minLength={8}

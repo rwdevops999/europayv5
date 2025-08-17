@@ -1,0 +1,43 @@
+import React, { Suspense } from "react";
+import Loaded from "./loaded";
+import { createSettings } from "@/app/server/settings";
+import { appsettings } from "@/app/server/data/setting-data";
+import LoadingSpinner from "@/ui/loading-spinner";
+import ProcessSettings from "./process-settings";
+import { clearRunningJobs } from "@/app/server/job";
+import { processOtpsOnServer } from "@/app/server/otp";
+
+const JobCreator = async () => {
+  await clearRunningJobs().then(async () => {
+    await processOtpsOnServer();
+  });
+
+  return (
+    <>
+      <Loaded service="Initialised jobs" />
+    </>
+  );
+};
+
+const SetupJobsWithSuspense = async ({
+  _needprocessing,
+}: {
+  _needprocessing: boolean;
+}) => {
+  console.log("SetupJobsWithSuspense", "_needprocessing", _needprocessing);
+  if (!_needprocessing) {
+    return (
+      <>
+        <Loaded service="Initialised jobs" />
+      </>
+    );
+  }
+
+  return (
+    <Suspense fallback={<LoadingSpinner label="Processing..." />}>
+      <JobCreator />
+    </Suspense>
+  );
+};
+
+export default SetupJobsWithSuspense;

@@ -6,7 +6,7 @@ export const dbTables: Record<string, string> = {
   exports: "Export",
   groups: "Group",
   history: "History",
-  jobs: "",
+  jobs: "Job",
   otp: "OTP",
   policies: "Policy",
   roles: "Role",

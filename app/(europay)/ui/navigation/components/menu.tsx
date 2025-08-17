@@ -3,7 +3,7 @@ import { FaTasks, FaUser } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { FcServices } from "react-icons/fc";
 import { GiScrollUnfurled, GiSettingsKnobs } from "react-icons/gi";
-import { GrStorage, GrTest } from "react-icons/gr";
+import { GrStorage, GrTasks, GrTest } from "react-icons/gr";
 import { IoIosKey } from "react-icons/io";
 import { IoListOutline } from "react-icons/io5";
 import { LuClipboardList, LuHistory, LuLayoutDashboard } from "react-icons/lu";
@@ -47,14 +47,14 @@ export let menu: MenuItem[] = [
         subItems: [],
         parent: "Lists",
       },
-      // {
-      //   title: "Jobs",
-      //   url: absoluteUrl("/jobs"),
-      //   disabled: false,
-      //   visible: true,
-      //   icon: <GrTasks size={16} />,
-      //   subItems: [],
-      // },
+      {
+        title: "Jobs",
+        url: absoluteUrl("/jobs"),
+        disabled: false,
+        visible: true,
+        icon: <GrTasks size={16} />,
+        subItems: [],
+      },
       // {
       //   url: absoluteUrl("/transactions"),
       //   title: "Transactions",

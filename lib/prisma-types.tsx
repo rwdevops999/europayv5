@@ -338,3 +338,8 @@ export type tOTPCreate = Prisma.OTPUncheckedCreateInput;
 
 /* == HISTORY =========== */
 export type tHistory = Prisma.HistoryGetPayload<{}>;
+
+/* == JOBS ========== */
+export type tJob = Prisma.JobGetPayload<{}>;
+export type tJobCreate = Prisma.JobUncheckedCreateInput;
+export type tJobUpdate = Prisma.JobUncheckedUpdateInput;

@@ -303,3 +303,27 @@ enum HistoryType {
   INFO
   ACTION
 }
+
+model Job {
+  id Int @id @default(autoincrement())
+  jobname String
+  status JobStatus @default(CREATED)
+  description String
+  model JobModel @default(CLIENT)
+  data Json
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+}
+
+enum JobModel {
+  CLIENT
+  SERVER
+}
+
+enum JobStatus {
+  CREATED
+  RUNNING
+  COMPLETED
+  SUSPENDED
+}
+

@@ -8,9 +8,12 @@ import { useOTPSettings } from "@/hooks/use-otp-settings";
 import { useToastSettings } from "@/hooks/use-toast-settings";
 import { DEFAULT_TOAST_DURATION } from "@/lib/constants";
 import { tSetting } from "@/lib/prisma-types";
+import { json } from "@/lib/util";
 import { useEffect } from "react";
 
 const ProcessSettings = () => {
+  console.log("PROCESSING SETTINGS");
+
   const { setToast, setToastDuration } = useToastSettings();
   const { setMarkdown } = useMarkdownSettings();
   const { setTiming } = useOTPSettings();
@@ -84,8 +87,17 @@ const ProcessSettings = () => {
     setting = settings.find((setting: tSetting) => setting.key === "Timing");
 
     if (setting) {
+      console.log(
+        "PROCESSING OTP SETTING ... TIMING (1)",
+        json(setting),
+        setting.value
+      );
       setTiming(setting.value);
     } else {
+      console.log(
+        "PROCESSING OTP SETTING ... TIMING (2)",
+        process.env.NEXT_PUBLIC_SETTINGS_OTP_TIMING
+      );
       setTiming(
         process.env.NEXT_PUBLIC_SETTINGS_OTP_TIMING
           ? process.env.NEXT_PUBLIC_SETTINGS_OTP_TIMING

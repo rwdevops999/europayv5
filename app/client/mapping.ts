@@ -2,6 +2,7 @@ import { Group } from "@/generated/prisma";
 import {
   tGroup,
   tHistory,
+  tJob,
   tPolicy,
   tRole,
   tService,
@@ -14,6 +15,7 @@ import {
 import { Data, tHistoryData } from "@/lib/types";
 import { tTaskData } from "../server/data/taskdata";
 import { convertDatabaseDateToString, padZero } from "@/lib/util";
+import { JobData } from "../server/data/job-data";
 
 /**
  * map serviceactions to Data
@@ -341,6 +343,27 @@ export const mapHistory = (history: tHistory[] | undefined): tHistoryData[] => {
       };
 
       return data;
+    });
+  }
+
+  return result;
+};
+
+export const mapJobs = (jobs: tJob[]): JobData[] => {
+  let result: JobData[] = [];
+
+  if (jobs.length > 0) {
+    result = jobs.map((job: tJob) => {
+      const jobData: JobData = {
+        id: job.id,
+        jobId: padZero(job.id, 5, "JOB"),
+        name: job.jobname,
+        description: job.description,
+        status: job.status,
+        model: job.model,
+      };
+
+      return jobData;
     });
   }
 

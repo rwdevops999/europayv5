@@ -14,7 +14,7 @@ type selective = {
 // these values need to be the same as the logistics tables (in setup.ts) when converted to lowercase
 const selectiveTables: Record<string, boolean> = {
   History: false,
-  // Jobs: false,
+  Jobs: false,
   OTP: false,
   Settings: false,
   Tasks: false,
@@ -22,7 +22,7 @@ const selectiveTables: Record<string, boolean> = {
 };
 
 const tooltips: Record<string, string> = {
-  // Jobs: "Attention! This can remove running jobs.",
+  Jobs: "Attention! This can remove running jobs.",
   OTP: "Attention! This can clear active OTP's.",
   Tasks: "Attention! This can remove uncompleted tasks.",
   Templates: "Attention! This will remove all templates.",
