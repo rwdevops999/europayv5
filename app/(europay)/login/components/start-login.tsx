@@ -29,6 +29,7 @@ import LoginOtpDialog from "./login-otp-dialog";
 import LoginPasswordDialog from "./login-password";
 import Processing from "@/ui/processing";
 import NotificationDialog from "@/ui/notification-dialog";
+import { createOtpJob, runInngestOtpJob } from "@/app/server/job";
 
 const cid: string = "StartLogin";
 
@@ -132,13 +133,9 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
 
     await createOTP(otp).then(async (id: number | null) => {
       if (id) {
-        // const jobCreated: boolean = await createJobOnServer(
-        //   `OTPCheck${id}`,
-        //   expirationvalue,
-        //   id,
-        //   `OTP expiration checker ${_user.email}`,
-        //   changeOTPStatus
-        // );
+        await createOtpJob(id).then(async () => {
+          await runInngestOtpJob(id);
+        });
       }
     });
 
