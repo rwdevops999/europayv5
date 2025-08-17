@@ -14,12 +14,12 @@ import {
   loadUserByEmail,
   updateUserAttemps,
 } from "@/app/server/users";
-import { OTPStatus, UserType } from "@/generated/prisma";
+import { JobStatus, OTPStatus, UserType } from "@/generated/prisma";
 import { useOTPSettings } from "@/hooks/use-otp-settings";
 import { useProgressBar } from "@/hooks/use-progress-bar";
 import { useToastSettings } from "@/hooks/use-toast-settings";
 import { useUser } from "@/hooks/use-user";
-import { tOTP, tOTPCreate, tUser } from "@/lib/prisma-types";
+import { tJob, tOTP, tOTPCreate, tUser } from "@/lib/prisma-types";
 import { ToastType } from "@/lib/types";
 import { absoluteUrl, showToast } from "@/lib/util";
 import { useRouter } from "next/navigation";
@@ -29,7 +29,13 @@ import LoginOtpDialog from "./login-otp-dialog";
 import LoginPasswordDialog from "./login-password";
 import Processing from "@/ui/processing";
 import NotificationDialog from "@/ui/notification-dialog";
-import { createOtpJob, runInngestOtpJob } from "@/app/server/job";
+import {
+  changeJobStatus,
+  createOtpJob,
+  findOtpJobOfOtpId,
+  runInngestOtpJob,
+  suspendInngestOtpJob,
+} from "@/app/server/job";
 
 const cid: string = "StartLogin";
 
@@ -262,6 +268,13 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
             showOTPAlreadyUsed(_otp);
           } else {
             await setOtpStatus(value.id, OTPStatus.USED).then(async () => {
+              const job: tJob | null = await findOtpJobOfOtpId(value.id);
+              if (job && job.status === JobStatus.RUNNING) {
+                await changeJobStatus(job.id, JobStatus.COMPLETED).then(
+                  async () => await suspendInngestOtpJob(job.id)
+                );
+              }
+
               await updateUserAttemps(user.id, 0).then(() => {
                 let welcome: string = "Guest";
                 if (user.type === UserType.EUROPAY) {
