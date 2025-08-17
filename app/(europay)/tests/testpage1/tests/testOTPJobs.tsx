@@ -1,7 +1,6 @@
 "use client";
 
 import Button from "@/ui/button";
-import { createOtpJobonInngest } from "./server";
 import moment from "moment";
 import { createOTP } from "@/app/server/otp";
 import { tOTPCreate } from "@/lib/prisma-types";
@@ -29,7 +28,7 @@ const TestOTPJobs = () => {
       console.log("OTP Created");
       if (id) {
         console.log("Create OTP Job");
-        await createOtpJobonInngest(`OTP${id}`, id, duration);
+        // await createOtpJobonInngest(`OTP${id}`, id, duration);
       }
     });
   };
