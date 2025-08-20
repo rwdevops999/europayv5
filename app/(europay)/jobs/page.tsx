@@ -14,6 +14,7 @@ import {
   changeJobStatus,
   deleteJob,
   loadJobs,
+  runInngestJob,
   runInngestOtpJob,
   suspendInngestJob,
   suspendInngestOtpJob,
@@ -112,7 +113,9 @@ const JobsPage = () => {
       if (job) {
         if (job.model === JobModel.CLIENT) {
           const jobName: string = job.jobname;
-          console.log("Job Timing", getJobTiming(jobName));
+          await changeJobStatus(job.id, JobStatus.RUNNING).then(async () => {
+            await runInngestJob(jobName, getJobTiming(jobName), job.id);
+          });
         } else {
           if (job.status === JobStatus.SUSPENDED) {
             await changeJobStatus(job.id, JobStatus.RUNNING).then(async () => {

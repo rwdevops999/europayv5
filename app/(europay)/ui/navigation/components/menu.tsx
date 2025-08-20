@@ -2,7 +2,7 @@ import { absoluteUrl } from "@/lib/util";
 import { FaTasks, FaUser } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { FcServices } from "react-icons/fc";
-import { GiScrollUnfurled, GiSettingsKnobs } from "react-icons/gi";
+import { GiBookCover, GiScrollUnfurled, GiSettingsKnobs } from "react-icons/gi";
 import { GrStorage, GrTasks, GrTest } from "react-icons/gr";
 import { IoIosKey } from "react-icons/io";
 import { IoListOutline } from "react-icons/io5";
@@ -215,14 +215,14 @@ export let menu: MenuItem[] = [
       },
     ],
   },
-  // {
-  //   url: absoluteUrl("/manual"),
-  //   title: "Manual",
-  //   disabled: false,
-  //   visible: true,
-  //   icon: <GiBookCover size={16} />,
-  //   subItems: [],
-  // },
+  {
+    url: absoluteUrl("/manual"),
+    title: "Manual",
+    disabled: false,
+    visible: true,
+    icon: <GiBookCover size={16} />,
+    subItems: [],
+  },
   {
     url: "#",
     title: "Tests",

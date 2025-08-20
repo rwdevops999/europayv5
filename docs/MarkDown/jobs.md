@@ -33,3 +33,7 @@ exeute OTP update.
 if (job exists)
 delete job
 }
+
+# SERVER JOBS
+
+# CLIENT JOBS
