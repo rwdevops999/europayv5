@@ -6,12 +6,12 @@ import LoadingSpinner from "@/ui/loading-spinner";
 const TemplateLoader = async () => {
   await uploadTemplates(process.env.NEXT_PUBLIC_TEMPLATE_FILE);
 
-  return <Loaded service="Initialised templates" />;
+  return null;
 };
 
 const TemplateLoaderWithSuspense = ({ _loaded }: { _loaded: boolean }) => {
   if (_loaded) {
-    return <Loaded service="Initialised templates" />;
+    return null;
   }
 
   return (

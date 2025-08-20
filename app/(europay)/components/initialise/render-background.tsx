@@ -13,10 +13,6 @@ const RenderBackground = () => {
         className="-z-10"
         priority
       />
-      <div data-testid={`init-wait`} className="ml-3 flex items-center">
-        <GiTrafficLightsReadyToGo size={32} style={{ color: "red" }} />
-        <div className="text-gray-200">Please wait</div>
-      </div>
     </>
   );
 };

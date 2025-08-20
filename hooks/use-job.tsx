@@ -40,6 +40,8 @@ export const JobProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const setJobTiming = (jobname: string, timing: string): void => {
+    console.log("[USE JOB]", jobname, timing);
+
     const chars = timing.split("");
     const timingchar = chars[chars.length - 1];
 

@@ -7,20 +7,12 @@ import Loaded from "./loaded";
 const ServiceCreator = async () => {
   await defineServices(servicesandactions, true);
 
-  return (
-    <>
-      <Loaded service="Initialised services" />
-    </>
-  );
+  return null;
 };
 
 const SetupServicesWithSuspense = async ({ _loaded }: { _loaded: boolean }) => {
   if (_loaded) {
-    return (
-      <>
-        <Loaded service="Initialised services" />
-      </>
-    );
+    return null;
   }
 
   return (

@@ -6,11 +6,7 @@ import LoadingSpinner from "@/ui/loading-spinner";
 const CountryCreator = async () => {
   await defineCountries(true);
 
-  return (
-    <>
-      <Loaded service="Initialised countries" />
-    </>
-  );
+  return null;
 };
 
 const SetupCountriesWithSuspense = async ({
@@ -19,11 +15,7 @@ const SetupCountriesWithSuspense = async ({
   _loaded: boolean;
 }) => {
   if (_loaded) {
-    return (
-      <>
-        <Loaded service="Initialised countries" />
-      </>
-    );
+    return null;
   }
 
   return (

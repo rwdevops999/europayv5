@@ -27,3 +27,7 @@ export const defaultSetting: tSetting = {
   key: "",
   value: "",
 };
+
+// JOBS and related
+export const TaskPollerJobName: string = "TaskPoller";
+export const taskKey: string = "key:task";

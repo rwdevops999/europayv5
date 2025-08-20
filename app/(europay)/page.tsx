@@ -13,7 +13,6 @@ const EuropayHome = () => {
         { name: "Home", url: absoluteUrl("/") },
       ]}
     >
-      <h1 className="text-3xl text-gray-200 font-extrabold italic">EUROPAY</h1>
       <InitialiseApplication />
     </PageContent>
   );

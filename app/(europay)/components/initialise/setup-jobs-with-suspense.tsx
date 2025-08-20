@@ -12,11 +12,7 @@ const JobCreator = async () => {
     await processOtpsOnServer();
   });
 
-  return (
-    <>
-      <Loaded service="Initialised jobs" />
-    </>
-  );
+  return null;
 };
 
 const SetupJobsWithSuspense = async ({
@@ -25,11 +21,7 @@ const SetupJobsWithSuspense = async ({
   _needprocessing: boolean;
 }) => {
   if (!_needprocessing) {
-    return (
-      <>
-        <Loaded service="Initialised jobs" />
-      </>
-    );
+    return null;
   }
 
   return (

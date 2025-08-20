@@ -31,4 +31,16 @@ export const appsettings: tSettingCreate[] = [
     key: "History",
     value: process.env.NEXT_PUBLIC_SETTINGS_HISTORY_LEVEL ?? "All",
   },
+  {
+    type: "Limit",
+    subtype: "Job",
+    key: "TaskPoller",
+    value: process.env.NEXT_PUBLIC_LIMIT_TASKPOLLER ?? "5'",
+  },
+  {
+    type: "Limit",
+    subtype: "Job",
+    key: "TransactionPoller",
+    value: process.env.NEXT_PUBLIC_LIMIT_TRANSACTIONPOLLER ?? "10'",
+  },
 ];

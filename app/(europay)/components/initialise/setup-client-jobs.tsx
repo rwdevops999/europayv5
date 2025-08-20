@@ -13,12 +13,12 @@ import {
 import { JobModel, JobStatus } from "@/generated/prisma";
 import { tJob } from "@/lib/prisma-types";
 import { json } from "@/lib/util";
-
-const TaskPollerJobName: string = "TaskPoller";
-const taskKey: string = "key:task";
+import { useJob } from "@/hooks/use-job";
+import { taskKey, TaskPollerJobName } from "@/lib/constants";
 
 const SetupClientJobs = () => {
   const { socket, isConnected } = useSocket();
+  const { getJobTiming } = useJob();
 
   const [isInitialised, setIsIntialised] = useState<boolean>(false);
 
@@ -67,8 +67,17 @@ const SetupClientJobs = () => {
   };
 
   const runInngestJobForTaskPoller = async (jobId: number): Promise<void> => {
-    console.log("[SetupClientJobs]", "Run Inngest Job for", jobId);
-    await runInngestJob(TaskPollerJobName, 3 * 60 * 1000, jobId);
+    console.log(
+      "[SetupClientJobs]",
+      "Run Inngest Job for",
+      jobId,
+      getJobTiming(TaskPollerJobName)
+    );
+    await runInngestJob(
+      TaskPollerJobName,
+      getJobTiming(TaskPollerJobName),
+      jobId
+    );
   };
 
   useEffect(() => {
@@ -93,15 +102,7 @@ const SetupClientJobs = () => {
     }
   }, [socket]);
 
-  return (
-    <>
-      {isInitialised && (
-        <Loaded service="Initialised client jobs" final={true} />
-      )}
-
-      {!isInitialised && <></>}
-    </>
-  );
+  return null;
 };
 
 export default SetupClientJobs;

@@ -4,8 +4,7 @@ import { tJob } from "@/lib/prisma-types";
 import { JobStatus, TaskStatus } from "@/generated/prisma";
 import { findJobByName, loadJobById } from "../server/job";
 import { absoluteUrl } from "@/lib/util";
-
-const taskkey: string = "key:task";
+import { taskKey, TaskPollerJobName } from "@/lib/constants";
 
 const createClientJob = inngest.createFunction(
   { id: "create-client-job", name: "Create Client Job" },
@@ -95,8 +94,8 @@ const taskPoller = inngest.createFunction(
   async ({ event }) => {
     console.log("[taskPoller] RUN TASKPOLLER JOB");
 
-    console.log("[taskPoller] ... lookup job in DB", "TaskPoller");
-    const job: tJob | null = await findJobByName("TaskPoller");
+    console.log("[taskPoller] ... lookup job in DB", TaskPollerJobName);
+    const job: tJob | null = await findJobByName(TaskPollerJobName);
 
     if (job && job.status === JobStatus.RUNNING) {
       console.log("[taskPoller] ... job found and it is RUNNING", job.id);
@@ -116,13 +115,13 @@ const taskPoller = inngest.createFunction(
         .then(async (_value: number) => {
           console.log(
             "[taskPoller] ... SEND DATA To CLIENT",
-            taskkey,
+            taskKey,
             _value,
             job.id
           );
           await fetch(
             absoluteUrl(
-              `/api/notification/send?key=${taskkey}&value=${_value}&jobid=${job.id}`
+              `/api/notification/send?key=${taskKey}&value=${_value}&jobid=${job.id}`
             )
           );
         });

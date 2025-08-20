@@ -3,6 +3,7 @@
 import { loadSettings } from "@/app/server/settings";
 import { HistoryType } from "@/generated/prisma";
 import { useHistorySettings } from "@/hooks/use-history-settings";
+import { useJob } from "@/hooks/use-job";
 import { useMarkdownSettings } from "@/hooks/use-markdown-settings";
 import { useOTPSettings } from "@/hooks/use-otp-settings";
 import { useToastSettings } from "@/hooks/use-toast-settings";
@@ -16,6 +17,7 @@ const ProcessSettings = () => {
   const { setMarkdown } = useMarkdownSettings();
   const { setTiming } = useOTPSettings();
   const { setHistory } = useHistorySettings();
+  const { setJobTiming, displayInfo } = useJob();
 
   const handleSettings = async (): Promise<void> => {
     let settings: tSetting[] = [];
@@ -95,8 +97,23 @@ const ProcessSettings = () => {
     }
   };
 
+  const handleLimits = async (): Promise<void> => {
+    let settings: tSetting[] = [];
+
+    settings = await loadSettings(["Limit"], ["Job"], []);
+    console.log("LIMIT SETTINGS", json(settings));
+
+    settings.forEach((settings: tSetting) => {
+      console.log("SETTING LIMIT SETTINGS", settings.key, settings.value);
+      setJobTiming(settings.key, settings.value);
+    });
+
+    displayInfo();
+  };
+
   useEffect(() => {
     handleSettings();
+    handleLimits();
   }, []);
 
   return null;

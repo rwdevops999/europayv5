@@ -2,8 +2,7 @@
 
 import Button from "@/ui/button";
 import { sendNotification } from "./test";
-
-const taskKey: string = "key:task";
+import { taskKey } from "@/lib/constants";
 
 const TestSockets = ({ setup = false }: { setup: boolean }) => {
   const handleSendTask = async (): Promise<void> => {

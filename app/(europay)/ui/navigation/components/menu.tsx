@@ -8,6 +8,7 @@ import { IoIosKey } from "react-icons/io";
 import { IoListOutline } from "react-icons/io5";
 import { LuClipboardList, LuHistory, LuLayoutDashboard } from "react-icons/lu";
 import { MdSettingsAccessibility } from "react-icons/md";
+import { PiSpeedometerDuotone } from "react-icons/pi";
 import { RiPoliceBadgeLine } from "react-icons/ri";
 import { TbDatabaseExport, TbDatabaseImport, TbTestPipe } from "react-icons/tb";
 
@@ -106,15 +107,15 @@ export let menu: MenuItem[] = [
         subItems: [],
         parent: "Settings",
       },
-      // {
-      //   title: "Limits",
-      //   url: absoluteUrl("/settings/limits"),
-      //   disabled: false,
-      //   visible: true,
-      //   icon: <PiSpeedometerDuotone size={16} />,
-      //   subItems: [],
-      //   parent: "Settings",
-      // },
+      {
+        title: "Limits",
+        url: absoluteUrl("/settings/limits"),
+        disabled: false,
+        visible: true,
+        icon: <PiSpeedometerDuotone size={16} />,
+        subItems: [],
+        parent: "Settings",
+      },
       {
         title: "Export",
         url: absoluteUrl("/settings/export"),

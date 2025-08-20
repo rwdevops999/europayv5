@@ -9,6 +9,7 @@ import { UserProvider } from "@/hooks/use-user";
 import { WifiProvider } from "@/hooks/use-wifi";
 import ProgressBar from "@/ui/progress-bar";
 import { ReactNode } from "react";
+import Initialisation from "./components/initialisation";
 
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
@@ -21,7 +22,11 @@ const Providers = ({ children }: { children: ReactNode }) => {
                 <UserProvider>
                   <WifiProvider>
                     <ToastSettingsProvider>
-                      <ProgressBar>{children}</ProgressBar>;
+                      <ProgressBar>
+                        <Initialisation />
+                        {children}
+                      </ProgressBar>
+                      ;
                     </ToastSettingsProvider>
                   </WifiProvider>
                 </UserProvider>
