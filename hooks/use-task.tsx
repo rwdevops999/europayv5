@@ -29,7 +29,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
             <div
               data-testid="tasks"
               className="tooltip tooltip-bottom"
-              data-tip={`Tasks available`}
+              data-tip={`Tasks: available`}
             >
               <FaTasks className="text-red-500" size={12} />
             </div>
@@ -40,7 +40,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
             <div
               data-testid="tasks"
               className="tooltip tooltip-bottom"
-              data-tip={`No tasks`}
+              data-tip={`Tasks: none`}
             >
               <FaTasks className="text-green-500" size={12} />
             </div>

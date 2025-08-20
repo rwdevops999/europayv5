@@ -41,7 +41,7 @@ export const MarkdownSettingsProvider = ({
           <div
             data-testid="markdown"
             className="tooltip tooltip-bottom"
-            data-tip={`Markdown active`}
+            data-tip={`Markdown: active`}
           >
             <FaMarkdown className="text-green-500" size={14} />
           </div>
@@ -49,7 +49,7 @@ export const MarkdownSettingsProvider = ({
           <div
             data-testid="markdown"
             className="tooltip tooltip-bottom"
-            data-tip={`Markdown inactive`}
+            data-tip={`Markdown: inactive`}
           >
             <FaMarkdown className="text-red-500" size={14} />
           </div>

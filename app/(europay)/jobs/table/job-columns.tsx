@@ -56,9 +56,28 @@ export const columns: ColumnDef<JobData>[] = [
     enableSorting: false,
   },
   {
+    accessorKey: "jobid",
+
+    size: 50,
+
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Id" className="-ml-1.5" />
+    ),
+
+    cell: ({ row, getValue }) => {
+      return (
+        <div>
+          <div className="flex items-center h-[10px]">{row.original.jobId}</div>
+        </div>
+      );
+    },
+
+    footer: (props) => props.column.id,
+  },
+  {
     accessorKey: "name",
 
-    size: 250,
+    size: 200,
 
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Job" className="-ml-1.5" />
@@ -85,7 +104,7 @@ export const columns: ColumnDef<JobData>[] = [
       <DataTableColumnHeader
         column={column}
         title="Description"
-        className="-ml-1.5"
+        className="-ml-2.5"
       />
     ),
 

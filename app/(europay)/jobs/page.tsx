@@ -15,14 +15,16 @@ import {
   deleteJob,
   loadJobs,
   runInngestOtpJob,
+  suspendInngestJob,
   suspendInngestOtpJob,
 } from "@/app/server/job";
 import PageContent from "@/ui/page-content";
 import { absoluteUrl, json } from "@/lib/util";
 import ConfirmDialog from "./components/confirm-dialog";
+import { TaskPollerJobName } from "@/lib/constants";
 
 const JobsPage = () => {
-  const { jobCount } = useJob();
+  const { jobCount, getJobTiming } = useJob();
 
   const [selectedJobs, setSelectedJobs] = useState<number[]>([]);
   const [jobs, setJobs] = useState<tJob[]>([]);
@@ -73,11 +75,22 @@ const JobsPage = () => {
   };
 
   const suspendJobs = async (): Promise<void> => {
+    console.log("Suspend Jobs");
     for (let i = 0; i < selectedJobs.length; i++) {
       const job = jobs.find((_job: tJob) => _job.id === selectedJobs[i]);
       if (job) {
+        console.log("Suspend Job", job.id);
         if (job.model === JobModel.CLIENT) {
-          // await suspendClientJob(job.jobname);
+          console.log("Suspend CLIENT Job");
+          if (job.status === JobStatus.RUNNING) {
+            console.log("Change Job status", job.id);
+            await changeJobStatus(job.id, JobStatus.SUSPENDED).then(
+              async () => {
+                console.log("Suspend inngest job", job.id);
+                await suspendInngestJob(job.jobname, job.id);
+              }
+            );
+          }
         } else {
           if (job.status === JobStatus.RUNNING) {
             await changeJobStatus(job.id, JobStatus.SUSPENDED).then(
@@ -98,7 +111,8 @@ const JobsPage = () => {
       const job = jobs.find((_job: tJob) => _job.id === selectedJobs[i]);
       if (job) {
         if (job.model === JobModel.CLIENT) {
-          // await restartClientJob(job.jobname);
+          const jobName: string = job.jobname;
+          console.log("Job Timing", getJobTiming(jobName));
         } else {
           if (job.status === JobStatus.SUSPENDED) {
             await changeJobStatus(job.id, JobStatus.RUNNING).then(async () => {
@@ -116,7 +130,9 @@ const JobsPage = () => {
       const job = jobs.find((_job: tJob) => _job.id === selectedJobs[i]);
       if (job) {
         if (job.model === JobModel.CLIENT) {
-          // await deleteClientJob(job.jobname);
+          await deleteJob(job.id).then(
+            async () => await suspendInngestJob(job.jobname, job.id)
+          );
         } else {
           await deleteJob(job.id).then(
             async () => await suspendInngestOtpJob(job.id)

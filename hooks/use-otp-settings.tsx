@@ -67,7 +67,7 @@ export const OTPSettingsProvider = ({ children }: { children: ReactNode }) => {
         <div
           data-testid="markdown"
           className="tooltip tooltip-bottom"
-          data-tip={`OTP expiration`}
+          data-tip={`OTP expires in`}
         >
           <div className="text-xs text-fuchsia-500">{getTimingNotation()}</div>
         </div>

@@ -8,7 +8,7 @@ export default async function sendHandler(
   res: NextApiResponseServerIO
 ) {
   const {
-    query: { key, value, jobid },
+    query: { key, value },
   } = req;
 
   console.log("[sendHandler]", "KEY = ", key as string);
@@ -17,19 +17,16 @@ export default async function sendHandler(
   const skey: string = key as string;
   const svalue: string = value as string;
   const nvalue: number = parseInt(svalue) as number;
-  const sjobid: string = jobid as string;
-  const njobid: number = parseInt(sjobid) as number;
 
   if (key) {
     if (res) {
       if (res.socket) {
         if (res.socket.server) {
           if (res.socket.server.io) {
-            console.log("[sendHandler]", "EMIT message", skey, nvalue, njobid);
+            console.log("[sendHandler]", "EMIT message", skey, nvalue);
             const sent: boolean = res.socket.server.io.emit(skey, {
               key: skey,
               value: nvalue,
-              jobid: njobid,
             });
             console.log("[sendHandler]", "EMIT message => ", sent);
           }
@@ -38,7 +35,5 @@ export default async function sendHandler(
     }
   }
 
-  return res
-    .status(200)
-    .json(`SENT key=${skey}, id=${nvalue}, jobId=${njobid}`);
+  return res.status(200).json(`SENT key=${skey}, id=${nvalue}`);
 }

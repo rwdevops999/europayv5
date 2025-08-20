@@ -23,8 +23,14 @@ const LimitSettingsPage = () => {
               <IoMdTimer size={16} />
               <div>Job polling timings</div>
             </div>
-            <SetupJob jobname={"Task"} />
-            <SetupJob jobname={"Transaction"} />
+            <SetupJob
+              jobname={"Task"}
+              env={process.env.NEXT_PUBLIC_LIMIT_TASKPOLLER ?? "5'"}
+            />
+            <SetupJob
+              jobname={"Transaction"}
+              env={process.env.NEXT_PUBLIC_LIMIT_TRANSACTIONPOLLER ?? "10'"}
+            />
           </PageItemContainer>
         </div>
       </div>

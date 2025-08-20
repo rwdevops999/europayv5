@@ -56,7 +56,7 @@ export const HistorySettingsProvider = ({
           <div
             data-testid="history"
             className="tooltip tooltip-bottom"
-            data-tip={`log 'ALL' history`}
+            data-tip={`History: ALL`}
           >
             <MdHistoryEdu size={14} className="text-green-500" />
           </div>
@@ -68,7 +68,7 @@ export const HistorySettingsProvider = ({
           <div
             data-testid="history"
             className="tooltip tooltip-bottom"
-            data-tip={`Log 'INFO' history`}
+            data-tip={`History: INFO`}
           >
             <TiInfoOutline size={14} color="#F97316" />
           </div>
@@ -80,7 +80,7 @@ export const HistorySettingsProvider = ({
           <div
             data-testid="internet-online"
             className="tooltip tooltip-bottom"
-            data-tip={`Log 'ACTION' history`}
+            data-tip={`History: ACTION`}
           >
             <AiOutlineThunderbolt size={16} color="#F97316" />
           </div>

@@ -46,7 +46,7 @@ export const ToastSettingsProvider = ({
         <div
           data-testid="toast"
           className="tooltip tooltip-bottom"
-          data-tip={`Toast: ${toast ? "on" : "off"} Duration: ${toastDuration}`}
+          data-tip={`Toast: ${toast ? "ON" : "OFF"} Duration: ${toastDuration}`}
         >
           {isToastOn() ? (
             <GiToaster className="text-green-500" size={14} />

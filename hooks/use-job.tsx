@@ -28,15 +28,15 @@ export const useJob = () => {
 export const JobProvider = ({ children }: { children: ReactNode }) => {
   const [jobCount, setJobCount] = useState<number>(0);
 
-  const jobTimings: Record<string, number> = {};
-  const jobTimingNotation: Record<string, string> = {};
+  const jobTimings = useRef<Record<string, number>>({});
+  const jobTimingNotation = useRef<Record<string, string>>({});
 
   const setJobTimingNotation = (jobname: string, value: string): void => {
-    jobTimingNotation[jobname] = value;
+    jobTimingNotation.current[jobname] = value;
   };
 
   const getJobTimingNotation = (jobname: string): string => {
-    return jobTimingNotation[jobname];
+    return jobTimingNotation.current[jobname];
   };
 
   const setJobTiming = (jobname: string, timing: string): void => {
@@ -50,16 +50,16 @@ export const JobProvider = ({ children }: { children: ReactNode }) => {
     );
     if (group) {
       const timingvalue: string = timing.split(timingchar)[0];
-      jobTimings[jobname] = parseInt(timingvalue) * group.accumulator;
+      jobTimings.current[jobname] = parseInt(timingvalue) * group.accumulator;
     } else {
-      jobTimings[jobname] = 300000;
+      jobTimings.current[jobname] = 300000;
     }
 
-    jobTimingNotation[jobname] = timing;
+    jobTimingNotation.current[jobname] = timing;
   };
 
   const getJobTiming = (jobname: string): number => {
-    return jobTimings[jobname];
+    return jobTimings.current[jobname];
   };
 
   const getJobTimings = (): tTimingGroup[] => {
@@ -67,8 +67,8 @@ export const JobProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const displayInfo = (): void => {
-    console.log("jobTimings", json(jobTimings));
-    console.log("jobTimingNotation", json(jobTimingNotation));
+    console.log("jobTimings", json(jobTimings.current));
+    console.log("jobTimingNotation", json(jobTimingNotation.current));
   };
 
   return (

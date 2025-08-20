@@ -7,11 +7,12 @@ import { tSetting } from "@/lib/prisma-types";
 import { JSX, useEffect, useState } from "react";
 import ReactHtmlParser from "react-html-parser";
 
-const SetupJob = ({ jobname }: { jobname: string }) => {
+const SetupJob = ({ jobname, env }: { jobname: string; env: string }) => {
   const { setJobTiming, getJobTimings, getJobTimingNotation, displayInfo } =
     useJob();
 
   const fulljobname = `${jobname}Poller`;
+  console.log("Full Job Name", fulljobname);
 
   const TimingGroup = ({ group }: { group: tTimingGroup }): JSX.Element => {
     return (
@@ -52,9 +53,20 @@ const SetupJob = ({ jobname }: { jobname: string }) => {
 
   const [selectedTiming, setSelectedTiming] = useState<string>("5'");
 
+  const setNotation = (_env: string): void => {
+    let notation: string | undefined = getJobTimingNotation(fulljobname);
+    if (!notation) {
+      notation = _env;
+    }
+
+    setSelectedTiming(notation);
+  };
+
   useEffect(() => {
+    console.log("[LIMITS][UE]", "Info");
     displayInfo();
-    setSelectedTiming(getJobTimingNotation(fulljobname));
+    console.log("Timing of", fulljobname, getJobTimingNotation(fulljobname));
+    setNotation(env);
   }, [jobname]);
 
   const renderComponent = () => {

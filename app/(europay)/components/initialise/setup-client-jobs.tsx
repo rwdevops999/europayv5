@@ -8,6 +8,7 @@ import {
   changeJobStatus,
   createJob,
   deleteJob,
+  findJobByName,
   runInngestJob,
 } from "@/app/server/job";
 import { JobModel, JobStatus } from "@/generated/prisma";
@@ -15,10 +16,12 @@ import { tJob } from "@/lib/prisma-types";
 import { json } from "@/lib/util";
 import { useJob } from "@/hooks/use-job";
 import { taskKey, TaskPollerJobName } from "@/lib/constants";
+import { useTask } from "@/hooks/use-task";
 
 const SetupClientJobs = () => {
   const { socket, isConnected } = useSocket();
   const { getJobTiming } = useJob();
+  const { setTaskAvailable } = useTask();
 
   const [isInitialised, setIsIntialised] = useState<boolean>(false);
 
@@ -40,15 +43,22 @@ const SetupClientJobs = () => {
 
   const taskListenerFunction = async (data: any): Promise<void> => {
     console.log("RECEIVED DATA", json(data));
-    const { key, value, jobid } = data;
+    const { key, value } = data;
     console.log("RECEIVED DATA ... key", key);
     console.log("RECEIVED DATA ... value", value);
-    console.log("RECEIVED DATA ... jobid", jobid);
 
     if (key === taskKey) {
-      console.log("RECEIVED DATA should be processed for task");
-      await deleteJob(jobid).then(() => {
-        startupJob();
+      console.log("RECEIVED DATA for task processing");
+
+      await findJobByName(TaskPollerJobName).then(async (job: tJob | null) => {
+        if (job && job.status === JobStatus.RUNNING) {
+          console.log("[taskPoller] ... job found and it is RUNNING", job.id);
+
+          setTaskAvailable(value > 0);
+          await deleteJob(job.id).then(() => {
+            startupJob();
+          });
+        }
       });
     }
   };

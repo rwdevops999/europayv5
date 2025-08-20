@@ -95,37 +95,25 @@ const taskPoller = inngest.createFunction(
     console.log("[taskPoller] RUN TASKPOLLER JOB");
 
     console.log("[taskPoller] ... lookup job in DB", TaskPollerJobName);
-    const job: tJob | null = await findJobByName(TaskPollerJobName);
-
-    if (job && job.status === JobStatus.RUNNING) {
-      console.log("[taskPoller] ... job found and it is RUNNING", job.id);
-      await prisma.task
-        .count({
-          where: {
-            OR: [
-              {
-                status: TaskStatus.CREATED,
-              },
-              {
-                status: TaskStatus.OPEN,
-              },
-            ],
-          },
-        })
-        .then(async (_value: number) => {
-          console.log(
-            "[taskPoller] ... SEND DATA To CLIENT",
-            taskKey,
-            _value,
-            job.id
-          );
-          await fetch(
-            absoluteUrl(
-              `/api/notification/send?key=${taskKey}&value=${_value}&jobid=${job.id}`
-            )
-          );
-        });
-    }
+    await prisma.task
+      .count({
+        where: {
+          OR: [
+            {
+              status: TaskStatus.CREATED,
+            },
+            {
+              status: TaskStatus.OPEN,
+            },
+          ],
+        },
+      })
+      .then(async (_value: number) => {
+        console.log("[taskPoller] ... SEND DATA To CLIENT", taskKey, _value);
+        await fetch(
+          absoluteUrl(`/api/notification/send?key=${taskKey}&value=${_value}`)
+        );
+      });
   }
 );
 

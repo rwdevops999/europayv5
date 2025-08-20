@@ -69,7 +69,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
             <div
               data-testid="socket"
               className="tooltip tooltip-bottom"
-              data-tip={`Socket disconnected`}
+              data-tip={`Socket: disconnected`}
             >
               <GiElectricalSocket className="text-yellow-600" size={12} />
             </div>
@@ -80,7 +80,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
             <div
               data-testid="socket"
               className="tooltip tooltip-bottom"
-              data-tip={`Socket connected`}
+              data-tip={`Socket: connected`}
             >
               <GiElectricalSocket className="text-emerald-600" size={12} />
             </div>
