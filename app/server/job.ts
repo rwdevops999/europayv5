@@ -7,7 +7,7 @@ import { json } from "@/lib/util";
 import { loadOTPById } from "./otp";
 import { inngest } from "../inngest/client";
 
-const createJob = async (
+export const createJob = async (
   _jobname: string,
   _model: JobModel,
   _data: any,
@@ -15,11 +15,12 @@ const createJob = async (
 ): Promise<tJob | null> => {
   let result: tJob | null = null;
 
+  console.log("[createJob] IN");
   await prisma.job
     .create({
       data: {
         jobname: _jobname,
-        description: "OTP job",
+        description: "Inngest job",
         model: _model,
         status: _status,
         data: _data,
@@ -27,20 +28,18 @@ const createJob = async (
     })
     .then((value: tJob) => (result = value));
 
+  console.log("[createJob] OUT", json(result));
+
   return result;
 };
 
 export const createOtpJob = async (_otpid: number): Promise<tJob | null> => {
-  console.log("handleCreateJob");
-
   let result: tJob | null = null;
 
   if (_otpid) {
     const otp: tOTP | null = await loadOTPById(_otpid);
 
     if (otp) {
-      console.log("handleCreateStartJob", "OTP Found", _otpid);
-
       const jobName = `OTP${_otpid}`;
 
       const job: tJob | null = await createJob(jobName, JobModel.SERVER, {
@@ -91,6 +90,8 @@ export const changeJobStatus = async (
   _id: number,
   _status: JobStatus
 ): Promise<void> => {
+  console.log("[JOB DB]", "Update Status", _id);
+
   await prisma.job.update({
     where: {
       id: _id,
@@ -102,7 +103,6 @@ export const changeJobStatus = async (
 };
 
 export const clearRunningJobs = async (): Promise<void> => {
-  console.log("Suspend Running Jobs");
   await prisma.job
     .findMany({
       where: {
@@ -111,12 +111,10 @@ export const clearRunningJobs = async (): Promise<void> => {
     })
     .then(async (values: tJob[]) => {
       for (let i = 0; i < values.length; i++) {
-        console.log("Suspend Running Jobs", values[i].id);
         await suspendInngestOtpJob(values[i].id);
       }
     });
 
-  console.log("Clearing Running Jobs");
   await prisma.job.deleteMany({
     where: {
       status: JobStatus.RUNNING,
@@ -146,19 +144,72 @@ export const findOtpJobOfOtpId = async (
   let result: tJob | null = null;
 
   const jobs: tJob[] = await prisma.job.findMany();
-  console.log("CHECKING EXISTING JOBS FOR OTP", _otpid, json(jobs));
 
   if (jobs.length > 0) {
     jobs.forEach((job: tJob) => {
       const data: any = job.data;
-      console.log("CHECKING JOB FOR OTP", job.id, json(data));
 
       if (job.status === JobStatus.RUNNING && data && data.otpid === _otpid) {
-        console.log("FOUND JOB FOR OTP", job.id);
         result = job;
       }
     });
   }
 
   return result;
+};
+
+export const findJobByName = async (_name: string): Promise<tJob | null> => {
+  let result: tJob | null = null;
+
+  await prisma.job
+    .findFirst({
+      where: {
+        jobname: _name,
+      },
+      orderBy: {
+        id: "desc",
+      },
+    })
+    .then((value: tJob | null) => (result = value));
+
+  return result;
+};
+
+export const findJobById = async (_id: number): Promise<tJob | null> => {
+  let result: tJob | null = null;
+
+  await prisma.job
+    .findFirst({
+      where: {
+        id: _id,
+      },
+    })
+    .then((value: tJob | null) => (result = value));
+
+  return result;
+};
+
+export const runInngestJob = async (
+  name: string,
+  _delay: number,
+  _jobid: number
+): Promise<void> => {
+  console.log("[runInngestJob]", `europay/${name}`, _jobid, _delay);
+  await inngest.send({
+    name: `europay/${name}`,
+    data: { jobid: _jobid },
+    ts: Date.now() + _delay,
+  });
+};
+
+export const suspendInngestJob = async (
+  _name: string,
+  _jobid: number
+): Promise<void> => {
+  await inngest.send({
+    name: `europay/${_name}.suspend`,
+    data: {
+      jobid: _jobid,
+    },
+  });
 };

@@ -1,10 +1,11 @@
 import { inngest } from "./client";
 import prisma from "@/lib/prisma";
-import { tJob, tOTP } from "@/lib/prisma-types";
-import { JobModel, JobStatus, OTPStatus } from "@/generated/prisma";
-import { loadOTPById, setOtpStatus } from "../server/otp";
-import { changeJobStatus, loadJobById } from "../server/job";
-import { json } from "@/lib/util";
+import { tJob } from "@/lib/prisma-types";
+import { JobStatus, TaskStatus } from "@/generated/prisma";
+import { findJobByName, loadJobById } from "../server/job";
+import { absoluteUrl } from "@/lib/util";
+
+const taskkey: string = "key:task";
 
 const createClientJob = inngest.createFunction(
   { id: "create-client-job", name: "Create Client Job" },
@@ -20,31 +21,6 @@ const createClientJob = inngest.createFunction(
     //     },
     //   })
     //   .catch((reason: any) => {});
-  }
-);
-
-const taskPoller = inngest.createFunction(
-  { id: "task-poller-scheduled", name: "Task Poller" },
-  { event: "europay/TaskPoller" },
-  async ({ event }) => {
-    // await prisma.task
-    //   .count({
-    //     where: {
-    //       OR: [
-    //         {
-    //           status: TaskStatus.CREATED,
-    //         },
-    //         {
-    //           status: TaskStatus.OPEN,
-    //         },
-    //       ],
-    //     },
-    //   })
-    //   .then(async (_value: number) => {
-    //     await sendClientData({ name: "TaskPoller", value: _value });
-    //   });
-
-    return { message: `Task Poller did run now: ${Date.now().toString()}` };
   }
 );
 
@@ -95,6 +71,7 @@ const createOTPJob = inngest.createFunction(
         await step
           .sleepUntil(`run ${jobName}`, new Date(now.getTime() + jobDuration))
           .then(async () => {
+            // TODO implement
             console.log("Running Job", jobid);
           });
       }
@@ -102,4 +79,55 @@ const createOTPJob = inngest.createFunction(
   }
 );
 
-export const inngestfunctions = [createOTPJob];
+const taskPoller = inngest.createFunction(
+  {
+    id: "task-poller-scheduled",
+    name: "Task Poller",
+    cancelOn: [
+      {
+        event: "europay/TaskPoller.suspend",
+        // ensure the async (future) event's userId matches the trigger userId
+        match: "data.jobid",
+      },
+    ],
+  },
+  { event: "europay/TaskPoller" },
+  async ({ event }) => {
+    console.log("[taskPoller] RUN TASKPOLLER JOB");
+
+    console.log("[taskPoller] ... lookup job in DB", "TaskPoller");
+    const job: tJob | null = await findJobByName("TaskPoller");
+
+    if (job && job.status === JobStatus.RUNNING) {
+      console.log("[taskPoller] ... job found and it is RUNNING", job.id);
+      await prisma.task
+        .count({
+          where: {
+            OR: [
+              {
+                status: TaskStatus.CREATED,
+              },
+              {
+                status: TaskStatus.OPEN,
+              },
+            ],
+          },
+        })
+        .then(async (_value: number) => {
+          console.log(
+            "[taskPoller] ... SEND DATA To CLIENT",
+            taskkey,
+            _value,
+            job.id
+          );
+          await fetch(
+            absoluteUrl(
+              `/api/notification/send?key=${taskkey}&value=${_value}&jobid=${job.id}`
+            )
+          );
+        });
+    }
+  }
+);
+
+export const inngestfunctions = [createOTPJob, taskPoller];

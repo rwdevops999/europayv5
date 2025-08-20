@@ -68,7 +68,7 @@ model ServiceStatement {
 model Template {
   id Int @id @default(autoincrement())
   role TemplateRole? @default(ALL)
-  name String @unique
+  name String
   description String? @default("")
   content String
   asHtml Boolean? @default(false)

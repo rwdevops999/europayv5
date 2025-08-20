@@ -247,6 +247,15 @@ export let menu: MenuItem[] = [
         subItems: [],
         parent: "Tests",
       },
+      {
+        title: "TestSocket",
+        url: absoluteUrl("/tests/testsocket"),
+        disabled: false,
+        visible: true,
+        icon: <TbTestPipe size={16} />,
+        subItems: [],
+        parent: "Tests",
+      },
     ],
   },
 ];

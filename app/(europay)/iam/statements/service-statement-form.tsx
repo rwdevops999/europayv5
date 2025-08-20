@@ -185,10 +185,8 @@ const ServiceStatementForm = (props: StatementFormProps) => {
     formData = { ...formData, serviceid: selectedServiceId.current! };
 
     if (formData.id) {
-      console.log("UPDATE SS");
       await handleUpdateStatement(formData);
     } else {
-      console.log("CREATE SS");
       await handleCreateStatement(formData);
     }
   };

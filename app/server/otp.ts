@@ -125,7 +125,6 @@ const removeExpiredOtps = async (): Promise<void> => {
 };
 
 export const processOtpsOnServer = async (): Promise<void> => {
-  console.log("processOtpsOnServer", "removeExpiredOtps");
   await removeExpiredOtps().then(async () => {
     const otps: tOTP[] = await prisma.oTP.findMany({
       where: {
@@ -135,22 +134,13 @@ export const processOtpsOnServer = async (): Promise<void> => {
       },
     });
 
-    console.log("ONGOING OTPS", json(otps));
-
     for (let i = 0; i < otps.length; i++) {
       const otpid: number = otps[i].id;
-      console.log("PROCESSING OTP", otpid);
 
-      console.log("LOOKIN FOR EXISTING JOB", otpid);
-
-      console.log("PROCESSING OTP", "Create new job", otpid);
       let job: tJob | null = await createOtpJob(otpid);
-
-      console.log("PROCESSING OTP => JOB", json(job));
 
       if (job) {
         await changeJobStatus(job.id, JobStatus.RUNNING).then(async () => {
-          console.log("handleStartJob", "Now start job on inngest");
           await runInngestOtpJob(job.id);
         });
       }

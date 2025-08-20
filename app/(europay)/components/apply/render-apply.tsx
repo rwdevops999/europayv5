@@ -29,7 +29,6 @@ const RenderApply = () => {
   };
 
   const createTasks = async (_application: tAccountApply): Promise<void> => {
-    console.log("CREATING TASKS");
     const task: tTaskSetup = {
       name: "TASK_CREATE_USER",
       taskParams: { applicationId: _application.id },
@@ -39,7 +38,6 @@ const RenderApply = () => {
     };
 
     const taskId: number | undefined = await createTask(task);
-    console.log("CREATED TASK", taskId);
 
     const linkedtask: tTaskSetup = {
       name: "TASK_CREATE_ACCOUNT",

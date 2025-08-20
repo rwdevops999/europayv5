@@ -32,7 +32,6 @@ const AppCountry = () => {
       const keyEnabled: boolean = stringToBoolean(apiKeyEnabled);
 
       if (keyEnabled) {
-        console.log("RETRIEVE COUNTRY FROM REGISTRY");
         const apiKey: string | undefined = process.env.NEXT_PUBLIC_IPREGISTRY;
 
         if (apiKey) {
@@ -50,7 +49,6 @@ const AppCountry = () => {
             });
         }
       } else {
-        console.log("SET HARCODED COUNTRY");
         setSelectedCountry(
           _countries.find(
             (country: tCountry) => country.name === DEFAULT_COUNTRY

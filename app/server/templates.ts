@@ -110,7 +110,6 @@ export const uploadTemplates = async (
         if (templates.length > 0) {
           for (let i = 0; i < templates.length; i++) {
             const template: tTemplate = templates[i];
-            console.log("CREATE TEMPLATE", json(template));
             await prisma.template.create({
               data: template,
             });

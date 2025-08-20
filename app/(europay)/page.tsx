@@ -1,6 +1,8 @@
 import { absoluteUrl } from "@/lib/util";
 import PageContent from "@/ui/page-content";
 import InitialiseApplication from "./components/initialise/initialise-application";
+import { useEffect } from "react";
+import io from "socket.io-client";
 
 const EuropayHome = () => {
   return (

@@ -46,8 +46,6 @@ export const JobProvider = ({ children }: { children: ReactNode }) => {
     const group: tTimingGroup | undefined = timings.find(
       (timing: tTimingGroup) => timing.char === timingchar
     );
-    console.log("OTP HOOK", "group", json(group));
-
     if (group) {
       const timingvalue: string = timing.split(timingchar)[0];
       jobTimings[jobname] = parseInt(timingvalue) * group.accumulator;

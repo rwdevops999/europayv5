@@ -28,7 +28,6 @@ const JobsPage = () => {
   const [jobs, setJobs] = useState<tJob[]>([]);
 
   const handleChangeJobSelection = (_ids: number[]) => {
-    console.log("Selected Jobs", json(_ids));
     const equal: boolean =
       _ids.length === selectedJobs.length &&
       selectedJobs.every(function (value, index) {

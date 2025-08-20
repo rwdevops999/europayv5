@@ -24,7 +24,6 @@ const SetupJobsWithSuspense = async ({
 }: {
   _needprocessing: boolean;
 }) => {
-  console.log("SetupJobsWithSuspense", "_needprocessing", _needprocessing);
   if (!_needprocessing) {
     return (
       <>

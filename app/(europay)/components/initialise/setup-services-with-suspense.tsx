@@ -9,7 +9,7 @@ const ServiceCreator = async () => {
 
   return (
     <>
-      <Loaded service="Initialised settings" />
+      <Loaded service="Initialised services" />
     </>
   );
 };
@@ -18,7 +18,7 @@ const SetupServicesWithSuspense = async ({ _loaded }: { _loaded: boolean }) => {
   if (_loaded) {
     return (
       <>
-        <Loaded service="Initialised settings" />
+        <Loaded service="Initialised services" />
       </>
     );
   }

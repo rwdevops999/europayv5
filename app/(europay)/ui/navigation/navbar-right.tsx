@@ -11,6 +11,7 @@ import { useMarkdownSettings } from "@/hooks/use-markdown-settings";
 import { useTask } from "@/hooks/use-task";
 import { useOTPSettings } from "@/hooks/use-otp-settings";
 import { useHistorySettings } from "@/hooks/use-history-settings";
+import { useSocket } from "@/hooks/use-socket";
 
 const renderDevItems: boolean = process.env.NODE_ENV === "development";
 
@@ -21,6 +22,7 @@ const NavbarRight = () => {
   const { getTaskNode } = useTask();
   const { getTimingNode } = useOTPSettings();
   const { getHistoryNode } = useHistorySettings();
+  const { getSocketNode } = useSocket();
 
   return (
     <div data-testid="navbarright" className="flex items-center space-x-2">
@@ -34,7 +36,7 @@ const NavbarRight = () => {
       >
         {getConnectNode()}
         {getTaskNode()}
-        <EmptyNode />
+        {getSocketNode()}
         <EmptyNode />
         {renderDevItems && (
           <>

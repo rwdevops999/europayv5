@@ -11,7 +11,6 @@ const TestOTPJobs = () => {
     _id: number,
     _expiration: Date
   ) => {
-    console.log("TEST OTP");
     const dInMs: number = Date.now();
     const duration: number = 5 * 60 * 1000;
     const ed: Date = new Date(dInMs + duration);
@@ -23,11 +22,8 @@ const TestOTPJobs = () => {
       expirationDate: ed,
     };
 
-    console.log("Create OTP");
     await createOTP(otp).then(async (id: number | null) => {
-      console.log("OTP Created");
       if (id) {
-        console.log("Create OTP Job");
         // await createOtpJobonInngest(`OTP${id}`, id, duration);
       }
     });

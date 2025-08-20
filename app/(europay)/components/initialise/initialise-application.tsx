@@ -10,10 +10,9 @@ import RenderBackground from "./render-background";
 import { countCountries, defineCountries } from "@/app/server/country";
 import SetupCountriesWithSuspense from "./setup-countries-with-suspense";
 import { provisionManagedIAM } from "@/app/server/managed";
-import SetupManagedWithSuspense from "./setup-managed-with-suspense";
-import FinalizeInitialisation from "./finalize-initialisation";
 import { countOngoingOTPs } from "@/app/server/otp";
 import SetupJobsWithSuspense from "./setup-jobs-with-suspense";
+import SetupClientJobs from "./setup-client-jobs";
 
 const InitialiseApplication = async () => {
   let loadServices: boolean = false;
@@ -50,10 +49,7 @@ const InitialiseApplication = async () => {
     process.env.NEXT_PUBLIC_TEMPLATE_FILE
   );
 
-  console.log("INIT APP(1)", nrOfSettings, appsettings.length);
-
   const loadSettings: boolean = nrOfSettings < appsettings.length;
-  console.log("INIT APP(2)", loadSettings);
 
   let settingsLoaded = true;
   if (loadSettings) {
@@ -65,9 +61,6 @@ const InitialiseApplication = async () => {
   if (loadManaged) {
     managedLoaded = await provisionManagedIAM(true);
   }
-
-  console.log("INIT EUROPAY");
-  console.log("need OTP processing", needProcessingOtps);
 
   return (
     <>
@@ -83,6 +76,7 @@ const InitialiseApplication = async () => {
       {/* {loadManaged && <SetupManagedWithSuspense _loaded={managedLoaded} />} */}
 
       <SetupJobsWithSuspense _needprocessing={needProcessingOtps} />
+      <SetupClientJobs />
     </>
   );
 };
