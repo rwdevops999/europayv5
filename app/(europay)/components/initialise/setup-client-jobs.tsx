@@ -33,6 +33,7 @@ const SetupClientJobs = () => {
           "Job Created => continue with innjest"
         );
 
+        console.log("[SetupClientJobs]", "Start TaskPoller");
         await runInngestJobForTaskPoller(job.id).then(() => {
           console.log("[SetupClientJobs]", "Inngest Job Started");
           setIsIntialised(true);

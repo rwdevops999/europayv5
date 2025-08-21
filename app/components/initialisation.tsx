@@ -1,5 +1,4 @@
 import React from "react";
-import RenderBackground from "../(europay)/components/initialise/render-background";
 import { countServices, defineServices } from "../server/services";
 import { countSettings, createSettings } from "../server/settings";
 import { countCountries, defineCountries } from "../server/country";
@@ -12,10 +11,12 @@ import SetupServicesWithSuspense from "../(europay)/components/initialise/setup-
 import SetupCountriesWithSuspense from "../(europay)/components/initialise/setup-countries-with-suspense";
 import TemplateLoaderWithSuspense from "../(europay)/components/initialise/templates-loader-with-suspense";
 import SetupSettingsWithSuspense from "../(europay)/components/initialise/setup-settings-with-suspense";
-import SetupJobsWithSuspense from "../(europay)/components/initialise/setup-jobs-with-suspense";
 import SetupClientJobs from "../(europay)/components/initialise/setup-client-jobs";
+import DeleteJobsWithSuspense from "../(europay)/components/initialise/delete-jobs-with-suspense";
+import SetupServerJobsWithSuspense from "../(europay)/components/initialise/setup-server-jobs-with-suspense";
 
 const Initialisation = async () => {
+  console.log("RUNNING INITIALISATION");
   let loadServices: boolean = false;
   const nrOfServices: number = await countServices();
   const nrOfSettings: number = await countSettings();
@@ -75,7 +76,9 @@ const Initialisation = async () => {
 
       {/* {loadManaged && <SetupManagedWithSuspense _loaded={managedLoaded} />} */}
 
-      <SetupJobsWithSuspense _needprocessing={needProcessingOtps} />
+      <DeleteJobsWithSuspense _needremoval={true} />
+
+      <SetupServerJobsWithSuspense _needprocessing={needProcessingOtps} />
       <SetupClientJobs />
     </>
   );

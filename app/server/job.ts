@@ -102,22 +102,44 @@ export const changeJobStatus = async (
   });
 };
 
-export const clearRunningJobs = async (): Promise<void> => {
+export const clearRunningJobs = async (_type: JobModel): Promise<void> => {
   await prisma.job
     .findMany({
       where: {
-        status: JobStatus.RUNNING,
+        AND: [
+          {
+            model: _type,
+          },
+          {
+            status: JobStatus.RUNNING,
+          },
+        ],
       },
     })
     .then(async (values: tJob[]) => {
       for (let i = 0; i < values.length; i++) {
-        await suspendInngestOtpJob(values[i].id);
+        const job: tJob = values[i];
+
+        if (_type === JobModel.SERVER) {
+          console.log("Suspend OTP Job", job.id),
+            await suspendInngestOtpJob(job.id);
+        } else {
+          console.log("Suspend Client Job", job.id),
+            await suspendInngestJob(job.jobname, job.id);
+        }
       }
     });
 
   await prisma.job.deleteMany({
     where: {
-      status: JobStatus.RUNNING,
+      AND: [
+        {
+          model: _type,
+        },
+        {
+          status: JobStatus.RUNNING,
+        },
+      ],
     },
   });
 };

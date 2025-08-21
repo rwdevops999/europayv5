@@ -6,29 +6,29 @@ import LoadingSpinner from "@/ui/loading-spinner";
 import ProcessSettings from "./process-settings";
 import { clearRunningJobs } from "@/app/server/job";
 import { processOtpsOnServer } from "@/app/server/otp";
+import { JobModel } from "@/generated/prisma";
 
-const JobCreator = async () => {
-  await clearRunningJobs().then(async () => {
-    await processOtpsOnServer();
-  });
+const JobRemover = async () => {
+  console.log("JobRemover for CLIENT Jobs");
+  await clearRunningJobs(JobModel.CLIENT);
 
   return null;
 };
 
-const SetupJobsWithSuspense = async ({
-  _needprocessing,
+const DeleteJobsWithSuspense = async ({
+  _needremoval,
 }: {
-  _needprocessing: boolean;
+  _needremoval: boolean;
 }) => {
-  if (!_needprocessing) {
+  if (!_needremoval) {
     return null;
   }
 
   return (
     <Suspense fallback={<LoadingSpinner label="Processing..." />}>
-      <JobCreator />
+      <JobRemover />
     </Suspense>
   );
 };
 
-export default SetupJobsWithSuspense;
+export default DeleteJobsWithSuspense;

@@ -5,45 +5,91 @@ export type dbResult = {
 
 // The first is the service and the array contains all actions on that service
 export const servicesandactions: Record<string, string[]> = {
-  Europay: [
-    "Home",
-    "Dashboard",
-    "Settings",
-    "IAM",
-    "Tests",
-    "Auth",
-    "Social Media",
+  europay: [
+    "Goto Home",
+    "View Dashboard",
+    "View Lists",
+    "View Settings",
+    "View IAM",
+    "View Manual",
+    "Access Auth",
+    "View Social Media",
   ],
 
-  // "Social Media": ["Execute"],
+  "europay:dashboard": [
+    "Show Environment",
+    "Show Version",
+    "Show Wifi",
+    "Show Country",
+  ],
+  "europay:dashboard:country": ["Change"],
 
-  Dashboard: ["Environment", "Version", "Wifi", "Country"],
+  "europay:lists": ["Show Tasks", "Show Jobs", "Show History"],
 
-  // "Dashboard.Country": ["Change"],
+  "europay:tasks": ["Handle"],
+  "europay:jobs": ["Suspend", "Restart", "Remove"],
 
-  // Settings: ["Export", "Import"],
+  "europay:settings": [
+    "Show General",
+    "Show Storage",
+    "Show Limits",
+    "Show Export",
+    "Show Import",
+  ],
+  "europay:settings:general": [
+    "View Toast",
+    "View History",
+    "View OTP",
+    "View Markdown",
+  ],
+  "europay:settings:general:toast": ["Change"],
+  "europay:settings:general:history": ["Change"],
+  "europay:settings:general:otp": ["Change"],
+  "europay:settings:general:markdown": ["Change"],
 
-  // "Settings.Export": [
-  //   "ToViewSS",
-  //   "ToViewP",
-  //   "ToViewR",
-  //   "ToViewU",
-  //   "ToViewG",
-  //   "DbName",
-  //   "ToDbSS",
-  //   "ToDbP",
-  //   "ToDbR",
-  //   "ToDbU",
-  //   "ToDbG",
-  //   "ToDbExport",
-  //   "Clipboard",
-  // ],
+  "europay:settings:storage": ["Show Database", "Show Selective"],
+  "europay:settings:storage:database": [
+    "Clear Full",
+    "Provision Countries",
+    "Clear Work",
+    "Load Service",
+    "Load Country",
+  ],
+  "europay:settings:storage:selective": ["Select", "Clear"],
 
-  // "Settings.Import": ["DbName", "FromDbImport"],
+  "europay:settings:limits": ["Show Jobs"],
+  "europay:settings:limits:jobs": ["Task", "Transaction"],
 
-  // IAM: ["Services", "Statements", "Policies", "Roles", "Users", "Groups"],
+  "europay:settings:export": [
+    "Export To View",
+    "Export To DB",
+    "Copy To Clipboard",
+  ],
+  "europay:settings:import": ["Show IAM"],
 
-  // Auth: ["Login", "Logout"],
+  "europay:settings:import:iam": ["Import"],
+
+  "europay:manual": ["Show Chapters"],
+
+  "europay:authorization": ["Login", "Logout"],
+
+  "europay:socialmedia": ["Execute"],
+
+  "europay:iam": [
+    "Show Services",
+    "Handle Statements",
+    "Handle Policies",
+    "Handle Roles",
+    "Handle Users",
+    "Handle Groups",
+  ],
+
+  "europay:iam:services": [],
+  "europay:iam:statements": [],
+  "europay:iam:policies": [],
+  "europay:iam::roles": [],
+  "europay:iam:users": [],
+  "europay:iam:groups": [],
 };
 
 // Under here we set all service statements
@@ -59,3 +105,7 @@ export const managedservicestatements: Record<string, ServiceStatementInfo> =
 export const managedpolicies: Record<string, string[]> = {};
 
 export const managedroles: Record<string, string[]> = {};
+
+export const managedusers: Record<string, string[]> = {};
+
+export const managedgroups: Record<string, string[]> = {};
