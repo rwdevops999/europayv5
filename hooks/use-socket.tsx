@@ -37,11 +37,14 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
+    console.log("[SOCKETPROVIDER]", "useEffect");
     // NEXT_PUBLIC_SITE_URL is localhost by default in development
     const socketInstance = new (ClientIO as any)(
       process.env.NEXT_PUBLIC_SITE_URL!,
       { path: "/api/socket/io", addTrailingSlash: false }
     );
+
+    console.log("[SOCKETPROVIDER]", "socketInstance", socketInstance);
 
     socketInstance.on("connect", () => {
       setIsConnected(true);
