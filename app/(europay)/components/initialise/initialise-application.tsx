@@ -5,7 +5,6 @@ const InitialiseApplication = async () => {
   return (
     <>
       <RenderBackground />
-      {/* <ProcessSettings /> */}
     </>
   );
 };

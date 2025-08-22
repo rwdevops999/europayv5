@@ -26,7 +26,6 @@ const Providers = ({ children }: { children: ReactNode }) => {
                         <Initialisation />
                         {children}
                       </ProgressBar>
-                      ;
                     </ToastSettingsProvider>
                   </WifiProvider>
                 </UserProvider>

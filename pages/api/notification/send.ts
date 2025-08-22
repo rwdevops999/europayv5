@@ -11,6 +11,7 @@ export default async function sendHandler(
     query: { key, value },
   } = req;
 
+  console.log("[sendHandler]", "NOTIFY CLIENT");
   console.log("[sendHandler]", "KEY = ", key as string);
   console.log("[sendHandler]", "VALUE = ", value);
 

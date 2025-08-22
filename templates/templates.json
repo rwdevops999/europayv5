@@ -86,5 +86,21 @@
     "content": "The OTP code ${otp} was already used. Retry?",
     "managed": true,
     "parameters": "{otp:  #variable}"
+  },
+  {
+    "role": "HISTORY",
+    "name": "STARTUP",
+    "description": "Starting up Europay",
+    "content": "EUROPAY STARTED",
+    "managed": true,
+    "parameters": ""
+  },
+  {
+    "role": "HISTORY",
+    "name": "INITIALISATION",
+    "description": "Initialised",
+    "content": "${subject} initialised",
+    "managed": true,
+    "parameters": "{subject:  #variable}"
   }
 ]

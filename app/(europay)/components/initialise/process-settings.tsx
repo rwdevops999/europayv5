@@ -12,7 +12,24 @@ import { tSetting } from "@/lib/prisma-types";
 import { json } from "@/lib/util";
 import { useEffect } from "react";
 
-const ProcessSettings = () => {
+const envToastOn: string | undefined =
+  process.env.NEXT_PUBLIC_SETTINGS_TOAST_ON;
+const envHistoryLevel: string | undefined =
+  process.env.NEXT_PUBLIC_SETTINGS_HISTORY_LEVEL;
+const envToastDuration: string | undefined =
+  process.env.NEXT_PUBLIC_SETTINGS_TOAST_DURATION;
+const envMarkdownOn: string | undefined =
+  process.env.NEXT_PUBLIC_SETTINGS_MARKDOWN_ON;
+const envOtpTiming: string | undefined =
+  process.env.NEXT_PUBLIC_SETTINGS_OTP_TIMING;
+
+const ProcessSettings = ({
+  start,
+  proceed,
+}: {
+  start: boolean;
+  proceed: (value: boolean) => void;
+}) => {
   const { setToast, setToastDuration } = useToastSettings();
   const { setMarkdown } = useMarkdownSettings();
   const { setTiming } = useOTPSettings();
@@ -20,6 +37,7 @@ const ProcessSettings = () => {
   const { setJobTiming, displayInfo } = useJob();
 
   const handleSettings = async (): Promise<void> => {
+    console.log("Processing Settings");
     let settings: tSetting[] = [];
 
     settings = await loadSettings(["General"], ["Application"], []);
@@ -31,11 +49,7 @@ const ProcessSettings = () => {
     if (setting && setting.value.toLocaleLowerCase() === "false") {
       setToast(false);
     } else {
-      setToast(
-        process.env.NEXT_PUBLIC_SETTINGS_TOAST_ON
-          ? process.env.NEXT_PUBLIC_SETTINGS_TOAST_ON.toLowerCase() === "true"
-          : true
-      );
+      setToast(envToastOn ? envToastOn.toLowerCase() === "true" : true);
     }
 
     setting = settings.find((setting: tSetting) => setting.key === "History");
@@ -44,11 +58,8 @@ const ProcessSettings = () => {
       setHistory(HistoryType[setting.value as keyof typeof HistoryType]);
     } else {
       setHistory(
-        process.env.NEXT_PUBLIC_SETTINGS_HISTORY_LEVEL
-          ? HistoryType[
-              process.env
-                .NEXT_PUBLIC_SETTINGS_HISTORY_LEVEL as keyof typeof HistoryType
-            ]
+        envHistoryLevel
+          ? HistoryType[envHistoryLevel as keyof typeof HistoryType]
           : HistoryType.ALL
       );
     }
@@ -62,8 +73,8 @@ const ProcessSettings = () => {
     } else {
       setToastDuration(
         parseInt(
-          process.env.NEXT_PUBLIC_SETTINGS_TOAST_DURATION
-            ? process.env.NEXT_PUBLIC_SETTINGS_TOAST_DURATION
+          envToastDuration
+            ? envToastDuration
             : DEFAULT_TOAST_DURATION.toString()
         )
       );
@@ -75,10 +86,7 @@ const ProcessSettings = () => {
       setMarkdown(false);
     } else {
       setMarkdown(
-        process.env.NEXT_PUBLIC_SETTINGS_MARKDOWN_ON
-          ? process.env.NEXT_PUBLIC_SETTINGS_MARKDOWN_ON.toLowerCase() ===
-              "true"
-          : true
+        envMarkdownOn ? envMarkdownOn.toLowerCase() === "true" : true
       );
     }
 
@@ -89,11 +97,7 @@ const ProcessSettings = () => {
     if (setting) {
       setTiming(setting.value);
     } else {
-      setTiming(
-        process.env.NEXT_PUBLIC_SETTINGS_OTP_TIMING
-          ? process.env.NEXT_PUBLIC_SETTINGS_OTP_TIMING
-          : "5'"
-      );
+      setTiming(envOtpTiming ? envOtpTiming : "5'");
     }
   };
 
@@ -111,10 +115,23 @@ const ProcessSettings = () => {
     displayInfo();
   };
 
+  const process = async (): Promise<void> => {
+    await handleSettings().then(async () => {
+      await handleLimits().then(() => proceed(true));
+    });
+  };
+
   useEffect(() => {
-    handleSettings();
-    handleLimits();
-  }, []);
+    console.log("envToastOn", envToastOn);
+    console.log("envHistoryLevel", envHistoryLevel);
+    console.log("envToastDuration", envToastDuration);
+    console.log("envMarkdownOn", envMarkdownOn);
+    console.log("envOtpTiming", envOtpTiming);
+
+    if (start) {
+      process();
+    }
+  }, [start]);
 
   return null;
 };

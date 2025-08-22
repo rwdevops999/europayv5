@@ -10,14 +10,14 @@ interface EuropayLayoutProps {
   children: React.ReactNode;
 }
 
-const dynamicHeight = "calc(100vh - 90px)";
+const dynamicHeight = "calc(100vh - 95px)";
 
 const EuropayLayout = ({ children }: EuropayLayoutProps) => {
   return (
-    <div data-wrapper="" className="border-border/40 dark:border-border">
+    <div className="border-border/40 dark:border-border">
       <div className="mx-auto w-full border-border/40 dark:border-border min-[2000px]:max-w-[1536px] min-[2000px]:border-x">
         <div className="flex-1">
-          <div className="h-screen">
+          <div className="h-screen border-1 border-red-500">
             <Navbar />
             <div style={{ height: dynamicHeight }}>{children}</div>
             <Footer />

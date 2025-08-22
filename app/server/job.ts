@@ -102,7 +102,10 @@ export const changeJobStatus = async (
   });
 };
 
-export const clearRunningJobs = async (_type: JobModel): Promise<void> => {
+export const clearRunningJobs = async (_type: JobModel): Promise<boolean> => {
+  let result: boolean = false;
+  let suspended: boolean = false;
+
   await prisma.job
     .findMany({
       where: {
@@ -117,31 +120,45 @@ export const clearRunningJobs = async (_type: JobModel): Promise<void> => {
       },
     })
     .then(async (values: tJob[]) => {
-      for (let i = 0; i < values.length; i++) {
-        const job: tJob = values[i];
+      if (values.length === 0) {
+        suspended = true;
+      } else {
+        for (let i = 0; i < values.length; i++) {
+          const job: tJob = values[i];
 
-        if (_type === JobModel.SERVER) {
-          console.log("Suspend OTP Job", job.id),
-            await suspendInngestOtpJob(job.id);
-        } else {
-          console.log("Suspend Client Job", job.id),
-            await suspendInngestJob(job.jobname, job.id);
+          if (_type === JobModel.SERVER) {
+            console.log("Suspend OTP Job", job.id),
+              await suspendInngestOtpJob(job.id).then(() => {
+                suspended = true;
+              });
+          } else {
+            console.log("Suspend Client Job", job.id),
+              await suspendInngestJob(job.jobname, job.id).then(
+                () => (suspended = true)
+              );
+          }
         }
       }
     });
 
-  await prisma.job.deleteMany({
-    where: {
-      AND: [
-        {
-          model: _type,
-        },
-        {
-          status: JobStatus.RUNNING,
-        },
-      ],
-    },
-  });
+  await prisma.job
+    .deleteMany({
+      where: {
+        AND: [
+          {
+            model: _type,
+          },
+          {
+            status: JobStatus.RUNNING,
+          },
+        ],
+      },
+    })
+    .then(() => {
+      result = suspended && true;
+    });
+
+  return result;
 };
 
 export const loadJobs = async (): Promise<tJob[]> => {

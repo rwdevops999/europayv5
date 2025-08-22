@@ -17,12 +17,12 @@ export const loadHistory = async (): Promise<tHistory[]> => {
 
 export const createHistoryEntry = async (
   _type: HistoryType,
-  _allowedTypes: HistoryType[],
+  _allowedType: HistoryType | undefined,
   _template: string,
   _params: Record<string, string>,
   _originator: string
 ): Promise<void> => {
-  if (_allowedTypes.includes(_type)) {
+  if (_allowedType === _type || _allowedType === HistoryType.ALL) {
     await loadTemplateByName(_template).then(
       async (value: tTemplate | undefined) => {
         if (value) {
@@ -31,6 +31,15 @@ export const createHistoryEntry = async (
               type: _type,
               title: value.description,
               description: await fillTemplate(value.content, _params),
+              originator: _originator,
+            },
+          });
+        } else {
+          await prisma.history.create({
+            data: {
+              type: _type,
+              title: _template,
+              description: _template.toLocaleLowerCase(),
               originator: _originator,
             },
           });
