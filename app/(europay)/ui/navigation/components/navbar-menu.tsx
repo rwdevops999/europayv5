@@ -4,16 +4,10 @@ import { menu, MenuItem } from "./menu";
 import NavbarMenuItem from "./navbar-menu-item";
 
 const NavbarMenu = () => {
-  // const { user } = useUser();
-
   const renderComponent = () => {
     let adaptedmenu: MenuItem[] = menu;
 
     adaptedmenu = adaptedmenu.map((value: MenuItem) => {
-      // if (value.title === "User") {
-      //   value.visible = user != null;
-      // }
-
       return value;
     });
 

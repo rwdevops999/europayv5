@@ -34,22 +34,20 @@ const SetupServices = ({
       nrOfServices < Object.keys(servicesandactions).length
     ) {
       console.log("[Initialise]", "SetupServices", "Loaded Services");
-      await defineServices(servicesandactions, nrOfServices > 0).then(
-        async () => {
-          await createHistoryEntry(
-            HistoryType.INFO,
-            getHistory(),
-            "INITIALISATION",
-            { subject: "SERVICES" },
-            "Initialise:SetupServices"
-          ).then(() => {
-            console.log("[Initialise]", "SetupServices", "SERVICES LOADED");
+      await defineServices(servicesandactions, true).then(async () => {
+        await createHistoryEntry(
+          HistoryType.INFO,
+          getHistory(),
+          "INITIALISATION",
+          { subject: "SERVICES" },
+          "Initialise:SetupServices"
+        ).then(() => {
+          console.log("[Initialise]", "SetupServices", "SERVICES LOADED");
 
-            setServicesLoaded(true);
-            proceed(true);
-          });
-        }
-      );
+          setServicesLoaded(true);
+          proceed(true);
+        });
+      });
     } else {
       await createHistoryEntry(
         HistoryType.INFO,

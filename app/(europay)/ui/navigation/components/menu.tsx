@@ -1,15 +1,15 @@
 import { absoluteUrl } from "@/lib/util";
-import { FaTasks, FaUser } from "react-icons/fa";
+import { FaTasks, FaUser, FaUsersCog } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { FcServices } from "react-icons/fc";
 import { GiBookCover, GiScrollUnfurled, GiSettingsKnobs } from "react-icons/gi";
-import { GrStorage, GrTasks, GrTest } from "react-icons/gr";
+import { GrStorage, GrTasks, GrTest, GrTransaction } from "react-icons/gr";
 import { IoIosKey } from "react-icons/io";
 import { IoListOutline } from "react-icons/io5";
 import { LuClipboardList, LuHistory, LuLayoutDashboard } from "react-icons/lu";
 import { MdSettingsAccessibility } from "react-icons/md";
-import { PiSpeedometerDuotone } from "react-icons/pi";
-import { RiPoliceBadgeLine } from "react-icons/ri";
+import { PiExportFill, PiSpeedometerDuotone } from "react-icons/pi";
+import { RiAdminFill, RiPoliceBadgeLine } from "react-icons/ri";
 import { TbDatabaseExport, TbDatabaseImport, TbTestPipe } from "react-icons/tb";
 
 export interface MenuItem {
@@ -56,14 +56,14 @@ export let menu: MenuItem[] = [
         icon: <GrTasks size={16} />,
         subItems: [],
       },
-      // {
-      //   url: absoluteUrl("/transactions"),
-      //   title: "Transactions",
-      //   disabled: false,
-      //   visible: true,
-      //   icon: <GrTransaction size={16} />,
-      //   subItems: [],
-      // },
+      {
+        url: absoluteUrl("/transactions"),
+        title: "Transactions",
+        disabled: false,
+        visible: false,
+        icon: <GrTransaction size={16} />,
+        subItems: [],
+      },
       {
         url: absoluteUrl("/history"),
         title: "History",
@@ -72,14 +72,14 @@ export let menu: MenuItem[] = [
         icon: <LuHistory size={16} />,
         subItems: [],
       },
-      // {
-      //   url: absoluteUrl("/exports"),
-      //   title: "Exports",
-      //   disabled: false,
-      //   visible: true,
-      //   icon: <PiExportFill size={16} />,
-      //   subItems: [],
-      // },
+      {
+        url: absoluteUrl("/exports"),
+        title: "Exports",
+        disabled: false,
+        visible: false,
+        icon: <PiExportFill size={16} />,
+        subItems: [],
+      },
     ],
   },
   {
@@ -136,22 +136,22 @@ export let menu: MenuItem[] = [
       },
     ],
   },
-  // {
-  //   title: "Admin",
-  //   url: absoluteUrl("/admin"),
-  //   disabled: false,
-  //   visible: true,
-  //   subItems: [],
-  //   icon: <RiAdminFill size={16} />,
-  // },
-  // {
-  //   title: "User",
-  //   url: absoluteUrl("/user"),
-  //   disabled: false,
-  //   visible: true,
-  //   subItems: [],
-  //   icon: <FaUsersCog size={16} />,
-  // },
+  {
+    title: "Admin",
+    url: absoluteUrl("/admin"),
+    disabled: false,
+    visible: false,
+    subItems: [],
+    icon: <RiAdminFill size={16} />,
+  },
+  {
+    title: "User",
+    url: absoluteUrl("/user"),
+    disabled: false,
+    visible: false,
+    subItems: [],
+    icon: <FaUsersCog size={16} />,
+  },
   {
     url: "#",
     title: "IAM",

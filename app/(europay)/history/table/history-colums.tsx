@@ -9,6 +9,8 @@ export const columns: ColumnDef<tHistoryData>[] = [
 
     size: 250,
 
+    enableSorting: false,
+
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -29,6 +31,8 @@ export const columns: ColumnDef<tHistoryData>[] = [
   },
   {
     accessorKey: "type",
+
+    enableSorting: false,
 
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Type" />
@@ -92,6 +96,8 @@ export const columns: ColumnDef<tHistoryData>[] = [
 
     size: 250,
 
+    enableSorting: false,
+
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -110,6 +116,8 @@ export const columns: ColumnDef<tHistoryData>[] = [
   },
   {
     accessorKey: "date",
+
+    enableSorting: false,
 
     header: ({ column }) => (
       <DataTableColumnHeader
