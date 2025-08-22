@@ -117,12 +117,13 @@ export type managedGroupInfo = {
 };
 
 export const managedgroups: Record<string, managedGroupInfo> = {
-  GROUP_ADMINS: {
+  ADMINS: {
     description: "Admins group",
     roles: [],
     policies: [],
   },
-  GROUP_CLIENTS: {
+
+  CLIENTS: {
     description: "Clients group",
     roles: [],
     policies: [],

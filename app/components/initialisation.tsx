@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import SetupServices from "./setup-services";
 import SetupTemplates from "./setup-templates";
 import SetupCountries from "./setup-countries";
@@ -10,9 +10,9 @@ import { HistoryType } from "@/generated/prisma";
 import DeleteClientJobs from "./delete-client-jobs";
 import SetupServerJobs from "./setup-server-jobs";
 import SetupClientJobs from "./setup-client-jobs";
-import LoadingSpinner from "@/ui/loading-spinner";
 import ProcessSettings from "../(europay)/components/initialise/process-settings";
 import CreateManagedIam from "./create-managed-iam";
+import EnableCursor from "./enable-cursor";
 
 const Initialisation = () => {
   const createStartupHistoryEntry = async (): Promise<void> => {
@@ -26,6 +26,9 @@ const Initialisation = () => {
   };
 
   useEffect(() => {
+    console.log("Hide cursor");
+    document.documentElement.style.cursor = "none";
+
     createStartupHistoryEntry();
   }, []);
 
@@ -37,6 +40,7 @@ const Initialisation = () => {
   const [setupServerJobs, setSetupServerJobs] = useState<boolean>(false);
   const [setupClientJobs, setSetupClientJobs] = useState<boolean>(false);
   const [initIam, setInitIam] = useState<boolean>(false);
+  const [enableCursor, setEnableCursor] = useState<boolean>(false);
 
   return (
     <>
@@ -48,7 +52,9 @@ const Initialisation = () => {
       <DeleteClientJobs start={deleteClientJobs} proceed={setSetupServerJobs} />
       <SetupServerJobs start={setupServerJobs} proceed={setSetupClientJobs} />
       <SetupClientJobs start={setupClientJobs} proceed={setInitIam} />
-      <CreateManagedIam start={initIam} />
+      <CreateManagedIam start={initIam} proceed={setEnableCursor} />
+
+      <EnableCursor start={enableCursor} />
     </>
   );
 };

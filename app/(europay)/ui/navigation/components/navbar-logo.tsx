@@ -1,8 +1,9 @@
 "use client";
 
+import { $iam_user_has_action } from "@/app/client/iam-access";
 import { useProgressBar } from "@/hooks/use-progress-bar";
+import { useUser } from "@/hooks/use-user";
 import { absoluteUrl } from "@/lib/util";
-// import { absoluteUrl } from "@/app/lib/util";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { startTransition } from "react";
@@ -11,6 +12,7 @@ const logofile: string = "/images/Europay.png";
 
 const NavbarLogo = () => {
   const progress = useProgressBar();
+  const { user } = useUser();
   const { push } = useRouter();
 
   const redirect = (href: string) => {
@@ -23,7 +25,10 @@ const NavbarLogo = () => {
   };
 
   const goHome = (): void => {
-    redirect(absoluteUrl("/"));
+    const allowed: boolean = $iam_user_has_action(user, "Goto Home", true);
+    if (allowed) {
+      redirect(absoluteUrl("/"));
+    }
   };
 
   return (
