@@ -12,6 +12,7 @@ import SetupServerJobs from "./setup-server-jobs";
 import SetupClientJobs from "./setup-client-jobs";
 import LoadingSpinner from "@/ui/loading-spinner";
 import ProcessSettings from "../(europay)/components/initialise/process-settings";
+import CreateManagedIam from "./create-managed-iam";
 
 const Initialisation = () => {
   const createStartupHistoryEntry = async (): Promise<void> => {
@@ -35,6 +36,7 @@ const Initialisation = () => {
   const [deleteClientJobs, setDeleteClientJobs] = useState<boolean>(false);
   const [setupServerJobs, setSetupServerJobs] = useState<boolean>(false);
   const [setupClientJobs, setSetupClientJobs] = useState<boolean>(false);
+  const [initIam, setInitIam] = useState<boolean>(false);
 
   return (
     <>
@@ -45,7 +47,8 @@ const Initialisation = () => {
       <ProcessSettings start={processSettings} proceed={setDeleteClientJobs} />
       <DeleteClientJobs start={deleteClientJobs} proceed={setSetupServerJobs} />
       <SetupServerJobs start={setupServerJobs} proceed={setSetupClientJobs} />
-      <SetupClientJobs start={setupClientJobs} />
+      <SetupClientJobs start={setupClientJobs} proceed={setInitIam} />
+      <CreateManagedIam start={initIam} />
     </>
   );
 };

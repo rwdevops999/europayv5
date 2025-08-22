@@ -1,3 +1,5 @@
+import { GROUP_ADMINS, GROUP_CLIENTS } from "@/lib/constants";
+
 export type dbResult = {
   services: number;
   countries: number;
@@ -108,4 +110,21 @@ export const managedroles: Record<string, string[]> = {};
 
 export const managedusers: Record<string, string[]> = {};
 
-export const managedgroups: Record<string, string[]> = {};
+export type managedGroupInfo = {
+  description: string;
+  roles: string[];
+  policies: string[];
+};
+
+export const managedgroups: Record<string, managedGroupInfo> = {
+  GROUP_ADMINS: {
+    description: "Admins group",
+    roles: [],
+    policies: [],
+  },
+  GROUP_CLIENTS: {
+    description: "Clients group",
+    roles: [],
+    policies: [],
+  },
+};

@@ -18,7 +18,13 @@ import {
 } from "../server/job";
 import { registerListener } from "@/listeners/register-listener";
 
-const SetupClientJobs = ({ start }: { start: boolean }) => {
+const SetupClientJobs = ({
+  start,
+  proceed,
+}: {
+  start: boolean;
+  proceed: (value: boolean) => void;
+}) => {
   const { socket } = useSocket();
   const { getJobTiming } = useJob();
   const { setTaskAvailable } = useTask();
@@ -49,7 +55,7 @@ const SetupClientJobs = ({ start }: { start: boolean }) => {
         await runInngestJobForTaskPoller(job.id).then(async () => {
           console.log("[SetupClientJobs]", "Inngest Job Started");
           setJobsInitialised(true);
-          await createHistoryForJobs("CLIENT JOBS");
+          await createHistoryForJobs("CLIENT JOBS").then(() => proceed(true));
         });
       }
     });

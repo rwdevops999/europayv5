@@ -7,6 +7,7 @@ import {
   tGroupUpdate,
 } from "@/lib/prisma-types";
 import prisma from "@/lib/prisma";
+import { Group } from "@/generated/prisma";
 
 export const createGroup = async (
   _group: tGroupCreate
@@ -76,6 +77,30 @@ export const loadGroupById = async (
         result = value;
       }
     });
+
+  return result;
+};
+
+export const addUserToGroup = async (
+  _userId: number,
+  _groupname: string
+): Promise<boolean> => {
+  let result: boolean = false;
+
+  await prisma.group
+    .update({
+      where: {
+        name: _groupname,
+      },
+      data: {
+        users: {
+          connect: {
+            id: _userId,
+          },
+        },
+      },
+    })
+    .then((value: Group | null) => (result = value !== null));
 
   return result;
 };
