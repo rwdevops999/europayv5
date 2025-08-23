@@ -1,10 +1,11 @@
 import { inngest } from "./client";
 import prisma from "@/lib/prisma";
 import { tJob } from "@/lib/prisma-types";
-import { JobStatus, TaskStatus } from "@/generated/prisma";
-import { findJobByName, loadJobById } from "../server/job";
+import { JobStatus, OTPStatus, TaskStatus } from "@/generated/prisma";
+import { changeJobStatus, findJobByName, loadJobById } from "../server/job";
 import { absoluteUrl } from "@/lib/util";
 import { taskKey, TaskPollerJobName } from "@/lib/constants";
+import { setOtpStatus } from "../server/otp";
 
 const createClientJob = inngest.createFunction(
   { id: "create-client-job", name: "Create Client Job" },
@@ -53,27 +54,32 @@ const createOTPJob = inngest.createFunction(
   async ({ event, step }) => {
     const { jobid } = event.data;
 
+    console.log("[OTPJOB]", "RUNNING FOR", jobid);
+
     const job: tJob | null = await loadJobById(jobid);
 
     if (job) {
+      console.log("[OTPJOB]", "JOB FOUND", jobid);
       const data: any = job.data;
 
       const otpId: number = data.otpid;
       const now: Date = new Date(Date.now());
       const expirationdate: Date = new Date(data.expirationdate);
 
-      if (expirationdate.getTime() > now.getTime()) {
-        const jobDuration = expirationdate.getTime() - now.getTime();
+      const jobDuration = expirationdate.getTime() - now.getTime();
 
-        const jobName = `OTP${otpId}`;
+      const jobName = `OTP${otpId}`;
 
-        await step
-          .sleepUntil(`run ${jobName}`, new Date(now.getTime() + jobDuration))
-          .then(async () => {
-            // TODO implement
-            console.log("Running Job", jobid);
-          });
-      }
+      console.log("[OTPJOB]", "GO TO SLEEP");
+      await step.sleepUntil(
+        `run ${jobName}`,
+        new Date(now.getTime() + jobDuration)
+      );
+
+      console.log("[OTPJOB] WOKE UP", jobid);
+      await setOtpStatus(otpId, OTPStatus.EXPIRED).then(async () => {
+        await changeJobStatus(jobid, JobStatus.COMPLETED);
+      });
     }
   }
 );

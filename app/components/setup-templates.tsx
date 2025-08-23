@@ -17,7 +17,7 @@ const SetupTemplates = ({
 
   const setup = async (): Promise<void> => {
     console.log("[Initialise]", "SetupTemplates", "Uploading templates");
-    await uploadTemplates(process.env.NEXT_PUBLIC_TEMPLATE_FILE).then(
+    await uploadTemplates(process.env.NEXT_PUBLIC_TEMPLATE_FILE, true).then(
       async () => {
         setTemplatesLoaded(true);
 

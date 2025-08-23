@@ -6,6 +6,7 @@ import { JobModel, JobStatus } from "@/generated/prisma";
 import { json } from "@/lib/util";
 import { loadOTPById } from "./otp";
 import { inngest } from "../inngest/client";
+import { cleanDbTables } from "./app-tables";
 
 export const createJob = async (
   _jobname: string,
@@ -33,7 +34,10 @@ export const createJob = async (
   return result;
 };
 
-export const createOtpJob = async (_otpid: number): Promise<tJob | null> => {
+export const createOtpJob = async (
+  _otpid: number,
+  _status: JobStatus = JobStatus.CREATED
+): Promise<tJob | null> => {
   let result: tJob | null = null;
 
   if (_otpid) {
@@ -42,10 +46,15 @@ export const createOtpJob = async (_otpid: number): Promise<tJob | null> => {
     if (otp) {
       const jobName = `OTP${_otpid}`;
 
-      const job: tJob | null = await createJob(jobName, JobModel.SERVER, {
-        otpid: otp.id,
-        expirationdate: otp.expirationDate,
-      });
+      const job: tJob | null = await createJob(
+        jobName,
+        JobModel.SERVER,
+        {
+          otpid: otp.id,
+          expirationdate: otp.expirationDate,
+        },
+        _status
+      );
 
       result = job;
     }
@@ -69,6 +78,7 @@ export const loadJobById = async (_id: number): Promise<tJob | null> => {
 };
 
 export const runInngestOtpJob = async (_jobid: number): Promise<void> => {
+  console.log("RUN OTP JOB WITH", _jobid);
   await inngest.send({
     name: "europay/otpjob.create",
     data: {
@@ -102,7 +112,10 @@ export const changeJobStatus = async (
   });
 };
 
-export const clearRunningJobs = async (_type: JobModel): Promise<boolean> => {
+export const clearRunningJobs = async (
+  _type: JobModel,
+  _resetTable: boolean = false
+): Promise<boolean> => {
   let result: boolean = false;
   let suspended: boolean = false;
 
@@ -141,22 +154,28 @@ export const clearRunningJobs = async (_type: JobModel): Promise<boolean> => {
       }
     });
 
-  await prisma.job
-    .deleteMany({
-      where: {
-        AND: [
-          {
-            model: _type,
-          },
-          {
-            status: JobStatus.RUNNING,
-          },
-        ],
-      },
-    })
-    .then(() => {
+  if (_resetTable) {
+    await cleanDbTables(["jobs"]).then(() => {
       result = suspended && true;
     });
+  } else {
+    await prisma.job
+      .deleteMany({
+        where: {
+          AND: [
+            {
+              model: _type,
+            },
+            {
+              status: JobStatus.RUNNING,
+            },
+          ],
+        },
+      })
+      .then(() => {
+        result = suspended && true;
+      });
+  }
 
   return result;
 };
@@ -187,7 +206,6 @@ export const findOtpJobOfOtpId = async (
   if (jobs.length > 0) {
     jobs.forEach((job: tJob) => {
       const data: any = job.data;
-
       if (job.status === JobStatus.RUNNING && data && data.otpid === _otpid) {
         result = job;
       }

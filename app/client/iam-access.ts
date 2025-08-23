@@ -92,5 +92,9 @@ export const $iam_user_has_action = (
     allowed = _default;
   }
 
+  if (!allowed && _default) {
+    allowed = _default;
+  }
+
   return allowed;
 };

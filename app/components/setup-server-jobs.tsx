@@ -6,6 +6,7 @@ import { createHistoryEntry } from "../server/history";
 import { HistoryType, JobModel } from "@/generated/prisma";
 import { clearRunningJobs } from "../server/job";
 import { countOngoingOTPs, processOtpsOnServer } from "../server/otp";
+import { cleanDbTables } from "../server/app-tables";
 
 const SetupServerJobs = ({
   start,
@@ -34,7 +35,7 @@ const SetupServerJobs = ({
     const needProcessingOtps: boolean = nrOngoingOtps > 0;
 
     if (needProcessingOtps) {
-      await clearRunningJobs(JobModel.SERVER).then(async () => {
+      await clearRunningJobs(JobModel.SERVER, true).then(async () => {
         await processOtpsOnServer().then(async () => {
           setJobsInitialised(true);
           await createHistoryForJobs("OTP JOBS").then(() => {
@@ -43,8 +44,10 @@ const SetupServerJobs = ({
         });
       });
     } else {
-      await createHistoryForJobs("OTP JOBS NOT").then(() => {
-        proceed(true);
+      await cleanDbTables(["jobs"]).then(async () => {
+        await createHistoryForJobs("OTP JOBS NOT").then(() => {
+          proceed(true);
+        });
       });
     }
   };

@@ -102,5 +102,13 @@
     "content": "${subject} initialised",
     "managed": true,
     "parameters": "{subject:  #variable}"
+  },
+  {
+    "role": "NOTIFICATION",
+    "name": "WRONG_LOGIN",
+    "description": "Login incorrect",
+    "content": "your login is incorrect. This was attempt ${attemp} of ${maxAttemps}. Retry?",
+    "managed": true,
+    "parameters": "{attemp:  #variable, maxAttemps: #variable}"
   }
 ]

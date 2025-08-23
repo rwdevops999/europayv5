@@ -5,6 +5,8 @@ import AppVersion from "./components/app-version";
 import AppEnvironment from "./components/app-environement";
 import AppInternet from "./components/app-internet";
 import AppCountry from "./components/app-country";
+import { useUser } from "@/hooks/use-user";
+import { $iam_user_has_action } from "@/app/client/iam-access";
 
 const Dashboard = () => {
   return (

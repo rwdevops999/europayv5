@@ -22,9 +22,6 @@ const AppCountry = () => {
 
   const loadTheCountries = async (): Promise<void> => {
     await loadCountries().then((_countries: tCountry[]) => {
-      // setSelectedCountry(
-      //   _countries.find((country: tCountry) => country.id === 760)
-      // );
       setCountries(_countries);
 
       const apiKeyEnabled: string | undefined =

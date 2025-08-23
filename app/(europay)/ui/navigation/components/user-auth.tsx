@@ -5,15 +5,13 @@ import { useUser } from "@/hooks/use-user";
 import { absoluteUrl } from "@/lib/util";
 import Button from "@/ui/button";
 import { useRouter } from "next/navigation";
-import { startTransition, useState } from "react";
+import { startTransition } from "react";
 import { RiLoginBoxLine, RiLogoutBoxLine } from "react-icons/ri";
 
 const UserAuth = () => {
-  const { user, isLoggedIn, logout } = useUser();
+  const { isLoggedIn, logout } = useUser();
   const progress = useProgressBar();
   const { push } = useRouter();
-
-  const [login, setLogin] = useState<boolean>(false);
 
   const redirect = (href: string) => {
     progress.start(); // show the indicator

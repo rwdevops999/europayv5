@@ -1,5 +1,7 @@
 "use client";
 
+import { $iam_user_has_action } from "@/app/client/iam-access";
+import { useUser } from "@/hooks/use-user";
 import Button from "@/ui/button";
 import React, { ReactNode } from "react";
 import { RiFacebookFill } from "react-icons/ri";
@@ -40,10 +42,12 @@ const FooterMediaButton = ({
   name,
   href,
   icon,
+  disabled,
 }: {
   name: string;
   href: string;
   icon: ReactNode;
+  disbaled: boolean;
 }) => {
   const navigateToDestination = () => {
     window.location.href = href;
@@ -58,12 +62,15 @@ const FooterMediaButton = ({
         style="link"
         icon={icon}
         onClick={navigateToDestination}
+        disabled={disabled}
       />
     </div>
   );
 };
 
 const FooterSocialMedia = () => {
+  const { user } = useUser();
+
   return (
     <div data-testid="footer-social-media" className="flex space-x-2">
       {socialmedia.map((media: tSocialMedia) => {
@@ -73,6 +80,7 @@ const FooterSocialMedia = () => {
             name={media.name}
             href={media.href}
             icon={media.icon}
+            disabled={$iam_user_has_action(user, "Execute")}
           />
         );
       })}

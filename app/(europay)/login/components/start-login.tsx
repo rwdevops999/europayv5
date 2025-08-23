@@ -139,9 +139,13 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
 
     await createOTP(otp).then(async (id: number | null) => {
       if (id) {
-        await createOtpJob(id).then(async () => {
-          await runInngestOtpJob(id);
-        });
+        await createOtpJob(id, JobStatus.RUNNING).then(
+          async (job: tJob | null) => {
+            if (job) {
+              await runInngestOtpJob(job.id);
+            }
+          }
+        );
       }
     });
 
@@ -248,12 +252,6 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
     setNotification(notification);
   };
 
-  const isExpired = (_expirationDate: Date): boolean => {
-    const now: Date = new Date();
-
-    return _expirationDate.getTime() < now.getTime();
-  };
-
   const loginWithOtp = async (_otp: string): Promise<void> => {
     setProcessingOn();
     if (userRef.current) {
@@ -262,16 +260,31 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
       await loadOTPByOtpCode(_otp).then(async (value: tOTP | null) => {
         if (value) {
           setProcessingOff();
-          if (isExpired(value.expirationDate)) {
+          if (value.status === OTPStatus.EXPIRED) {
             showOTPExpired(_otp);
           } else if (value.status === OTPStatus.USED) {
             showOTPAlreadyUsed(_otp);
           } else {
+            console.log("LOGGED COORECTLY IN WITH OTP", value.id);
             await setOtpStatus(value.id, OTPStatus.USED).then(async () => {
+              console.log("LOGGED COORECTLY IN WITH OTP", "LOOKUP JOB");
               const job: tJob | null = await findOtpJobOfOtpId(value.id);
+              console.log("LOGGED COORECTLY IN WITH OTP", "JOB", job?.id);
               if (job && job.status === JobStatus.RUNNING) {
+                console.log(
+                  "LOGGED COORECTLY IN WITH OTP",
+                  "CHANGE JOB STATUS TO COMPLETED",
+                  job.id
+                );
                 await changeJobStatus(job.id, JobStatus.COMPLETED).then(
-                  async () => await suspendInngestOtpJob(job.id)
+                  async () => {
+                    console.log(
+                      "LOGGED COORECTLY IN WITH OTP",
+                      "SUSPEND INNGEST JOB",
+                      job.id
+                    );
+                    await suspendInngestOtpJob(job.id);
+                  }
                 );
               }
 
