@@ -12,8 +12,11 @@ import { TableMeta } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 import { columns } from "./table/task-colums";
 import { DataTableToolbar } from "./table/task-data-table-toolbar";
+import { useUser } from "@/hooks/use-user";
 
 const TaskList = ({ tasks }: { tasks: tTask[] }) => {
+  const { user } = useUser();
+
   const { setTaskAvailable } = useTask();
 
   const [tableData, setTableData] = useState<tTaskData[]>([]);
@@ -29,7 +32,7 @@ const TaskList = ({ tasks }: { tasks: tTask[] }) => {
   }, [tasks]);
 
   const tableMeta: TableMeta<tTaskData[]> = {
-    // user: user,
+    user: user,
   };
 
   return (

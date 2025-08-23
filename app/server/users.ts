@@ -62,8 +62,8 @@ export const deleteUser = async (_id: number): Promise<void> => {
 export const createUser = async (
   _user: tUserCreate,
   _encrypt: boolean = true
-): Promise<string | undefined> => {
-  let errorcode: string | undefined = undefined;
+): Promise<string | undefined | tUser> => {
+  let result: string | undefined | tUser = undefined;
 
   _user.password =
     _user.passwordless || !_encrypt
@@ -73,12 +73,14 @@ export const createUser = async (
   await prisma.user
     .create({
       data: _user,
+      ...cWhatToSelectFromUser,
     })
+    .then((value: tUser) => (result = value))
     .catch((error: any) => {
-      errorcode = error.code;
+      result = error.code;
     });
 
-  return errorcode;
+  return result;
 };
 
 export const updateUser = async (

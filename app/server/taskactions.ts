@@ -18,6 +18,7 @@ import { loadCountryByName } from "./country";
 import prisma from "@/lib/prisma";
 import { tEmail } from "./data/email-data";
 import { sendEmail } from "./email";
+import { addUserToGroup } from "./groups";
 
 /**
  * this action can b performed manually, but here we lt user execute it.s
@@ -67,10 +68,12 @@ export const handleUserCreation = async (
       },
     };
 
-    await createUser(user, false).then((errorcode: string | undefined) => {
-      if (errorcode) {
-        // show a toast here about error
-        displayPrismaErrorCode(errorcode);
+    await createUser(user, false).then((result: string | undefined | tUser) => {
+      if (typeof result === "string") {
+        displayPrismaErrorCode(result);
+      } else {
+        const user: tUser = result as tUser;
+        addUserToGroup(user.id, "CLIENTS");
       }
     });
   }

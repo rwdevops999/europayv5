@@ -1,12 +1,14 @@
 "use client";
 
+import { $iam_user_has_action } from "@/app/client/iam-access";
 import { tTaskData } from "@/app/server/data/taskdata";
 import { TaskStatus } from "@/generated/prisma";
+import { tUser } from "@/lib/prisma-types";
 import { cn } from "@/lib/util";
 import { DataTableColumnHeader } from "@/ui/datatable/data-table-column-header";
 import ProgressLink from "@/ui/progress-link";
 import { ColumnDef } from "@tanstack/react-table";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 const renderNormal = (_str: string, _icons: string[]): ReactNode => {
   return (
@@ -23,12 +25,17 @@ const renderNormal = (_str: string, _icons: string[]): ReactNode => {
 const renderLink = (
   _id: number,
   _str: string,
-  // _user: tUser,
+  _user: tUser,
   _icons: string[],
   _iamactions: string[]
 ): ReactNode => {
-  // const uselink: boolean = _user && $iam_user(_iamactions, _user);
-  const uselink: boolean = true;
+  const [uselink, setUselink] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log("Uselink???", $iam_user_has_action(_user, "Handle"));
+    setUselink($iam_user_has_action(_user, "Handle"));
+  }, [_user]);
+
   return (
     <>
       {uselink && (
@@ -44,7 +51,7 @@ const renderLink = (
         </div>
       )}
       {!uselink && (
-        <div className="ml-3 flex items-center h-[8px] underline text-blue-400">
+        <div className="ml-3 flex items-center h-[8px]">
           {_str}
           <div className="text-foreground ml-1">
             {_icons.map((_icon: string) => _icon)}
@@ -74,7 +81,7 @@ export const columns: ColumnDef<tTaskData>[] = [
         ? renderLink(
             row.original.id,
             getValue<string>(),
-            // table.options.meta?.user,
+            table.options.meta?.user,
             row.original.icons,
             ["GetTask"]
           )

@@ -78,7 +78,7 @@ const RenderApply = () => {
   };
 
   return (
-    <div className="w-[100vw] h-[20vw] flex justify-center">
+    <div className="w-[100vw] h-[20vw] flex justify-center mt-64">
       <Button
         id="applybutton"
         comp={
