@@ -160,7 +160,7 @@ export const mapServiceStatements = (
  */
 export const mapPolicies = (
   _policies: tPolicy[],
-  _services?: tService[]
+  _depth: number = 2
 ): Data[] => {
   let result: Data[] = [];
 
@@ -176,7 +176,8 @@ export const mapPolicies = (
         id: _policy.id,
         name: _policy.name!,
         description: _policy.description,
-        children: mapServiceStatements(_policy.servicestatements),
+        children:
+          _depth > 0 ? mapServiceStatements(_policy.servicestatements) : [],
         extra: {
           subject: "Policy",
           servicename: servicename,
@@ -189,7 +190,7 @@ export const mapPolicies = (
   return result;
 };
 
-export const mapRoles = (roles: tRole[]): Data[] => {
+export const mapRoles = (roles: tRole[], _depth: number = 2): Data[] => {
   let result: Data[] = [];
 
   if (roles) {
@@ -198,7 +199,7 @@ export const mapRoles = (roles: tRole[]): Data[] => {
         id: role.id,
         name: role.name!,
         description: role.description!,
-        children: mapPolicies(role.policies),
+        children: mapPolicies(role.policies, _depth - 1),
         extra: {
           subject: "Role",
           managed: role.managed ?? undefined,
