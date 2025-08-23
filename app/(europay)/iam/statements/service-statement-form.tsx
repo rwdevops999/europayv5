@@ -278,7 +278,7 @@ const ServiceStatementForm = (props: StatementFormProps) => {
             )}
             required
             minLength={3}
-            maxLength={25}
+            maxLength={50}
             {...register("ssname")}
           />
           <label className="mt-1">Description:</label>

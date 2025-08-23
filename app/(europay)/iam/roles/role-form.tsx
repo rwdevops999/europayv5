@@ -206,7 +206,7 @@ const RoleForm = (props: RoleFormProps) => {
             required
             placeholder="name..."
             minLength={3}
-            maxLength={25}
+            maxLength={50}
             {...register("rolename")}
           />
           <label className="mt-1">Description:</label>

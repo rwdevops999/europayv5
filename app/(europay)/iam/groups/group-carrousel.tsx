@@ -162,7 +162,7 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
             className="input input-sm w-11/12 validator"
             required
             minLength={1}
-            maxLength={25}
+            maxLength={50}
             {...register("name")}
           />
         </div>

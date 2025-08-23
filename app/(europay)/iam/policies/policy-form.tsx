@@ -244,7 +244,7 @@ const PolicyForm = (props: PolicyFormProps) => {
             )}
             required
             minLength={3}
-            maxLength={25}
+            maxLength={50}
             {...register("policyname")}
           />
           <label className="mt-1">Description:</label>
