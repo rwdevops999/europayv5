@@ -92,7 +92,7 @@ const PolicyHandler = ({
       }
     }
 
-    setTableData(mapPolicies(policiesToMap, services));
+    setTableData(mapPolicies(policiesToMap, 2));
   };
 
   useEffect(() => {
