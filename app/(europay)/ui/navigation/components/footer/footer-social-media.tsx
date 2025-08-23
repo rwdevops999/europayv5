@@ -47,7 +47,7 @@ const FooterMediaButton = ({
   name: string;
   href: string;
   icon: ReactNode;
-  disbaled: boolean;
+  disabled: boolean;
 }) => {
   const navigateToDestination = () => {
     window.location.href = href;
@@ -80,7 +80,7 @@ const FooterSocialMedia = () => {
             name={media.name}
             href={media.href}
             icon={media.icon}
-            disabled={$iam_user_has_action(user, "Execute")}
+            disabled={!$iam_user_has_action(user, "Execute")}
           />
         );
       })}
