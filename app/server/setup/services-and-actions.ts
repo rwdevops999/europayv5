@@ -16,6 +16,9 @@ export const servicesandactions: Record<string, string[]> = {
     "View Manual",
     "Access Auth",
     "View Social Media",
+    "View User",
+    "View Admin",
+    "Apply",
   ],
 
   "europay:dashboard": [
@@ -28,8 +31,8 @@ export const servicesandactions: Record<string, string[]> = {
 
   "europay:lists": ["Show Tasks", "Show Jobs", "Show History"],
 
-  "europay:tasks": ["Handle"],
-  "europay:jobs": ["Suspend", "Restart", "Remove"],
+  "europay:lists:tasks": ["Handle"],
+  "europay:lists:jobs": ["Suspend", "Restart", "Remove"],
 
   "europay:settings": [
     "Show General",

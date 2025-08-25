@@ -20,7 +20,7 @@ import { Row } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { JSX, useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { columns, initialTableState } from "./table/dialog-columns";
+import { columns } from "./table/dialog-columns";
 import { DataTableToolbar } from "./table/dialog-data-table-toolbar";
 import ValidationConflictsDialog from "@/ui/validation-conflicts-dialog";
 
@@ -176,6 +176,8 @@ const RoleForm = (props: RoleFormProps) => {
 
   const linkedPolicies = useRef<number[]>([]);
 
+  const [resetPagination, setResetPagination] = useState<boolean>(false);
+
   useEffect(() => {
     processTableData();
 
@@ -183,6 +185,8 @@ const RoleForm = (props: RoleFormProps) => {
     setValidateButtonEnabled(props.linkedpolicies.length >= 2);
     setPersistButtonEnabled(props.linkedpolicies.length === 1);
     reset(props.entity);
+
+    setResetPagination(true);
   }, [props]);
 
   const [persistButtonEnabled, setPersistButtonEnabled] =
@@ -378,17 +382,36 @@ const RoleForm = (props: RoleFormProps) => {
     setValidateButtonEnabled(selectionData.length > 1 && !validFlag);
   };
 
+  const [paginationState, setPaginationState] = useState<PaginationState>({
+    pageIndex: 0, //custom initial page index
+    pageSize: 5, //custom default page size
+  });
+
+  const handlePageChange = (_state: PaginationState) => {
+    if (resetPagination) {
+      setResetPagination(false);
+      setPaginationState({
+        pageIndex: 0,
+        pageSize: 5,
+      });
+    } else {
+      setPaginationState(_state);
+    }
+  };
+
   const Data = (): JSX.Element => {
     return (
       <>
         <DataTable
           data={tableData}
           columns={columns}
-          initialTableState={initialTableState}
           Toolbar={DataTableToolbar}
           selectedItems={linkedPolicies.current}
           selectionType="data"
           handleChangeSelection={handleChangePolicySelection}
+          paginationState={paginationState}
+          changePagination={handlePageChange}
+          changePaginationSize={false}
         />
       </>
     );

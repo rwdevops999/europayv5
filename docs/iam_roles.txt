@@ -1,0 +1,72 @@
+    "Goto Home", D,               AllowGotoHome (europay),                                              EuropayDefaultPolicy                  DefaultRole
+
+    "View Dashboard", D,          AllowViewDashboard (europay),                                         EuropayDefaultPolicy                  DefaultRole
+      "Show Environment", D,      AllowDashboardViewEnvironment (europay:dashboard)                     DashboardDefaultPolicy                DefaultRole
+      "Show Version", D,          AllowDashboardViewVersion (europay:dashboard)                         DashboardDefaultPolicy                DefaultRole
+      "Show Wifi", D,             AllowDashboardViewWifi (europay:dashboard)                            DashboardDefaultPolicy                DefaultRole
+      "Show Country", D,          AllowDashboardViewCountry (europay:dashboard)                         DashboardDefaultPolicy                DefaultRole
+        "Change" D,               AllowDashboardCountryChange (europay:dashboard:country)               DashboardCountryDefaultPolicy         DefaultRole
+
+    "View Lists", D,              AllowViewLists (europay),                                             EuropayDefaultPolicy                  DefaultRole
+      "Show Tasks", A             AllowViewListViewTasks (europay:lists)                                TasksViewPolicy                       TaskRole
+        "Handle" A,               AllowListsTaskHandle (europay:lists:tasks)                            TasksHandlePolicy                     TaskRole
+      "Show Jobs", A              AllowViewListViewJobs (europay:lists)                                 JobsViewPolicy                        JobsRole
+        "Suspend" A,              AllowListJobsSuspend (europay:lists:jobs)                             JobsHandlePolicy                      JobsRole
+        "Restart" A,              AllowListJobsRestart (europay:lists:jobs)                             JobsHandlePolicy                      JobsRole
+        "Remove" A,               AllowListJobsRemove (europay:lists:jobs)                              JobsHandlePolicy                      JobsRole
+      "Show History" D,           AllowViewListViewHistory (europay:lists)                              ListsDefaultPolicy                    DefaultRole
+
+    "View Settings", A,           AllowViewSettings (europay)                                           SettingsViewPolicy                    SettingsRole
+      "Show General", A,          AllowViewSettingsGeneral (europay:settings)                           GeneralViewPolicy                     SettingsRole
+        "View Toast", A,          AllowGeneralViewToast (europay:settings:general)                      GeneralPolicy                         SettingsRole
+          "Change" A,             AllowGeneralToastChange (europay:settings:general:toast)              ToastHandlePolicy                     SettingsRole
+        "View History", A,        AllowGeneralViewHistory (europay:settings:general)                    GeneralPolicy                         SettingsRole
+          "Change" A,             AllowGeneralHistoryChange (europay:settings:general:history)          HistoryHandlePolicy                   SettingsRole
+        "View OTP", A,            AllowGeneralViewOTP (europay:settings:general)                        GeneralPolicy                         SettingsRole
+          "Change" A,             AllowGeneralOTPChange (europay:settings:general:otp)                  OTPHandlePolicy                       SettingsRole
+        "View Markdown", A,       AllowGeneralViewMarkdown (europay:settings:general)                   GeneralPolicy                         SettingsRole
+          "Change" A,             AllowGeneralMarkdownChange (europay:settings:general:markdown)        MarkdownHandlePolicy                  SettingsRole
+
+      "Show Storage", A,          AllowViewSettingsStorage (europay:settings)                           StorageViewPolicy                     SettingsRole
+        "Show Database" A,        AllowStorageViewDatabase (europay:settings:storage)                   StoragePolicy                         SettingsRole
+          "Clear Full", A,        AllowDatabaseClearFull (europay:settings:storage:database)            DatabaseHandlePolicy                  SettingsRole
+          "Provision Countries", A, AllowDatabaseProvisionCountries (europay:settings:storage:database) DatabaseHandlePolicy                  SettingsRole
+          "Clear Work", A,        AllowDatabaseClearWork (europay:settings:storage:database)            DatabaseHandlePolicy                  SettingsRole
+          "Load Service", A,      AllowDatabaseLoadService (europay:settings:storage:database)          DatabaseHandlePolicy                  SettingsRole
+          "Load Country", A,      AllowDatabaseCountry (europay:settings:storage:database)              DatabaseHandlePolicy                  SettingsRole
+        "Show Selective" A,       AllowStorageViewSelective (europay:settings:storage)                  StoragePolicy                         SettingsRole
+          "Select" A,             AllowSelectiveSelect (europay:settings:storage:selective)             SelectiveHandlePolicy                 SettingsRole
+          "Clear" A,              AllowSelectiveClear (europay:settings:storage:selective)              SelectiveHandlePolicy                 SettingsRole
+
+      "Show Limits", A,           AllowViewSettingsLimits (europay:settings)                            LimitsViewPolicy                      SettingsRole
+        "Show Jobs" A,            AllowLimitsViewJobs (europay:settings:limits)                         LimitsPolicy                          SettingsRole
+          "Task" A,               AllowLimitsTaskChange (europay:settings:limits:jobs)                  JobsLimitPolicy                       SettingsRole
+          "Transaction" A,        AllowLimitsTransactionChange (europay:settings:limits:jobs)           JobsLimitPolicy                       SettingsRole
+
+      "Show Export", A,           AllowViewSettingsExport (europay:settings)                            ExportViewPolicy                      SettingsRole
+        "Export To View", A,      AllowExportToView (europay:settings:export)                           ExportPolicy                          SettingsRole
+        "Export To DB", A,        AllowExportToDB (europay:settings:export)                             ExportPolicy                          SettingsRole
+        "Copy To Clipboard", A,   AllowExportToClipboard (europay:settings:export)                      ExportPolicy                          SettingsRole
+
+      "Show Import", A,           AllowViewSettingsImport (europay:settings)                            ImportViewPolicy                      SettingsRole
+        "Show IAM", A,            AllowImportViewIAm (europay:settings:import)                          ImportPolicy                          SettingsRole
+          "Import" A,             AllowIamImport (europay:settings:import:iam)                          ImportIAMPolicy                       SettingsRole
+
+    "View Manual", D,             AllowViewManual (europay)                                             EuropayDefaultPolicy                  DefaultRole
+      "Show Chapters" D,          AllowManualViewChapters (europay:manual)                              ManualDefaultPolicy                   DefaultRole
+
+    "Access Auth", D,             AllowAccessAuth (europay)                                             EuropayDefaultPolicy                  DefaultRole
+      "Login", D,                 AllowAuthLogin (europay:authorization)                                AuthDefaultPolicy                     DefaultRole
+      "Logout", D,                AllowAuthLogout (europay:authorization)                               AuthDefaultPolicy                     DefaultRole
+
+    "View Social Media", C,       AllowViewSocialMedia (europay)                                        EuropayClientPolicy                   ClientRole
+      "Execute", C,               AllowSocialMediaExecute (europay:socialmedia)                         SocialMediaClientPolicy               ClientRole
+
+    "View User", C,               AllowViewUser (europay)                                               EuropayClientPolicy                   ClientRole
+
+    "View Admin", A,              AllowViewAdmin (europay)                                              EuropayAdminPolicy                    AdminRole
+
+    "Apply", D,                   AllowApply (europay)                                                  EuropayDefaultPolicy                  DefaultRole
+
+
+EXPORTED TO DB: Europay

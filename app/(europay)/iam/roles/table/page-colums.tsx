@@ -5,7 +5,6 @@ import Button from "@/ui/button";
 import { DataTableColumnHeader } from "@/ui/datatable/data-table-column-header";
 import { DataTableRowActions } from "@/ui/datatable/data-table-row-actions";
 import { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
 
 export const columns: ColumnDef<Data>[] = [
   {

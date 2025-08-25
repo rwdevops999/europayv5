@@ -277,6 +277,10 @@ const UserHandler = ({
             columns={columns}
             tablemeta={tableMeta}
             Toolbar={DataTableToolbar}
+            paginationState={{
+              pageIndex: 0, //custom initial page index
+              pageSize: 15, //custom default page size
+            }}
           />
         </PageItemContainer>
         <div className="flex justify-center">

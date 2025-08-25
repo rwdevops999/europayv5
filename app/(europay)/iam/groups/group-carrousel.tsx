@@ -29,6 +29,7 @@ import { ValidationConflict } from "@/app/server/data/validation-data";
 import { validateData } from "@/app/server/validate";
 import Button from "@/ui/button";
 import ValidationConflictsDialog from "@/ui/validation-conflicts-dialog";
+import { PaginationState } from "@tanstack/react-table";
 
 export interface GroupEntity {
   id?: number;
@@ -116,6 +117,8 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
     });
   };
 
+  const [resetPagination, setResetPagination] = useState<boolean>(false);
+
   useEffect(() => {
     ignoreEscape();
 
@@ -133,6 +136,8 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
 
     currentPage.current = Pages.DETAILS;
     showCurrentPage(Pages.DETAILS);
+
+    setResetPagination(true);
   }, [props]);
 
   const GroupFormControl = (): JSX.Element => {
@@ -215,6 +220,24 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
     showCurrentPage(currentPage.current);
   };
 
+  const [rolesPaginationState, setRolesPaginationState] =
+    useState<PaginationState>({
+      pageIndex: 0, //custom initial page index
+      pageSize: 5, //custom default page size
+    });
+
+  const handleRolesPageChange = (_state: PaginationState) => {
+    if (resetPagination) {
+      setResetPagination(false);
+      setRolesPaginationState({
+        pageIndex: 0,
+        pageSize: 5,
+      });
+    } else {
+      setRolesPaginationState(_state);
+    }
+  };
+
   const Roles = (): JSX.Element => {
     return (
       <div>
@@ -224,6 +247,9 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
           selectedItems={linkedRoles.current}
           Toolbar={DataTableToolbar}
           handleChangeSelection={handleChangeRoleSelection}
+          paginationState={rolesPaginationState}
+          changePagination={handleRolesPageChange}
+          changePaginationSize={false}
         />
       </div>
     );
@@ -251,6 +277,24 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
     showCurrentPage(currentPage.current);
   };
 
+  const [policiesPaginationState, setPoliciesPaginationState] =
+    useState<PaginationState>({
+      pageIndex: 0, //custom initial page index
+      pageSize: 5, //custom default page size
+    });
+
+  const handlePoliciesPageChange = (_state: PaginationState) => {
+    if (resetPagination) {
+      setResetPagination(false);
+      setPoliciesPaginationState({
+        pageIndex: 0,
+        pageSize: 5,
+      });
+    } else {
+      setPoliciesPaginationState(_state);
+    }
+  };
+
   const Policies = (): JSX.Element => {
     return (
       <div>
@@ -260,6 +304,9 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
           selectedItems={linkedPolicies.current}
           Toolbar={DataTableToolbar}
           handleChangeSelection={handleChangePolicySelection}
+          paginationState={policiesPaginationState}
+          changePagination={handlePoliciesPageChange}
+          changePaginationSize={false}
         />
       </div>
     );
@@ -279,6 +326,24 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
     showCurrentPage(currentPage.current);
   };
 
+  const [usersPaginationState, setUsersPaginationState] =
+    useState<PaginationState>({
+      pageIndex: 0, //custom initial page index
+      pageSize: 5, //custom default page size
+    });
+
+  const handleUsersPageChange = (_state: PaginationState) => {
+    if (resetPagination) {
+      setResetPagination(false);
+      setUsersPaginationState({
+        pageIndex: 0,
+        pageSize: 5,
+      });
+    } else {
+      setUsersPaginationState(_state);
+    }
+  };
+
   const Users = (): JSX.Element => {
     return (
       <div>
@@ -288,6 +353,9 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
           selectedItems={linkedUsers.current}
           Toolbar={DataTableToolbar}
           handleChangeSelection={handleChangeUserSelection}
+          paginationState={usersPaginationState}
+          changePagination={handleUsersPageChange}
+          changePaginationSize={false}
         />
       </div>
     );

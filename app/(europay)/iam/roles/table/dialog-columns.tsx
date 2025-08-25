@@ -3,13 +3,6 @@ import { DataTableColumnHeader } from "@/ui/datatable/data-table-column-header";
 import IndeterminateCheckbox from "@/ui/indeterminate-checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 
-export const initialTableState = {
-  pagination: {
-    pageIndex: 0, //custom initial page index
-    pageSize: 10, //custom default page size
-  },
-};
-
 export const columns: ColumnDef<Data>[] = [
   {
     accessorKey: "id",

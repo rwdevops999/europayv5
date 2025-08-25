@@ -20,9 +20,9 @@ import { DataTable } from "@/ui/datatable/data-table";
 import ServiceSelect from "@/ui/service-select";
 import { JSX, useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { columns, initialTableState } from "./table/dialog-columns";
+import { columns } from "./table/dialog-columns";
 import { DataTableToolbar } from "./table/dialog-data-table-toolbar";
-import { Row } from "@tanstack/react-table";
+import { PaginationState, Row } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { useToastSettings } from "@/hooks/use-toast-settings";
 
@@ -215,6 +215,8 @@ const ServiceStatementForm = (props: StatementFormProps) => {
 
   const linkedActions = useRef<number[]>([]);
 
+  const [resetPagination, setResetPagination] = useState<boolean>(false);
+
   useEffect(() => {
     if (props.entity.serviceid) {
       selectedServiceId.current = props.entity.serviceid;
@@ -228,6 +230,8 @@ const ServiceStatementForm = (props: StatementFormProps) => {
     reset(props.entity);
     setManaged(getValues("managed"));
     setPermission(getValues("permission"));
+
+    setResetPagination(true);
   }, [props]);
 
   const selectedServiceId = useRef<number | undefined>(undefined);
@@ -397,17 +401,37 @@ const ServiceStatementForm = (props: StatementFormProps) => {
     setFormButtonEnabled(selectionData.length > 0);
   };
 
+  const handlePageChange = (_state: PaginationState) => {
+    if (resetPagination) {
+      setResetPagination(false);
+      setPaginationState({
+        pageIndex: 0,
+        pageSize: 5,
+      });
+    } else {
+      setPaginationState(_state);
+    }
+  };
+
+  const [paginationState, setPaginationState] = useState<PaginationState>({
+    pageIndex: 0, //custom initial page index
+    pageSize: 5, //custom default page size
+  });
+
   const Data = (): JSX.Element => {
     return (
       <>
         <DataTable
+          id="DataTableServiceStatementForm"
           data={tableData}
           columns={columns}
-          initialTableState={initialTableState}
+          paginationState={paginationState}
           Toolbar={DataTableToolbar}
           selectedItems={linkedActions.current}
           selectionType="data"
           handleChangeSelection={handleChangeActionSelection}
+          changePagination={handlePageChange}
+          changePaginationSize={false}
         />
       </>
     );

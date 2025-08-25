@@ -20,85 +20,16 @@ ADMIN
 User for ADMIN also add it to CLIENT and ALL
 User for CLIENT also add it to ALL
 
+# Service Statements
+
+# Policies
+
 # Roles
 
-DefaultRole
+# Groups
 
-- GotoHomePolicy
-- ViewDashboardPolicy
-- ListDefaultPolicy
-  - View History
-- ViewManualPolicy
-- DefaultAuthPolicy
-  - Handle Auth
-  - Login
-  - Logout
-  - Apply
+ALL
 
-UserPageRole
+CLIENTS
 
-- ViewUserMenuPolicy
-
-AdminPageRole
-
-- ViewAdminMenuPolicy
-
-TaskAdminRole
-
-- ViewTaskMenuPolicy
-- HandleTaskPolicy
-
-JobAdminRole
-
-- ViewJobMenuPolicy
-- DefaultJobActionsPolicy
-  - Suspend Job
-  - Delete Job
-  - Restart Job
-
-SettingsAdminRole
-
-- ViewGeneralPolicy
-
-- ViewStoragePolicy
-- HandleDefaultStoragePolicy
-
-- ViewLimitsPolicy
-- HandleDefaultLimitsPolicy
-
-- ViewExportPolicy
-- HandleDefaultExportPolicy
-
-- ViewImportPolicy
-- HandleDefaultImportPolicy
-
-SocialMediaFullRole
-
-- ViewSocialMediaPolicy
-- ExecuteSocialMediaPolicy
-
-IAMAdminRole
-
-- ViewStatementsPolicy
-
-  - Handle Statement (Create/Delete/Update)
-  - Delete Managed Statement
-
-- ViewPoliciesPolicy
-
-  - Handle Policy
-  - Delete Managed Policy
-
-- ViewRolesPolicy
-
-  - Handle Role
-  - Delete Managed Role
-
-- ViewUsersPolicy
-
-  - Handle User
-  - Delete Managed User
-
-- ViewGroupsPolicy
-  - Handle Group
-  - Delete Managed Group
+ADMINS

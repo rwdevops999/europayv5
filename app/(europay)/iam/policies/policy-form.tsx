@@ -16,11 +16,11 @@ import { Data, ToastType } from "@/lib/types";
 import Button from "@/ui/button";
 import { DataTable } from "@/ui/datatable/data-table";
 import ServiceSelect from "@/ui/service-select";
-import { Row } from "@tanstack/react-table";
+import { PaginationState, Row } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { JSX, useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { columns, initialTableState } from "./table/dialog-columns";
+import { columns } from "./table/dialog-columns";
 import { DataTableToolbar } from "./table/dialog-data-table-toolbar";
 import ValidationConflictsDialog from "@/ui/validation-conflicts-dialog";
 import { useToastSettings } from "@/hooks/use-toast-settings";
@@ -183,6 +183,8 @@ const PolicyForm = (props: PolicyFormProps) => {
 
   const linkedStatements = useRef<number[]>([]);
 
+  const [resetPagination, setResetPagination] = useState<boolean>(false);
+
   useEffect(() => {
     if (props.entity.serviceid) {
       selectedServiceId.current = props.entity.serviceid;
@@ -198,7 +200,8 @@ const PolicyForm = (props: PolicyFormProps) => {
     setValidateButtonEnabled(props.linkedstatements.length >= 2);
     setPersistButtonEnabled(props.linkedstatements.length === 1);
     reset(props.entity);
-    // setManaged(getValues("managed"));
+
+    setResetPagination(true);
   }, [props]);
 
   const selectedServiceId = useRef<number | undefined>(undefined);
@@ -420,17 +423,36 @@ const PolicyForm = (props: PolicyFormProps) => {
     setValidateButtonEnabled(selectionData.length > 1 && !validFlag);
   };
 
+  const [paginationState, setPaginationState] = useState<PaginationState>({
+    pageIndex: 0, //custom initial page index
+    pageSize: 5, //custom default page size
+  });
+
+  const handlePageChange = (_state: PaginationState) => {
+    if (resetPagination) {
+      setResetPagination(false);
+      setPaginationState({
+        pageIndex: 0,
+        pageSize: 5,
+      });
+    } else {
+      setPaginationState(_state);
+    }
+  };
+
   const Data = (): JSX.Element => {
     return (
       <>
         <DataTable
           data={tableData}
           columns={columns}
-          initialTableState={initialTableState}
+          paginationState={paginationState}
           Toolbar={DataTableToolbar}
           selectedItems={linkedStatements.current}
           selectionType="data"
           handleChangeSelection={handleChangeStatementSelection}
+          changePagination={handlePageChange}
+          changePaginationSize={false}
         />
       </>
     );

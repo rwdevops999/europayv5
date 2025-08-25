@@ -18,12 +18,12 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  InitialTableState,
   Row,
   RowSelectionState,
   SortingState,
   TableMeta,
   useReactTable,
+  PaginationState,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -34,6 +34,7 @@ import {
   TableRow,
 } from "../table/table";
 import { DataTablePagination } from "./data-table-pagination";
+import { json } from "@/lib/util";
 
 export interface IDataSubRows<TData> {
   id?: number;
@@ -51,12 +52,14 @@ interface DataTableProps<TData, TValue> {
   readonly rowSelecting?: boolean;
   readonly handleChangeSelection?: (selection: any[]) => void;
   readonly selectionType?: string;
-  readonly initialTableState?: InitialTableState;
+  readonly paginationState?: PaginationState;
   expandAll?: boolean;
   enableRowSelection?: boolean;
   selectedItems?: (number | undefined)[];
   id?: string;
-  pagination?: boolean;
+  dopagination?: boolean;
+  changePaginationSize?: boolean;
+  changePagination?: (_pagination: PaginationState) => void;
 }
 
 export function DataTable<TData extends IDataSubRows<TData>, TValue>({
@@ -68,12 +71,14 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
   rowSelecting = true,
   handleChangeSelection = (selection: any[]) => {},
   selectionType = "ids",
-  initialTableState,
+  paginationState,
   expandAll = false,
   enableRowSelection = true,
   selectedItems = [],
   id = "",
-  pagination = true,
+  dopagination = true,
+  changePaginationSize = true,
+  changePagination,
 }: DataTableProps<TData, TValue>) {
   const [expanded, setExpanded] = useState<ExpandedState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -82,6 +87,13 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
   const [columnVisibility, setColumnVisibility] = useState({
     id: false,
   });
+
+  const [pagination, setPagination] = useState<PaginationState>(
+    paginationState ?? {
+      pageIndex: 0,
+      pageSize: 5,
+    }
+  );
 
   /**
    * TABLE INSTANCE
@@ -95,15 +107,17 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
       rowSelection,
       sorting,
       columnVisibility,
+      pagination,
     },
-    initialState: initialTableState
-      ? initialTableState
-      : {
-          pagination: {
-            pageIndex: 0, //custom initial page index
-            pageSize: 10, //custom default page size
-          },
-        },
+
+    // initialState: initialTableState
+    //   ? initialTableState
+    //   : {
+    //       pagination: {
+    //         pageIndex: 0, //custom initial page index
+    //         pageSize: 5, //custom default page size
+    //       },
+    //     },
     onExpandedChange: setExpanded,
     getSubRows: (row) => row.children,
     getCoreRowModel: getCoreRowModel(),
@@ -113,6 +127,7 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     filterFromLeafRows: true,
     getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
     enableRowSelection: enableRowSelection && ((row) => row.depth === 0),
     enableSubRowSelection: false,
     getFacetedRowModel: getFacetedRowModel(),
@@ -123,7 +138,18 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
     enableSortingRemoval: false,
   });
 
-  const handleRowSelection = (value: RowSelectionState): void => {};
+  useEffect(() => {
+    if (paginationState) {
+      const p = paginationState;
+      setPagination(p);
+    }
+  }, [paginationState]);
+
+  useEffect(() => {
+    if (changePagination) {
+      changePagination(pagination);
+    }
+  }, [pagination]);
 
   useEffect(() => {
     initPhase = true;
@@ -133,13 +159,16 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
     if (selectedItems.length > 0) {
       let state: Record<string, boolean> = {};
       selectedItems.map((item: number | undefined) => {
-        const row: Row<TData> | undefined = table
-          .getRowModel()
-          .rows.find((row) => row.original.id === item);
-        if (row) {
-          state[row.id] = true;
+        if (item) {
+          const row: Row<TData> | undefined = Object.values(
+            table.getRowModel().rowsById
+          ).find((row: Row<TData>) => row.original.id === item);
+          if (row) {
+            state[row.id] = true;
+          }
         }
       });
+
       if (data.length > 0) {
         setRowSelection({ ...state });
       }
@@ -153,7 +182,6 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
       const selectedIds: string[] = Object.keys(rowSelection).map(
         (key: string) => key
       );
-
       if (handleChangeSelection && data.length > 0) {
         if (selectionType === "ids") {
           const itemIds: (number | undefined)[] = selectedIds.map(
@@ -162,14 +190,12 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
               return row.original.id;
             }
           );
-
           handleChangeSelection(itemIds);
         } else {
           const items: Row<TData>[] = selectedIds.map((id: string) => {
             const row: Row<TData> = table.getRow(id);
             return row;
           });
-
           handleChangeSelection(items);
         }
       }
@@ -262,7 +288,12 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
             </TableBody>
           </Table>
         </div>
-        {pagination && <DataTablePagination table={table} />}
+        {dopagination && (
+          <DataTablePagination
+            table={table}
+            changeSize={changePaginationSize}
+          />
+        )}
       </div>
     );
   };

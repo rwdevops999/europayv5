@@ -37,6 +37,7 @@ import { ValidationConflict } from "@/app/server/data/validation-data";
 import { validateData } from "@/app/server/validate";
 import Button from "@/ui/button";
 import ValidationConflictsDialog from "@/ui/validation-conflicts-dialog";
+import { PaginationState } from "@tanstack/react-table";
 
 export interface CountryEntity {
   id?: number;
@@ -159,6 +160,8 @@ const UserCarrousel = (props: UserCarrouselProps) => {
     });
   };
 
+  const [resetPagination, setResetPagination] = useState<boolean>(false);
+
   useEffect(() => {
     ignoreEscape();
 
@@ -197,6 +200,8 @@ const UserCarrousel = (props: UserCarrouselProps) => {
 
     currentPage.current = Pages.DETAILS;
     showCurrentPage(Pages.DETAILS);
+
+    setResetPagination(true);
   }, [props]);
 
   const UserFormControl = (): JSX.Element => {
@@ -514,6 +519,24 @@ const UserCarrousel = (props: UserCarrouselProps) => {
     showCurrentPage(currentPage.current);
   };
 
+  const [rolesPaginationState, setRolesPaginationState] =
+    useState<PaginationState>({
+      pageIndex: 0, //custom initial page index
+      pageSize: 5, //custom default page size
+    });
+
+  const handleRolesPageChange = (_state: PaginationState) => {
+    if (resetPagination) {
+      setResetPagination(false);
+      setRolesPaginationState({
+        pageIndex: 0,
+        pageSize: 5,
+      });
+    } else {
+      setRolesPaginationState(_state);
+    }
+  };
+
   const Roles = (): JSX.Element => {
     return (
       <div>
@@ -523,6 +546,9 @@ const UserCarrousel = (props: UserCarrouselProps) => {
           selectedItems={linkedRoles.current}
           Toolbar={DataTableToolbar}
           handleChangeSelection={handleChangeRoleSelection}
+          paginationState={rolesPaginationState}
+          changePagination={handleRolesPageChange}
+          changePaginationSize={false}
         />
       </div>
     );
@@ -554,6 +580,24 @@ const UserCarrousel = (props: UserCarrouselProps) => {
     showCurrentPage(currentPage.current);
   };
 
+  const [policiesPaginationState, setPoliciesPaginationState] =
+    useState<PaginationState>({
+      pageIndex: 0, //custom initial page index
+      pageSize: 5, //custom default page size
+    });
+
+  const handlePoliciesPageChange = (_state: PaginationState) => {
+    if (resetPagination) {
+      setResetPagination(false);
+      setPoliciesPaginationState({
+        pageIndex: 0,
+        pageSize: 5,
+      });
+    } else {
+      setPoliciesPaginationState(_state);
+    }
+  };
+
   const Policies = (): JSX.Element => {
     return (
       <div>
@@ -563,6 +607,9 @@ const UserCarrousel = (props: UserCarrouselProps) => {
           selectedItems={linkedPolicies.current}
           Toolbar={DataTableToolbar}
           handleChangeSelection={handleChangePolicySelection}
+          paginationState={policiesPaginationState}
+          changePagination={handlePoliciesPageChange}
+          changePaginationSize={false}
         />
       </div>
     );
@@ -584,6 +631,24 @@ const UserCarrousel = (props: UserCarrouselProps) => {
     showCurrentPage(currentPage.current);
   };
 
+  const [groupsPaginationState, setGroupsPaginationState] =
+    useState<PaginationState>({
+      pageIndex: 0, //custom initial page index
+      pageSize: 5, //custom default page size
+    });
+
+  const handleGroupsPageChange = (_state: PaginationState) => {
+    if (resetPagination) {
+      setResetPagination(false);
+      setGroupsPaginationState({
+        pageIndex: 0,
+        pageSize: 5,
+      });
+    } else {
+      setGroupsPaginationState(_state);
+    }
+  };
+
   const Groups = (): JSX.Element => {
     return (
       <div>
@@ -593,6 +658,9 @@ const UserCarrousel = (props: UserCarrouselProps) => {
           selectedItems={linkedGroups.current}
           Toolbar={DataTableToolbar}
           handleChangeSelection={handleChangeGroupSelection}
+          paginationState={groupsPaginationState}
+          changePagination={handleGroupsPageChange}
+          changePaginationSize={false}
         />
       </div>
     );
@@ -732,8 +800,8 @@ const UserCarrousel = (props: UserCarrouselProps) => {
   const handleCreateUser = async (_entity: UserEntity): Promise<void> => {
     const user: tUserCreate = provisionUserForCreate(_entity);
 
-    await createUser(user).then((errorcode: string | undefined) => {
-      if (errorcode) {
+    await createUser(user).then((errorcode: string | undefined | tUser) => {
+      if (errorcode && typeof errorcode === "string") {
         showToast(
           ToastType.ERROR,
           `User create error ${displayPrismaErrorCode(errorcode)}`,

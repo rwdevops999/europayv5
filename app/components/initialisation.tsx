@@ -27,7 +27,6 @@ const Initialisation = () => {
 
   useEffect(() => {
     console.log("Hide cursor");
-    document.documentElement.style.cursor = "none";
 
     createStartupHistoryEntry();
   }, []);
@@ -53,8 +52,6 @@ const Initialisation = () => {
       <SetupServerJobs start={setupServerJobs} proceed={setSetupClientJobs} />
       <SetupClientJobs start={setupClientJobs} proceed={setInitIam} />
       <CreateManagedIam start={initIam} proceed={setEnableCursor} />
-
-      <EnableCursor start={enableCursor} />
     </>
   );
 };

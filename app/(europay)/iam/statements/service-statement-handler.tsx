@@ -4,7 +4,7 @@ import { mapServiceStatements } from "@/app/client/mapping";
 import { deleteServiceStatement } from "@/app/server/service-statements";
 import { Permission } from "@/generated/prisma";
 import { DATATABLE_ACTION_DELETE } from "@/lib/constants";
-import { absoluteUrl, showToast } from "@/lib/util";
+import { absoluteUrl, json, showToast } from "@/lib/util";
 import {
   tService,
   tServiceStatement,
@@ -15,12 +15,12 @@ import Button from "@/ui/button";
 import PageItemContainer from "@/ui/page-item-container";
 import ServiceSelect from "@/ui/service-select";
 import TemplateAlert, { tAlert } from "@/ui/template-alert";
-import { TableMeta } from "@tanstack/react-table";
+import { PaginationState, TableMeta } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DataTable } from "@/ui/datatable/data-table";
 import { DataTableToolbar } from "./table/page-data-table-toolbar";
-import { columns, initialTableState } from "./table/page-colums";
+import { columns } from "./table/page-colums";
 import ServiceStatementForm, {
   defaultStatementEntity,
   StatementEntity,
@@ -240,9 +240,9 @@ const ServiceStatementHandler = ({
           setLinkedActions(linked);
 
           openTheDialog();
-        } else {
-          setAlert(alert);
         }
+      } else {
+        setAlert(alert);
       }
     }
   };
@@ -292,11 +292,15 @@ const ServiceStatementHandler = ({
         </PageItemContainer>
         <PageItemContainer title="service statements">
           <DataTable
+            id="DataTableServiceStatementHandler"
             data={tableData}
             columns={columns}
             tablemeta={tableMeta}
             Toolbar={DataTableToolbar}
-            initialTableState={initialTableState}
+            paginationState={{
+              pageIndex: 0, //custom initial page index
+              pageSize: 15, //custom default page size
+            }}
             expandAll={servicestatementid === undefined ? false : true}
           />
         </PageItemContainer>

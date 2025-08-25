@@ -252,6 +252,10 @@ const RoleHandler = ({
             tablemeta={tableMeta}
             Toolbar={DataTableToolbar}
             expandAll={roleid === undefined ? false : true}
+            paginationState={{
+              pageIndex: 0, //custom initial page index
+              pageSize: 15, //custom default page size
+            }}
           />
         </PageItemContainer>
         <div className="flex justify-center">
