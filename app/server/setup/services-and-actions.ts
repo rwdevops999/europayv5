@@ -50,7 +50,7 @@ export const servicesandactions: Record<string, string[]> = {
   "europay:settings:general:otp": ["Change"],
   "europay:settings:general:markdown": ["Change"],
 
-  "europay:settings:storage": ["Show Database", "Show Selective"],
+  "europay:settings:storage": ["View Database", "View Selective"],
   "europay:settings:storage:database": [
     "Clear Full",
     "Provision Countries",

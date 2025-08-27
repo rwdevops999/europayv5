@@ -147,13 +147,19 @@ const PolicyForm = (props: PolicyFormProps) => {
     });
   };
 
-  const onSubmit: SubmitHandler<PolicyEntity> = (formData: PolicyEntity) => {
-    formData = { ...formData, serviceid: selectedServiceId.current! };
+  const onSubmit: SubmitHandler<PolicyEntity> = async (
+    formData: PolicyEntity
+  ) => {
+    const valid: boolean = await validateLinkedStatements();
 
-    if (formData.id) {
-      handleUpdatePolicy(formData);
-    } else {
-      handleCreatePolicy(formData);
+    if (valid) {
+      formData = { ...formData, serviceid: selectedServiceId.current! };
+
+      if (formData.id) {
+        handleUpdatePolicy(formData);
+      } else {
+        handleCreatePolicy(formData);
+      }
     }
   };
 
@@ -184,8 +190,6 @@ const PolicyForm = (props: PolicyFormProps) => {
 
   const linkedStatements = useRef<number[]>([]);
 
-  const [resetPagination, setResetPagination] = useState<boolean>(false);
-
   useEffect(() => {
     if (props.entity.serviceid) {
       selectedServiceId.current = props.entity.serviceid;
@@ -198,11 +202,7 @@ const PolicyForm = (props: PolicyFormProps) => {
     }
 
     linkedStatements.current = props.linkedstatements;
-    setValidateButtonEnabled(props.linkedstatements.length >= 2);
-    setPersistButtonEnabled(props.linkedstatements.length === 1);
     reset(props.entity);
-
-    setResetPagination(true);
   }, [props]);
 
   const selectedServiceId = useRef<number | undefined>(undefined);
@@ -213,11 +213,6 @@ const PolicyForm = (props: PolicyFormProps) => {
   };
 
   // const [managed, setManaged] = useState<boolean>(false);
-
-  const [persistButtonEnabled, setPersistButtonEnabled] =
-    useState<boolean>(false);
-  const [validateButtonEnabled, setValidateButtonEnabled] =
-    useState<boolean>(false);
 
   const Select = (): JSX.Element => {
     return (
@@ -308,13 +303,13 @@ const PolicyForm = (props: PolicyFormProps) => {
     );
   };
 
-  const formValid = useRef<boolean>(true);
-
   const [conflicts, setConflicts] = useState<ValidationConflict[]>([]);
   const [validationConflictDialogOpen, setValidationConflictDialogOpen] =
     useState<boolean>(false);
 
-  const validateLinkedStatements = async (): Promise<void> => {
+  const validateLinkedStatements = async (): Promise<boolean> => {
+    let valid: boolean = true;
+
     const _entity: PolicyEntity = getValues();
 
     let data: Data = {
@@ -334,12 +329,10 @@ const PolicyForm = (props: PolicyFormProps) => {
         setValidationConflictDialogOpen(true);
       }
 
-      formValid.current = conflicts.length === 0;
-      handleButtonsVisibiliy(
-        selectedStatements.current,
-        conflicts.length === 0
-      );
+      valid = conflicts.length === 0;
     });
+
+    return valid;
   };
 
   const FormButtons = (): JSX.Element => {
@@ -362,7 +355,6 @@ const PolicyForm = (props: PolicyFormProps) => {
             size={"small"}
             className="bg-custom mb-1"
             type="submit"
-            disabled={!persistButtonEnabled}
           />
         )}
         {props.entity.id && (
@@ -373,10 +365,9 @@ const PolicyForm = (props: PolicyFormProps) => {
             size={"small"}
             className="bg-custom mb-1"
             type="submit"
-            disabled={!persistButtonEnabled}
           />
         )}
-        <Button
+        {/* <Button
           name="Validate"
           intent={"neutral"}
           style={"soft"}
@@ -385,7 +376,7 @@ const PolicyForm = (props: PolicyFormProps) => {
           type="button"
           disabled={!validateButtonEnabled}
           onClick={validateLinkedStatements}
-        />
+        /> */}
       </div>
     );
   };
@@ -410,14 +401,6 @@ const PolicyForm = (props: PolicyFormProps) => {
 
   const selectedStatements = useRef<Data[]>([]);
 
-  const handleButtonsVisibiliy = (
-    selectionData: Data[],
-    validFlag: boolean
-  ): void => {
-    setPersistButtonEnabled(selectionData.length >= 1 && validFlag);
-    setValidateButtonEnabled(selectionData.length > 1 && !validFlag);
-  };
-
   const handleSelectionChanged = (_selection: number[]): void => {
     const selectionData: Data[] = tableData.reduce<Data[]>(
       (acc: Data[], data: Data) => {
@@ -436,11 +419,6 @@ const PolicyForm = (props: PolicyFormProps) => {
     selectedStatements.current = selectionData;
 
     linkedStatements.current = _selection;
-
-    const valid: boolean = selectionData.length < 2;
-
-    formValid.current = valid;
-    handleButtonsVisibiliy(selectionData, valid);
   };
 
   const renderComponent = () => {

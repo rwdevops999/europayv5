@@ -107,8 +107,6 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
 
   const [reload, setReload] = useState<number>(0);
 
-  const [valid, setValid] = useState<boolean>(false);
-
   const ignoreEscape = (): void => {
     addEventListener("keydown", function (event) {
       if (event.key === "Escape") {
@@ -126,8 +124,6 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
     linkedPolicies.current = props.linkedpolicies;
     linkedRoles.current = props.linkedroles;
     linkedUsers.current = props.linkedusers;
-
-    setValid(props.linkedpolicies.length + props.linkedroles.length < 2);
 
     setReload((x: number) => x + 1);
 
@@ -224,8 +220,6 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
   const handleRoleSelectionChanged = (_selection: number[]): void => {
     linkedRoles.current = _selection;
 
-    handleButtons(linkedPolicies.current, _selection);
-
     showCurrentPage(currentPage.current);
   };
 
@@ -241,16 +235,8 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
     );
   };
 
-  const handleButtons = (_policies: number[], _roles: number[]): void => {
-    const sum: number = _policies.length + _roles.length;
-
-    setValid(sum < 2);
-  };
-
   const handlePolicySelectionChanged = (_selection: number[]): void => {
     linkedPolicies.current = _selection;
-
-    handleButtons(_selection, linkedRoles.current);
 
     showCurrentPage(currentPage.current);
   };
@@ -282,18 +268,6 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
         selectedIds={linkedUsers.current}
         changeSelection={handleUserSelectionChanged}
       />
-      /* <div>
-        <DataTable
-          data={tableDataUsers}
-          columns={columnsUsers}
-          selectedItems={linkedUsers.current}
-          Toolbar={DataTableToolbar}
-          handleChangeSelection={handleChangeUserSelection}
-          paginationState={usersPaginationState}
-          changePagination={handleUsersPageChange}
-          changePaginationSize={false}
-        />
-      </div> */
     );
   };
 
@@ -475,11 +449,17 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
     });
   };
 
-  const onSubmit: SubmitHandler<GroupEntity> = (formData: GroupEntity) => {
-    if (formData.id) {
-      handleUpdateGroup(formData);
-    } else {
-      handleCreateGroup(formData);
+  const onSubmit: SubmitHandler<GroupEntity> = async (
+    formData: GroupEntity
+  ) => {
+    const valid: boolean = await validateDependencies();
+
+    if (valid) {
+      if (formData.id) {
+        handleUpdateGroup(formData);
+      } else {
+        handleCreateGroup(formData);
+      }
     }
   };
 
@@ -495,7 +475,9 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
   const [validationConflictDialogOpen, setValidationConflictDialogOpen] =
     useState<boolean>(false);
 
-  const validateDependencies = async (): Promise<void> => {
+  const validateDependencies = async (): Promise<boolean> => {
+    let valid: boolean = true;
+
     const _entity: GroupEntity = getValues();
 
     const _selectedPolicies: tPolicy[] = props.policies.filter(
@@ -517,14 +499,17 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
         subject: "Group",
       },
     };
+
     await validateData(data).then((conflicts: ValidationConflict[]) => {
       if (conflicts.length > 0) {
         setConflicts(conflicts);
         setValidationConflictDialogOpen(true);
       }
 
-      setValid(!(conflicts.length > 0));
+      valid = !(conflicts.length > 0);
     });
+
+    return valid;
   };
 
   const Buttons = (): JSX.Element => {
@@ -549,7 +534,6 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
             size={"small"}
             className="bg-custom"
             type="submit"
-            disabled={!valid}
           />
         )}
         {props.entity.id && (
@@ -561,20 +545,8 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
             size={"small"}
             className="bg-custom"
             type="submit"
-            disabled={!valid}
           />
         )}
-        <Button
-          id="validatebutton"
-          name="Validate"
-          intent={"neutral"}
-          style={"soft"}
-          size={"small"}
-          className="bg-custom"
-          type="button"
-          disabled={valid}
-          onClick={validateDependencies}
-        />
       </div>
     );
   };

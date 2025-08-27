@@ -17,6 +17,9 @@ export const loadServiceStatements = async (): Promise<tServiceStatement[]> => {
 
   await prisma.serviceStatement
     .findMany({
+      orderBy: {
+        updateDate: "desc",
+      },
       ...cWhatToSelectFromServiceStatement,
     })
     .then((values: tServiceStatement[]) => (result = values));

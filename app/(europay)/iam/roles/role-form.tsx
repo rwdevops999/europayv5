@@ -143,11 +143,15 @@ const RoleForm = (props: RoleFormProps) => {
     });
   };
 
-  const onSubmit: SubmitHandler<RoleEntity> = (formData: RoleEntity) => {
-    if (formData.id) {
-      handleUpdateRole(formData);
-    } else {
-      handleCreateRole(formData);
+  const onSubmit: SubmitHandler<RoleEntity> = async (formData: RoleEntity) => {
+    const valid: boolean = await validateLinkedPolicies();
+
+    if (valid) {
+      if (formData.id) {
+        handleUpdateRole(formData);
+      } else {
+        handleCreateRole(formData);
+      }
     }
   };
 
@@ -183,17 +187,10 @@ const RoleForm = (props: RoleFormProps) => {
     processTableData();
 
     linkedPolicies.current = props.linkedpolicies;
-    setValidateButtonEnabled(props.linkedpolicies.length >= 2);
-    setPersistButtonEnabled(props.linkedpolicies.length === 1);
     reset(props.entity);
 
     setResetPagination(true);
   }, [props]);
-
-  const [persistButtonEnabled, setPersistButtonEnabled] =
-    useState<boolean>(false);
-  const [validateButtonEnabled, setValidateButtonEnabled] =
-    useState<boolean>(false);
 
   const FormDetails = (): JSX.Element => {
     const focus = (_name: string) => {
@@ -269,13 +266,13 @@ const RoleForm = (props: RoleFormProps) => {
     );
   };
 
-  const formValid = useRef<boolean>(true);
-
   const [conflicts, setConflicts] = useState<ValidationConflict[]>([]);
   const [validationConflictDialogOpen, setValidationConflictDialogOpen] =
     useState<boolean>(false);
 
-  const validateLinkedPolicies = async (): Promise<void> => {
+  const validateLinkedPolicies = async (): Promise<boolean> => {
+    let valid: boolean = true;
+
     const _entity: RoleEntity = getValues();
 
     let data: Data = {
@@ -290,14 +287,14 @@ const RoleForm = (props: RoleFormProps) => {
 
     await validateData(data).then((conflicts: ValidationConflict[]) => {
       if (conflicts.length > 0) {
-        // handleCancelClick();
         setConflicts(conflicts);
         setValidationConflictDialogOpen(true);
       }
 
-      formValid.current = conflicts.length === 0;
-      handleButtonsVisibiliy(selectedPolicies.current, conflicts.length === 0);
+      valid = conflicts.length === 0;
     });
+
+    return valid;
   };
 
   const FormButtons = (): JSX.Element => {
@@ -320,7 +317,6 @@ const RoleForm = (props: RoleFormProps) => {
             size={"small"}
             className="bg-custom mb-1"
             type="submit"
-            disabled={!persistButtonEnabled}
           />
         )}
         {props.entity.id && (
@@ -331,19 +327,17 @@ const RoleForm = (props: RoleFormProps) => {
             size={"small"}
             className="bg-custom mb-1"
             type="submit"
-            disabled={!persistButtonEnabled}
           />
         )}
-        <Button
+        {/* <Button
           name="Validate"
           intent={"neutral"}
           style={"soft"}
           size={"small"}
           className="bg-custom"
           type="button"
-          disabled={!validateButtonEnabled}
           onClick={validateLinkedPolicies}
-        />
+        /> */}
       </div>
     );
   };
@@ -383,18 +377,7 @@ const RoleForm = (props: RoleFormProps) => {
       linkedPolicies.current = mappedPolicies;
 
       const valid: boolean = selectionData.length < 2;
-
-      formValid.current = valid;
-      handleButtonsVisibiliy(selectionData, valid);
     }
-  };
-
-  const handleButtonsVisibiliy = (
-    selectionData: Data[],
-    validFlag: boolean
-  ): void => {
-    setPersistButtonEnabled(selectionData.length >= 1 && validFlag);
-    setValidateButtonEnabled(selectionData.length > 1 && !validFlag);
   };
 
   const handleSelectionChanged = (_selection: number[]): void => {
@@ -414,11 +397,6 @@ const RoleForm = (props: RoleFormProps) => {
 
     selectedPolicies.current = selectionData;
     linkedPolicies.current = _selection;
-
-    const valid: boolean = selectionData.length < 2;
-
-    formValid.current = valid;
-    handleButtonsVisibiliy(selectionData, valid);
   };
 
   const renderComponent = () => {
