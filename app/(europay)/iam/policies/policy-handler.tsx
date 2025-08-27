@@ -18,7 +18,7 @@ import Dialog from "@/ui/dialog";
 import { DataTable } from "@/ui/datatable/data-table";
 import { DataTableToolbar } from "./table/dialog-data-table-toolbar";
 import { useToastSettings } from "@/hooks/use-toast-settings";
-import { columns } from "./table/page-colums";
+import { columns, initialTableState } from "./table/page-colums";
 
 // import { Data, ToastType } from "@/app/lib/types";
 // import { absoluteUrl, json, showToast } from "@/app/lib/util";
@@ -193,36 +193,27 @@ const PolicyHandler = ({
         }
       }
     } else {
-      const alert: tAlert | undefined = policyInDependency(
-        policy.id,
-        "UNABLE_TO_UPDATE_LINKED"
+      const pol: tPolicy | undefined = policies.find(
+        (_policy: tPolicy) => _policy.id === policy.id
       );
+      if (pol) {
+        const entity: PolicyEntity = {
+          id: pol.id,
+          policyname: pol.name,
+          description: pol.description ?? "",
+          managed: pol.managed ?? false,
+          serviceid:
+            pol.servicestatements.length > 0
+              ? pol.servicestatements[0].serviceid
+              : undefined,
+        };
 
-      if (alert) {
-        setAlert(alert);
-      } else {
-        const pol: tPolicy | undefined = policies.find(
-          (_policy: tPolicy) => _policy.id === policy.id
+        const linked: number[] = pol.servicestatements.map(
+          (statement: tServiceStatement) => statement.id
         );
-        if (pol) {
-          const entity: PolicyEntity = {
-            id: pol.id,
-            policyname: pol.name,
-            description: pol.description ?? "",
-            managed: pol.managed ?? false,
-            serviceid:
-              pol.servicestatements.length > 0
-                ? pol.servicestatements[0].serviceid
-                : undefined,
-          };
-
-          const linked: number[] = pol.servicestatements.map(
-            (statement: tServiceStatement) => statement.id
-          );
-          setEntity(entity);
-          setLinkedStatements(linked);
-          openTheDialog();
-        }
+        setEntity(entity);
+        setLinkedStatements(linked);
+        openTheDialog();
       }
     }
   };
@@ -315,10 +306,7 @@ const PolicyHandler = ({
             tablemeta={tableMeta}
             Toolbar={DataTableToolbar}
             expandAll={policyid === undefined ? false : true}
-            paginationState={{
-              pageIndex: 0, //custom initial page index
-              pageSize: 15, //custom default page size
-            }}
+            initialState={initialTableState}
           />
         </PageItemContainer>
         <div className="flex justify-center">

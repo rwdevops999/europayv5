@@ -13,7 +13,6 @@ export const registerListener = async (
   notificationKey: string,
   notificationFunction: (data: any) => void
 ) => {
-  console.log("Registering listener on", notificationKey);
   listenNotificationSocket({
     socket,
     notificationKey: notificationKey,

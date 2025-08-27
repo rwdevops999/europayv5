@@ -32,6 +32,7 @@ export type UserForExport = {
   username: string;
   lastname: string;
   firstname: string;
+  avatar: string | null;
   email: string;
   password: string;
   passwordless: boolean;

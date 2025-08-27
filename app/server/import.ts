@@ -110,6 +110,7 @@ const createUser = async (_user: UserForExport): Promise<void> => {
       username: _user.username,
       firstname: _user.firstname,
       lastname: _user.lastname,
+      avatar: _user.avatar,
       email: _user.email,
       password: _user.passwordless
         ? _user.password

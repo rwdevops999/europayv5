@@ -14,25 +14,11 @@ export const useNotificationSocket = ({
   notificationFunction,
 }: NotificationSocketProps) => {
   useEffect(() => {
-    console.log("[NOTIFICATION RECEIVER]", "useEffect");
     if (!socket) {
-      console.log("[NOTIFICATION RECEIVER]", "useEffect", "No Socket");
       return;
     }
 
-    console.log(
-      "[NOTIFICATION RECEIVER]",
-      "useEffect",
-      "Waiting on",
-      notificationKey
-    );
-
     socket.on(notificationKey, (data: any) => {
-      console.log(
-        "[NOTIFICATION RECEIVER",
-        "RECEIVED NOTIFICATION KEY",
-        json(data)
-      );
       notificationFunction(data);
     });
 

@@ -28,14 +28,7 @@ const SetupClientJobs = () => {
   const startupJob = async (): Promise<void> => {
     await createTaskPollerJob().then(async (job: tJob | null) => {
       if (job) {
-        console.log(
-          "[SetupClientJobs]",
-          "Job Created => continue with innjest"
-        );
-
-        console.log("[SetupClientJobs]", "Start TaskPoller");
         await runInngestJobForTaskPoller(job.id).then(() => {
-          console.log("[SetupClientJobs]", "Inngest Job Started");
           setIsIntialised(true);
         });
       }
@@ -43,18 +36,11 @@ const SetupClientJobs = () => {
   };
 
   const taskListenerFunction = async (data: any): Promise<void> => {
-    console.log("RECEIVED DATA", json(data));
     const { key, value } = data;
-    console.log("RECEIVED DATA ... key", key);
-    console.log("RECEIVED DATA ... value", value);
 
     if (key === taskKey) {
-      console.log("RECEIVED DATA for task processing");
-
       await findJobByName(TaskPollerJobName).then(async (job: tJob | null) => {
         if (job && job.status === JobStatus.RUNNING) {
-          console.log("[taskPoller] ... job found and it is RUNNING", job.id);
-
           setTaskAvailable(value > 0);
           await deleteJob(job.id).then(() => {
             startupJob();
@@ -65,8 +51,6 @@ const SetupClientJobs = () => {
   };
 
   const createTaskPollerJob = async (): Promise<tJob | null> => {
-    console.log("[SetupClientJobs]", "Creating DB Job (X)");
-
     const job: tJob | null = await createJob(
       TaskPollerJobName,
       JobModel.CLIENT,
@@ -78,12 +62,6 @@ const SetupClientJobs = () => {
   };
 
   const runInngestJobForTaskPoller = async (jobId: number): Promise<void> => {
-    console.log(
-      "[SetupClientJobs]",
-      "Run Inngest Job for",
-      jobId,
-      getJobTiming(TaskPollerJobName)
-    );
     await runInngestJob(
       TaskPollerJobName,
       getJobTiming(TaskPollerJobName),
@@ -92,23 +70,8 @@ const SetupClientJobs = () => {
   };
 
   useEffect(() => {
-    console.log("[SetupClientJobs]", "useEffect called on socket change");
-
-    if (!socket) {
-      console.log(
-        "[SetupClientJobs]",
-        "useEffect called on socket change ... not Connected"
-      );
-    } else {
-      console.log(
-        "[SetupClientJobs]",
-        "useEffect called on socket change ... Connected to socket",
-        socket
-      );
-
-      console.log("[SetupClientJobs]", "Register listener");
+    if (socket) {
       registerListener(socket, taskKey, taskListenerFunction);
-      console.log("[SetupClientJobs]", "Create Job");
       startupJob();
     }
   }, [socket]);

@@ -18,7 +18,6 @@ const DeleteClientJobs = ({
   const [jobsDeleted, setJobsDeleted] = useState<boolean>(false);
 
   const createHistoryForJobs = async (_message: string): Promise<void> => {
-    console.log("Create History", _message);
     await createHistoryEntry(
       HistoryType.INFO,
       getHistory(),
@@ -34,15 +33,9 @@ const DeleteClientJobs = ({
     setJobsDeleted(deletedJobs);
     if (deletedJobs) {
       await createHistoryForJobs("DELETION CLIENT JOBS").then(() => {
-        console.log("[Initialise]", "DeleteClientJobs", "Deleted Client Jobs?");
         proceed(true);
       });
     } else {
-      console.log(
-        "[Initialise]",
-        "DeleteClientJobs",
-        "Not deleted any client Jobs?"
-      );
       createHistoryForJobs("DELETION CLIENT JOBS NOT");
       proceed(true);
     }
@@ -50,7 +43,6 @@ const DeleteClientJobs = ({
 
   useEffect(() => {
     if (start) {
-      console.log("[Initialise]", "DeleteClientJobs", "Deleting Client Jobs?");
       setup();
     }
   }, [start]);

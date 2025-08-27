@@ -19,7 +19,7 @@ import PageItemContainer from "@/ui/page-item-container";
 import Button from "@/ui/button";
 import Dialog from "@/ui/dialog";
 import { DataTable } from "@/ui/datatable/data-table";
-import { columns } from "./table/page-colums";
+import { columns, initialTableState } from "./table/page-colums";
 import { DataTableToolbar } from "./table/page-data-table-toolbar";
 
 /**
@@ -208,10 +208,7 @@ const GroupHandler = ({
             columns={columns}
             tablemeta={tableMeta}
             Toolbar={DataTableToolbar}
-            paginationState={{
-              pageIndex: 0, //custom initial page index
-              pageSize: 15, //custom default page size
-            }}
+            initialState={initialTableState}
           />
         </PageItemContainer>
         <div className="flex justify-center">

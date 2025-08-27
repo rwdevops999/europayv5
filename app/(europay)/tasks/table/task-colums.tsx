@@ -32,8 +32,7 @@ const renderLink = (
   const [uselink, setUselink] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("Uselink???", $iam_user_has_action(_user, "Handle"));
-    setUselink($iam_user_has_action(_user, "Handle"));
+    setUselink($iam_user_has_action(_user, "", "Handle"));
   }, [_user]);
 
   return (

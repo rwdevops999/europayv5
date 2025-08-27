@@ -18,7 +18,6 @@ const SetupCountries = ({
   const [countriesLoaded, setCountriesLoaded] = useState<boolean>(false);
 
   const createHistoryForCountries = async (_message: string): Promise<void> => {
-    console.log("Create History", _message);
     await createHistoryEntry(
       HistoryType.INFO,
       getHistory(),
@@ -29,10 +28,8 @@ const SetupCountries = ({
   };
 
   const setup = async (): Promise<void> => {
-    console.log("[Initialise]", "SetupCountries", "Loading Countries");
     await defineCountries(true).then(async () => {
       await createHistoryForCountries("COUNTRIES").then(() => {
-        console.log("[Initialise]", "SetupCountries", "COUNTRIES LOADED");
         setCountriesLoaded(true);
         proceed(true);
       });
@@ -41,7 +38,6 @@ const SetupCountries = ({
 
   useEffect(() => {
     if (start) {
-      console.log("[Initialise]", "SetupCountries", "Load Countries?");
       setup();
     }
   }, [start]);

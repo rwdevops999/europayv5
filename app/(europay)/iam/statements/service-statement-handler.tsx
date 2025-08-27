@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { DataTable } from "@/ui/datatable/data-table";
 import { DataTableToolbar } from "./table/page-data-table-toolbar";
-import { columns } from "./table/page-colums";
+import { columns, initialTableState } from "./table/page-colums";
 import ServiceStatementForm, {
   defaultStatementEntity,
   StatementEntity,
@@ -213,36 +213,29 @@ const ServiceStatementHandler = ({
         }
       }
     } else {
-      const alert: tAlert | undefined = isStatementInPolicy(
-        statement.id,
-        "UNABLE_TO_UPDATE_LINKED"
+      const stat: tServiceStatement | undefined = servicestatements.find(
+        (_statement: tServiceStatement) => _statement.id === statement.id
       );
-      if (!alert) {
-        const stat: tServiceStatement | undefined = servicestatements.find(
-          (_statement: tServiceStatement) => _statement.id === statement.id
+
+      if (stat) {
+        const entity: StatementEntity = {
+          id: stat.id,
+          ssname: stat.ssname,
+          description: stat.description ?? "",
+          managed: stat.managed ?? false,
+          permission: stat.permission ?? Permission.ALLOW,
+          serviceid: stat.serviceid,
+        };
+
+        const linked: number[] = stat.servicestatementactions.map(
+          (action: tServiceStatementAction) => action.serviceaction.id
         );
 
-        if (stat) {
-          const entity: StatementEntity = {
-            id: stat.id,
-            ssname: stat.ssname,
-            description: stat.description ?? "",
-            managed: stat.managed ?? false,
-            permission: stat.permission ?? Permission.ALLOW,
-            serviceid: stat.serviceid,
-          };
+        setEntity(entity);
+        console.log("UPDATE SELECTED: Linked", json(linked));
+        setLinkedActions(linked);
 
-          const linked: number[] = stat.servicestatementactions.map(
-            (action: tServiceStatementAction) => action.serviceaction.id
-          );
-
-          setEntity(entity);
-          setLinkedActions(linked);
-
-          openTheDialog();
-        }
-      } else {
-        setAlert(alert);
+        openTheDialog();
       }
     }
   };
@@ -297,11 +290,8 @@ const ServiceStatementHandler = ({
             columns={columns}
             tablemeta={tableMeta}
             Toolbar={DataTableToolbar}
-            paginationState={{
-              pageIndex: 0, //custom initial page index
-              pageSize: 15, //custom default page size
-            }}
             expandAll={servicestatementid === undefined ? false : true}
+            initialState={initialTableState}
           />
         </PageItemContainer>
         <div className="flex justify-center">

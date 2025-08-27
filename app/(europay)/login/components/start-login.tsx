@@ -265,24 +265,11 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
           } else if (value.status === OTPStatus.USED) {
             showOTPAlreadyUsed(_otp);
           } else {
-            console.log("LOGGED COORECTLY IN WITH OTP", value.id);
             await setOtpStatus(value.id, OTPStatus.USED).then(async () => {
-              console.log("LOGGED COORECTLY IN WITH OTP", "LOOKUP JOB");
               const job: tJob | null = await findOtpJobOfOtpId(value.id);
-              console.log("LOGGED COORECTLY IN WITH OTP", "JOB", job?.id);
               if (job && job.status === JobStatus.RUNNING) {
-                console.log(
-                  "LOGGED COORECTLY IN WITH OTP",
-                  "CHANGE JOB STATUS TO COMPLETED",
-                  job.id
-                );
                 await changeJobStatus(job.id, JobStatus.COMPLETED).then(
                   async () => {
-                    console.log(
-                      "LOGGED COORECTLY IN WITH OTP",
-                      "SUSPEND INNGEST JOB",
-                      job.id
-                    );
                     await suspendInngestOtpJob(job.id);
                   }
                 );

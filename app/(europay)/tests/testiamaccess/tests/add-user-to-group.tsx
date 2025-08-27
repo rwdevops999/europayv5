@@ -11,11 +11,7 @@ const AddUserToGroup = () => {
   const handleAddUser = async (): Promise<void> => {
     const user: tUser | null = await loadUserById(1);
 
-    console.log("User loaded", json(user));
-
-    const userAdded: boolean = await addUserToGroup(2, GROUP_ADMINS);
-
-    console.log("User added", userAdded);
+    const userAdded: boolean = await addUserToGroup(1, GROUP_ADMINS);
   };
 
   return (

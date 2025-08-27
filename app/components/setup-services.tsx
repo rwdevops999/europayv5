@@ -22,18 +22,10 @@ const SetupServices = ({
   const setup = async (): Promise<void> => {
     const nrOfServices: number = await countServices();
 
-    console.log("[Initialise]", "nrOfServices", nrOfServices);
-    console.log(
-      "[Initialise]",
-      "defined Services",
-      Object.keys(servicesandactions).length
-    );
-
     if (
       (nrOfServices === 0 && Object.keys(servicesandactions).length > 0) ||
       nrOfServices < Object.keys(servicesandactions).length
     ) {
-      console.log("[Initialise]", "SetupServices", "Loaded Services");
       await defineServices(servicesandactions, true).then(async () => {
         await createHistoryEntry(
           HistoryType.INFO,
@@ -42,8 +34,6 @@ const SetupServices = ({
           { subject: "SERVICES" },
           "Initialise:SetupServices"
         ).then(() => {
-          console.log("[Initialise]", "SetupServices", "SERVICES LOADED");
-
           setServicesLoaded(true);
           proceed(true);
         });
@@ -63,7 +53,6 @@ const SetupServices = ({
 
   useEffect(() => {
     if (start) {
-      console.log("[Initialise]", "SetupServices", "Load Services?");
       setup();
     }
   }, [start]);

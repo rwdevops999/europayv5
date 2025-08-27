@@ -11,10 +11,6 @@ export default async function sendHandler(
     query: { key, value },
   } = req;
 
-  console.log("[sendHandler]", "NOTIFY CLIENT");
-  console.log("[sendHandler]", "KEY = ", key as string);
-  console.log("[sendHandler]", "VALUE = ", value);
-
   const skey: string = key as string;
   const svalue: string = value as string;
   const nvalue: number = parseInt(svalue) as number;
@@ -24,12 +20,10 @@ export default async function sendHandler(
       if (res.socket) {
         if (res.socket.server) {
           if (res.socket.server.io) {
-            console.log("[sendHandler]", "EMIT message", skey, nvalue);
             const sent: boolean = res.socket.server.io.emit(skey, {
               key: skey,
               value: nvalue,
             });
-            console.log("[sendHandler]", "EMIT message => ", sent);
           }
         }
       }

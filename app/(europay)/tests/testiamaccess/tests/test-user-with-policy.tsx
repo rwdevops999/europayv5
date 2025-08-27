@@ -14,19 +14,11 @@ const TestUserWithPolicy = () => {
 
     setUser(u);
 
-    console.log("USER LOADED", json(u));
-
     let hasAccess: boolean = false;
-    console.log("Has Access: start", hasAccess);
 
-    hasAccess = $iam_user_has_action(u, "Goto Home");
-    console.log("Has Access: Goto Home", hasAccess);
+    hasAccess = $iam_user_has_action(u, "europay", "View Social Media");
 
-    hasAccess = $iam_user_has_action(u, "View Dashboard");
-    console.log("Has Access: View Dashboard", hasAccess);
-
-    hasAccess = $iam_user_has_action(u, "Login");
-    console.log("Has Access: Login", hasAccess);
+    hasAccess = $iam_user_has_action(u, "europay:socialmedia", "Execute");
   };
 
   useEffect(() => {

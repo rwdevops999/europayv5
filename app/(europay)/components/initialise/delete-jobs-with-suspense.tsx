@@ -9,7 +9,6 @@ import { processOtpsOnServer } from "@/app/server/otp";
 import { JobModel } from "@/generated/prisma";
 
 const JobRemover = async () => {
-  console.log("JobRemover for CLIENT Jobs");
   await clearRunningJobs(JobModel.CLIENT);
 
   return null;

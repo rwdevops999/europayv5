@@ -37,8 +37,6 @@ const RolesWithParam = async ({
     /**
      * create a Promise which resolved as policyId
      */
-    console.log("[ROLE WITH ID]", roleId);
-
     const promise: Promise<any[]> = CreatePromise(roleId);
 
     return (

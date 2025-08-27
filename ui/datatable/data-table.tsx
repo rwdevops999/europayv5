@@ -24,6 +24,7 @@ import {
   TableMeta,
   useReactTable,
   PaginationState,
+  InitialTableState,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -44,41 +45,33 @@ export interface IDataSubRows<TData> {
 let initPhase: boolean = true;
 
 interface DataTableProps<TData, TValue> {
-  code?: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   tablemeta?: TableMeta<TData>;
   Toolbar?: ComponentType<DataTableToolbarProps<TData>>;
   readonly rowSelecting?: boolean;
-  readonly handleChangeSelection?: (selection: any[]) => void;
-  readonly selectionType?: string;
-  readonly paginationState?: PaginationState;
+  readonly handleChangeSelection?: (selection: number[]) => void;
   expandAll?: boolean;
   enableRowSelection?: boolean;
   selectedItems?: (number | undefined)[];
   id?: string;
-  dopagination?: boolean;
-  changePaginationSize?: boolean;
-  changePagination?: (_pagination: PaginationState) => void;
+  initialState?: InitialTableState;
+  disablePageSizeChange?: boolean;
 }
 
 export function DataTable<TData extends IDataSubRows<TData>, TValue>({
-  code,
   columns,
   data,
   tablemeta,
   Toolbar,
   rowSelecting = true,
-  handleChangeSelection = (selection: any[]) => {},
-  selectionType = "ids",
-  paginationState,
+  handleChangeSelection = (selection: number[]) => {},
   expandAll = false,
   enableRowSelection = true,
-  selectedItems = [],
+  selectedItems,
   id = "",
-  dopagination = true,
-  changePaginationSize = true,
-  changePagination,
+  initialState,
+  disablePageSizeChange = false,
 }: DataTableProps<TData, TValue>) {
   const [expanded, setExpanded] = useState<ExpandedState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -87,13 +80,6 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
   const [columnVisibility, setColumnVisibility] = useState({
     id: false,
   });
-
-  const [pagination, setPagination] = useState<PaginationState>(
-    paginationState ?? {
-      pageIndex: 0,
-      pageSize: 5,
-    }
-  );
 
   /**
    * TABLE INSTANCE
@@ -107,17 +93,14 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
       rowSelection,
       sorting,
       columnVisibility,
-      pagination,
     },
 
-    // initialState: initialTableState
-    //   ? initialTableState
-    //   : {
-    //       pagination: {
-    //         pageIndex: 0, //custom initial page index
-    //         pageSize: 5, //custom default page size
-    //       },
-    //     },
+    initialState: initialState ?? {
+      pagination: {
+        pageIndex: 0, //custom initial page index
+        pageSize: 5, //custom default page size
+      },
+    },
     onExpandedChange: setExpanded,
     getSubRows: (row) => row.children,
     getCoreRowModel: getCoreRowModel(),
@@ -127,7 +110,6 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     filterFromLeafRows: true,
     getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination,
     enableRowSelection: enableRowSelection && ((row) => row.depth === 0),
     enableSubRowSelection: false,
     getFacetedRowModel: getFacetedRowModel(),
@@ -138,68 +120,75 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
     enableSortingRemoval: false,
   });
 
-  useEffect(() => {
-    if (paginationState) {
-      const p = paginationState;
-      setPagination(p);
-    }
-  }, [paginationState]);
+  // useEffect(() => {
+  //   if (selectedItems.length > 0) {
+  //     let state: Record<string, boolean> = {};
+  //     selectedItems.map((item: number | undefined) => {
+  //       if (item) {
+  //         const row: Row<TData> | undefined = Object.values(
+  //           table.getRowModel().rowsById
+  //         ).find((row: Row<TData>) => row.original.id === item);
+  //         if (row) {
+  //           state[row.id] = true;
+  //         }
+  //       }
+  //     });
+
+  //     if (data.length > 0) {
+  //       setRowSelection({ ...state });
+  //     }
+  //   }
+  // }, [data]);
 
   useEffect(() => {
-    if (changePagination) {
-      changePagination(pagination);
-    }
-  }, [pagination]);
+    if (selectedItems) {
+      console.log("SELECTED ITEMS PASSED", json(selectedItems));
 
-  useEffect(() => {
-    initPhase = true;
-  }, []);
-
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      let state: Record<string, boolean> = {};
-      selectedItems.map((item: number | undefined) => {
-        if (item) {
-          const row: Row<TData> | undefined = Object.values(
-            table.getRowModel().rowsById
-          ).find((row: Row<TData>) => row.original.id === item);
-          if (row) {
-            state[row.id] = true;
-          }
-        }
-      });
-
-      if (data.length > 0) {
-        setRowSelection({ ...state });
-      }
-    }
-  }, [data]);
-
-  useEffect(() => {
-    if (initPhase) {
-      initPhase = false;
-    } else {
-      const selectedIds: string[] = Object.keys(rowSelection).map(
-        (key: string) => key
-      );
-      if (handleChangeSelection && data.length > 0) {
-        if (selectionType === "ids") {
-          const itemIds: (number | undefined)[] = selectedIds.map(
-            (id: string) => {
-              const row: Row<TData> = table.getRow(id);
-              return row.original.id;
+      let selection: Record<string, boolean> = table
+        .getCoreRowModel()
+        .rows.reduce<Record<string, boolean>>(
+          (acc: Record<string, boolean>, row: Row<TData>) => {
+            if (selectedItems.includes(row.original.id)) {
+              acc[row.id] = true;
             }
-          );
-          handleChangeSelection(itemIds);
-        } else {
-          const items: Row<TData>[] = selectedIds.map((id: string) => {
-            const row: Row<TData> = table.getRow(id);
-            return row;
-          });
-          handleChangeSelection(items);
-        }
-      }
+
+            return acc;
+          },
+          {}
+        );
+
+      console.log("SELECTION IS", json(selection));
+      setRowSelection(selection);
     }
+  }, [selectedItems]);
+
+  useEffect(() => {
+    console.log("ROW SELECTION CHANGED", json(rowSelection));
+    // if (initPhase) {
+    //   initPhase = false;
+    // } else {
+    const selectedIds: string[] = Object.keys(rowSelection).map(
+      (key: string) => key
+    );
+    //   if (handleChangeSelection && data.length > 0) {
+    // if (selectionType === "ids") {
+    const itemIds: number[] = selectedIds.map((id: string) => {
+      const row: Row<TData> = table.getRow(id);
+      return row.original.id!;
+    });
+
+    console.log("SELECTED IDS", json(itemIds));
+    handleChangeSelection(itemIds);
+    //       handleChangeSelection(itemIds);
+    //     } else {
+    //       const items: Row<TData>[] = selectedIds.map((id: string) => {
+    //         const row: Row<TData> = table.getRow(id);
+    //         return row;
+    //       });
+    //       handleChangeSelection(items);
+    //     }
+    //   }
+    // }
   }, [rowSelection]);
 
   useEffect(() => {
@@ -288,12 +277,10 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
             </TableBody>
           </Table>
         </div>
-        {dopagination && (
-          <DataTablePagination
-            table={table}
-            changeSize={changePaginationSize}
-          />
-        )}
+        <DataTablePagination
+          table={table}
+          disablePageSizeChange={disablePageSizeChange}
+        />
       </div>
     );
   };

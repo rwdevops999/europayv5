@@ -16,8 +16,8 @@ const TestIamAccess = () => {
       ]}
       className="border-1 border-blue-500"
     >
-      {/* <TestUserWithPolicy /> */}
-      <AddUserToGroup />
+      <TestUserWithPolicy />
+      {/* <AddUserToGroup /> */}
     </PageContent>
   );
 };

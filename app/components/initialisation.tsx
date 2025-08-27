@@ -26,8 +26,6 @@ const Initialisation = () => {
   };
 
   useEffect(() => {
-    console.log("Hide cursor");
-
     createStartupHistoryEntry();
   }, []);
 

@@ -16,7 +16,6 @@ const SetupTemplates = ({
   const [templatesLoaded, setTemplatesLoaded] = useState<boolean>(false);
 
   const setup = async (): Promise<void> => {
-    console.log("[Initialise]", "SetupTemplates", "Uploading templates");
     await uploadTemplates(process.env.NEXT_PUBLIC_TEMPLATE_FILE, true).then(
       async () => {
         setTemplatesLoaded(true);
@@ -29,7 +28,6 @@ const SetupTemplates = ({
           "Initialise:SetupTemplates"
         );
 
-        console.log("[Initialise]", "SetupTemplates", "TEMPLATES LOADED");
         proceed(true);
       }
     );
@@ -37,7 +35,6 @@ const SetupTemplates = ({
 
   useEffect(() => {
     if (!templatesLoaded) {
-      console.log("[Initialise]", "SetupTemplates", "Load Templates?");
       setup();
     } else {
       proceed(true);

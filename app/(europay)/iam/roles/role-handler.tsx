@@ -16,7 +16,7 @@ import PageItemContainer from "@/ui/page-item-container";
 import Button from "@/ui/button";
 import Dialog from "@/ui/dialog";
 import { DataTable } from "@/ui/datatable/data-table";
-import { columns } from "./table/page-colums";
+import { columns, initialTableState } from "./table/page-colums";
 import { DataTableToolbar } from "./table/page-data-table-toolbar";
 
 /**
@@ -59,14 +59,11 @@ const RoleHandler = ({
 
     const mappedRoles: Data[] = mapRoles(rolesToMap, 1);
 
-    console.log("[MAPPEDROLES]", json(mappedRoles));
-
     // setTableData(mapRoles(rolesToMap));
     setTableData(mappedRoles);
   };
 
   useEffect(() => {
-    console.log("[ROLE HANDLER", "ROLES", json(roles));
     initialise();
   }, [roles]);
 
@@ -148,32 +145,23 @@ const RoleHandler = ({
         }
       }
     } else {
-      const alert: tAlert | undefined = roleInDependency(
-        role.id,
-        "UNABLE_TO_UPDATE_LINKED"
+      const rol: tRole | undefined = roles.find(
+        (_role: tRole) => _role.id === role.id
       );
+      if (rol) {
+        const entity: RoleEntity = {
+          id: rol.id,
+          rolename: rol.name,
+          description: rol.description ?? "",
+          managed: rol.managed ?? false,
+        };
 
-      if (alert) {
-        setAlert(alert);
-      } else {
-        const rol: tRole | undefined = roles.find(
-          (_role: tRole) => _role.id === role.id
+        const linked: number[] = rol.policies.map(
+          (policy: tPolicy) => policy.id
         );
-        if (rol) {
-          const entity: RoleEntity = {
-            id: rol.id,
-            rolename: rol.name,
-            description: rol.description ?? "",
-            managed: rol.managed ?? false,
-          };
-
-          const linked: number[] = rol.policies.map(
-            (policy: tPolicy) => policy.id
-          );
-          setEntity(entity);
-          setLinkedPolicies(linked);
-          openTheDialog();
-        }
+        setEntity(entity);
+        setLinkedPolicies(linked);
+        openTheDialog();
       }
     }
   };
@@ -252,10 +240,7 @@ const RoleHandler = ({
             tablemeta={tableMeta}
             Toolbar={DataTableToolbar}
             expandAll={roleid === undefined ? false : true}
-            paginationState={{
-              pageIndex: 0, //custom initial page index
-              pageSize: 15, //custom default page size
-            }}
+            initialState={initialTableState}
           />
         </PageItemContainer>
         <div className="flex justify-center">

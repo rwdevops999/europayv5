@@ -82,6 +82,10 @@ const ServiceHandler = ({
             columns={columns}
             Toolbar={DataTableToolbar}
             expandAll={serviceId === undefined ? false : true}
+            paginationState={{
+              pageIndex: 0, //custom initial page index
+              pageSize: 10, //custom default page size
+            }}
           />
         </PageItemContainer>
       </div>

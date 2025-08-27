@@ -23,6 +23,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { columns } from "./table/dialog-columns";
 import { DataTableToolbar } from "./table/dialog-data-table-toolbar";
 import ValidationConflictsDialog from "@/ui/validation-conflicts-dialog";
+import RoleDataRenderer from "./role-data-renderer";
 
 export interface RoleEntity {
   id?: number; // role id
@@ -195,12 +196,26 @@ const RoleForm = (props: RoleFormProps) => {
     useState<boolean>(false);
 
   const FormDetails = (): JSX.Element => {
+    const focus = (_name: string) => {
+      const element: HTMLElement | null = document.getElementById(_name);
+
+      if (element) {
+        window.setTimeout(() => {
+          element.focus();
+        }, 310);
+      }
+    };
+
+    useEffect(() => {
+      focus("rolename");
+    }, []);
+
     return (
       <div className="ml-1 grid grid-rows-[25%_25%_25%_25%] gap-y-1 mt-0.75">
         <div className="grid grid-cols-[10%_40%_10%_40%] gap-y-1 mt-0.75 mb-15">
           <label className="mt-1">Name:</label>
           <input
-            id="name"
+            id="rolename"
             className={cn(
               "rounded-sm",
               "input validator input-sm w-[95%]",
@@ -382,39 +397,28 @@ const RoleForm = (props: RoleFormProps) => {
     setValidateButtonEnabled(selectionData.length > 1 && !validFlag);
   };
 
-  const [paginationState, setPaginationState] = useState<PaginationState>({
-    pageIndex: 0, //custom initial page index
-    pageSize: 5, //custom default page size
-  });
+  const handleSelectionChanged = (_selection: number[]): void => {
+    const selectionData: Data[] = tableData.reduce<Data[]>(
+      (acc: Data[], data: Data) => {
+        if (
+          _selection.includes(data.id) &&
+          !acc.some((accvalue: Data) => accvalue.id === data.id)
+        ) {
+          acc.push(data);
+        }
 
-  const handlePageChange = (_state: PaginationState) => {
-    if (resetPagination) {
-      setResetPagination(false);
-      setPaginationState({
-        pageIndex: 0,
-        pageSize: 5,
-      });
-    } else {
-      setPaginationState(_state);
-    }
-  };
-
-  const Data = (): JSX.Element => {
-    return (
-      <>
-        <DataTable
-          data={tableData}
-          columns={columns}
-          Toolbar={DataTableToolbar}
-          selectedItems={linkedPolicies.current}
-          selectionType="data"
-          handleChangeSelection={handleChangePolicySelection}
-          paginationState={paginationState}
-          changePagination={handlePageChange}
-          changePaginationSize={false}
-        />
-      </>
+        return acc;
+      },
+      []
     );
+
+    selectedPolicies.current = selectionData;
+    linkedPolicies.current = _selection;
+
+    const valid: boolean = selectionData.length < 2;
+
+    formValid.current = valid;
+    handleButtonsVisibiliy(selectionData, valid);
   };
 
   const renderComponent = () => {
@@ -422,6 +426,13 @@ const RoleForm = (props: RoleFormProps) => {
       <div className="form relative w-[100%] h-[450px] grid grid-rows-[30%_70%]">
         <div>
           <Form />
+          <RoleDataRenderer
+            data={tableData}
+            columns={columns}
+            toolbar={DataTableToolbar}
+            selectedIds={linkedPolicies.current}
+            changeSelection={handleSelectionChanged}
+          />
         </div>
         <ValidationConflictsDialog
           open={validationConflictDialogOpen}
@@ -434,9 +445,6 @@ const RoleForm = (props: RoleFormProps) => {
             size="small"
           />
         </ValidationConflictsDialog>
-        <div>
-          <Data />
-        </div>
       </div>
     );
   };

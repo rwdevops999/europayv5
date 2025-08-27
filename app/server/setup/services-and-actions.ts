@@ -1,5 +1,3 @@
-import { GROUP_ADMINS, GROUP_CLIENTS } from "@/lib/constants";
-
 export type dbResult = {
   services: number;
   countries: number;
@@ -89,12 +87,11 @@ export const servicesandactions: Record<string, string[]> = {
     "Handle Groups",
   ],
 
-  "europay:iam:services": [],
-  "europay:iam:statements": [],
-  "europay:iam:policies": [],
-  "europay:iam::roles": [],
-  "europay:iam:users": [],
-  "europay:iam:groups": [],
+  "europay:iam:statements": ["Delete Managed"],
+  "europay:iam:policies": ["Delete Managed"],
+  "europay:iam::roles": ["Delete Managed"],
+  "europay:iam:users": ["Delete Managed"],
+  "europay:iam:groups": ["Delete Managed"],
 };
 
 // Under here we set all service statements

@@ -19,7 +19,6 @@ const SetupSettings = ({
   const [settingsLoaded, setSettingsLoaded] = useState<boolean>(false);
 
   const createHistoryForSettings = async (_message: string): Promise<void> => {
-    console.log("Create History", _message);
     await createHistoryEntry(
       HistoryType.INFO,
       getHistory(),
@@ -38,7 +37,6 @@ const SetupSettings = ({
         setSettingsLoaded(true);
         await createHistoryForSettings("SETTINGS").then(() => {
           setSettingsLoaded(true);
-          console.log("[Initialise]", "SetupSettings", "SETTINGS LOADED");
           proceed(true);
         });
       });
@@ -49,7 +47,6 @@ const SetupSettings = ({
 
   useEffect(() => {
     if (start) {
-      console.log("[Initialise]", "SetupSettings", "Load Settings?");
       setup();
     }
   }, [start]);

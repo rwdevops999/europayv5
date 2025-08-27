@@ -278,6 +278,7 @@ const provisionUsers = async (_exportData: any): Promise<any> => {
       lastname: _user.lastname,
       email: _user.email,
       password: _user.password,
+      avatar: _user.avatar,
       passwordless: _user.passwordless ?? false,
       managed: _user.managed ?? false,
       blocked: _user.blocked ?? false,

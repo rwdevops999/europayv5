@@ -20,7 +20,6 @@ const SetupServerJobs = ({
   const [jobsInitialised, setJobsInitialised] = useState<boolean>(false);
 
   const createHistoryForJobs = async (_message: string): Promise<void> => {
-    console.log("Create History", _message);
     await createHistoryEntry(
       HistoryType.INFO,
       getHistory(),
@@ -54,7 +53,6 @@ const SetupServerJobs = ({
 
   useEffect(() => {
     if (start) {
-      console.log("[Initialise]", "SetupServerJobs", "Create Server Jobs?");
       setup();
     }
   }, [start]);

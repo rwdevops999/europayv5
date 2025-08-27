@@ -37,7 +37,6 @@ const ProcessSettings = ({
   const { setJobTiming, displayInfo } = useJob();
 
   const handleSettings = async (): Promise<void> => {
-    console.log("Processing Settings");
     let settings: tSetting[] = [];
 
     settings = await loadSettings(["General"], ["Application"], []);
@@ -105,10 +104,8 @@ const ProcessSettings = ({
     let settings: tSetting[] = [];
 
     settings = await loadSettings(["Limit"], ["Job"], []);
-    console.log("LIMIT SETTINGS", json(settings));
 
     settings.forEach((settings: tSetting) => {
-      console.log("SETTING LIMIT SETTINGS", settings.key, settings.value);
       setJobTiming(settings.key, settings.value);
     });
 
@@ -122,12 +119,6 @@ const ProcessSettings = ({
   };
 
   useEffect(() => {
-    console.log("envToastOn", envToastOn);
-    console.log("envHistoryLevel", envHistoryLevel);
-    console.log("envToastDuration", envToastDuration);
-    console.log("envMarkdownOn", envMarkdownOn);
-    console.log("envOtpTiming", envOtpTiming);
-
     if (start) {
       process();
     }

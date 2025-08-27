@@ -46,14 +46,6 @@ const PoliciesWithParam = async ({
      * create a Promise which resolved as policyId
      */
     const promise: Promise<any[]> = CreatePromise([policyId, serviceId]);
-    console.log(
-      "[POLICY WITH ID]",
-      "policyId",
-      policyId,
-      "serviceId",
-      serviceId
-    );
-
     return (
       <Suspense fallback={<LoadingSpinner label="Loading..." />}>
         <IamPoliciesPage params={promise} />

@@ -6,7 +6,7 @@ import {
   updateServiceStatement,
 } from "@/app/server/service-statements";
 import { Permission } from "@/generated/prisma";
-import { absoluteUrl, cn, json, showToast } from "@/lib/util";
+import { absoluteUrl, cn, showToast } from "@/lib/util";
 import { displayPrismaErrorCode } from "@/lib/prisma-errors";
 import {
   tService,
@@ -16,15 +16,14 @@ import {
 import { Data, ToastType } from "@/lib/types";
 import AllowDenySwitch from "@/ui/allow-deny-switch";
 import Button from "@/ui/button";
-import { DataTable } from "@/ui/datatable/data-table";
 import ServiceSelect from "@/ui/service-select";
 import { JSX, useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { columns } from "./table/dialog-columns";
-import { DataTableToolbar } from "./table/dialog-data-table-toolbar";
-import { PaginationState, Row } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { useToastSettings } from "@/hooks/use-toast-settings";
+import ServiceStatementDataRenderer from "./service-statement-data-renderer";
+import { columns } from "./table/dialog-columns";
+import { DataTableToolbar } from "./table/dialog-data-table-toolbar";
 
 export interface StatementEntity {
   id?: number; // statement id
@@ -215,8 +214,6 @@ const ServiceStatementForm = (props: StatementFormProps) => {
 
   const linkedActions = useRef<number[]>([]);
 
-  const [resetPagination, setResetPagination] = useState<boolean>(false);
-
   useEffect(() => {
     if (props.entity.serviceid) {
       selectedServiceId.current = props.entity.serviceid;
@@ -228,10 +225,8 @@ const ServiceStatementForm = (props: StatementFormProps) => {
     linkedActions.current = props.linkedactions;
     setFormButtonEnabled(props.linkedactions.length > 0);
     reset(props.entity);
-    setManaged(getValues("managed"));
+    // setManaged(getValues("managed"));
     setPermission(getValues("permission"));
-
-    setResetPagination(true);
   }, [props]);
 
   const selectedServiceId = useRef<number | undefined>(undefined);
@@ -251,7 +246,7 @@ const ServiceStatementForm = (props: StatementFormProps) => {
     );
   };
 
-  const [managed, setManaged] = useState<boolean>(false);
+  // const [managed, setManaged] = useState<boolean>(false);
 
   const Select = (): JSX.Element => {
     return (
@@ -268,11 +263,26 @@ const ServiceStatementForm = (props: StatementFormProps) => {
   };
 
   const FormDetails = (): JSX.Element => {
+    const focus = (_name: string) => {
+      const element: HTMLElement | null = document.getElementById(_name);
+
+      if (element) {
+        window.setTimeout(() => {
+          element.focus();
+        }, 310);
+      }
+    };
+
+    useEffect(() => {
+      focus("statementname");
+    }, []);
+
     return (
       <div className="ml-1 grid grid-rows-[25%_25%_25%_25%] gap-y-1 mt-0.75">
         <div className="grid grid-cols-[10%_40%_10%_40%] gap-y-1 mt-0.75">
           <label className="mt-1">Name:</label>
           <input
+            id="statementname"
             type="text"
             placeholder="name..."
             className={cn(
@@ -391,61 +401,39 @@ const ServiceStatementForm = (props: StatementFormProps) => {
 
   const [formButtonEnabled, setFormButtonEnabled] = useState<boolean>(false);
 
-  const handleChangeActionSelection = (_selection: Row<Data>[]) => {
-    const selectionData: Data[] = _selection.map((row) => row.original);
+  const handleSelectionChanged = (_selection: number[]): void => {
+    const selectionData: Data[] = tableData.reduce<Data[]>(
+      (acc: Data[], data: Data) => {
+        if (
+          _selection.includes(data.id) &&
+          !acc.some((accvalue: Data) => accvalue.id === data.id)
+        ) {
+          acc.push(data);
+        }
+
+        return acc;
+      },
+      []
+    );
 
     selectedActions.current = selectionData;
 
-    linkedActions.current = selectionData.map((data: Data) => data.id);
+    linkedActions.current = _selection;
 
-    setFormButtonEnabled(selectionData.length > 0);
-  };
-
-  const handlePageChange = (_state: PaginationState) => {
-    if (resetPagination) {
-      setResetPagination(false);
-      setPaginationState({
-        pageIndex: 0,
-        pageSize: 5,
-      });
-    } else {
-      setPaginationState(_state);
-    }
-  };
-
-  const [paginationState, setPaginationState] = useState<PaginationState>({
-    pageIndex: 0, //custom initial page index
-    pageSize: 5, //custom default page size
-  });
-
-  const Data = (): JSX.Element => {
-    return (
-      <>
-        <DataTable
-          id="DataTableServiceStatementForm"
-          data={tableData}
-          columns={columns}
-          paginationState={paginationState}
-          Toolbar={DataTableToolbar}
-          selectedItems={linkedActions.current}
-          selectionType="data"
-          handleChangeSelection={handleChangeActionSelection}
-          changePagination={handlePageChange}
-          changePaginationSize={false}
-        />
-      </>
-    );
+    setFormButtonEnabled(_selection.length > 0);
   };
 
   const renderComponent = () => {
     return (
       <div className="form relative w-[100%] h-[450px] grid grid-rows-[30%_70%]">
-        <div>
-          <Form />
-        </div>
-        <div>
-          <Data />
-        </div>
+        <Form />
+        <ServiceStatementDataRenderer
+          data={tableData}
+          columns={columns}
+          toolbar={DataTableToolbar}
+          selectedIds={linkedActions.current}
+          changeSelection={handleSelectionChanged}
+        />
       </div>
     );
   };

@@ -54,12 +54,9 @@ const createOTPJob = inngest.createFunction(
   async ({ event, step }) => {
     const { jobid } = event.data;
 
-    console.log("[OTPJOB]", "RUNNING FOR", jobid);
-
     const job: tJob | null = await loadJobById(jobid);
 
     if (job) {
-      console.log("[OTPJOB]", "JOB FOUND", jobid);
       const data: any = job.data;
 
       const otpId: number = data.otpid;
@@ -70,13 +67,11 @@ const createOTPJob = inngest.createFunction(
 
       const jobName = `OTP${otpId}`;
 
-      console.log("[OTPJOB]", "GO TO SLEEP");
       await step.sleepUntil(
         `run ${jobName}`,
         new Date(now.getTime() + jobDuration)
       );
 
-      console.log("[OTPJOB] WOKE UP", jobid);
       await setOtpStatus(otpId, OTPStatus.EXPIRED).then(async () => {
         await changeJobStatus(jobid, JobStatus.COMPLETED);
       });
@@ -98,9 +93,6 @@ const taskPoller = inngest.createFunction(
   },
   { event: "europay/TaskPoller" },
   async ({ event }) => {
-    console.log("[taskPoller] RUN TASKPOLLER JOB");
-
-    console.log("[taskPoller] ... lookup job in DB", TaskPollerJobName);
     await prisma.task
       .count({
         where: {
@@ -115,7 +107,6 @@ const taskPoller = inngest.createFunction(
         },
       })
       .then(async (_value: number) => {
-        console.log("[taskPoller] ... SEND DATA To CLIENT", taskKey, _value);
         await fetch(
           absoluteUrl(`/api/notification/send?key=${taskKey}&value=${_value}`)
         );

@@ -25,7 +25,12 @@ const NavbarLogo = () => {
   };
 
   const goHome = (): void => {
-    const allowed: boolean = $iam_user_has_action(user, "Goto Home", true);
+    const allowed: boolean = $iam_user_has_action(
+      user,
+      "europay",
+      "Goto Home",
+      true
+    );
     if (allowed) {
       redirect(absoluteUrl("/"));
     }

@@ -80,7 +80,9 @@ const FooterSocialMedia = () => {
             name={media.name}
             href={media.href}
             icon={media.icon}
-            disabled={!$iam_user_has_action(user, "Execute")}
+            disabled={
+              !$iam_user_has_action(user, "europay:socialmedia", "Execute")
+            }
           />
         );
       })}

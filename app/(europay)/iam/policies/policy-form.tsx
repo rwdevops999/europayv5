@@ -24,6 +24,7 @@ import { columns } from "./table/dialog-columns";
 import { DataTableToolbar } from "./table/dialog-data-table-toolbar";
 import ValidationConflictsDialog from "@/ui/validation-conflicts-dialog";
 import { useToastSettings } from "@/hooks/use-toast-settings";
+import PolicyDataRenderer from "./policy-data-renderer";
 
 export interface PolicyEntity {
   id?: number; // statement id
@@ -233,11 +234,26 @@ const PolicyForm = (props: PolicyFormProps) => {
   };
 
   const FormDetails = (): JSX.Element => {
+    const focus = (_name: string) => {
+      const element: HTMLElement | null = document.getElementById(_name);
+
+      if (element) {
+        window.setTimeout(() => {
+          element.focus();
+        }, 310);
+      }
+    };
+
+    useEffect(() => {
+      focus("policyname");
+    }, []);
+
     return (
       <div className="ml-1 grid grid-rows-[25%_25%_25%_25%] gap-y-1 mt-0.75">
         <div className="grid grid-cols-[10%_40%_10%_40%] gap-y-1 mt-0.75">
           <label className="mt-1">Name:</label>
           <input
+            id="policyname"
             type="text"
             placeholder="name..."
             className={cn(
@@ -394,27 +410,6 @@ const PolicyForm = (props: PolicyFormProps) => {
 
   const selectedStatements = useRef<Data[]>([]);
 
-  const handleChangeStatementSelection = (_selection: Row<Data>[]) => {
-    const selectionData: Data[] = _selection.map((row) => row.original);
-
-    selectedStatements.current = selectionData;
-
-    const mappedStatements = selectionData.map((data: Data) => data.id);
-    const equal: boolean =
-      mappedStatements.length === linkedStatements.current.length &&
-      mappedStatements.every(function (value, index) {
-        return value === linkedStatements.current[index];
-      });
-    if (!equal) {
-      linkedStatements.current = mappedStatements;
-
-      const valid: boolean = selectionData.length < 2;
-
-      formValid.current = valid;
-      handleButtonsVisibiliy(selectionData, valid);
-    }
-  };
-
   const handleButtonsVisibiliy = (
     selectionData: Data[],
     validFlag: boolean
@@ -423,39 +418,29 @@ const PolicyForm = (props: PolicyFormProps) => {
     setValidateButtonEnabled(selectionData.length > 1 && !validFlag);
   };
 
-  const [paginationState, setPaginationState] = useState<PaginationState>({
-    pageIndex: 0, //custom initial page index
-    pageSize: 5, //custom default page size
-  });
+  const handleSelectionChanged = (_selection: number[]): void => {
+    const selectionData: Data[] = tableData.reduce<Data[]>(
+      (acc: Data[], data: Data) => {
+        if (
+          _selection.includes(data.id) &&
+          !acc.some((accvalue: Data) => accvalue.id === data.id)
+        ) {
+          acc.push(data);
+        }
 
-  const handlePageChange = (_state: PaginationState) => {
-    if (resetPagination) {
-      setResetPagination(false);
-      setPaginationState({
-        pageIndex: 0,
-        pageSize: 5,
-      });
-    } else {
-      setPaginationState(_state);
-    }
-  };
-
-  const Data = (): JSX.Element => {
-    return (
-      <>
-        <DataTable
-          data={tableData}
-          columns={columns}
-          paginationState={paginationState}
-          Toolbar={DataTableToolbar}
-          selectedItems={linkedStatements.current}
-          selectionType="data"
-          handleChangeSelection={handleChangeStatementSelection}
-          changePagination={handlePageChange}
-          changePaginationSize={false}
-        />
-      </>
+        return acc;
+      },
+      []
     );
+
+    selectedStatements.current = selectionData;
+
+    linkedStatements.current = _selection;
+
+    const valid: boolean = selectionData.length < 2;
+
+    formValid.current = valid;
+    handleButtonsVisibiliy(selectionData, valid);
   };
 
   const renderComponent = () => {
@@ -463,9 +448,13 @@ const PolicyForm = (props: PolicyFormProps) => {
       <div className="form relative w-[100%] h-[450px] grid grid-rows-[30%_70%]">
         <div>
           <Form />
-        </div>
-        <div>
-          <Data />
+          <PolicyDataRenderer
+            data={tableData}
+            columns={columns}
+            toolbar={DataTableToolbar}
+            selectedIds={linkedStatements.current}
+            changeSelection={handleSelectionChanged}
+          />
         </div>
         <ValidationConflictsDialog
           open={validationConflictDialogOpen}

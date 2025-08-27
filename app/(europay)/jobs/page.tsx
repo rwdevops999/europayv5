@@ -76,18 +76,13 @@ const JobsPage = () => {
   };
 
   const suspendJobs = async (): Promise<void> => {
-    console.log("Suspend Jobs");
     for (let i = 0; i < selectedJobs.length; i++) {
       const job = jobs.find((_job: tJob) => _job.id === selectedJobs[i]);
       if (job) {
-        console.log("Suspend Job", job.id);
         if (job.model === JobModel.CLIENT) {
-          console.log("Suspend CLIENT Job");
           if (job.status === JobStatus.RUNNING) {
-            console.log("Change Job status", job.id);
             await changeJobStatus(job.id, JobStatus.SUSPENDED).then(
               async () => {
-                console.log("Suspend inngest job", job.id);
                 await suspendInngestJob(job.jobname, job.id);
               }
             );

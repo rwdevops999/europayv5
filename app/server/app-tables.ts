@@ -10,7 +10,6 @@ import { json } from "@/lib/util";
  * @param _table the table in the DB
  */
 const resetTable = async (_table: string): Promise<void> => {
-  console.log("TRUNCATE", _table, "WITH RESET IDENTITY");
   await prisma.$executeRawUnsafe(
     `TRUNCATE \"${_table}\" RESTART IDENTITY CASCADE`
   );

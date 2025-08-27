@@ -32,7 +32,6 @@ const CreateManagedIam = ({
 
   const setup = (): void => {
     Object.keys(managedgroups).forEach((group: string) => {
-      console.log("Create managed group", group);
       createManagedGroup(group, managedgroups[group]);
     });
 
@@ -41,7 +40,6 @@ const CreateManagedIam = ({
 
   useEffect(() => {
     if (start) {
-      console.log("Creating Managed IAM entities");
       setup();
     }
   }, [start]);

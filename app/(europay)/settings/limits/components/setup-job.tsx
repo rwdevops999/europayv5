@@ -12,7 +12,6 @@ const SetupJob = ({ jobname, env }: { jobname: string; env: string }) => {
     useJob();
 
   const fulljobname = `${jobname}Poller`;
-  console.log("Full Job Name", fulljobname);
 
   const TimingGroup = ({ group }: { group: tTimingGroup }): JSX.Element => {
     return (
@@ -63,9 +62,7 @@ const SetupJob = ({ jobname, env }: { jobname: string; env: string }) => {
   };
 
   useEffect(() => {
-    console.log("[LIMITS][UE]", "Info");
     displayInfo();
-    console.log("Timing of", fulljobname, getJobTimingNotation(fulljobname));
     setNotation(env);
   }, [jobname]);
 

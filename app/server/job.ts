@@ -16,7 +16,6 @@ export const createJob = async (
 ): Promise<tJob | null> => {
   let result: tJob | null = null;
 
-  console.log("[createJob] IN");
   await prisma.job
     .create({
       data: {
@@ -28,8 +27,6 @@ export const createJob = async (
       },
     })
     .then((value: tJob) => (result = value));
-
-  console.log("[createJob] OUT", json(result));
 
   return result;
 };
@@ -78,7 +75,6 @@ export const loadJobById = async (_id: number): Promise<tJob | null> => {
 };
 
 export const runInngestOtpJob = async (_jobid: number): Promise<void> => {
-  console.log("RUN OTP JOB WITH", _jobid);
   await inngest.send({
     name: "europay/otpjob.create",
     data: {
@@ -100,8 +96,6 @@ export const changeJobStatus = async (
   _id: number,
   _status: JobStatus
 ): Promise<void> => {
-  console.log("[JOB DB]", "Update Status", _id);
-
   await prisma.job.update({
     where: {
       id: _id,
@@ -140,15 +134,13 @@ export const clearRunningJobs = async (
           const job: tJob = values[i];
 
           if (_type === JobModel.SERVER) {
-            console.log("Suspend OTP Job", job.id),
-              await suspendInngestOtpJob(job.id).then(() => {
-                suspended = true;
-              });
+            await suspendInngestOtpJob(job.id).then(() => {
+              suspended = true;
+            });
           } else {
-            console.log("Suspend Client Job", job.id),
-              await suspendInngestJob(job.jobname, job.id).then(
-                () => (suspended = true)
-              );
+            await suspendInngestJob(job.jobname, job.id).then(
+              () => (suspended = true)
+            );
           }
         }
       }
@@ -251,7 +243,6 @@ export const runInngestJob = async (
   _delay: number,
   _jobid: number
 ): Promise<void> => {
-  console.log("[runInngestJob]", `europay/${name}`, _jobid, _delay);
   await inngest.send({
     name: `europay/${name}`,
     data: { jobid: _jobid },
