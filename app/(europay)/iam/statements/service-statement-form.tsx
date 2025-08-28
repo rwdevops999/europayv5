@@ -6,7 +6,7 @@ import {
   updateServiceStatement,
 } from "@/app/server/service-statements";
 import { Permission } from "@/generated/prisma";
-import { absoluteUrl, cn, showToast } from "@/lib/util";
+import { absoluteUrl, cn, json, showToast } from "@/lib/util";
 import { displayPrismaErrorCode } from "@/lib/prisma-errors";
 import {
   tService,
@@ -142,7 +142,9 @@ const ServiceStatementForm = (props: StatementFormProps) => {
             `Statement ${statement.ssname} created`,
             getToastDuration()
           );
-          push(absoluteUrl(`/iam/statements/id`));
+          push(
+            absoluteUrl(`/iam/statements/serviceid=${props.entity.serviceid}`)
+          );
           handleCancelClick();
         }
       }
@@ -155,6 +157,7 @@ const ServiceStatementForm = (props: StatementFormProps) => {
     const statement: tServiceStatementUpdate =
       provisionStatementForUpdate(_entity);
 
+    console.log("PROVISIONED STATEMENT", json(statement));
     await updateServiceStatement(statement).then(
       (errorcode: string | undefined) => {
         if (errorcode) {
@@ -171,7 +174,9 @@ const ServiceStatementForm = (props: StatementFormProps) => {
             `Statement ${statement.ssname} updated`,
             getToastDuration()
           );
-          push(absoluteUrl(`/iam/statements/id`));
+          push(
+            absoluteUrl(`/iam/statements/serviceid=${props.entity.serviceid}`)
+          );
           handleCancelClick();
         }
       }
@@ -184,6 +189,7 @@ const ServiceStatementForm = (props: StatementFormProps) => {
     formData = { ...formData, serviceid: selectedServiceId.current! };
 
     if (formData.id) {
+      console.log("Updating statement");
       await handleUpdateStatement(formData);
     } else {
       await handleCreateStatement(formData);
@@ -198,31 +204,63 @@ const ServiceStatementForm = (props: StatementFormProps) => {
     dialog.close();
   };
 
-  const processTableData = (_serviceId: number | undefined): void => {
+  const processTableData = (_serviceId: number | undefined): Data[] => {
+    let tableData: Data[] = [];
+
     if (_serviceId) {
       const service: tService | undefined = props.services.find(
         (_service: tService) => _service.id === _serviceId
       );
 
       if (service) {
-        setTableData(mapServiceActions(service.serviceactions));
+        tableData = mapServiceActions(service.serviceactions);
       }
     } else {
-      setTableData([]);
+      tableData = [];
     }
+
+    setTableData(tableData);
+
+    return tableData;
   };
 
   const linkedActions = useRef<number[]>([]);
 
+  const setSelectedActions = (
+    _selection: number[],
+    _tableData: Data[]
+  ): void => {
+    const selectionData: Data[] = _tableData.reduce<Data[]>(
+      (acc: Data[], data: Data) => {
+        if (
+          _selection.includes(data.id) &&
+          !acc.some((accvalue: Data) => accvalue.id === data.id)
+        ) {
+          acc.push(data);
+        }
+
+        return acc;
+      },
+      []
+    );
+
+    selectedActions.current = selectionData;
+    console.log("INIT SELECTED ACTIONS", json(selectionData));
+  };
+
   useEffect(() => {
+    let tableData: Data[] = [];
     if (props.entity.serviceid) {
       selectedServiceId.current = props.entity.serviceid;
-      processTableData(props.entity.serviceid);
+      tableData = processTableData(props.entity.serviceid);
     } else {
       selectedServiceId.current = props.services[0].id;
-      processTableData(props.services[0].id);
+      tableData = processTableData(props.services[0].id);
     }
+
     linkedActions.current = props.linkedactions;
+    setSelectedActions(props.linkedactions, tableData);
+
     setFormButtonEnabled(props.linkedactions.length > 0);
     reset(props.entity);
     // setManaged(getValues("managed"));
@@ -233,7 +271,8 @@ const ServiceStatementForm = (props: StatementFormProps) => {
 
   const handleChangeService = (_serviceId: number | undefined): void => {
     selectedServiceId.current = _serviceId;
-    processTableData(_serviceId);
+    const tableData: Data[] = processTableData(_serviceId);
+    setSelectedActions(props.linkedactions, tableData);
   };
 
   const [permission, setPermission] = useState<string>(Permission.ALLOW);
@@ -402,6 +441,8 @@ const ServiceStatementForm = (props: StatementFormProps) => {
   const [formButtonEnabled, setFormButtonEnabled] = useState<boolean>(false);
 
   const handleSelectionChanged = (_selection: number[]): void => {
+    console.log("SELECTION CHANGED", json(_selection));
+
     const selectionData: Data[] = tableData.reduce<Data[]>(
       (acc: Data[], data: Data) => {
         if (
@@ -416,6 +457,8 @@ const ServiceStatementForm = (props: StatementFormProps) => {
       []
     );
 
+    console.log("SELECTED ACTIONS", json(selectionData));
+
     selectedActions.current = selectionData;
 
     linkedActions.current = _selection;
@@ -424,6 +467,7 @@ const ServiceStatementForm = (props: StatementFormProps) => {
   };
 
   const renderComponent = () => {
+    console.log("[ServiceStatementForm", "RENDER", json(linkedActions.current));
     return (
       <div className="form relative w-[100%] h-[450px] grid grid-rows-[30%_70%]">
         <Form />

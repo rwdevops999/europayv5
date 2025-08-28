@@ -1,4 +1,4 @@
-import { CreatePromise, isNumber, splitURLParams } from "@/lib/util";
+import { CreatePromise, isNumber, json, splitURLParams } from "@/lib/util";
 import LoadingSpinner from "@/ui/loading-spinner";
 import { Suspense } from "react";
 import IamStatementsPage from "../page";
@@ -28,13 +28,17 @@ const ServiceStatementsWithParam = async ({
    * @param _param : the url param string (e.g: id%3D5%26serviceid%3D3), wehere %3D is '=' and %26 is '&'
    */
   const parseURLParams = (_param: string) => {
+    console.log("[ServiceStatementWithParam]", "parseURLParams", _param);
     const params: Record<string, string> = splitURLParams(_param);
+    console.log("[ServiceStatementWithParam]", "splitted", json(params));
 
     if (isNumber(params["id"])) {
+      console.log("[ServiceStatementWithParam]", "getStatementId");
       statementId = parseInt(params["id"]) as number;
     }
 
     if (isNumber(params["serviceid"])) {
+      console.log("[ServiceStatementWithParam]", "getServiceId");
       serviceId = parseInt(params["serviceid"]) as number;
     }
   };
@@ -49,6 +53,12 @@ const ServiceStatementsWithParam = async ({
      * create a Promise which resolved as an array with [statementId, serviceId]
      */
     const promise: Promise<any[]> = CreatePromise([statementId, serviceId]);
+    console.log(
+      "[ServiceStatementWithParam]",
+      "render",
+      "promise",
+      json(promise)
+    );
 
     /**
      * we pass the statement id (undefined or real id) to IamStatementsPage.

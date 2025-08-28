@@ -58,7 +58,14 @@ const ServiceStatementHandler = ({
    * if statementid is undefined, we show all statements in the data table
    */
   const initialise = (): void => {
+    console.log("[ServiceStatement]", "initialize", serviceid);
     if (serviceid) {
+      console.log(
+        "[ServiceStatement]",
+        "initialize",
+        "load statements of service",
+        serviceid
+      );
       const statements: tServiceStatement[] = servicestatements.flatMap(
         (statement: tServiceStatement) =>
           statement.serviceid === serviceid ? [statement] : []
@@ -227,9 +234,13 @@ const ServiceStatementHandler = ({
           serviceid: stat.serviceid,
         };
 
+        console.log("[ServiceStatementHandler]", "update", json(stat));
+
         const linked: number[] = stat.servicestatementactions.map(
           (action: tServiceStatementAction) => action.serviceaction.id
         );
+
+        console.log("[ServiceStatementHandler]", "linked", json(linked));
 
         setEntity(entity);
         console.log("UPDATE SELECTED: Linked", json(linked));

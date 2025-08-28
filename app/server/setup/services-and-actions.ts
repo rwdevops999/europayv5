@@ -55,12 +55,12 @@ export const servicesandactions: Record<string, string[]> = {
     "Clear Full",
     "Provision Countries",
     "Clear Work",
-    "Load Service",
-    "Load Country",
+    "Load Services",
+    "Load Countries",
   ],
   "europay:settings:storage:selective": ["Select", "Clear"],
 
-  "europay:settings:limits": ["Show Jobs"],
+  "europay:settings:limits": ["Show Job Limits"],
   "europay:settings:limits:jobs": ["Task", "Transaction"],
 
   "europay:settings:export": [
@@ -74,13 +74,13 @@ export const servicesandactions: Record<string, string[]> = {
 
   "europay:manual": ["Show Chapters"],
 
-  "europay:authorization": ["Login", "Logout"],
+  "europay:authorisation": ["Login", "Logout"],
 
   "europay:socialmedia": ["Execute"],
 
   "europay:iam": [
     "Show Services",
-    "Handle Statements",
+    "Show Statements",
     "Handle Policies",
     "Handle Roles",
     "Handle Users",
