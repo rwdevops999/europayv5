@@ -52,7 +52,10 @@ const PolicyForm = (props: PolicyFormProps) => {
   const { push } = useRouter();
   const { getToastDuration } = useToastSettings();
 
+  const [disabled, setDisabled] = useState(false);
+
   const formMethods = useForm({
+    disabled,
     defaultValues: props.entity,
   });
 
@@ -117,7 +120,7 @@ const PolicyForm = (props: PolicyFormProps) => {
           `Policy ${policy.name} created`,
           getToastDuration()
         );
-        push(absoluteUrl(`/iam/policies/id`));
+        push(absoluteUrl(`/iam/policies/serviceid=${props.entity.serviceid}`));
       }
       handleCancelClick();
     });
@@ -141,7 +144,7 @@ const PolicyForm = (props: PolicyFormProps) => {
           `Policy ${policy.name} updated`,
           getToastDuration()
         );
-        push(absoluteUrl(`/iam/policies/id`));
+        push(absoluteUrl(`/iam/policies/serviceid=${props.entity.serviceid}`));
       }
       handleCancelClick();
     });
@@ -150,6 +153,7 @@ const PolicyForm = (props: PolicyFormProps) => {
   const onSubmit: SubmitHandler<PolicyEntity> = async (
     formData: PolicyEntity
   ) => {
+    setDisabled(true);
     const valid: boolean = await validateLinkedStatements();
 
     if (valid) {
@@ -161,6 +165,7 @@ const PolicyForm = (props: PolicyFormProps) => {
         handleCreatePolicy(formData);
       }
     }
+    setDisabled(false);
   };
 
   const handleCancelClick = (): void => {
@@ -171,7 +176,9 @@ const PolicyForm = (props: PolicyFormProps) => {
     dialog.close();
   };
 
-  const processTableData = (_serviceId: number | undefined): void => {
+  const processTableData = (_serviceId: number | undefined): Data[] => {
+    let tableData: Data[] = [];
+
     let affectedStatements: tServiceStatement[] = props.servicestatements;
 
     if (_serviceId) {
@@ -185,23 +192,50 @@ const PolicyForm = (props: PolicyFormProps) => {
       }
     }
 
-    setTableData(mapServiceStatements(affectedStatements));
+    tableData = mapServiceStatements(affectedStatements);
+    setTableData(tableData);
+
+    return tableData;
   };
 
   const linkedStatements = useRef<number[]>([]);
 
+  const setSelectedStatements = (
+    _selection: number[],
+    _tableData: Data[]
+  ): void => {
+    const selectionData: Data[] = _tableData.reduce<Data[]>(
+      (acc: Data[], data: Data) => {
+        if (
+          _selection.includes(data.id) &&
+          !acc.some((accvalue: Data) => accvalue.id === data.id)
+        ) {
+          acc.push(data);
+        }
+
+        return acc;
+      },
+      []
+    );
+
+    selectedStatements.current = selectionData;
+  };
+
   useEffect(() => {
+    let tableData: Data[] = [];
     if (props.entity.serviceid) {
       selectedServiceId.current = props.entity.serviceid;
-      processTableData(props.entity.serviceid);
+      tableData = processTableData(props.entity.serviceid);
     } else {
       if (props.services && props.services.length > 0) {
         selectedServiceId.current = props.services[0].id;
-        processTableData(props.services[0].id);
+        tableData = processTableData(props.services[0].id);
       }
     }
 
     linkedStatements.current = props.linkedstatements;
+    setSelectedStatements(props.linkedstatements, tableData);
+
     reset(props.entity);
   }, [props]);
 
@@ -209,7 +243,8 @@ const PolicyForm = (props: PolicyFormProps) => {
 
   const handleChangeService = (_serviceId: number | undefined): void => {
     selectedServiceId.current = _serviceId;
-    processTableData(_serviceId);
+    const tableData: Data[] = processTableData(_serviceId);
+    setSelectedStatements(props.linkedstatements, tableData);
   };
 
   // const [managed, setManaged] = useState<boolean>(false);

@@ -18,6 +18,9 @@ export const loadPolicies = async (): Promise<tPolicy[]> => {
 
   await prisma.policy
     .findMany({
+      orderBy: {
+        createDate: "desc",
+      },
       ...cWhatToSelectFromPolicy,
     })
     .then((values: tPolicy[]) => (result = values));
