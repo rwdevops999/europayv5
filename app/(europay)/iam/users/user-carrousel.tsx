@@ -733,8 +733,6 @@ const UserCarrousel = (props: UserCarrouselProps) => {
   const handleCreateUser = async (_entity: UserEntity): Promise<void> => {
     const user: tUserCreate = provisionUserForCreate(_entity);
 
-    console.log("Creating user", json(user));
-
     await createUser(user).then((errorcode: string | undefined | tUser) => {
       if (errorcode && typeof errorcode === "string") {
         showToast(
