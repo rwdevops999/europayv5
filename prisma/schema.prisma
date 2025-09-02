@@ -214,8 +214,8 @@ model Account {
   userId Int? @unique
   createDate DateTime @default(now())
   updateDate DateTime @updatedAt
-  // sendertransactions Transaction[] @relation("Sender")
-  // receivertransactions Transaction[] @relation("Receiver")
+  sendertransactions Transaction[] @relation("Sender")
+  receivertransactions Transaction[] @relation("Receiver")
   // bankaccounts BankAccount[]
 }
 
@@ -325,5 +325,32 @@ enum JobStatus {
   RUNNING
   COMPLETED
   SUSPENDED
+}
+
+model Transaction {
+  id Int @id @default(autoincrement())
+  transactionid String
+  senderAmount Float
+  receiverAmount Float
+  senderAccountAmount Float
+  receiverAccountAmount Float?
+  senderAccount Account? @relation("Sender", fields: [senderAccountId], references: [id])
+  senderAccountId Int
+  receiverAccount Account? @relation("Receiver", fields: [receiverAccountId], references: [id])
+  receiverAccountId Int?
+  sender String?
+  receiver String?
+  message String?
+  transactionDate DateTime? @default(now())
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+  status TransactionStatus @default(PENDING)
+  rejectionmessgae String
+}
+
+enum TransactionStatus {
+  PENDING
+  REFURSED
+  COMPLETED
 }
 

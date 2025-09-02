@@ -210,3 +210,27 @@ export const blockUser = async (_id: number): Promise<void> => {
     },
   });
 };
+
+export const loadUserWithUsernameOrEmail = async (
+  _value: string
+): Promise<tUser | null> => {
+  let result: tUser | null = null;
+
+  await prisma.user
+    .findFirst({
+      where: {
+        OR: [
+          {
+            username: _value,
+          },
+          {
+            email: _value,
+          },
+        ],
+      },
+      ...cWhatToSelectFromUser,
+    })
+    .then((value: tUser | null) => (result = value));
+
+  return result;
+};

@@ -8,6 +8,7 @@ import {
 } from "./constants";
 import { Zoom } from "react-toastify";
 import moment from "moment";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * create an abosulte url
@@ -187,4 +188,10 @@ export const padZero = (
 
 export const convertDatabaseDateToString = (date: Date | null): string => {
   return date ? moment(date).format("DD-MMM-YYYY (HH:mm:ss)") : "";
+};
+
+export const generateUUID = (): string => {
+  const params: string[] = uuidv4().split("-");
+
+  return params[params.length - 1];
 };

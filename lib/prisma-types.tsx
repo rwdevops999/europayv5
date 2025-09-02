@@ -343,3 +343,42 @@ export type tHistory = Prisma.HistoryGetPayload<{}>;
 export type tJob = Prisma.JobGetPayload<{}>;
 export type tJobCreate = Prisma.JobUncheckedCreateInput;
 export type tJobUpdate = Prisma.JobUncheckedUpdateInput;
+
+type WhatToSelectFromTransaction = {
+  include: {
+    receiverAccount: {
+      include: {
+        user: {
+          include: {
+            address: {
+              include: {
+                country: boolean;
+              };
+            };
+          };
+        };
+      };
+    };
+    senderAccount: {
+      include: {
+        user: {
+          include: {
+            address: {
+              include: {
+                country: boolean;
+              };
+            };
+            account: {
+              // include: {
+              //   bankaccounts: boolean;
+              // };
+            };
+          };
+        };
+      };
+    };
+  };
+};
+
+export type tTransaction =
+  Prisma.TransactionGetPayload<WhatToSelectFromTransaction>;
