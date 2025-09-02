@@ -157,7 +157,6 @@ const ServiceStatementForm = (props: StatementFormProps) => {
     const statement: tServiceStatementUpdate =
       provisionStatementForUpdate(_entity);
 
-    console.log("PROVISIONED STATEMENT", json(statement));
     await updateServiceStatement(statement).then(
       (errorcode: string | undefined) => {
         if (errorcode) {
@@ -189,7 +188,6 @@ const ServiceStatementForm = (props: StatementFormProps) => {
     formData = { ...formData, serviceid: selectedServiceId.current! };
 
     if (formData.id) {
-      console.log("Updating statement");
       await handleUpdateStatement(formData);
     } else {
       await handleCreateStatement(formData);
@@ -245,7 +243,6 @@ const ServiceStatementForm = (props: StatementFormProps) => {
     );
 
     selectedActions.current = selectionData;
-    console.log("INIT SELECTED ACTIONS", json(selectionData));
   };
 
   useEffect(() => {
@@ -441,8 +438,6 @@ const ServiceStatementForm = (props: StatementFormProps) => {
   const [formButtonEnabled, setFormButtonEnabled] = useState<boolean>(false);
 
   const handleSelectionChanged = (_selection: number[]): void => {
-    console.log("SELECTION CHANGED", json(_selection));
-
     const selectionData: Data[] = tableData.reduce<Data[]>(
       (acc: Data[], data: Data) => {
         if (
@@ -457,8 +452,6 @@ const ServiceStatementForm = (props: StatementFormProps) => {
       []
     );
 
-    console.log("SELECTED ACTIONS", json(selectionData));
-
     selectedActions.current = selectionData;
 
     linkedActions.current = _selection;
@@ -467,7 +460,6 @@ const ServiceStatementForm = (props: StatementFormProps) => {
   };
 
   const renderComponent = () => {
-    console.log("[ServiceStatementForm", "RENDER", json(linkedActions.current));
     return (
       <div className="form relative w-[100%] h-[450px] grid grid-rows-[30%_70%]">
         <Form />

@@ -17,15 +17,8 @@ const ServiceStatementDataRenderer = ({
   selectedIds: number[];
   changeSelection?: (_selection: number[]) => void;
 }) => {
-  useEffect(() => {
-    console.log("[DataRenderer]", "useEffect[selectedIds]", json(selectedIds));
-  }, [selectedIds]);
-
   const renderComponent = (): JSX.Element => {
-    console.log("[DataRenderer]", "RENDER", json(selectedIds));
-
     const handleSelectionChange = (selection: number[]): void => {
-      console.log("[DataRenderer]", "handleSelectionChange", json(selection));
       const selectionSorted = selection.slice().sort();
       const equal: boolean =
         selectedIds.length === selection.length &&

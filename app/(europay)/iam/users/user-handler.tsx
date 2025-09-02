@@ -16,7 +16,7 @@ import PageItemContainer from "@/ui/page-item-container";
 import Button from "@/ui/button";
 import Dialog from "@/ui/dialog";
 import { DataTable } from "@/ui/datatable/data-table";
-import { columns } from "./table/page-colums";
+import { columns, initialTableState } from "./table/page-colums";
 import { DataTableToolbar } from "./table/page-data-table-toolbar";
 import { Group } from "@/generated/prisma";
 
@@ -156,61 +156,52 @@ const UserHandler = ({
         }
       }
     } else {
-      const alert: tAlert | undefined = userInGroup(
-        user.id,
-        "UNABLE_TO_UPDATE_LINKED"
+      const appuser: tUser | undefined = users.find(
+        (_user: tUser) => _user.id === user.id
       );
 
-      if (alert) {
-        setAlert(alert);
-      } else {
-        const appuser: tUser | undefined = users.find(
-          (_user: tUser) => _user.id === user.id
-        );
-
-        if (appuser) {
-          const entity: UserEntity = {
-            id: appuser.id,
-            username: appuser.username ?? "",
-            lastname: appuser.lastname,
-            firstname: appuser.firstname,
-            avatar: appuser.avatar ?? "john.doe.png",
-            phone: appuser.phone ?? "",
-            email: appuser.email,
-            password: appuser.password,
-            passwordless: appuser.passwordless ?? false,
-            blocked: appuser.blocked ?? false,
-            managed: appuser.managed ?? false,
-            address: {
-              id: appuser.address?.id,
-              street: appuser.address?.street ?? "",
-              number: appuser.address?.number ?? "",
-              box: appuser.address?.box ?? "",
-              city: appuser.address?.city ?? "",
-              postalcode: appuser.address?.postalcode ?? "",
-              county: appuser.address?.county ?? "",
-              country: {
-                id: appuser.address?.country?.id,
-                name: appuser.address?.country?.name,
-                dialCode: appuser.address?.country?.dialCode ?? "",
-              },
+      if (appuser) {
+        const entity: UserEntity = {
+          id: appuser.id,
+          username: appuser.username ?? "",
+          lastname: appuser.lastname,
+          firstname: appuser.firstname,
+          avatar: appuser.avatar ?? "john.doe.png",
+          phone: appuser.phone ?? "",
+          email: appuser.email,
+          password: appuser.password,
+          passwordless: appuser.passwordless ?? false,
+          blocked: appuser.blocked ?? false,
+          managed: appuser.managed ?? false,
+          address: {
+            id: appuser.address?.id,
+            street: appuser.address?.street ?? "",
+            number: appuser.address?.number ?? "",
+            box: appuser.address?.box ?? "",
+            city: appuser.address?.city ?? "",
+            postalcode: appuser.address?.postalcode ?? "",
+            county: appuser.address?.county ?? "",
+            country: {
+              id: appuser.address?.country?.id,
+              name: appuser.address?.country?.name,
+              dialCode: appuser.address?.country?.dialCode ?? "",
             },
-          };
+          },
+        };
 
-          let linked: number[] = appuser.policies.map(
-            (_policy: tPolicy) => _policy.id
-          );
-          setLinkedPolicies(linked);
+        let linked: number[] = appuser.policies.map(
+          (_policy: tPolicy) => _policy.id
+        );
+        setLinkedPolicies(linked);
 
-          linked = appuser.roles.map((_role: tRole) => _role.id);
-          setLinkedRoles(linked);
+        linked = appuser.roles.map((_role: tRole) => _role.id);
+        setLinkedRoles(linked);
 
-          linked = appuser.groups.map((_group: Group) => _group.id);
-          setLinkedGroups(linked);
+        linked = appuser.groups.map((_group: Group) => _group.id);
+        setLinkedGroups(linked);
 
-          setEntity(entity);
-          openTheDialog();
-        }
+        setEntity(entity);
+        openTheDialog();
       }
     }
   };
@@ -277,10 +268,7 @@ const UserHandler = ({
             columns={columns}
             tablemeta={tableMeta}
             Toolbar={DataTableToolbar}
-            paginationState={{
-              pageIndex: 0, //custom initial page index
-              pageSize: 10, //custom default page size
-            }}
+            initialState={initialTableState}
           />
         </PageItemContainer>
         <div className="flex justify-center">

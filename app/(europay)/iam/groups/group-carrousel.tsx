@@ -23,7 +23,7 @@ import { MdPolicy } from "react-icons/md";
 import { GiScrollUnfurled } from "react-icons/gi";
 import { FaUser } from "react-icons/fa";
 import { createGroup, updateGroup } from "@/app/server/groups";
-import { absoluteUrl, showToast } from "@/lib/util";
+import { absoluteUrl, json, showToast } from "@/lib/util";
 import { displayPrismaErrorCode } from "@/lib/prisma-errors";
 import { ValidationConflict } from "@/app/server/data/validation-data";
 import { validateData } from "@/app/server/validate";
@@ -66,6 +66,8 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
   const { push } = useRouter();
   const { getToastDuration } = useToastSettings();
 
+  const [disabled, setDisabled] = useState<boolean>(false);
+
   const currentPage = useRef<string>(Pages.DETAILS);
   const showCurrentPage = (_page: string): void => {
     const element: HTMLElement | null = document.getElementById(_page);
@@ -75,6 +77,7 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
   };
 
   const formMethods = useForm({
+    disabled,
     defaultValues: props.entity,
   });
 
@@ -116,8 +119,6 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
     });
   };
 
-  const [resetPagination, setResetPagination] = useState<boolean>(false);
-
   useEffect(() => {
     ignoreEscape();
 
@@ -133,8 +134,6 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
 
     currentPage.current = Pages.DETAILS;
     showCurrentPage(Pages.DETAILS);
-
-    setResetPagination(true);
   }, [props]);
 
   const GroupFormControl = (): JSX.Element => {
@@ -226,6 +225,7 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
   const Roles = (): JSX.Element => {
     return (
       <DataRenderer
+        id="RolesTable"
         data={tableDataRoles}
         columns={columnsRoles}
         toolbar={DataTableToolbar}
@@ -244,6 +244,7 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
   const Policies = (): JSX.Element => {
     return (
       <DataRenderer
+        id="PolicyTable"
         data={tableDataPolicies}
         columns={columnsPolicies}
         toolbar={DataTableToolbar}
@@ -262,6 +263,7 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
   const Users = (): JSX.Element => {
     return (
       <DataRenderer
+        id="UsersTable"
         data={tableDataUsers}
         columns={columnsUsers}
         toolbar={DataTableToolbar}
@@ -452,8 +454,8 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
   const onSubmit: SubmitHandler<GroupEntity> = async (
     formData: GroupEntity
   ) => {
+    setDisabled(true);
     const valid: boolean = await validateDependencies();
-
     if (valid) {
       if (formData.id) {
         handleUpdateGroup(formData);
@@ -461,6 +463,7 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
         handleCreateGroup(formData);
       }
     }
+    setDisabled(false);
   };
 
   const handleCancelClick = (): void => {

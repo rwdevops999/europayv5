@@ -91,7 +91,8 @@ const NavbarMenu = () => {
       newmenu[2].subItems[3].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show Export"
+        "Show Export",
+        true
       );
 
       // Import

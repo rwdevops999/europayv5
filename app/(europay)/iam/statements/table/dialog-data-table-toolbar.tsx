@@ -11,7 +11,6 @@ export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
   const handleChangeEvent = (e: any) => {
-    console.log("Set Filter Value");
     e.preventDefault();
     e.stopPropagation();
     table.getColumn("name")!.setFilterValue(e.target.value);

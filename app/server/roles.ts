@@ -66,6 +66,9 @@ export const loadRoles = async (): Promise<tRole[]> => {
 
   await prisma.role
     .findMany({
+      orderBy: {
+        createDate: "desc",
+      },
       ...cWhatToSelectFromRole,
     })
     .then((values: tRole[]) => (result = values));

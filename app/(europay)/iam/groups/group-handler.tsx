@@ -10,7 +10,7 @@ import GroupCarrousel, {
   GroupEntity,
 } from "./group-carrousel";
 import { mapGroups } from "@/app/client/mapping";
-import { absoluteUrl, showToast } from "@/lib/util";
+import { absoluteUrl, json, showToast } from "@/lib/util";
 import TemplateAlert, { tAlert } from "@/ui/template-alert";
 import { DATATABLE_ACTION_DELETE } from "@/lib/constants";
 import { deleteGroup } from "@/app/server/groups";
@@ -59,7 +59,7 @@ const GroupHandler = ({
     setLinkedPolicies(linkedpolicies);
     setLinkedRoles(linkedroles);
     setLinkedUsers(linkedusers);
-  }, [users]);
+  }, [policies, , roles, users]);
 
   const processDeletedGroup = (_name: string): void => {
     showToast(ToastType.SUCCESS, `Deleted group ${_name}`, getToastDuration());

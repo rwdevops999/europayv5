@@ -37,6 +37,9 @@ export const loadUsers = async (): Promise<tUser[]> => {
 
   await prisma.user
     .findMany({
+      orderBy: {
+        createDate: "desc",
+      },
       ...cWhatToSelectFromUser,
     })
     .then(async (values: tUser[]) => {

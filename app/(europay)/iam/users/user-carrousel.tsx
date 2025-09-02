@@ -31,7 +31,7 @@ import AvatarSelect from "@/ui/avatar-select";
 import CountrySelect from "@/ui/country-select";
 import { DataTable } from "@/ui/datatable/data-table";
 import { createUser, loadUserById, updateUser } from "@/app/server/users";
-import { absoluteUrl, showToast } from "@/lib/util";
+import { absoluteUrl, json, showToast } from "@/lib/util";
 import { displayPrismaErrorCode } from "@/lib/prisma-errors";
 import { ValidationConflict } from "@/app/server/data/validation-data";
 import { validateData } from "@/app/server/validate";
@@ -519,6 +519,7 @@ const UserCarrousel = (props: UserCarrouselProps) => {
   const Roles = (): JSX.Element => {
     return (
       <DataRenderer
+        id="RolesTable"
         data={tableDataRoles}
         columns={columnsRoles}
         toolbar={DataTableToolbar}
@@ -569,6 +570,7 @@ const UserCarrousel = (props: UserCarrouselProps) => {
   const Policies = (): JSX.Element => {
     return (
       <DataRenderer
+        id="PoliciesTable"
         data={tableDataPolicies}
         columns={columnsPolicies}
         toolbar={DataTableToolbar}
@@ -587,6 +589,7 @@ const UserCarrousel = (props: UserCarrouselProps) => {
   const Groups = (): JSX.Element => {
     return (
       <DataRenderer
+        id="GroupsTable"
         data={tableDataGroups}
         columns={columnsGroups}
         toolbar={DataTableToolbar}
@@ -729,6 +732,8 @@ const UserCarrousel = (props: UserCarrouselProps) => {
 
   const handleCreateUser = async (_entity: UserEntity): Promise<void> => {
     const user: tUserCreate = provisionUserForCreate(_entity);
+
+    console.log("Creating user", json(user));
 
     await createUser(user).then((errorcode: string | undefined | tUser) => {
       if (errorcode && typeof errorcode === "string") {

@@ -140,10 +140,10 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
   //   }
   // }, [data]);
 
+  let xrowSelection: RowSelectionState = {};
+
   useEffect(() => {
     if (selectedItems) {
-      console.log("SELECTED ITEMS PASSED", json(selectedItems));
-
       let selection: Record<string, boolean> = table
         .getCoreRowModel()
         .rows.reduce<Record<string, boolean>>(
@@ -157,17 +157,24 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
           {}
         );
 
-      console.log("SELECTION IS", json(selection));
+      xrowSelection = selection;
+
       setRowSelection(selection);
     }
   }, [selectedItems]);
 
   useEffect(() => {
-    console.log("ROW SELECTION CHANGED", json(rowSelection));
-    // if (initPhase) {
-    //   initPhase = false;
-    // } else {
-    const selectedIds: string[] = Object.keys(rowSelection).map(
+    let selection: RowSelectionState = {};
+
+    if (xrowSelection !== rowSelection) {
+      if (Object.keys(xrowSelection).length === 0) {
+        selection = rowSelection;
+      } else {
+        selection = xrowSelection;
+      }
+    }
+
+    const selectedIds: string[] = Object.keys(selection).map(
       (key: string) => key
     );
     //   if (handleChangeSelection && data.length > 0) {
@@ -177,7 +184,6 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
       return row.original.id!;
     });
 
-    console.log("SELECTED IDS", json(itemIds));
     handleChangeSelection(itemIds);
     //       handleChangeSelection(itemIds);
     //     } else {

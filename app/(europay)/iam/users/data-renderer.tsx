@@ -8,12 +8,14 @@ import { render } from "@testing-library/react";
 import { ColumnDef, DataTableToolbarProps } from "@tanstack/react-table";
 
 const DataRenderer = ({
+  id,
   data,
   columns,
   toolbar,
   selectedIds,
   changeSelection,
 }: {
+  id: string;
   data: Data[];
   columns: ColumnDef<Data>[];
   toolbar?: any;
@@ -39,7 +41,7 @@ const DataRenderer = ({
     return (
       <div>
         <DataTable
-          id="DataTablForm"
+          id={id}
           data={data}
           columns={columns}
           Toolbar={toolbar}

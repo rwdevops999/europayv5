@@ -48,7 +48,10 @@ const RoleForm = (props: RoleFormProps) => {
   const { push } = useRouter();
   const { getToastDuration } = useToastSettings();
 
+  const [disabled, setDisabled] = useState(false);
+
   const formMethods = useForm({
+    disabled,
     defaultValues: props.entity,
   });
 
@@ -144,6 +147,7 @@ const RoleForm = (props: RoleFormProps) => {
   };
 
   const onSubmit: SubmitHandler<RoleEntity> = async (formData: RoleEntity) => {
+    setDisabled(true);
     const valid: boolean = await validateLinkedPolicies();
 
     if (valid) {
@@ -153,6 +157,7 @@ const RoleForm = (props: RoleFormProps) => {
         handleCreateRole(formData);
       }
     }
+    setDisabled(false);
   };
 
   const handleCancelClick = (): void => {
@@ -183,10 +188,33 @@ const RoleForm = (props: RoleFormProps) => {
 
   const [resetPagination, setResetPagination] = useState<boolean>(false);
 
+  const setSelectedPolicies = (
+    _selection: number[],
+    _tableData: Data[]
+  ): void => {
+    const selectionData: Data[] = _tableData.reduce<Data[]>(
+      (acc: Data[], data: Data) => {
+        if (
+          _selection.includes(data.id) &&
+          !acc.some((accvalue: Data) => accvalue.id === data.id)
+        ) {
+          acc.push(data);
+        }
+
+        return acc;
+      },
+      []
+    );
+
+    selectedPolicies.current = selectionData;
+  };
+
   useEffect(() => {
     processTableData();
 
     linkedPolicies.current = props.linkedpolicies;
+    setSelectedPolicies(props.linkedpolicies, tableData);
+
     reset(props.entity);
 
     setResetPagination(true);
