@@ -241,11 +241,12 @@ export const findJobById = async (_id: number): Promise<tJob | null> => {
 export const runInngestJob = async (
   name: string,
   _delay: number,
-  _jobid: number
+  _jobid: number,
+  _userid?: number
 ): Promise<void> => {
   await inngest.send({
     name: `europay/${name}`,
-    data: { jobid: _jobid },
+    data: { jobid: _jobid, userid: _userid },
     ts: Date.now() + _delay,
   });
 };

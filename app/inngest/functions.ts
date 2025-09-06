@@ -1,10 +1,15 @@
 import { inngest } from "./client";
 import prisma from "@/lib/prisma";
 import { tJob } from "@/lib/prisma-types";
-import { JobStatus, OTPStatus, TaskStatus } from "@/generated/prisma";
+import {
+  JobStatus,
+  OTPStatus,
+  TaskStatus,
+  TransactionStatus,
+} from "@/generated/prisma";
 import { changeJobStatus, findJobByName, loadJobById } from "../server/job";
 import { absoluteUrl } from "@/lib/util";
-import { taskKey, TaskPollerJobName } from "@/lib/constants";
+import { taskKey, TaskPollerJobName, transactionKey } from "@/lib/constants";
 import { setOtpStatus } from "../server/otp";
 
 const createClientJob = inngest.createFunction(
@@ -25,16 +30,56 @@ const createClientJob = inngest.createFunction(
 );
 
 const transactionPoller = inngest.createFunction(
-  { id: "transaction-poller-scheduled", name: "Transaction Poller" },
+  {
+    id: "transaction-poller-scheduled",
+    name: "Transaction Poller",
+    cancelOn: [
+      {
+        event: "europay/TaskPoller.suspend",
+        // ensure the async (future) event's userId matches the trigger userId
+        match: "data.jobid",
+      },
+    ],
+  },
   { event: "europay/TransactionPoller" },
   async ({ event }) => {
-    // await prisma.transaction.count().then(async (_value: number) => {
-    //   await sendClientData({ name: "TransactionPoller", value: _value });
-    // });
-
-    return {
-      message: `Transaction Poller did run now: ${Date.now().toString()}`,
-    };
+    const { jobid, userid } = event.data;
+    console.log("[INNGEST] : TransactionPoller (JOB, USER)", jobid, userid);
+    await prisma.transaction
+      .count({
+        where: {
+          AND: [
+            {
+              senderId: userid,
+            },
+            {
+              OR: [
+                {
+                  status: TransactionStatus.PENDING,
+                },
+                {
+                  status: TransactionStatus.COMPLETED,
+                },
+                {
+                  status: TransactionStatus.REJECTED,
+                },
+              ],
+            },
+          ],
+        },
+      })
+      .then(async (_value: number) => {
+        console.log(
+          "[INNGEST] : SEND (KEY, VALUE)",
+          `${transactionKey}:${userid}`,
+          _value
+        );
+        await fetch(
+          absoluteUrl(
+            `/api/notification/send?key=${transactionKey}:${userid}&value=${_value}`
+          )
+        );
+      });
   }
 );
 
@@ -114,4 +159,4 @@ const taskPoller = inngest.createFunction(
   }
 );
 
-export const inngestfunctions = [createOTPJob, taskPoller];
+export const inngestfunctions = [createOTPJob, taskPoller, transactionPoller];

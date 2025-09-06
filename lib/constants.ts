@@ -32,5 +32,8 @@ export const defaultSetting: tSetting = {
 export const TaskPollerJobName: string = "TaskPoller";
 export const taskKey: string = "key:task";
 
+export const TransactionPollerJobName: string = "TransactionPoller";
+export const transactionKey: string = "key:transaction";
+
 export const GROUP_ADMINS = "ADMIN";
 export const GROUP_CLIENTS = "CLIENT";

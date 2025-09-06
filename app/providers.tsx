@@ -10,30 +10,33 @@ import { WifiProvider } from "@/hooks/use-wifi";
 import ProgressBar from "@/ui/progress-bar";
 import { ReactNode } from "react";
 import Initialisation from "./components/initialisation";
+import { TransactionProvider } from "@/hooks/use-transaction";
 
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
     <SocketProvider>
-      <JobProvider>
-        <HistorySettingsProvider>
-          <OTPSettingsProvider>
-            <TaskProvider>
-              <MarkdownSettingsProvider>
-                <UserProvider>
-                  <WifiProvider>
-                    <ToastSettingsProvider>
-                      <ProgressBar>
-                        <Initialisation />
-                        {children}
-                      </ProgressBar>
-                    </ToastSettingsProvider>
-                  </WifiProvider>
-                </UserProvider>
-              </MarkdownSettingsProvider>
-            </TaskProvider>
-          </OTPSettingsProvider>
-        </HistorySettingsProvider>
-      </JobProvider>
+      <TransactionProvider>
+        <JobProvider>
+          <HistorySettingsProvider>
+            <OTPSettingsProvider>
+              <TaskProvider>
+                <MarkdownSettingsProvider>
+                  <UserProvider>
+                    <WifiProvider>
+                      <ToastSettingsProvider>
+                        <ProgressBar>
+                          <Initialisation />
+                          {children}
+                        </ProgressBar>
+                      </ToastSettingsProvider>
+                    </WifiProvider>
+                  </UserProvider>
+                </MarkdownSettingsProvider>
+              </TaskProvider>
+            </OTPSettingsProvider>
+          </HistorySettingsProvider>
+        </JobProvider>
+      </TransactionProvider>
     </SocketProvider>
   );
 };

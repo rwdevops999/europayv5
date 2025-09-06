@@ -262,8 +262,11 @@ export const loadUserByUsernameOrEmail = async (
       },
       ...cWhatToSelectFromUser,
     })
-    .then((value: tUser | null) => {
+    .then(async (value: tUser | null) => {
       console.log("FOUND USER BY EMAIL OR USERNAME", json(value));
+      if (value) {
+        value.password = await decrypt(value.password);
+      }
       result = value;
     });
 

@@ -335,6 +335,8 @@ model Transaction {
   status TransactionStatus? @default(PENDING)
   statusMessage String? @default("")
 
+  senderId Int?
+  
   transactionDate DateTime? @default(now())
   createDate DateTime? @default(now())
   updateDate DateTime? @updatedAt
