@@ -812,6 +812,8 @@ const UserCarrousel = (props: UserCarrouselProps) => {
   const handleUpdateUser = async (_entity: UserEntity): Promise<void> => {
     const _user: tUserUpdate = provisionUserForUpdate(_entity);
 
+    console.dir("UPDATE USER: " + json(_user), { depth: null });
+
     await updateUser(_user).then(async (errorcode: string | undefined) => {
       if (errorcode) {
         showToast(

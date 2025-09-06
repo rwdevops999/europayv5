@@ -45,9 +45,9 @@ const LoginEmailForm = ({
     e.preventDefault();
 
     if (submitForm) {
-      let email: string = getInputValue("email");
+      let emailOrUsername: string = getInputValue("email");
       closeEmailDialog(false);
-      login(email);
+      login(emailOrUsername);
     }
     // } else {
     //   redirect(absoluteUrl("/"));
@@ -112,7 +112,7 @@ const LoginEmailForm = ({
           <input
             id="email"
             data-prevent-modal-close-on-escape="true"
-            type="email"
+            type="text"
             required
             className="validator"
             placeholder="email..."

@@ -10,9 +10,11 @@ import { json } from "@/lib/util";
  * @param _table the table in the DB
  */
 const resetTable = async (_table: string): Promise<void> => {
-  await prisma.$executeRawUnsafe(
-    `TRUNCATE \"${_table}\" RESTART IDENTITY CASCADE`
-  );
+  await prisma.$executeRawUnsafe(`DELETE from \"${_table}\"`).then(async () => {
+    await prisma.$executeRawUnsafe(
+      `ALTER SEQUENCE \"${_table}_id_seq\" RESTART;`
+    );
+  });
 };
 
 /**

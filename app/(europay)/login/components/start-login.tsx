@@ -11,7 +11,9 @@ import {
 import {
   blockUser,
   createUserAsGuest,
+  createUserAsGuestUsingUsername,
   loadUserByEmail,
+  loadUserByUsernameOrEmail,
   updateUserAttemps,
 } from "@/app/server/users";
 import { JobStatus, OTPStatus, UserType } from "@/generated/prisma";
@@ -21,7 +23,7 @@ import { useToastSettings } from "@/hooks/use-toast-settings";
 import { useUser } from "@/hooks/use-user";
 import { tJob, tOTP, tOTPCreate, tUser } from "@/lib/prisma-types";
 import { ToastType } from "@/lib/types";
-import { absoluteUrl, json, showToast } from "@/lib/util";
+import { absoluteUrl, json, showToast, validEmail } from "@/lib/util";
 import { useRouter } from "next/navigation";
 import { startTransition, useEffect, useRef, useState } from "react";
 import LoginEmailDialog from "./login-email-dialog";
@@ -203,20 +205,31 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
     }
   };
 
-  const loginWithEmail = async (_email: string): Promise<void> => {
+  const loginWithEmailOrUsername = async (
+    _emailOrUsername: string
+  ): Promise<void> => {
     setProcessingOn();
 
-    await loadUserByEmail(_email).then(async (user: tUser | null) => {
-      if (user) {
-        userRef.current = user;
-        continueWithUser(user);
-      } else {
-        await createUserAsGuest(_email).then((user: tUser | null) => {
+    console.log("loginWithEmailOrUsername");
+    await loadUserByUsernameOrEmail(_emailOrUsername).then(
+      async (user: tUser | null) => {
+        console.dir("loginWithEmailOrUsername: User" + json(user), {
+          depth: null,
+        });
+        if (user) {
           userRef.current = user;
           continueWithUser(user);
-        });
+        } else {
+          // TEST HERE IF IT's and email
+          await createUserAsGuest(_emailOrUsername).then(
+            (user: tUser | null) => {
+              userRef.current = user;
+              continueWithUser(user);
+            }
+          );
+        }
       }
-    });
+    );
   };
 
   const showWrongOTPNotification = (_otp: string): void => {
@@ -425,7 +438,7 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
           <LoginEmailDialog
             open={openEmailLoginDialog}
             closeEmailDialog={closeEmailDialog}
-            login={loginWithEmail}
+            login={loginWithEmailOrUsername}
           />
           <LoginOtpDialog
             open={openOtpLoginDialog}

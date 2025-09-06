@@ -103,6 +103,7 @@ export const updateUser = async (
       data: _user,
     })
     .catch((error: any) => {
+      console.dir("UPDATE ERROR: " + json(error), { depth: null });
       errorcode = error.code;
     });
 
@@ -172,6 +173,35 @@ export const createUserAsGuest = async (
         blocked: false,
         type: UserType.GUEST,
         username: "",
+        lastname: "",
+        firstname: "",
+        avatar: "",
+        phone: "",
+        password: "",
+      },
+      ...cWhatToSelectFromUser,
+    })
+    .then((value: tUser) => {
+      result = value;
+    });
+
+  return result;
+};
+
+export const createUserAsGuestUsingUsername = async (
+  _username: string
+): Promise<tUser | null> => {
+  let result: tUser | null = null;
+
+  await prisma.user
+    .create({
+      data: {
+        email: "",
+        passwordless: true,
+        attemps: 0,
+        blocked: false,
+        type: UserType.GUEST,
+        username: _username,
         lastname: "",
         firstname: "",
         avatar: "",
