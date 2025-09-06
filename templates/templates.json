@@ -110,5 +110,21 @@
     "content": "your login is incorrect. This was attempt ${attemp} of ${maxAttemps}. Retry?",
     "managed": true,
     "parameters": "{attemp:  #variable, maxAttemps: #variable}"
+  },
+  {
+    "role": "EMAIL",
+    "name": "TRANSACTION_INVALID_PARTY",
+    "description": "Payment not executed",
+    "content": "<h1>Hello ${sender}</h1><br/><p>you tried to use Europay.<br/> However, ${party} has no account or has no linked transaction account.</p><br/><p>To complete the account follow the link<a href='${url}' and apply></p><p>The <b>Europay</b> team.</p>",
+    "managed": true,
+    "parameters": "{sender: #variable, party:  #variable, url: #variable}"
+  },
+  {
+    "role": "EMAIL",
+    "name": "AMOUNT_INSUFFICIENT",
+    "description": "Payment not executed",
+    "content": "<h1>Hello ${sender}</h1><br/>you tried to send you a payment to ${receiver}.<br/> However, the amount on your account is <b><u>UNSUFFICIENT</u></b> for this payment.<br/><p>So, the payment is <b>rejected</b></p><br/><p>The <b>Europay</b> team.</p>",
+    "managed": true,
+    "parameters": "{sender:  #variable, receiver: #variable}"
   }
 ]

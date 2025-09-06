@@ -235,6 +235,7 @@ export const cWhatToSelectFromAccount: WhatToSelectFromAccount = {
 };
 export type tAccount = Prisma.AccountGetPayload<WhatToSelectFromAccount>;
 export type tAccountCreate = Prisma.AccountUncheckedCreateInput;
+export type tAccountUpdate = Prisma.AccountUncheckedUpdateInput;
 
 /* == USER ========== */
 type WhatToSelectFromUser = {
@@ -344,41 +345,10 @@ export type tJob = Prisma.JobGetPayload<{}>;
 export type tJobCreate = Prisma.JobUncheckedCreateInput;
 export type tJobUpdate = Prisma.JobUncheckedUpdateInput;
 
-type WhatToSelectFromTransaction = {
-  include: {
-    receiverAccount: {
-      include: {
-        user: {
-          include: {
-            address: {
-              include: {
-                country: boolean;
-              };
-            };
-          };
-        };
-      };
-    };
-    senderAccount: {
-      include: {
-        user: {
-          include: {
-            address: {
-              include: {
-                country: boolean;
-              };
-            };
-            account: {
-              // include: {
-              //   bankaccounts: boolean;
-              // };
-            };
-          };
-        };
-      };
-    };
-  };
-};
+export type tTransaction = Prisma.TransactionGetPayload<{}>;
+export type tTransactionCreate = Prisma.TransactionUncheckedCreateInput;
+export type tTransactionUpdate = Prisma.TransactionUncheckedUpdateInput;
 
-export type tTransaction =
-  Prisma.TransactionGetPayload<WhatToSelectFromTransaction>;
+export type tTransactionDetail = Prisma.TransactionDetailGetPayload<{}>;
+export type tTransactionDetailCreate =
+  Prisma.TransactionDetailUncheckedCreateInput;

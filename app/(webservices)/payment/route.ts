@@ -1,7 +1,6 @@
 import { NextRequest } from "next/server";
 import { tWebPayment, tWebResponse } from "../data/web";
-import { json } from "@/app/lib/util";
-import { executePayment } from "@/app/(europay)/scripts/server/transaction";
+import { executePayment } from "@/app/server/transaction";
 
 export const POST = async (_request: NextRequest): Promise<Response> => {
   let response: tWebResponse = {

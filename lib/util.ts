@@ -195,3 +195,8 @@ export const generateUUID = (): string => {
 
   return params[params.length - 1];
 };
+
+export const validEmail = (_email: string) => {
+  const re: RegExp = /^\S+@\S+\.\S+$/;
+  return re.test(_email);
+};

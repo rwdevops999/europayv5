@@ -211,7 +211,7 @@ export const blockUser = async (_id: number): Promise<void> => {
   });
 };
 
-export const loadUserWithUsernameOrEmail = async (
+export const loadUserByUsernameOrEmail = async (
   _value: string
 ): Promise<tUser | null> => {
   let result: tUser | null = null;
