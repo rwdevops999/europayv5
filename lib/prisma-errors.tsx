@@ -4,6 +4,9 @@ export const displayPrismaErrorCode = (_errorcode: string): string => {
     case "P2002":
       message = "Unique constraint failed";
       break;
+    default:
+      message = _errorcode;
+      break;
   }
 
   return message;

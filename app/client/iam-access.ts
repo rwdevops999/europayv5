@@ -37,9 +37,9 @@ const $iam_statements_allow_action = (
         allowed = $iam_statementaction_has_action(statementaction, _action);
         j++;
       }
-
-      i++;
     }
+
+    i++;
   }
 
   return allowed;

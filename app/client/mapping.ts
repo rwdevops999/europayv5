@@ -116,7 +116,7 @@ const mapServiceStatementActions = (
  */
 export const mapServiceStatements = (
   statements: tServiceStatement[],
-  excludeservicestatementactions: boolean = false
+  depth: number = 1
 ): Data[] => {
   let result: Data[] = [];
 
@@ -126,15 +126,16 @@ export const mapServiceStatements = (
         id: statement.id,
         name: statement.ssname,
         description: statement.description,
-        children: excludeservicestatementactions
-          ? []
-          : mapServiceStatementActions(
-              statement.service.servicename,
-              statement.servicestatementactions,
-              statement.permission,
-              statement.serviceid,
-              statement.ssname
-            ),
+        children:
+          depth > 0
+            ? mapServiceStatementActions(
+                statement.service.servicename,
+                statement.servicestatementactions,
+                statement.permission,
+                statement.serviceid,
+                statement.ssname
+              )
+            : [],
         extra: {
           subject: "ServiceStatement",
           parent: undefined,
@@ -164,6 +165,7 @@ export const mapPolicies = (
 ): Data[] => {
   let result: Data[] = [];
 
+  console.log("MAP POLICIES", _depth);
   if (_policies) {
     let servicename: string;
 
@@ -176,8 +178,7 @@ export const mapPolicies = (
         id: _policy.id,
         name: _policy.name!,
         description: _policy.description,
-        children:
-          _depth > 0 ? mapServiceStatements(_policy.servicestatements) : [],
+        children: mapServiceStatements(_policy.servicestatements, _depth - 1),
         extra: {
           subject: "Policy",
           servicename: servicename,

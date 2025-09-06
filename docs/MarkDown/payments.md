@@ -11,38 +11,38 @@
 
 ## Script (A sends money to B)
 
-- [ ] AAA0 => BBB0, € 100
+- [x] AAA0(email) => BBB0, € 100
 
   - [ ] email send to AAA0
-  - [ ] transaction created with status REJECTED
+  - [x] transaction created with status REJECTED
 
-- [ ] AAA1 => BBB0, € 100
-
-  - [ ] email send to A
-  - [ ] transaction created with status REJECTED
-
-- [ ] AAA2 (€50) => BBB0, € 100
+- [ ] AAA1(username) => BBB0, € 100
 
   - [ ] email send to A
   - [ ] transaction created with status REJECTED
 
-- [ ] AAA2 (€500) => BANK, €100
+- [ ] AAA2 (username, €50) => BBB0, € 100
+
+  - [ ] email send to A
+  - [ ] transaction created with status REJECTED
+
+- [ ] AAA2 (email, €500) => BANK, €100
 
   - [ ] email send to A
   - [ ] transaction created with status COMPLETED
   - [ ] created transaction details (1 entry because there is no details for the bank)
 
-- [ ] AAA2(€500) => BBB0, € 100
+- [ ] AAA2(username, €500) => BBB0(email), € 100
 
   - [ ] email send to A
   - [ ] transaction created with status REJECTED
 
-- [ ] AAA2(€500) => BBB1, €100
+- [ ] AAA2(username, €500) => BBB1(username), €100
 
   - [ ] email send to A
   - [ ] transaction created with status REJECTED
 
-- [ ] AAA2(€500) => BBB2(100$), €100
+- [ ] AAA2(email, €500) => BBB2(email, 100$), €100
 
   - [ ] email send to B, cc to A
   - [ ] transaction created with status COMPLETED

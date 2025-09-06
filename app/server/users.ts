@@ -9,6 +9,7 @@ import {
 } from "@/lib/prisma-types";
 import { decrypt, encrypt } from "./encrypt";
 import { UserType } from "@/generated/prisma";
+import { json } from "@/lib/util";
 
 export const loadUserById = async (_userId: number): Promise<tUser | null> => {
   let result: tUser | null = null;
