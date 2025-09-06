@@ -16,34 +16,34 @@
   - [ ] email send to AAA0
   - [x] transaction created with status REJECTED
 
-- [ ] AAA1(username) => BBB0, € 100
+- [x] AAA1(username) => BBB0, € 100
 
   - [ ] email send to A
-  - [ ] transaction created with status REJECTED
+  - [x] transaction created with status REJECTED
 
-- [ ] AAA2 (username, €50) => BBB0, € 100
+- [x] AAA2 (username, €50) => BBB0, € 100
 
   - [ ] email send to A
-  - [ ] transaction created with status REJECTED
+  - [x] transaction created with status REJECTED
 
-- [ ] AAA2 (email, €500) => BANK, €100
+- [x] AAA2 (email, €500) => BANK, €100
 
   - [ ] email send to A
   - [ ] transaction created with status COMPLETED
-  - [ ] created transaction details (1 entry because there is no details for the bank)
+  - [x] created transaction details (2 entries wherefrom one for the bank)
 
-- [ ] AAA2(username, €500) => BBB0(email), € 100
+- [x] AAA2(username, €500) => BBB0(email), € 100
+
+  - [x] email send to A
+  - [x] transaction created with status REJECTED
+
+- [x] AAA2(username, €500) => BBB1(username), €100
 
   - [ ] email send to A
-  - [ ] transaction created with status REJECTED
-
-- [ ] AAA2(username, €500) => BBB1(username), €100
-
-  - [ ] email send to A
-  - [ ] transaction created with status REJECTED
+  - [x] transaction created with status REJECTED
 
 - [ ] AAA2(email, €500) => BBB2(email, 100$), €100
 
   - [ ] email send to B, cc to A
-  - [ ] transaction created with status COMPLETED
-  - [ ] created transaction details (2 entrues, 1 for A and 1 for B)
+  - [x] transaction created with status COMPLETED
+  - [x] created transaction details (2 entrues, 1 for A and 1 for B)

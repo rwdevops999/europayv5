@@ -92,8 +92,6 @@ const PolicyHandler = ({
       }
     }
 
-    let md: Data[] = mapPolicies(policiesToMap, policyid ? 1 : 2);
-
     setTableData(mapPolicies(policiesToMap, policyid ? 0 : 1));
   };
 

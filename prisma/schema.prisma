@@ -163,7 +163,7 @@ model User {
   firstname String
   avatar String? @default("")
   phone String? @default("")
-  email String @unique
+  email String
   password String
   passwordless Boolean? @default(false)
   attemps Int? @default(0)

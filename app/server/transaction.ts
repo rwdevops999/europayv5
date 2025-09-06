@@ -172,12 +172,11 @@ export const handlePayment = async (
 
         // _to is a bank account
         status = TransactionStatus.COMPLETED;
-        statusmessage = "APPROVED: Bank payment";
+        statusmessage = "Bank payment";
         executePayment = true;
       } else {
         // _to is an email or username
-
-        const receiver: tUser | null = await loadUserByUsernameOrEmail(_from);
+        const receiver: tUser | null = await loadUserByUsernameOrEmail(_to);
         if (receiver && receiver.account) {
           receiverEmail = receiver.email;
           receiverAccountId = receiver.account.id;
@@ -186,11 +185,11 @@ export const handlePayment = async (
           currencyReceiver = receiver.address?.country?.currencycode!;
 
           status = TransactionStatus.COMPLETED;
-          statusmessage = "APPROVED: Client payment";
+          statusmessage = "Client payment";
           executePayment = true;
         } else {
           status = TransactionStatus.REJECTED;
-          statusmessage = "REJECTED: Receiver invalid";
+          statusmessage = "Receiver invalid";
 
           email.destination = _from;
           email.template = "TRANSACTION_INVALID_PARTY";
@@ -203,16 +202,27 @@ export const handlePayment = async (
       }
     } else {
       status = TransactionStatus.REJECTED;
-      statusmessage = "REJECTED: Amount insufficient";
+      statusmessage = "Amount insufficient";
 
       email.destination = _from;
       email.template = "AMOUNT_INSUFFICIENT";
       email.params = { sender: _from, receiver: _to };
     }
   } else {
+    if (sender) {
+      console.log("SENDER KNOWN");
+      if (sender.account) {
+        console.log("SENDER ACCOUNT KNOWN");
+      } else {
+        console.log("SENDER ACCOUNT UNKNOWN");
+      }
+    } else {
+      console.log("SENDER UNKNOWN");
+    }
+
     // if (validEmail(_from)) {
     status = TransactionStatus.REJECTED;
-    statusmessage = "REJECTED: Sender invalid";
+    statusmessage = "Sender invalid";
 
     email.destination = _from;
     email.template = "TRANSACTION_INVALID_PARTY";

@@ -68,6 +68,7 @@ export const DataTablePagination = <TData extends unknown>({
               onClick={() => {
                 table.setPageIndex(0);
               }}
+              type="button"
             />
             <Button
               size={"extrasmall"}
@@ -77,6 +78,7 @@ export const DataTablePagination = <TData extends unknown>({
               onClick={() => {
                 table.previousPage();
               }}
+              type="button"
             />
             <Button
               size={"extrasmall"}
@@ -86,6 +88,7 @@ export const DataTablePagination = <TData extends unknown>({
               onClick={() => {
                 table.nextPage();
               }}
+              type="button"
             />
             <Button
               size={"extrasmall"}
@@ -95,6 +98,7 @@ export const DataTablePagination = <TData extends unknown>({
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1);
               }}
+              type="button"
             />
           </div>
         </div>

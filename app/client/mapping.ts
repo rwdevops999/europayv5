@@ -191,16 +191,15 @@ export const mapPolicies = (
   return result;
 };
 
+let result: Data[] = [];
 export const mapRoles = (roles: tRole[], _depth: number = 2): Data[] => {
-  let result: Data[] = [];
-
   if (roles) {
     result = roles.map((role) => {
       return {
         id: role.id,
         name: role.name!,
         description: role.description!,
-        children: mapPolicies(role.policies, _depth - 1),
+        children: mapPolicies(role.policies, _depth),
         extra: {
           subject: "Role",
           managed: role.managed ?? undefined,
