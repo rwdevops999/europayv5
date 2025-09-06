@@ -223,6 +223,10 @@ export const handlePayment = async (
     };
   }
 
+  const transaction: tTransaction | null = await findTransactionById(
+    _transactionId
+  );
+
   if (executePayment) {
     let amountPayableToReceiver: number = 0;
     await fetch(
@@ -232,10 +236,6 @@ export const handlePayment = async (
       .then(
         (value: any) => (amountPayableToReceiver = value.conversion_result)
       );
-
-    const transaction: tTransaction | null = await findTransactionById(
-      _transactionId
-    );
 
     if (transaction?.status === TransactionStatus.PENDING) {
       console.log("UPDATING SENDER ACCOUNT");
@@ -277,14 +277,16 @@ export const handlePayment = async (
         })
         .then(async () => {
           console.log("SEND EMAIL");
-          if (status === TransactionStatus.COMPLETED) {
-            console.log("SEND EMAIL FOR COMPLETED TRANSACTION");
-          }
-
-          if (status === TransactionStatus.REJECTED) {
-            console.log("SEND EMAIL FOR REJECTED TRANSACTION");
-          }
+          console.log("SEND EMAIL FOR COMPLETED TRANSACTION");
         });
+    }
+  } else {
+    if (transaction?.status === TransactionStatus.PENDING) {
+      await updateTransactionStatus(transaction.id, status, statusmessage).then(
+        () => {
+          console.log("SEND EMAIL FOR REJECTED TRANSACTION");
+        }
+      );
     }
   }
 

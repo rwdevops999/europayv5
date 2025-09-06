@@ -13,12 +13,22 @@ import Button from "@/ui/button";
 import { useState } from "react";
 import KeyboardShortcut from "../../ui/navigation/keyboard-shortcut";
 import ApplyDialog from "./apply-dialog";
+import { useUser } from "@/hooks/use-user";
+import { $iam_user_has_action } from "@/app/client/iam-access";
 
 const RenderApply = () => {
+  const { user } = useUser();
   const { setTaskAvailable } = useTask();
   const { getToastDuration } = useToastSettings();
 
   const [openApplyDialog, setOpenApplyDialog] = useState<boolean>(false);
+
+  const ApplyDisabled: boolean = !$iam_user_has_action(
+    user,
+    "europay",
+    "Apply",
+    true
+  );
 
   const closeApplyDialog = (_cancelLogin?: boolean): void => {
     setOpenApplyDialog(false);
@@ -91,6 +101,7 @@ const RenderApply = () => {
         className="bg-custom"
         size="large"
         onClick={handleOpenApplyDialog}
+        disabled={ApplyDisabled}
       />
       <ApplyDialog
         open={openApplyDialog}

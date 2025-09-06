@@ -1,5 +1,6 @@
 "use client";
 
+import { $iam_user_has_action } from "@/app/client/iam-access";
 import { useProgressBar } from "@/hooks/use-progress-bar";
 import { useUser } from "@/hooks/use-user";
 import { absoluteUrl } from "@/lib/util";
@@ -9,7 +10,7 @@ import { startTransition } from "react";
 import { RiLoginBoxLine, RiLogoutBoxLine } from "react-icons/ri";
 
 const UserAuth = () => {
-  const { isLoggedIn, logout } = useUser();
+  const { user, isLoggedIn, logout } = useUser();
   const progress = useProgressBar();
   const { push } = useRouter();
 
@@ -27,33 +28,60 @@ const UserAuth = () => {
     redirect(absoluteUrl("/"));
   };
 
+  const visible: boolean = $iam_user_has_action(
+    user,
+    "europay",
+    "Access Auth",
+    true
+  );
+
+  const mayLogin: boolean = $iam_user_has_action(
+    user,
+    "europay:authorisation",
+    "Login",
+    true
+  );
+
+  const mayLogout: boolean = $iam_user_has_action(
+    user,
+    "europay:authorisation",
+    "Logout",
+    true
+  );
+
   return (
-    <div>
-      {isLoggedIn() && (
-        <div className="-ml-4 flex items-center">
-          <Button
-            name="Log Out"
-            size="small"
-            className="bg-transparent hover:border-none hover:shadow-none"
-            icon={<RiLogoutBoxLine className="text-red-500" size={16} />}
-            iconFirst
-            onClick={doLogout}
-          />
+    <>
+      {visible && (
+        <div>
+          {isLoggedIn() && (
+            <div className="-ml-4 flex items-center">
+              <Button
+                name="Log Out"
+                size="small"
+                className="bg-transparent hover:border-none hover:shadow-none"
+                icon={<RiLogoutBoxLine className="text-red-500" size={16} />}
+                iconFirst
+                onClick={doLogout}
+                disabled={!mayLogout}
+              />
+            </div>
+          )}
+          {!isLoggedIn() && (
+            <div className="-ml-4 flex items-center">
+              <Button
+                name="Log In"
+                size="small"
+                className="bg-transparent hover:border-none hover:shadow-none"
+                icon={<RiLoginBoxLine className="text-red-500" size={16} />}
+                iconFirst
+                onClick={() => redirect(absoluteUrl("/login"))}
+                disabled={!mayLogin}
+              />
+            </div>
+          )}
         </div>
       )}
-      {!isLoggedIn() && (
-        <div className="-ml-4 flex items-center">
-          <Button
-            name="Log In"
-            size="small"
-            className="bg-transparent hover:border-none hover:shadow-none"
-            icon={<RiLoginBoxLine className="text-red-500" size={16} />}
-            iconFirst
-            onClick={() => redirect(absoluteUrl("/login"))}
-          />
-        </div>
-      )}
-    </div>
+    </>
   );
 };
 

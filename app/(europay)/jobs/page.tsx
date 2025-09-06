@@ -23,8 +23,11 @@ import PageContent from "@/ui/page-content";
 import { absoluteUrl, json } from "@/lib/util";
 import ConfirmDialog from "./components/confirm-dialog";
 import { TaskPollerJobName } from "@/lib/constants";
+import { useUser } from "@/hooks/use-user";
+import { $iam_user_has_action } from "@/app/client/iam-access";
 
 const JobsPage = () => {
+  const { user } = useUser();
   const { jobCount, getJobTiming } = useJob();
 
   const [selectedJobs, setSelectedJobs] = useState<number[]>([]);
@@ -174,6 +177,7 @@ const JobsPage = () => {
           name="Suspend"
           size="small"
           onClick={suspendJobs}
+          disabled={!maySuspend}
         />
         <Button
           intent="success"
@@ -181,6 +185,7 @@ const JobsPage = () => {
           name="Restart"
           size="small"
           onClick={restartJobs}
+          disabled={!mayRestart}
         />
         <Button
           intent="error"
@@ -188,6 +193,7 @@ const JobsPage = () => {
           name="Remove"
           size="small"
           onClick={removeJobs}
+          disabled={!mayRemove}
         />
       </div>
     );
@@ -206,6 +212,22 @@ const JobsPage = () => {
   useEffect(() => {
     loadTheJobs();
   }, [jobCount]);
+
+  const maySuspend: boolean = $iam_user_has_action(
+    user,
+    "europay:lists:jobs",
+    "Suspend"
+  );
+  const mayRemove: boolean = $iam_user_has_action(
+    user,
+    "europay:lists:jobs",
+    "Remove"
+  );
+  const mayRestart: boolean = $iam_user_has_action(
+    user,
+    "europay:lists:jobs",
+    "Restart"
+  );
 
   return (
     <PageContent

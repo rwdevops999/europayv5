@@ -59,12 +59,7 @@ const NavbarMenu = () => {
     }
 
     // Settings
-    newmenu[2].visible = $iam_user_has_action(
-      user,
-      "europay",
-      "View Settings",
-      true
-    );
+    newmenu[2].visible = $iam_user_has_action(user, "europay", "View Settings");
     if (newmenu[2].visible && newmenu[2].subItems) {
       // General
       newmenu[2].subItems[0].visible = $iam_user_has_action(
@@ -91,16 +86,14 @@ const NavbarMenu = () => {
       newmenu[2].subItems[3].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show Export",
-        true
+        "Show Export"
       );
 
       // Import
       newmenu[2].subItems[4].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show Import",
-        true
+        "Show Import"
       );
     }
 
@@ -130,40 +123,35 @@ const NavbarMenu = () => {
       newmenu[5].subItems[1].visible = $iam_user_has_action(
         user,
         "europay:iam",
-        "Handle Statements",
-        true
+        "Handle Statements"
       );
 
       // Policies
       newmenu[5].subItems[2].visible = $iam_user_has_action(
         user,
         "europay:iam",
-        "Handle Policies",
-        true
+        "Handle Policies"
       );
 
       // Roles
       newmenu[5].subItems[3].visible = $iam_user_has_action(
         user,
         "europay:iam",
-        "Handle Roles",
-        true
+        "Handle Roles"
       );
 
       // Users
       newmenu[5].subItems[4].visible = $iam_user_has_action(
         user,
         "europay:iam",
-        "Handle Users",
-        true
+        "Handle Users"
       );
 
       // Groups
       newmenu[5].subItems[5].visible = $iam_user_has_action(
         user,
         "europay:iam",
-        "Handle Groups",
-        true
+        "Handle Groups"
       );
     }
 

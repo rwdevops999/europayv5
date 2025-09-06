@@ -16,7 +16,7 @@ import { ScrollArea, ScrollBar } from "@/ui/radix/scroll-area";
 import { JSX, useEffect, useState } from "react";
 import ReactHtmlParser from "react-html-parser";
 
-const AppCountry = () => {
+const AppCountry = ({ canChange = true }: { canChange?: boolean }) => {
   const [countries, setCountries] = useState<tCountry[]>([]);
   const [selectedCountry, setSelectedCountry] = useState<tCountry>();
 
@@ -118,38 +118,44 @@ const AppCountry = () => {
 
   return (
     <>
-      <div className="flex justify-center">
-        <button
-          id="btn-country"
-          className="btn btn-sm border-1 border-base-content/30"
-          popoverTarget="popover-1"
-          style={{ anchorName: "--anchor-1" } as React.CSSProperties}
+      {canChange && (
+        <div className="flex justify-center">
+          <button
+            id="btn-country"
+            className="btn btn-sm border-1 border-base-content/30"
+            popoverTarget="popover-1"
+            style={{ anchorName: "--anchor-1" } as React.CSSProperties}
+          >
+            Select country
+          </button>
+        </div>
+      )}
+      {canChange && (
+        <div
+          data-testid="test-country"
+          className="p-1 flex text-4xl font-bold items-center justify-center"
         >
-          Select country
-        </button>
-      </div>
-      <div
-        data-testid="test-country"
-        className="p-1 flex text-4xl font-bold items-center justify-center"
-      >
-        <Command
-          className="dropdown menu w-52 rounded-box bg-base-100 shadow-sm border border-base-content/30 overflow-auto"
-          popover="auto"
-          id="popover-1"
-          style={{ positionAnchor: "--anchor-1" } as React.CSSProperties}
-        >
-          <CommandInput placeholder="country..." />
-          <CommandList>
-            <CommandEmpty>No countries.</CommandEmpty>
-            <CommandGroup>
-              <ScrollArea className="overflow-auto h-[200px] min-h-[200px] max-h-[400px]">
-                {countries.map((_country: tCountry) => renderCountry(_country))}
-                <ScrollBar className="bg-content" />
-              </ScrollArea>
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </div>
+          <Command
+            className="dropdown menu w-52 rounded-box bg-base-100 shadow-sm border border-base-content/30 overflow-auto"
+            popover="auto"
+            id="popover-1"
+            style={{ positionAnchor: "--anchor-1" } as React.CSSProperties}
+          >
+            <CommandInput placeholder="country..." />
+            <CommandList>
+              <CommandEmpty>No countries.</CommandEmpty>
+              <CommandGroup>
+                <ScrollArea className="overflow-auto h-[200px] min-h-[200px] max-h-[400px]">
+                  {countries.map((_country: tCountry) =>
+                    renderCountry(_country)
+                  )}
+                  <ScrollBar className="bg-content" />
+                </ScrollArea>
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </div>
+      )}
       <CountryInfo country={selectedCountry} />
     </>
   );
