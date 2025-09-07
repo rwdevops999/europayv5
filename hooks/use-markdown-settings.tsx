@@ -5,6 +5,7 @@ import { FaMarkdown } from "react-icons/fa6";
 
 interface MarkdownSettingsContextInterface {
   setMarkdown: (value: boolean) => void;
+  markdown: boolean;
   isMarkdownOn: () => boolean;
   getMarkdownNode: () => ReactNode;
 }
@@ -62,6 +63,7 @@ export const MarkdownSettingsProvider = ({
     <MarkdownSettingsContext.Provider
       value={{
         setMarkdown,
+        markdown,
         isMarkdownOn,
         getMarkdownNode,
       }}

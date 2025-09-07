@@ -17,42 +17,46 @@ const SetupServices = ({
 }) => {
   const { getHistory } = useHistorySettings();
 
-  const [servicesLoaded, setServicesLoaded] = useState<boolean>(false);
+  const uploadServicesNeeded = async (): Promise<boolean> => {
+    let result: boolean = false;
+
+    const dbServices: number = await countServices();
+    console.log("[SetupServices]", "in DB are", dbServices);
+
+    const memServices: number = Object.keys(servicesandactions).length;
+    console.log("[SetupServices]", "in mem are", memServices);
+
+    result = (dbServices === 0 && memServices > 0) || dbServices < memServices;
+    console.log("[SetupServices]", "upload needed", result);
+
+    return result;
+  };
 
   const setup = async (): Promise<void> => {
-    const nrOfServices: number = await countServices();
+    let message: string = "SERVICES";
 
-    if (
-      (nrOfServices === 0 && Object.keys(servicesandactions).length > 0) ||
-      nrOfServices < Object.keys(servicesandactions).length
-    ) {
-      await defineServices(servicesandactions, true).then(async () => {
-        await createHistoryEntry(
-          HistoryType.INFO,
-          getHistory(),
-          "INITIALISATION",
-          { subject: "SERVICES" },
-          "Initialise:SetupServices"
-        ).then(() => {
-          setServicesLoaded(true);
-          proceed(true);
-        });
-      });
+    if (await uploadServicesNeeded()) {
+      console.log("[SetupServices]", "Upload Services");
+      await defineServices(servicesandactions, true);
     } else {
-      await createHistoryEntry(
-        HistoryType.INFO,
-        getHistory(),
-        "INITIALISATION",
-        { subject: "SERVICES NOT" },
-        "Initialise:SetupServices"
-      ).then(() => {
-        proceed(true);
-      });
+      console.log("[SetupServices]", "Do NOT Upload Services");
+      message = "SERVICES NOT";
     }
+
+    await createHistoryEntry(
+      HistoryType.INFO,
+      getHistory(),
+      "INITIALISATION",
+      { subject: `${message}` },
+      "Initialise:SetupServices"
+    ).then(() => {
+      proceed(true);
+    });
   };
 
   useEffect(() => {
     if (start) {
+      console.log("Setup Services");
       setup();
     }
   }, [start]);

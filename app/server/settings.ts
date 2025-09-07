@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { tSetting, tSettingCreate } from "@/lib/prisma-types";
+import { cleanDbTables } from "./app-tables";
 
 /**
  * count the number of settings entries
@@ -24,19 +25,25 @@ export const countSettings = async (): Promise<number> => {
  * @returns true if created, false if not
  */
 export const createSettings = async (
-  _settings: tSettingCreate[]
+  _settings: tSettingCreate[],
+  _resetTable: boolean = true,
+  _cascadedelete: boolean = true
 ): Promise<boolean> => {
   let created: boolean = false;
 
-  await prisma.setting.deleteMany({}).then(async () => {
-    await prisma.setting
-      .createMany({
-        data: _settings,
-      })
-      .then(() => {
-        created = true;
-      });
-  });
+  if (_resetTable) {
+    await cleanDbTables(["settings"]);
+  } else {
+    await prisma.setting.deleteMany({});
+  }
+
+  await prisma.setting
+    .createMany({
+      data: _settings,
+    })
+    .then(() => {
+      created = true;
+    });
 
   return created;
 };

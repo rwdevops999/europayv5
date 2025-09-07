@@ -179,12 +179,22 @@ model User {
   @@unique([firstname, lastname])
   groups Group[]
   account Account?
+  settings UserSetting?
 }
 
 enum UserType {
   EUROPAY
   GUEST
 }
+
+model UserSetting {
+  id Int @id @default(autoincrement())
+  key String
+  value String
+  user User? @relation(fields: [userId], references: [id])
+  userId Int? @unique
+}
+
 
 model Group {
   id Int @id @default(autoincrement())
@@ -335,8 +345,8 @@ model Transaction {
   status TransactionStatus? @default(PENDING)
   statusMessage String? @default("")
 
-  senderId Int?
-  
+  parties Int[]
+
   transactionDate DateTime? @default(now())
   createDate DateTime? @default(now())
   updateDate DateTime? @updatedAt

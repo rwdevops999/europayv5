@@ -16,37 +16,46 @@ const SetupSettings = ({
 }) => {
   const { getHistory } = useHistorySettings();
 
-  const [settingsLoaded, setSettingsLoaded] = useState<boolean>(false);
+  const uploadSettingsNeeded = async (): Promise<boolean> => {
+    let result: boolean = false;
 
-  const createHistoryForSettings = async (_message: string): Promise<void> => {
+    const dbSettings: number = await countSettings();
+    console.log("[SetupSettings]", "in DB are", dbSettings);
+
+    const memSettings: number = appsettings.length;
+    console.log("[SetupSettings]", "in mem are", memSettings);
+
+    result = (dbSettings === 0 && memSettings > 0) || dbSettings < memSettings;
+    console.log("[SetupSettings]", "upload needed", result);
+
+    return result;
+  };
+
+  const setup = async (): Promise<void> => {
+    let message: string = "SETTINGS";
+
+    if (await uploadSettingsNeeded()) {
+      console.log("[SetupSettings]", "Upload Settings");
+      await createSettings(appsettings);
+    } else {
+      console.log("[SetupSettings]", "Do NOT Upload Settings");
+      message = "SETTINGS NOT";
+    }
+
     await createHistoryEntry(
       HistoryType.INFO,
       getHistory(),
       "INITIALISATION",
-      { subject: `${_message}` },
-      "Initialise:SetupServices"
-    );
-  };
-
-  const setup = async (): Promise<void> => {
-    const nrOfSettings: number = await countSettings();
-
-    const loadSettings: boolean = nrOfSettings < appsettings.length;
-    if (loadSettings) {
-      await createSettings(appsettings).then(async () => {
-        setSettingsLoaded(true);
-        await createHistoryForSettings("SETTINGS").then(() => {
-          setSettingsLoaded(true);
-          proceed(true);
-        });
-      });
-    } else {
-      await createHistoryForSettings("SETTINGS NOT").then(() => proceed(true));
-    }
+      { subject: `${message}` },
+      "Initialise:SetupSettings"
+    ).then(() => {
+      proceed(true);
+    });
   };
 
   useEffect(() => {
     if (start) {
+      console.log("Setup Settings");
       setup();
     }
   }, [start]);

@@ -122,3 +122,28 @@ export const uploadTemplates = async (
 
   return loaded;
 };
+
+export const getDBTemplatesCount = async (): Promise<number> => {
+  let result: number = 0;
+
+  await prisma.template.count().then((value: number) => (result = value));
+
+  return result;
+};
+
+export const getFileTemplatesCount = async (
+  filename: string | undefined
+): Promise<number> => {
+  let result: number = 0;
+
+  if (filename) {
+    const csvFilePath = path.resolve(filename);
+    const fileContent = fs.readFileSync(csvFilePath);
+    var decoder = new TextDecoder("utf-8");
+    let str = decoder.decode(fileContent);
+    let templates: tTemplate[] = JSON.parse(str);
+    result = templates.length;
+  }
+
+  return result;
+};

@@ -9,12 +9,23 @@ import { json } from "@/lib/util";
  *
  * @param _table the table in the DB
  */
-const resetTable = async (_table: string): Promise<void> => {
-  await prisma.$executeRawUnsafe(`DELETE from \"${_table}\"`).then(async () => {
+const resetTable = async (
+  _table: string,
+  _cascadedelete: boolean = true
+): Promise<void> => {
+  if (!_cascadedelete) {
+    await prisma
+      .$executeRawUnsafe(`DELETE from \"${_table}\"`)
+      .then(async () => {
+        await prisma.$executeRawUnsafe(
+          `ALTER SEQUENCE \"${_table}_id_seq\" RESTART;`
+        );
+      });
+  } else {
     await prisma.$executeRawUnsafe(
-      `ALTER SEQUENCE \"${_table}_id_seq\" RESTART;`
+      `TRUNCATE \"${_table}\" RESTART IDENTITY CASCADE`
     );
-  });
+  }
 };
 
 /**
@@ -25,17 +36,18 @@ const resetTable = async (_table: string): Promise<void> => {
  */
 export const cleanDbTables = async (
   _tables: string[],
-  checklinked: boolean = true
+  _checklinked: boolean = true,
+  _cascadeDelete: boolean = true
 ): Promise<void> => {
   for (let i = 0; i < _tables.length; i++) {
     const tableToClean: string = _tables[i];
     const tableName = dbTables[tableToClean];
 
-    await resetTable(tableName);
-    if (checklinked) {
+    await resetTable(tableName, _cascadeDelete);
+    if (_checklinked) {
       const linked: string[] | undefined = linkedDbTables[tableToClean];
       if (linked) {
-        await cleanDbTables(linked, false);
+        await cleanDbTables(linked, false, _cascadeDelete);
       }
     }
   }

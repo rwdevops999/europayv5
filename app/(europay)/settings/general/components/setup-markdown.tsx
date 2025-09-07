@@ -4,10 +4,11 @@ import { updateSetting } from "@/app/server/settings";
 import { useMarkdownSettings } from "@/hooks/use-markdown-settings";
 import { defaultSetting } from "@/lib/constants";
 import { tSetting } from "@/lib/prisma-types";
+import { useEffect, useState } from "react";
 import { SiMarkdown } from "react-icons/si";
 
 const SetupMarkdown = () => {
-  const { isMarkdownOn, setMarkdown } = useMarkdownSettings();
+  const { markdown, setMarkdown } = useMarkdownSettings();
 
   const updateValue = async (_key: string, _value: any) => {
     const setting: tSetting = defaultSetting;
@@ -22,6 +23,13 @@ const SetupMarkdown = () => {
 
     updateValue("Markdown", event.target.checked.toString());
   };
+
+  const [rerender, setRerender] = useState<number>(0);
+
+  useEffect(() => {
+    console.log("markdow changed", "RERENDER");
+    setRerender((x: number) => x + 1);
+  }, [markdown]);
 
   return (
     <div>
@@ -39,7 +47,7 @@ const SetupMarkdown = () => {
               <input
                 type="checkbox"
                 className="checkbox checkbox-xs rounded-sm"
-                checked={isMarkdownOn()}
+                checked={markdown}
                 onChange={(event) => handleMarkdownChange(event)}
               />
             </div>

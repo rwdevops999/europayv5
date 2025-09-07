@@ -22,8 +22,8 @@ export const dbTables: Record<string, string> = {
 
 export const linkedDbTables: Record<string, string[]> = {
   services: ["serviceactions"],
-  servicestatements: ["servicestatementactions"],
-  users: ["addresses", "accounts"],
+  // servicestatements: ["servicestatementactions"],
+  // users: ["addresses", "accounts"],
 };
 
 export type dbResult = {

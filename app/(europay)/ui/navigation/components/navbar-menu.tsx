@@ -17,7 +17,7 @@ const NavbarMenu = () => {
   const setMenuVisibilities = (_menu: MenuItem[]): void => {
     let newmenu: MenuItem[] = [..._menu];
 
-    // Dahsboard menu
+    // Dashboard menu
     newmenu[0].visible = $iam_user_has_action(
       user,
       "europay",

@@ -94,7 +94,8 @@ const createIncomingTransaction = async (
 const updateTransactionStatus = async (
   _id: number,
   _status: TransactionStatus,
-  _statusmessage: string
+  _statusmessage: string,
+  _parties: number[]
 ): Promise<void> => {
   await prisma.transaction.update({
     where: {
@@ -103,6 +104,7 @@ const updateTransactionStatus = async (
     data: {
       status: _status,
       statusMessage: _statusmessage,
+      parties: _parties,
     },
   });
 };
@@ -156,6 +158,8 @@ export const handlePayment = async (
   let receiverAccountId: number = 0;
   let receiverAccountAmount: number = 0;
 
+  let receiver: tUser | null = null;
+
   if (sender && sender.account) {
     senderEmail = sender.email;
     senderAccountId = sender.account.id;
@@ -176,7 +180,7 @@ export const handlePayment = async (
         executePayment = true;
       } else {
         // _to is an email or username
-        const receiver: tUser | null = await loadUserByUsernameOrEmail(_to);
+        receiver = await loadUserByUsernameOrEmail(_to);
         if (receiver && receiver.account) {
           receiverEmail = receiver.email;
           receiverAccountId = receiver.account.id;
@@ -283,7 +287,17 @@ export const handlePayment = async (
         })
         .then(async () => {
           console.log("UPDATING TRANSACTION STATUS");
-          await updateTransactionStatus(transaction.id, status, statusmessage);
+          let parties: number[] = [];
+
+          parties[0] = sender ? sender.id : 0;
+          parties[1] = receiver ? receiver.id : 0;
+
+          await updateTransactionStatus(
+            transaction.id,
+            status,
+            statusmessage,
+            parties
+          );
         })
         .then(async () => {
           console.log("SEND EMAIL");
@@ -292,11 +306,19 @@ export const handlePayment = async (
     }
   } else {
     if (transaction?.status === TransactionStatus.PENDING) {
-      await updateTransactionStatus(transaction.id, status, statusmessage).then(
-        () => {
-          console.log("SEND EMAIL FOR REJECTED TRANSACTION");
-        }
-      );
+      let parties: number[] = [];
+
+      parties[0] = sender ? sender.id : 0;
+      parties[1] = receiver ? receiver.id : 0;
+
+      await updateTransactionStatus(
+        transaction.id,
+        status,
+        statusmessage,
+        parties
+      ).then(() => {
+        console.log("SEND EMAIL FOR REJECTED TRANSACTION");
+      });
     }
   }
 

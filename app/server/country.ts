@@ -21,6 +21,17 @@ export const countCountries = async (): Promise<number> => {
   return result;
 };
 
+const countCountriesFromFile = async (filename: string): Promise<number> => {
+  const csvFilePath = path.resolve(filename);
+  const fileContent = fs.readFileSync(csvFilePath);
+  var decoder = new TextDecoder("utf-8");
+  let str = decoder.decode(fileContent);
+
+  let countries: tCountryFile[] = JSON.parse(str);
+
+  return countries.length;
+};
+
 export const loadCountries = async (): Promise<tCountry[]> => {
   let result: tCountry[] = [];
 
@@ -82,7 +93,8 @@ const provisionCountries = async (
 };
 
 export const defineCountries = async (
-  _resetTables: boolean = false
+  _resetTables: boolean = true,
+  _cascade: boolean = false
 ): Promise<number> => {
   let count: number = 0;
 
@@ -90,7 +102,7 @@ export const defineCountries = async (
 
   if (countriesFile) {
     if (_resetTables) {
-      await cleanDbTables(["countries"], false);
+      await cleanDbTables(["countries"], false, false);
     }
 
     await provisionCountries(countriesFile).then((value: number) => {

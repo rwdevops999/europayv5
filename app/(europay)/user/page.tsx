@@ -1,5 +1,7 @@
 import { absoluteUrl } from "@/lib/util";
 import PageContent from "@/ui/page-content";
+import PageItemContainer from "@/ui/page-item-container";
+import UserAccount from "./components/user-account";
 
 const UserPage = () => {
   return (
@@ -14,10 +16,10 @@ const UserPage = () => {
         className="w-[98vw] h-[84vh] rounded-sm grid flex-1 items-start gap-2 grid-cols-8"
       >
         <div className="col-span-2 m-1 group relative flex flex-col overflow-hidden rounded-md shadow transition-all duration-200 ease-in-out hover:z-30 space-y-2">
-          {/* <PageItemContainer title="user account" border>
+          <PageItemContainer title="user account" border>
             <UserAccount />
           </PageItemContainer>
-          <PageItemContainer title="payment" border>
+          {/* <PageItemContainer title="payment" border>
             <UserPayment />
           </PageItemContainer> */}
         </div>

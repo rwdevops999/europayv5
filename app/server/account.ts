@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { cWhatToSelectFromAccount } from "@/lib/prisma-types";
+import { cWhatToSelectFromAccount, tAccount } from "@/lib/prisma-types";
 import { equal } from "assert";
 
 export const updateAccountAmount = async (
@@ -18,4 +18,26 @@ export const updateAccountAmount = async (
       },
     },
   });
+};
+
+export const getAccountAmount = async (
+  _accountId: number | undefined,
+  _currencyCode: string
+): Promise<string> => {
+  let result: string = "";
+
+  await prisma.account
+    .findFirst({
+      where: {
+        id: _accountId,
+      },
+      ...cWhatToSelectFromAccount,
+    })
+    .then((value: tAccount | null) => {
+      if (value) {
+        result = value.amount.toFixed(2);
+      }
+    });
+
+  return result;
 };

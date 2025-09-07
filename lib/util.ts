@@ -200,3 +200,9 @@ export const validEmail = (_email: string) => {
   const re: RegExp = /^\S+@\S+\.\S+$/;
   return re.test(_email);
 };
+
+export const generateClientId = (): string => {
+  const params: string[] = uuidv4().split("-");
+
+  return params[params.length - 1];
+};

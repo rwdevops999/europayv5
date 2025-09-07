@@ -37,7 +37,6 @@ const Initialisation = () => {
   const [setupServerJobs, setSetupServerJobs] = useState<boolean>(false);
   const [setupClientJobs, setSetupClientJobs] = useState<boolean>(false);
   const [initIam, setInitIam] = useState<boolean>(false);
-  const [enableCursor, setEnableCursor] = useState<boolean>(false);
 
   return (
     <>
@@ -46,10 +45,10 @@ const Initialisation = () => {
       <SetupCountries start={initCountries} proceed={setInitSettings} />
       <SetupSettings start={initSettings} proceed={setProcessSettings} />
       <ProcessSettings start={processSettings} proceed={setDeleteClientJobs} />
-      <DeleteClientJobs start={deleteClientJobs} proceed={setSetupServerJobs} />
-      <SetupServerJobs start={setupServerJobs} proceed={setSetupClientJobs} />
-      <SetupClientJobs start={setupClientJobs} proceed={setInitIam} />
-      <CreateManagedIam start={initIam} proceed={setEnableCursor} />
+      {/* <DeleteClientJobs start={deleteClientJobs} proceed={setSetupServerJobs} /> */}
+      {/* <SetupServerJobs start={setupServerJobs} proceed={setSetupClientJobs} /> */}
+      {/* <SetupClientJobs start={setupClientJobs} proceed={setInitIam} /> */}
+      {/* <CreateManagedIam start={initIam} proceed={setEnableCursor} /> */}
     </>
   );
 };

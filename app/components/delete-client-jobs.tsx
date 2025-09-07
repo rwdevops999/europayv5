@@ -3,8 +3,10 @@
 import { useHistorySettings } from "@/hooks/use-history-settings";
 import { useEffect, useState } from "react";
 import { createHistoryEntry } from "../server/history";
-import { HistoryType, JobModel } from "@/generated/prisma";
+import { HistoryType, JobModel, JobStatus } from "@/generated/prisma";
 import { clearRunningJobs } from "../server/job";
+import { tJob } from "@/lib/prisma-types";
+import { TaskPollerJobName, TransactionPollerJobName } from "@/lib/constants";
 
 const DeleteClientJobs = ({
   start,
@@ -27,22 +29,28 @@ const DeleteClientJobs = ({
     );
   };
 
-  const setup = async (): Promise<void> => {
-    const deletedJobs: boolean = await clearRunningJobs(JobModel.CLIENT);
+  const handleJobsOf = async (_type: string): Promise<void> => {};
 
-    setJobsDeleted(deletedJobs);
-    if (deletedJobs) {
-      await createHistoryForJobs("DELETION CLIENT JOBS").then(() => {
-        proceed(true);
-      });
-    } else {
-      createHistoryForJobs("DELETION CLIENT JOBS NOT");
-      proceed(true);
-    }
+  const setup = async (): Promise<void> => {
+    handleJobsOf(TaskPollerJobName);
+    handleJobsOf(TransactionPollerJobName);
+
+    // const jobs: tJob = await findJobs(JobModel.CLIENT, [JobStatus.CREATED, JobStatus.SUSPENDED, JobStatus.COMPLETED]);
+
+    // setJobsDeleted(deletedJobs);
+    // if (deletedJobs) {
+    //   await createHistoryForJobs("DELETION CLIENT JOBS").then(() => {
+    //     proceed(true);
+    //   });
+    // } else {
+    //   createHistoryForJobs("DELETION CLIENT JOBS NOT");
+    //   proceed(true);
+    // }
   };
 
   useEffect(() => {
     if (start) {
+      console.log("DELETE CLIENT JOBS");
       setup();
     }
   }, [start]);

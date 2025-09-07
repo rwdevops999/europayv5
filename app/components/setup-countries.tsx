@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { countCountries, defineCountries } from "../server/country";
 import { createHistoryEntry } from "../server/history";
 import { HistoryType } from "@/generated/prisma";
+import { getFileTemplatesCount } from "../server/templates";
 
 const SetupCountries = ({
   start,
@@ -15,29 +16,50 @@ const SetupCountries = ({
 }) => {
   const { getHistory } = useHistorySettings();
 
-  const [countriesLoaded, setCountriesLoaded] = useState<boolean>(false);
+  const uploadCountriesNeeded = async (): Promise<boolean> => {
+    let result: boolean = false;
 
-  const createHistoryForCountries = async (_message: string): Promise<void> => {
+    const dbCountries: number = await countCountries();
+    console.log("[SetupCountries]", "in DB are", dbCountries);
+
+    let countriesFile: string | undefined =
+      process.env.NEXT_PUBLIC_COUNTRY_FILE;
+
+    const fileCountries: number = await getFileTemplatesCount(countriesFile);
+    console.log("[SetupCountries]", "in file are", fileCountries);
+
+    result =
+      (dbCountries === 0 && fileCountries > 0) || dbCountries < fileCountries;
+    console.log("[SetupCountries]", "upload needed", result);
+
+    return result;
+  };
+
+  const setup = async (): Promise<void> => {
+    let message: string = "COUNTRIES";
+
+    if (await uploadCountriesNeeded()) {
+      console.log("[SetupCountries]", "Upload Countries");
+      await defineCountries(true);
+    } else {
+      console.log("[SetupCountries]", "Do NOT Upload Countries");
+      message = "COUNTRIES NOT";
+    }
+
     await createHistoryEntry(
       HistoryType.INFO,
       getHistory(),
       "INITIALISATION",
-      { subject: `${_message}` },
-      "Initialise:SetupServices"
-    );
-  };
-
-  const setup = async (): Promise<void> => {
-    await defineCountries(true).then(async () => {
-      await createHistoryForCountries("COUNTRIES").then(() => {
-        setCountriesLoaded(true);
-        proceed(true);
-      });
+      { subject: `${message}` },
+      "Initialise:SetupCountries"
+    ).then(() => {
+      proceed(true);
     });
   };
 
   useEffect(() => {
     if (start) {
+      console.log("Setup Countries");
       setup();
     }
   }, [start]);

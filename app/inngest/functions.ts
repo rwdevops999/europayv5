@@ -35,7 +35,7 @@ const transactionPoller = inngest.createFunction(
     name: "Transaction Poller",
     cancelOn: [
       {
-        event: "europay/TaskPoller.suspend",
+        event: "europay/TransactionPoller.suspend",
         // ensure the async (future) event's userId matches the trigger userId
         match: "data.jobid",
       },
@@ -50,7 +50,9 @@ const transactionPoller = inngest.createFunction(
         where: {
           AND: [
             {
-              senderId: userid,
+              parties: {
+                has: userid,
+              },
             },
             {
               OR: [
@@ -138,6 +140,8 @@ const taskPoller = inngest.createFunction(
   },
   { event: "europay/TaskPoller" },
   async ({ event }) => {
+    const { jobid } = event.data;
+
     await prisma.task
       .count({
         where: {
@@ -152,11 +156,15 @@ const taskPoller = inngest.createFunction(
         },
       })
       .then(async (_value: number) => {
-        await fetch(
-          absoluteUrl(`/api/notification/send?key=${taskKey}&value=${_value}`)
-        );
+        await changeJobStatus(jobid, JobStatus.RUNNING).then(async () => {
+          await fetch(
+            absoluteUrl(`/api/notification/send?key=${taskKey}&value=${_value}`)
+          );
+        });
       });
   }
 );
+
+// create here the test functions
 
 export const inngestfunctions = [createOTPJob, taskPoller, transactionPoller];
