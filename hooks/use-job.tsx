@@ -1,12 +1,20 @@
 "use client";
 
-import { createContext, ReactNode, useContext, useRef, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { json } from "../lib/util";
 import { timings, tTimingGroup } from "@/app/client/data/timings-data";
 
 interface JobContextInterface {
-  jobCount: number;
-  setJobCount: (value: number) => void;
+  jobsChanged: number;
+  setJobsChanged: (value: number) => void;
+  incrementJobsChanged: () => void;
   setJobTiming: (jobname: string, value: string) => void;
   getJobTiming: (jobname: string) => number;
   getJobTimings: () => tTimingGroup[];
@@ -26,11 +34,14 @@ export const useJob = () => {
 };
 
 export const JobProvider = ({ children }: { children: ReactNode }) => {
-  const [jobCount, setJobCount] = useState<number>(0);
+  const [jobsChanged, setJobsChanged] = useState<number>(0);
 
   const jobTimings = useRef<Record<string, number>>({});
   const jobTimingNotation = useRef<Record<string, string>>({});
 
+  const incrementJobsChanged = (): void => {
+    setJobsChanged((x: number) => x + 1);
+  };
   const setJobTimingNotation = (jobname: string, value: string): void => {
     jobTimingNotation.current[jobname] = value;
   };
@@ -72,8 +83,9 @@ export const JobProvider = ({ children }: { children: ReactNode }) => {
   return (
     <JobContext.Provider
       value={{
-        jobCount,
-        setJobCount,
+        jobsChanged,
+        incrementJobsChanged,
+        setJobsChanged,
         setJobTiming,
         getJobTiming,
         getJobTimings,

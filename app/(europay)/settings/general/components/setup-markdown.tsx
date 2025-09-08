@@ -27,7 +27,6 @@ const SetupMarkdown = () => {
   const [rerender, setRerender] = useState<number>(0);
 
   useEffect(() => {
-    console.log("markdow changed", "RERENDER");
     setRerender((x: number) => x + 1);
   }, [markdown]);
 

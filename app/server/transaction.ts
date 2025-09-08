@@ -213,17 +213,6 @@ export const handlePayment = async (
       email.params = { sender: _from, receiver: _to };
     }
   } else {
-    if (sender) {
-      console.log("SENDER KNOWN");
-      if (sender.account) {
-        console.log("SENDER ACCOUNT KNOWN");
-      } else {
-        console.log("SENDER ACCOUNT UNKNOWN");
-      }
-    } else {
-      console.log("SENDER UNKNOWN");
-    }
-
     // if (validEmail(_from)) {
     status = TransactionStatus.REJECTED;
     statusmessage = "Sender invalid";
@@ -252,10 +241,8 @@ export const handlePayment = async (
       );
 
     if (transaction?.status === TransactionStatus.PENDING) {
-      console.log("UPDATING SENDER ACCOUNT");
       await updateAccountAmount(senderAccountId, -amountToPay)
         .then(async () => {
-          console.log("CREATE SENDER TRANSACTION DETAIL");
           await createTransactionDetail(
             transaction.transactionid,
             senderEmail,
@@ -267,7 +254,6 @@ export const handlePayment = async (
         })
         .then(async () => {
           if (!isBankAccount) {
-            console.log("UPDATING RECEIVER ACCOUNT");
             await updateAccountAmount(
               receiverAccountId,
               amountPayableToReceiver
@@ -275,7 +261,6 @@ export const handlePayment = async (
           }
         })
         .then(async () => {
-          console.log("CREATE RECEIVER TRANSACTION DETAIL");
           await createTransactionDetail(
             transaction.transactionid,
             receiverEmail,
@@ -286,7 +271,6 @@ export const handlePayment = async (
           );
         })
         .then(async () => {
-          console.log("UPDATING TRANSACTION STATUS");
           let parties: number[] = [];
 
           parties[0] = sender ? sender.id : 0;

@@ -87,22 +87,13 @@ const ProcessSettings = ({
     //   );
     // }
 
-    console.log("[ProcessSettings] load OTP Settings");
     settings = await loadSettings(["General"], ["OTP"], []);
 
     setting = settings.find((setting: tSetting) => setting.key === "Timing");
 
     if (setting) {
-      console.log(
-        "[ProcessSettings] setting found in db, set timing to ",
-        setting.value
-      );
       setTiming(setting.value);
     } else {
-      console.log(
-        "[ProcessSettings] setting not found in db, set timing to ",
-        envOtpTiming ? envOtpTiming : "5'"
-      );
       setTiming(envOtpTiming ? envOtpTiming : "5'");
     }
   };
@@ -110,16 +101,9 @@ const ProcessSettings = ({
   const handleLimits = async (): Promise<void> => {
     let settings: tSetting[] = [];
 
-    console.log("[ProcessSettings] load Limit Settings");
     settings = await loadSettings(["Limit"], ["Job"], []);
 
     settings.forEach((setting: tSetting) => {
-      console.log(
-        "[ProcessSettings] set timing for",
-        setting.key,
-        "TO",
-        setting.value
-      );
       setJobTiming(setting.key, setting.value);
     });
 
@@ -127,17 +111,13 @@ const ProcessSettings = ({
   };
 
   const process = async (): Promise<void> => {
-    console.log("[process]: first handle application settings");
-
     await handleSettings().then(async () => {
-      console.log("[process]: second handle limits settings");
       await handleLimits().then(() => proceed(true));
     });
   };
 
   useEffect(() => {
     if (start) {
-      console.log("Processing Settings");
       process();
     }
   }, [start]);

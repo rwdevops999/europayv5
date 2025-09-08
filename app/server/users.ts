@@ -245,7 +245,6 @@ export const blockUser = async (_id: number): Promise<void> => {
 export const loadUserByUsernameOrEmail = async (
   _value: string
 ): Promise<tUser | null> => {
-  console.log("FIND USER BY EMAIL OR USERNAME", _value);
   let result: tUser | null = null;
 
   await prisma.user
@@ -263,7 +262,6 @@ export const loadUserByUsernameOrEmail = async (
       ...cWhatToSelectFromUser,
     })
     .then(async (value: tUser | null) => {
-      console.log("FOUND USER BY EMAIL OR USERNAME", json(value));
       if (value) {
         value.password = await decrypt(value.password);
       }

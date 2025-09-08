@@ -120,46 +120,10 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
     enableSortingRemoval: false,
   });
 
-  useEffect(() => {
-    console.log("DATA ARRIVED", json(data), "FOR", id);
-
-    if (data.length > 0) {
-      console.log("DATA ARRIVED", "CORE MODEL", json(table.getCoreRowModel()));
-    }
-
-    //   if (selectedItems.length > 0) {
-    //     let state: Record<string, boolean> = {};
-    //     selectedItems.map((item: number | undefined) => {
-    //       if (item) {
-    //         const row: Row<TData> | undefined = Object.values(
-    //           table.getRowModel().rowsById
-    //         ).find((row: Row<TData>) => row.original.id === item);
-    //         if (row) {
-    //           state[row.id] = true;
-    //         }
-    //       }
-    //     });
-
-    //     if (data.length > 0) {
-    //       setRowSelection({ ...state });
-    //     }
-    //   }
-  }, [data]);
-
   let xrowSelection: RowSelectionState = {};
 
   useEffect(() => {
-    console.log(
-      "[DT]:UE[selectedItems]",
-      "selected items",
-      json(selectedItems)
-    );
     if (selectedItems) {
-      console.log(
-        "[DT]:UE[selectedItems]",
-        "coreModel",
-        json(table.getCoreRowModel())
-      );
       let selection: Record<string, boolean> = table
         .getCoreRowModel()
         .rows.reduce<Record<string, boolean>>(
@@ -174,7 +138,6 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
         );
 
       xrowSelection = selection;
-      console.log("[DT]", "new rowSelection", xrowSelection);
 
       setRowSelection(selection);
     }
@@ -201,7 +164,6 @@ export function DataTable<TData extends IDataSubRows<TData>, TValue>({
       return row.original.id!;
     });
 
-    console.log("[DT]", "CALLING HANDLE CHANGE SELECTION", json(itemIds));
     handleChangeSelection(itemIds);
     //       handleChangeSelection(itemIds);
     //     } else {

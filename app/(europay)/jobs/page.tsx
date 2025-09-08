@@ -17,8 +17,11 @@ import JobsTable from "./components/jobs-table";
 import JobInfo from "./components/job-info";
 import JobActionButtons from "./components/job-action-buttons";
 import { JsonValue } from "@/generated/prisma/runtime/library";
+import { useJob } from "@/hooks/use-job";
 
 const JobsPage = () => {
+  const { jobsChanged } = useJob();
+
   const [jobs, setJobs] = useState<tJob[]>([]);
 
   const loadDatabaseJobs = async (): Promise<void> => {
@@ -28,7 +31,7 @@ const JobsPage = () => {
   useEffect(() => {
     loadDatabaseJobs();
     setSelectedJobIds([]);
-  }, []);
+  }, [jobsChanged]);
 
   // const selectedJobsIds = useRef<number[]>([]);
   const [selectedJobIds, setSelectedJobIds] = useState<number[]>([]);

@@ -34,14 +34,6 @@ const NavbarUserProfile = () => {
   const runInngestJobForTransactionPoller = async (
     jobId: number
   ): Promise<void> => {
-    console.log(
-      "[USER_PROFILE]",
-      "run Inngest job for transaction polling",
-      "Data (job, user, timing)",
-      jobId,
-      user?.id,
-      getJobTiming(TransactionPollerJobName)
-    );
     await runInngestJob(
       TransactionPollerJobName,
       getJobTiming(TransactionPollerJobName),
@@ -64,11 +56,9 @@ const NavbarUserProfile = () => {
   };
 
   const startupJob = async (_jobname: string): Promise<void> => {
-    console.log("[USER_PROFILE]", "startup job", _jobname);
     await createTransactionPollerJob(_jobname).then(
       async (job: tJob | null) => {
         if (job) {
-          console.log("[USER_PROFILE]", "job created", "ID", job.id);
           await runInngestJobForTransactionPoller(job.id);
         }
       }
@@ -78,25 +68,10 @@ const NavbarUserProfile = () => {
   const transactionListenerFunction = async (data: any): Promise<void> => {
     const { key, value } = data;
 
-    console.log(
-      "[USER_PROFILE]",
-      "transactionListenerFunction (KEY, VALUE)",
-      key,
-      value
-    );
-
     if (key === `${transactionKey}:${user?.id}`) {
-      console.log("[USER_PROFILE]", "transactionListenerFunction", "KEY IS OK");
-
       const jobname: string = `${TransactionPollerJobName}:${user?.id}`;
       await findJobByName(jobname).then(async (job: tJob | null) => {
         if (job && job.status === JobStatus.RUNNING) {
-          console.log(
-            "[USER_PROFILE]",
-            "transactionListenerFunction",
-            "UPDATE HOOK",
-            value > 0
-          );
           setTransactionAvailable(value > 0);
           await deleteJob(job.id).then(() => {
             startupJob(jobname);
@@ -108,16 +83,8 @@ const NavbarUserProfile = () => {
 
   useEffect(() => {
     if (user) {
-      console.log("[USER_PROFILE]", "USER LOGGED IN");
       const jobname: string = `${TransactionPollerJobName}:${user.id}`;
-      console.log("[USER_PROFILE]", "jobname", jobname);
       if (socket) {
-        console.log(
-          "[USER_PROFILE]",
-          "register listener",
-          "key",
-          `${transactionKey}:${user.id}`
-        );
         registerListener(
           socket,
           `${transactionKey}:${user.id}`,

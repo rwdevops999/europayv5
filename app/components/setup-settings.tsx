@@ -20,13 +20,10 @@ const SetupSettings = ({
     let result: boolean = false;
 
     const dbSettings: number = await countSettings();
-    console.log("[SetupSettings]", "in DB are", dbSettings);
 
     const memSettings: number = appsettings.length;
-    console.log("[SetupSettings]", "in mem are", memSettings);
 
     result = (dbSettings === 0 && memSettings > 0) || dbSettings < memSettings;
-    console.log("[SetupSettings]", "upload needed", result);
 
     return result;
   };
@@ -35,10 +32,8 @@ const SetupSettings = ({
     let message: string = "SETTINGS";
 
     if (await uploadSettingsNeeded()) {
-      console.log("[SetupSettings]", "Upload Settings");
       await createSettings(appsettings);
     } else {
-      console.log("[SetupSettings]", "Do NOT Upload Settings");
       message = "SETTINGS NOT";
     }
 
@@ -55,7 +50,6 @@ const SetupSettings = ({
 
   useEffect(() => {
     if (start) {
-      console.log("Setup Settings");
       setup();
     }
   }, [start]);

@@ -50,7 +50,6 @@ const DeleteClientJobs = ({
 
   useEffect(() => {
     if (start) {
-      console.log("DELETE CLIENT JOBS");
       setup();
     }
   }, [start]);

@@ -732,7 +732,6 @@ const UserCarrousel = (props: UserCarrouselProps) => {
 
   const handleCreateUser = async (_entity: UserEntity): Promise<void> => {
     const user: tUserCreate = provisionUserForCreate(_entity);
-    console.log("Create USER");
 
     await createUser(user).then((errorcode: string | undefined | tUser) => {
       if (errorcode && typeof errorcode === "string") {
@@ -841,7 +840,6 @@ const UserCarrousel = (props: UserCarrouselProps) => {
   };
 
   const onSubmit: SubmitHandler<UserEntity> = async (formData: UserEntity) => {
-    console.log("submitting");
     const valid: boolean = await validateDependencies();
 
     if (valid) {
@@ -866,7 +864,6 @@ const UserCarrousel = (props: UserCarrouselProps) => {
     useState<boolean>(false);
 
   const validateDependencies = async (): Promise<boolean> => {
-    console.log("VALIDATE USER");
     let valid: boolean = true;
 
     const _entity: UserEntity = getValues();
@@ -876,13 +873,11 @@ const UserCarrousel = (props: UserCarrouselProps) => {
     );
 
     const _mappedPolicies: Data[] = mapPolicies(_selectedPolicies);
-    console.log("mapped policies", _mappedPolicies);
 
     const _selectedRoles: tRole[] = props.roles.filter((_role: tRole) =>
       linkedRoles.current.includes(_role.id)
     );
     const _mappedRoles: Data[] = mapRoles(_selectedRoles);
-    console.log("mapped roles", _mappedRoles);
 
     const _selectedGroups: tGroup[] = props.groups.filter((_group: tGroup) =>
       linkedGroups.current.includes(_group.id)

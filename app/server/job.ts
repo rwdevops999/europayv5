@@ -227,7 +227,6 @@ export const findJobByName = async (_name: string): Promise<tJob | null> => {
 export const findJobById = async (_id: number): Promise<tJob | null> => {
   let result: tJob | null = null;
 
-  console.log("[JOB]:findJobById", _id);
   await prisma.job
     .findFirst({
       where: {
@@ -235,7 +234,6 @@ export const findJobById = async (_id: number): Promise<tJob | null> => {
       },
     })
     .then((value: tJob | null) => {
-      console.log("[JOB]:findJobById", "Job", json(value));
       result = value;
     });
 

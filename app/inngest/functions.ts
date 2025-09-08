@@ -45,7 +45,6 @@ const transactionPoller = inngest.createFunction(
   { event: "europay/TransactionPoller" },
   async ({ event }) => {
     const { jobid, userid } = event.data;
-    console.log("[INNGEST] : TransactionPoller (JOB, USER)", jobid, userid);
     await prisma.transaction
       .count({
         where: {
@@ -72,11 +71,6 @@ const transactionPoller = inngest.createFunction(
         },
       })
       .then(async (_value: number) => {
-        console.log(
-          "[INNGEST] : SEND (KEY, VALUE)",
-          `${transactionKey}:${userid}`,
-          _value
-        );
         await fetch(
           absoluteUrl(
             `/api/notification/send?key=${transactionKey}:${userid}&value=${_value}`

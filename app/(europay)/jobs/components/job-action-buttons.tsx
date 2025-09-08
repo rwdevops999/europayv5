@@ -61,9 +61,7 @@ const JobActionButtons = ({
   };
 
   const confirmDialog = async (): Promise<void> => {
-    console.log("Confirm Dialog");
     if (removeSelectedJobs) {
-      console.log("[confirmDialog] => call parent");
       removeSelectedJobs();
     }
 

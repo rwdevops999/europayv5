@@ -165,7 +165,6 @@ export const mapPolicies = (
 ): Data[] => {
   let result: Data[] = [];
 
-  console.log("MAP POLICIES", _depth);
   if (_policies) {
     let servicename: string;
 

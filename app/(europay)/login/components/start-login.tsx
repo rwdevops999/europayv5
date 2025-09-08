@@ -210,12 +210,8 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
   ): Promise<void> => {
     setProcessingOn();
 
-    console.log("loginWithEmailOrUsername");
     await loadUserByUsernameOrEmail(_emailOrUsername).then(
       async (user: tUser | null) => {
-        console.dir("loginWithEmailOrUsername: User" + json(user), {
-          depth: null,
-        });
         if (user) {
           userRef.current = user;
           continueWithUser(user);
