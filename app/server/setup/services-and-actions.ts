@@ -74,7 +74,7 @@ export const servicesandactions: Record<string, string[]> = {
 
   "europay:manual": ["Show Chapters"],
 
-  "europay:authorisation": ["Login", "Logout"],
+  "europay:authorisation": ["Login", "Logout", "Settings"],
 
   "europay:socialmedia": ["Execute"],
 

@@ -21,6 +21,8 @@ import {
 import { JobModel, JobStatus } from "@/generated/prisma";
 import { useTransaction } from "@/hooks/use-transaction";
 import { useJob } from "@/hooks/use-job";
+import UserSettings from "./user-settings";
+import { $iam_user_has_action } from "@/app/client/iam-access";
 
 // const JOB_NAME: string = "TransactionPoller";
 // const JOB_TIMING: number = 1 * 60 * 1000;
@@ -119,7 +121,7 @@ const NavbarUserProfile = () => {
           <UserInfo />
         </li>
         <li>
-          <a>Settings</a>
+          <UserSettings />
         </li>
         <li>
           <UserAuth />
