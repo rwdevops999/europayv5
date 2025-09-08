@@ -44,10 +44,11 @@ const Initialisation = () => {
       <SetupServices start={initServices} proceed={setInitCountries} />
       <SetupCountries start={initCountries} proceed={setInitSettings} />
       <SetupSettings start={initSettings} proceed={setProcessSettings} />
-      <ProcessSettings start={processSettings} proceed={setDeleteClientJobs} />
+      {/* <ProcessSettings start={processSettings} proceed={setDeleteClientJobs} /> */}
+      <ProcessSettings start={processSettings} proceed={setSetupClientJobs} />
       {/* <DeleteClientJobs start={deleteClientJobs} proceed={setSetupServerJobs} /> */}
       {/* <SetupServerJobs start={setupServerJobs} proceed={setSetupClientJobs} /> */}
-      {/* <SetupClientJobs start={setupClientJobs} proceed={setInitIam} /> */}
+      <SetupClientJobs start={setupClientJobs} proceed={setInitIam} />
       {/* <CreateManagedIam start={initIam} proceed={setEnableCursor} /> */}
     </>
   );

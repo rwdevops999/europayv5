@@ -11,6 +11,7 @@ import { changeJobStatus, findJobByName, loadJobById } from "../server/job";
 import { absoluteUrl } from "@/lib/util";
 import { taskKey, TaskPollerJobName, transactionKey } from "@/lib/constants";
 import { setOtpStatus } from "../server/otp";
+import { countNonCompletedTasks } from "../server/tasks";
 
 const createClientJob = inngest.createFunction(
   { id: "create-client-job", name: "Create Client Job" },
@@ -139,32 +140,98 @@ const taskPoller = inngest.createFunction(
     ],
   },
   { event: "europay/TaskPoller" },
-  async ({ event }) => {
-    const { jobid } = event.data;
+  async ({ event, step }) => {
+    const { jobid, delayexpression } = event.data;
 
-    await prisma.task
-      .count({
-        where: {
-          OR: [
-            {
-              status: TaskStatus.CREATED,
-            },
-            {
-              status: TaskStatus.OPEN,
-            },
-          ],
-        },
-      })
-      .then(async (_value: number) => {
-        await changeJobStatus(jobid, JobStatus.RUNNING).then(async () => {
-          await fetch(
-            absoluteUrl(`/api/notification/send?key=${taskKey}&value=${_value}`)
-          );
-        });
+    await step.run("run-job", async () => {
+      await changeJobStatus(jobid, JobStatus.RUNNING);
+    });
+
+    await step.sleep("delay-job", delayexpression);
+
+    await step.run("complete-job", async () => {
+      const tasks: number = await countNonCompletedTasks();
+
+      await fetch(
+        absoluteUrl(`/api/notification/send?key=${taskKey}&value=${tasks}`)
+      ).then(async () => {
+        await changeJobStatus(jobid, JobStatus.COMPLETED);
       });
+    });
+
+    await step.sendEvent("reactivate-job", {
+      name: "europay/TaskPoller",
+      data: { jobid: jobid, delayexpression: delayexpression },
+    });
   }
 );
 
-// create here the test functions
+//   const { jobid } = event.data;
 
-export const inngestfunctions = [createOTPJob, taskPoller, transactionPoller];
+//   await prisma.task
+//     .count({
+//       where: {
+//         OR: [
+//           {
+//             status: TaskStatus.CREATED,
+//           },
+//           {
+//             status: TaskStatus.OPEN,
+//           },
+//         ],
+//       },
+//     })
+//     .then(async (_value: number) => {
+//       await changeJobStatus(jobid, JobStatus.RUNNING).then(async () => {
+//         await fetch(
+//           absoluteUrl(`/api/notification/send?key=${taskKey}&value=${_value}`)
+//         );
+//       });
+//     });
+// }
+
+// create here the test functions
+const testJob = inngest.createFunction(
+  {
+    id: "test-job",
+    name: "Test Job",
+    cancelOn: [
+      {
+        event: "europay/TestJobEvent.suspend",
+        // ensure the async (future) event's userId matches the trigger userId
+        match: "data.jobid",
+      },
+    ],
+  },
+  {
+    event: "europay/TestJobEvent",
+  },
+  async ({ event, step }) => {
+    const { jobid, delayexpression } = event.data;
+
+    await step.run("step1", async () => {
+      console.log("Test Job RUN", "STEP1");
+      console.log("Test Job RUN", "HERE WE SET JOB TO STATUS RUNNING");
+    });
+
+    await step.sleep("wait-a-moment", delayexpression);
+
+    await step.run("step2", async () => {
+      console.log("Test Job RUN", "STEP2");
+      console.log("Test Job RUN", "HERE WE SEND DATA TO CLIENT");
+      console.log("Test Job RUN", "AND WE SET JOB TO STATUS COMPLETED");
+    });
+
+    await step.sendEvent("send-reactivate-job", {
+      name: "europay/TestJobEvent",
+      data: { jobid: jobid, delayexpression: delayexpression },
+    });
+  }
+);
+
+export const inngestfunctions = [
+  createOTPJob,
+  taskPoller,
+  transactionPoller,
+  testJob,
+];

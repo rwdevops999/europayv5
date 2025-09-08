@@ -1,6 +1,7 @@
 import { absoluteUrl } from "@/lib/util";
 import PageContent from "@/ui/page-content";
 import CronTest from "./tests/cron-test";
+import JobTest from "./tests/job-test";
 
 export const dynamic = "force-dynamic";
 
@@ -15,9 +16,8 @@ const TestJobs = () => {
       ]}
       className="border-1 border-blue-500"
     >
-      {/* <TestUserWithPolicy /> */}
-      {/* <AddUserToGroup /> */}
-      <CronTest />
+      {/* <CronTest /> */}
+      <JobTest />
     </PageContent>
   );
 };

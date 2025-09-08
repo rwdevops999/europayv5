@@ -36,3 +36,28 @@ export const createCronExpression = (_timing: string): string => {
 
   return cron;
 };
+
+export const createDelayExpression = (_timing: string): string => {
+  let delay: string = "";
+
+  const chars = _timing.split("");
+
+  const value: number = parseInt(chars[0]);
+  const timingchar = chars[chars.length - 1];
+
+  const timinggroup: tTimingGroup | undefined = timings.find(
+    (timing: tTimingGroup) => timing.char === timingchar
+  );
+
+  if (value > 1) {
+    delay = `${value} ${timinggroup?.group}`;
+  } else {
+    const timing: string | undefined = timinggroup?.group.slice(
+      0,
+      timinggroup?.group.length - 1
+    );
+    delay = `${value} ${timing}`;
+  }
+
+  return delay;
+};

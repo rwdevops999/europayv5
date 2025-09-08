@@ -1,233 +1,133 @@
 "use client";
 
-import { mapJobs } from "@/app/client/mapping";
-import { JobData } from "@/app/server/data/job-data";
-import { useJob } from "@/hooks/use-job";
 import { tJob } from "@/lib/prisma-types";
-import { DataTable } from "@/ui/datatable/data-table";
-import { JSX, useEffect, useState } from "react";
-import { columns } from "./table/job-columns";
-import { DataTableToolbar } from "./table/job-data-table-toolbar";
-import { JobModel, JobStatus } from "@/generated/prisma";
-import Button from "@/ui/button";
+import { useEffect, useState } from "react";
+import { JobStatus } from "@/generated/prisma";
 import {
   changeJobStatus,
   deleteJob,
+  findJobById,
   loadJobs,
   runInngestJob,
-  runInngestOtpJob,
   suspendInngestJob,
-  suspendInngestOtpJob,
 } from "@/app/server/job";
 import PageContent from "@/ui/page-content";
-import { absoluteUrl, json } from "@/lib/util";
-import ConfirmDialog from "./components/confirm-dialog";
-import { TaskPollerJobName } from "@/lib/constants";
-import { useUser } from "@/hooks/use-user";
-import { $iam_user_has_action } from "@/app/client/iam-access";
+import { absoluteUrl } from "@/lib/util";
+import JobsTable from "./components/jobs-table";
+import JobInfo from "./components/job-info";
+import JobActionButtons from "./components/job-action-buttons";
+import { JsonValue } from "@/generated/prisma/runtime/library";
 
 const JobsPage = () => {
-  const { user } = useUser();
-  const { jobCount, getJobTiming } = useJob();
-
-  const [selectedJobs, setSelectedJobs] = useState<number[]>([]);
   const [jobs, setJobs] = useState<tJob[]>([]);
 
-  const handleChangeJobSelection = (_ids: number[]) => {
-    const equal: boolean =
-      _ids.length === selectedJobs.length &&
-      selectedJobs.every(function (value, index) {
-        return value === _ids[index];
-      });
-
-    if (!equal) {
-      setSelectedJobs(_ids);
-    }
-  };
-
-  const JobTable = ({ _jobs }: { _jobs: tJob[] }): JSX.Element => {
-    const [tableData, setTableData] = useState<JobData[]>([]);
-
-    const mapJobsToData = (_jobs: tJob[]): void => {
-      const mappedJobs: JobData[] = mapJobs(_jobs);
-
-      setTableData(mappedJobs);
-    };
-
-    useEffect(() => {
-      mapJobsToData(_jobs);
-    }, [_jobs]);
-
-    return (
-      <DataTable
-        data={tableData}
-        columns={columns}
-        Toolbar={DataTableToolbar}
-        selectedItems={selectedJobs}
-        handleChangeSelection={handleChangeJobSelection}
-      />
-    );
-  };
-
-  const JobInfo = (): JSX.Element => {
-    return (
-      <div className="ml-2 flex items-center space-x-2">
-        <label>selected jobs:</label>
-        <label className="font-extrabold italic">{selectedJobs.length}</label>
-      </div>
-    );
-  };
-
-  const suspendJobs = async (): Promise<void> => {
-    for (let i = 0; i < selectedJobs.length; i++) {
-      const job = jobs.find((_job: tJob) => _job.id === selectedJobs[i]);
-      if (job) {
-        if (job.model === JobModel.CLIENT) {
-          if (job.status === JobStatus.RUNNING) {
-            await changeJobStatus(job.id, JobStatus.SUSPENDED).then(
-              async () => {
-                await suspendInngestJob(job.jobname, job.id);
-              }
-            );
-          }
-        } else {
-          if (job.status === JobStatus.RUNNING) {
-            await changeJobStatus(job.id, JobStatus.SUSPENDED).then(
-              async () => {
-                await suspendInngestOtpJob(job.id);
-              }
-            );
-          }
-        }
-
-        loadTheJobs();
-      }
-    }
-  };
-
-  const restartJobs = async (): Promise<void> => {
-    for (let i = 0; i < selectedJobs.length; i++) {
-      const job = jobs.find((_job: tJob) => _job.id === selectedJobs[i]);
-      if (job) {
-        if (job.model === JobModel.CLIENT) {
-          const jobName: string = job.jobname;
-          await changeJobStatus(job.id, JobStatus.RUNNING).then(async () => {
-            await runInngestJob(jobName, getJobTiming(jobName), job.id);
-          });
-        } else {
-          if (job.status === JobStatus.SUSPENDED) {
-            await changeJobStatus(job.id, JobStatus.RUNNING).then(async () => {
-              await runInngestOtpJob(job.id);
-            });
-          }
-        }
-        loadTheJobs();
-      }
-    }
-  };
-
-  const confirmDialog = async (): Promise<void> => {
-    for (let i = 0; i < selectedJobs.length; i++) {
-      const job = jobs.find((_job: tJob) => _job.id === selectedJobs[i]);
-      if (job) {
-        if (job.model === JobModel.CLIENT) {
-          await deleteJob(job.id).then(
-            async () => await suspendInngestJob(job.jobname, job.id)
-          );
-        } else {
-          await deleteJob(job.id).then(
-            async () => await suspendInngestOtpJob(job.id)
-          );
-        }
-
-        loadTheJobs();
-      }
-    }
-    closeConfirmDialog();
-  };
-
-  const openConfirmDialog = (): void => {
-    const dialog: HTMLDialogElement = document.getElementById(
-      "confirmdialog"
-    ) as HTMLDialogElement;
-
-    dialog.showModal();
-  };
-
-  const closeConfirmDialog = (): void => {
-    const dialog: HTMLDialogElement = document.getElementById(
-      "confirmdialog"
-    ) as HTMLDialogElement;
-
-    dialog.close();
-  };
-
-  const removeJobs = (): void => {
-    if (selectedJobs.length > 0) {
-      openConfirmDialog();
-    }
-  };
-
-  const Buttons = (): JSX.Element => {
-    return (
-      <div className="ml-2 flex items-center space-x-2">
-        <Button
-          intent="warning"
-          style="soft"
-          name="Suspend"
-          size="small"
-          onClick={suspendJobs}
-          disabled={!maySuspend}
-        />
-        <Button
-          intent="success"
-          style="soft"
-          name="Restart"
-          size="small"
-          onClick={restartJobs}
-          disabled={!mayRestart}
-        />
-        <Button
-          intent="error"
-          style="soft"
-          name="Remove"
-          size="small"
-          onClick={removeJobs}
-          disabled={!mayRemove}
-        />
-      </div>
-    );
-  };
-
-  const loadTheJobs = async (): Promise<void> => {
-    const jobs: tJob[] = await loadJobs();
-    setJobs(jobs);
-    setSelectedJobs([]);
+  const loadDatabaseJobs = async (): Promise<void> => {
+    setJobs(await loadJobs());
   };
 
   useEffect(() => {
-    loadTheJobs();
+    loadDatabaseJobs();
+    setSelectedJobIds([]);
   }, []);
 
-  useEffect(() => {
-    loadTheJobs();
-  }, [jobCount]);
+  // const selectedJobsIds = useRef<number[]>([]);
+  const [selectedJobIds, setSelectedJobIds] = useState<number[]>([]);
 
-  const maySuspend: boolean = $iam_user_has_action(
-    user,
-    "europay:lists:jobs",
-    "Suspend"
-  );
-  const mayRemove: boolean = $iam_user_has_action(
-    user,
-    "europay:lists:jobs",
-    "Remove"
-  );
-  const mayRestart: boolean = $iam_user_has_action(
-    user,
-    "europay:lists:jobs",
-    "Restart"
-  );
+  const updateSelectedJobsId = (selection: number[]): void => {
+    setSelectedJobIds(selection);
+  };
+
+  const suspendSelectedJobs = async (): Promise<void> => {
+    let jobdataChanged: boolean = false;
+
+    for (let i = 0; i < selectedJobIds.length; i++) {
+      const jobId: number = selectedJobIds[i];
+      const job: tJob | null = await findJobById(jobId);
+      if (job) {
+        if (job.status !== JobStatus.SUSPENDED) {
+          const jobname: string = job.jobname;
+          await suspendInngestJob(jobname, {
+            jobid: job.id,
+            delayexpression: "",
+          }).then(async () => {
+            await changeJobStatus(job.id, JobStatus.SUSPENDED).then(
+              () => (jobdataChanged = true)
+            );
+          });
+        }
+      }
+    }
+
+    if (jobdataChanged) {
+      loadDatabaseJobs();
+    }
+    setSelectedJobIds([]);
+  };
+
+  const removeSelectedJobs = async (): Promise<void> => {
+    let jobdataChanged: boolean = false;
+
+    for (let i = 0; i < selectedJobIds.length; i++) {
+      const jobId: number = selectedJobIds[i];
+
+      const job: tJob | null = await findJobById(jobId);
+
+      if (job) {
+        if (job.status !== JobStatus.SUSPENDED) {
+          const jobname: string = job.jobname;
+          await suspendInngestJob(jobname, {
+            jobid: job.id,
+            delayexpression: "",
+          });
+        }
+
+        await deleteJob(job.id).then(() => {
+          jobdataChanged = true;
+        });
+      }
+    }
+
+    if (jobdataChanged) {
+      loadDatabaseJobs();
+    }
+
+    setSelectedJobIds([]);
+  };
+
+  const restartSelectedJobs = async (): Promise<void> => {
+    let jobdataChanged: boolean = false;
+
+    for (let i = 0; i < selectedJobIds.length; i++) {
+      const jobId: number = selectedJobIds[i];
+
+      const job: tJob | null = await findJobById(jobId);
+
+      if (job) {
+        const data: JsonValue = job.data;
+
+        const _data: { delayexpression: string } = data as {
+          delayexpression: string;
+        };
+
+        await changeJobStatus(job.id, JobStatus.CREATED).then(async () => {
+          await runInngestJob(job.jobname, {
+            jobid: job.id,
+            delayexpression: _data.delayexpression,
+          }).then(() => (jobdataChanged = true));
+        });
+      }
+    }
+
+    if (jobdataChanged) {
+      loadDatabaseJobs();
+    }
+
+    setSelectedJobIds([]);
+  };
+
+  const clearSelectedJobs = (): void => {
+    setSelectedJobIds([]);
+  };
 
   return (
     <PageContent
@@ -236,22 +136,22 @@ const JobsPage = () => {
         { name: "Jobs", url: absoluteUrl("/jobs") },
       ]}
     >
-      <div className="absolute w-[99vw] h-[84vh] grid grid-rows-[90%_5%_5%]">
-        <div>
-          <JobTable _jobs={jobs} />
-        </div>
-        <div>
-          <JobInfo />
-        </div>
-        <div>
-          <Buttons />
-        </div>
+      <label>LENGTH: {selectedJobIds.length}</label>
+      <div className="absolute w-[99vw] h-[80vh] grid grid-rows-[90%_5%_5%]">
+        <JobsTable
+          _jobs={jobs}
+          selectedJobs={selectedJobIds}
+          changeJobSelection={updateSelectedJobsId}
+        />
+        <JobInfo selectedJobs={selectedJobIds.length} />
+        <JobActionButtons
+          selectedJobsSize={selectedJobIds.length}
+          suspendSelectedJobs={suspendSelectedJobs}
+          removeSelectedJobs={removeSelectedJobs}
+          restartSelectedJobs={restartSelectedJobs}
+          clearSelectedJobs={clearSelectedJobs}
+        />
       </div>
-      <ConfirmDialog
-        plural={selectedJobs.length > 1}
-        handleOK={confirmDialog}
-        handleCancel={closeConfirmDialog}
-      />
     </PageContent>
   );
 };

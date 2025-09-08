@@ -15,8 +15,10 @@ import {
   deleteJob,
   findJobByName,
   runInngestJob,
+  suspendInngestJob,
 } from "../server/job";
 import { registerListener } from "@/listeners/register-listener";
+import { createDelayExpression } from "../client/cron";
 
 const SetupClientJobs = ({
   start,
@@ -26,11 +28,9 @@ const SetupClientJobs = ({
   proceed: (value: boolean) => void;
 }) => {
   const { socket } = useSocket();
-  const { getJobTiming } = useJob();
-  const { setTaskAvailable } = useTask();
+  const { getJobTimingNotation } = useJob();
   const { getHistory } = useHistorySettings();
-
-  const [jobsInitialised, setJobsInitialised] = useState<boolean>(false);
+  const { setTaskAvailable } = useTask();
 
   const createHistoryForJobs = async (_message: string): Promise<void> => {
     await createHistoryEntry(
@@ -42,55 +42,85 @@ const SetupClientJobs = ({
     );
   };
 
-  const startupJob = async (): Promise<void> => {
-    await createTaskPollerJob().then(async (job: tJob | null) => {
-      if (job) {
-        await runInngestJobForTaskPoller(job.id).then(async () => {
-          setJobsInitialised(true);
-          await createHistoryForJobs("CLIENT JOBS").then(() => proceed(true));
-        });
-      }
-    });
-  };
-
-  const taskListenerFunction = async (data: any): Promise<void> => {
-    const { key, value } = data;
-
-    if (key === taskKey) {
-      await findJobByName(TaskPollerJobName).then(async (job: tJob | null) => {
-        if (job && job.status === JobStatus.RUNNING) {
-          setTaskAvailable(value > 0);
-          await deleteJob(job.id).then(() => {
-            startupJob();
-          });
-        }
-      });
-    }
-  };
-
-  const createTaskPollerJob = async (): Promise<tJob | null> => {
+  const createClientJob = async (
+    _jobname: string,
+    _data: any
+  ): Promise<tJob | null> => {
     const job: tJob | null = await createJob(
-      TaskPollerJobName,
+      _jobname,
       JobModel.CLIENT,
-      {},
-      JobStatus.RUNNING
+      _data,
+      JobStatus.CREATED
     );
 
     return job;
   };
 
-  const runInngestJobForTaskPoller = async (jobId: number): Promise<void> => {
-    await runInngestJob(
-      TaskPollerJobName,
-      getJobTiming(TaskPollerJobName),
-      jobId
+  const startupJob = async (): Promise<void> => {
+    console.log("[startupJob]", "Starting Up job");
+
+    const job: tJob | null = await findJobByName(TaskPollerJobName);
+
+    if (job) {
+      console.log("[startupJob]", "Job found");
+      if (job.status === JobStatus.RUNNING) {
+        console.log("[startupJob]", "Job is running => cancel inngest");
+        await suspendInngestJob(TaskPollerJobName, {
+          jobid: job.id,
+          delayexpression: "",
+        });
+      }
+
+      console.log("[startupJob]", "Delete job", job.id);
+      await deleteJob(job.id);
+    }
+
+    const delay = createDelayExpression(
+      getJobTimingNotation(TaskPollerJobName)
     );
+    console.log("[startupJob]", "DELAY", delay);
+
+    console.log("[startupJob]", "CREATE Client Job", delay);
+    await createClientJob(TaskPollerJobName, { delayexpression: delay }).then(
+      async (job: tJob | null) => {
+        if (job) {
+          console.log(
+            "[startupJob]",
+            "Client Job created => RUN INNGEST JOB",
+            delay
+          );
+          await runInngestJob(TaskPollerJobName, {
+            jobid: job.id,
+            delayexpression: delay,
+          });
+        }
+      }
+    );
+  };
+
+  const taskListenerFunction = async (data: any): Promise<void> => {
+    const { key, value } = data;
+    console.log(
+      "[taskListenerFunction]",
+      "Received message for Inngest job",
+      key,
+      value
+    );
+
+    if (key === taskKey) {
+      setTaskAvailable(value > 0);
+    }
   };
 
   useEffect(() => {
     if (socket) {
       if (start) {
+        console.log(
+          "[SetupClientJob]:useEffect",
+          "REGISTER Listener on TaskPoller"
+        );
         registerListener(socket, taskKey, taskListenerFunction);
+        console.log("[SetupClientJob]:useEffect", "Startup job");
         startupJob();
       }
     }

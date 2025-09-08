@@ -225,3 +225,22 @@ export const executeTask = async (
 
   return result;
 };
+
+export const countNonCompletedTasks = async (): Promise<number> => {
+  let result: number = 0;
+
+  await prisma.task.count({
+    where: {
+      OR: [
+        {
+          status: TaskStatus.CREATED,
+        },
+        {
+          status: TaskStatus.OPEN,
+        },
+      ],
+    },
+  });
+
+  return result;
+};

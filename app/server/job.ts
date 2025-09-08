@@ -227,38 +227,37 @@ export const findJobByName = async (_name: string): Promise<tJob | null> => {
 export const findJobById = async (_id: number): Promise<tJob | null> => {
   let result: tJob | null = null;
 
+  console.log("[JOB]:findJobById", _id);
   await prisma.job
     .findFirst({
       where: {
         id: _id,
       },
     })
-    .then((value: tJob | null) => (result = value));
+    .then((value: tJob | null) => {
+      console.log("[JOB]:findJobById", "Job", json(value));
+      result = value;
+    });
 
   return result;
 };
 
 export const runInngestJob = async (
-  name: string,
-  _delay: number,
-  _jobid: number,
-  _userid?: number
+  _name: string,
+  _data: any
 ): Promise<void> => {
   await inngest.send({
-    name: `europay/${name}`,
-    data: { jobid: _jobid, userid: _userid },
-    ts: Date.now() + _delay,
+    name: `europay/${_name}`,
+    data: _data,
   });
 };
 
 export const suspendInngestJob = async (
   _name: string,
-  _jobid: number
+  _data: any
 ): Promise<void> => {
   await inngest.send({
     name: `europay/${_name}.suspend`,
-    data: {
-      jobid: _jobid,
-    },
+    data: _data,
   });
 };
