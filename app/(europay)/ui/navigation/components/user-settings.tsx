@@ -62,7 +62,7 @@ const UserSettings = () => {
               name="Settings"
               size="small"
               className="bg-transparent hover:border-none hover:shadow-none"
-              icon={<GiSettingsKnobs className="text-red-500" size={16} />}
+              icon={<GiSettingsKnobs className="text-white" size={16} />}
               iconFirst
               onClick={() =>
                 redirect(absoluteUrl("/usersettings") + `?id=${random}`)

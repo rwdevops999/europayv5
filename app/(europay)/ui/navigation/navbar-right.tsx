@@ -12,10 +12,13 @@ import { useTask } from "@/hooks/use-task";
 import { useOTPSettings } from "@/hooks/use-otp-settings";
 import { useHistorySettings } from "@/hooks/use-history-settings";
 import { useSocket } from "@/hooks/use-socket";
+import { useUser } from "@/hooks/use-user";
+import { useEffect, useState } from "react";
 
 const renderDevItems: boolean = process.env.NODE_ENV === "development";
 
 const NavbarRight = () => {
+  const { user } = useUser();
   const { getToastNode } = useToastSettings();
   const { getConnectNode } = useWifi();
   const { getMarkdownNode } = useMarkdownSettings();
@@ -23,6 +26,16 @@ const NavbarRight = () => {
   const { getTimingNode } = useOTPSettings();
   const { getHistoryNode } = useHistorySettings();
   const { getSocketNode } = useSocket();
+
+  const [showUserInfo, setShowUserInfo] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (user && user.settings.length > 0) {
+      setShowUserInfo(true);
+    } else {
+      setShowUserInfo(false);
+    }
+  }, [user]);
 
   return (
     <div data-testid="navbarright" className="flex items-center space-x-2">
@@ -37,13 +50,16 @@ const NavbarRight = () => {
         {getConnectNode()}
         {getTaskNode()}
         {getSocketNode()}
-        <EmptyNode />
+        {getTimingNode()}
         {renderDevItems && (
           <>
-            {getHistoryNode()}
-            {getToastNode()}
-            {getMarkdownNode()}
-            {getTimingNode()}
+            {showUserInfo && getToastNode()}
+            {!showUserInfo && <EmptyNode />}
+            {showUserInfo && getHistoryNode()}
+            {!showUserInfo && <EmptyNode />}
+            {showUserInfo && getMarkdownNode()}
+            {!showUserInfo && <EmptyNode />}
+            <EmptyNode />
           </>
         )}
       </NavbarAppInfo>
