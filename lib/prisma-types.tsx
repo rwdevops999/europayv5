@@ -237,7 +237,23 @@ export type tAccount = Prisma.AccountGetPayload<WhatToSelectFromAccount>;
 export type tAccountCreate = Prisma.AccountUncheckedCreateInput;
 export type tAccountUpdate = Prisma.AccountUncheckedUpdateInput;
 
+/* == USERSETTING ========== */
+type WhatToSelectFromUsersetting = {
+  include: {
+    users: boolean;
+  };
+};
+export const cWhatToSelectFromUsersetting: WhatToSelectFromUsersetting = {
+  include: {
+    users: true,
+  },
+};
+export type tUserSetting =
+  Prisma.UserSettingGetPayload<WhatToSelectFromUsersetting>;
+export type tUserSettingCreate = Prisma.UserSettingCreateInput;
+
 /* == USER ========== */
+
 type WhatToSelectFromUser = {
   include: {
     address: WhatToSelectFromAddress;
@@ -251,6 +267,7 @@ type WhatToSelectFromUser = {
       };
     };
     account: WhatToSelectFromAccount;
+    settings: WhatToSelectFromUsersetting;
   };
 };
 export const cWhatToSelectFromUser: WhatToSelectFromUser = {
@@ -266,6 +283,7 @@ export const cWhatToSelectFromUser: WhatToSelectFromUser = {
       },
     },
     account: cWhatToSelectFromAccount,
+    settings: cWhatToSelectFromUsersetting,
   },
 };
 export type tUser = Prisma.UserGetPayload<WhatToSelectFromUser>;
