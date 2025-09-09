@@ -4,7 +4,7 @@ import Dialog from "@/ui/dialog";
 import React, { useEffect } from "react";
 import UserSettingsCarrousel from "./user-settings-carrousel";
 
-const StartSettings = ({ open }: { open: number }) => {
+const StartSettings = ({ open }: { open: string | null | undefined }) => {
   const handleOpenDialog = (): void => {
     console.log("[handleOpenDialog]");
     const dialog: HTMLDialogElement = document.getElementById(

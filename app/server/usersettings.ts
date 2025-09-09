@@ -1,6 +1,6 @@
 "use server";
 
-import { tUserSettingCreate } from "@/lib/prisma-types";
+import { tUserSetting, tUserSettingCreate } from "@/lib/prisma-types";
 import prisma from "@/lib/prisma";
 import { json } from "@/lib/util";
 
@@ -13,4 +13,19 @@ export const createUserSettings = async (
       data: setting,
     });
   }
+};
+
+export const updateUserSetting = async (
+  _id: number,
+  _value: string
+): Promise<void> => {
+  console.log("[UserSettings]", "UPDATE", _id, _value);
+  await prisma.userSetting.update({
+    where: {
+      id: _id,
+    },
+    data: {
+      value: _value,
+    },
+  });
 };

@@ -1,31 +1,39 @@
 "use client";
 
 import { updateSetting } from "@/app/server/settings";
+import { updateUserSetting } from "@/app/server/usersettings";
 import { useToastSettings } from "@/hooks/use-toast-settings";
+import { useUser } from "@/hooks/use-user";
 import { defaultSetting } from "@/lib/constants";
-import { tSetting } from "@/lib/prisma-types";
+import { tSetting, tUserSetting } from "@/lib/prisma-types";
 import { ToastType } from "@/lib/types";
-import { showToast } from "@/lib/util";
+import { json, showToast } from "@/lib/util";
 import { BsHourglassSplit } from "react-icons/bs";
 import { GiToaster } from "react-icons/gi";
 import { MdDynamicForm } from "react-icons/md";
 
 const SetupToast = () => {
+  const { user } = useUser();
+
   const { isToastOn, setToast, getToastDuration, setToastDuration } =
     useToastSettings();
 
-  const updateValue = async (_key: string, _value: any) => {
-    const setting: tSetting = defaultSetting;
-    setting.key = _key;
-    setting.value = _value;
-
-    await updateSetting(setting);
+  const updateValue = async (_id: number, _value: any): Promise<void> => {
+    await updateUserSetting(_id, _value);
   };
 
   const handleToastChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setToast(event.target.checked);
+    if (user) {
+      setToast(event.target.checked);
 
-    updateValue("Toast", event.target.checked.toString());
+      const setting: tUserSetting | undefined = user.settings.find(
+        (usersetting: tUserSetting) => usersetting.key === "Toast"
+      );
+
+      if (setting) {
+        updateValue(setting.id, event.target.checked.toString());
+      }
+    }
   };
 
   const handleToastDurationChange = (duration: string): void => {
@@ -33,8 +41,16 @@ const SetupToast = () => {
       duration = "0";
     }
 
-    setToastDuration(parseInt(duration));
-    updateValue("ToastDuration", duration);
+    if (user) {
+      setToastDuration(parseInt(duration));
+      const setting: tUserSetting | undefined = user.settings.find(
+        (usersetting: tUserSetting) => usersetting.key === "ToastDuration"
+      );
+
+      if (setting) {
+        updateValue(setting.id, duration);
+      }
+    }
   };
 
   const handleTestToast = (): void => {
@@ -51,7 +67,7 @@ const SetupToast = () => {
           <div>Toast settings</div>
         </div>
         <div className="block space-y-2 mt-3">
-          <div id="toastsettings" className="grid grid-cols-[35%_60%]">
+          <div id="toastsettings" className="grid grid-cols-[15%_80%]">
             <div className="flex items-center">
               <label>Show toasts:</label>
             </div>
@@ -64,7 +80,7 @@ const SetupToast = () => {
               />
             </div>
           </div>
-          <div id="toastduration" className="grid grid-cols-[35%_60%_5%]">
+          <div id="toastduration" className="grid grid-cols-[15%_33%_5%]">
             <div className="flex items-center">
               <label>Toast duration:</label>
             </div>
@@ -76,22 +92,24 @@ const SetupToast = () => {
                   value={getToastDuration()}
                   className="input-sm"
                   placeholder="milliseconds..."
-                  onChange={(event) =>
-                    handleToastDurationChange(event.target.value)
-                  }
+                  onChange={(event) => {
+                    console.log("INPUT Changed");
+                    handleToastDurationChange(event.target.value);
+                  }}
                 />
               </label>
             </div>
-            <div className="ml-1 flex items-center justify-end">
+            <div className="flex items-center">
               <div
                 data-testid="testtoast"
-                className="tooltip tooltip-left"
+                className="tooltip tooltip-bottom"
                 data-tip={`Test toast`}
                 onClick={handleTestToast}
               >
                 <MdDynamicForm
                   size={16}
-                  color={isToastOn() ? "#fff" : "#555"}
+                  // color={isToastOn() ? "#fff" : "#555"}
+                  color={isToastOn() ? "#0f0" : "#f00"}
                 />
               </div>
             </div>

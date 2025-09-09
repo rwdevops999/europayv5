@@ -6,6 +6,9 @@ import { JSX, useEffect, useRef } from "react";
 import { GrToast } from "react-icons/gr";
 import { MdHistoryEdu } from "react-icons/md";
 import { PiMarkdownLogoDuotone } from "react-icons/pi";
+import SetupToast from "./setup-toast";
+import SetupHistory from "./setup-history";
+import SetupMarkdown from "./setup-markdown";
 
 export interface UserSettingsCarrouselProps {}
 
@@ -56,18 +59,48 @@ const UserSettingsCarrousel = (props: UserSettingsCarrouselProps) => {
     location.href = "#markdown";
   };
 
+  const ToastPage = (): JSX.Element => {
+    return (
+      <div id="toastsettings" className="w-[100%] rounded-sm items-start gap-2">
+        <SetupToast />
+      </div>
+    );
+  };
+
+  const HistoryPage = (): JSX.Element => {
+    return (
+      <div
+        id="historysettings"
+        className="w-[100%] rounded-sm items-start gap-2"
+      >
+        <SetupHistory />
+      </div>
+    );
+  };
+
+  const MarkdownPage = (): JSX.Element => {
+    return (
+      <div
+        id="markdownsettings"
+        className="w-[100%] rounded-sm items-start gap-2"
+      >
+        <SetupMarkdown />
+      </div>
+    );
+  };
+
   const Carrousel = (): JSX.Element => {
     return (
       <>
         <div id="carrousel" className="relative h-[95%] carousel w-full">
           <div id="toast" className="carousel-item w-full">
-            <label>TOAST</label>
+            <ToastPage />
           </div>
           <div id="history" className="carousel-item w-full">
-            <label>HISTORY</label>
+            <HistoryPage />
           </div>
           <div id="markdown" className="carousel-item w-full">
-            <label>MARKDOWN</label>
+            <MarkdownPage />
           </div>
         </div>
         <div className="flex w-full justify-center gap-2 py-2">
@@ -119,23 +152,14 @@ const UserSettingsCarrousel = (props: UserSettingsCarrouselProps) => {
     return (
       <div className="flex flex-col">
         <Button
-          id="cancelbutton"
-          name="Cancel"
+          id="okbutton"
+          name="Ok"
           intent={"neutral"}
           style={"soft"}
           size={"small"}
           onClick={handleCancelClick}
-          className="bg-cancel"
-          type="button"
-        />
-        <Button
-          id="savebutton"
-          name="Save"
-          intent={"neutral"}
-          style={"soft"}
-          size={"small"}
           className="bg-custom"
-          type="submit"
+          type="button"
         />
       </div>
     );
