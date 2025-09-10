@@ -4,7 +4,7 @@ import { createCronExpression, createDelayExpression } from "@/app/client/cron";
 import Button from "@/ui/button";
 import React from "react";
 
-const timing: string = "10'";
+const timing: string = '3"';
 
 const CronTest = () => {
   const setTiming = (_timing: string): void => {

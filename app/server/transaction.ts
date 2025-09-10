@@ -451,30 +451,34 @@ export const executePayment = async (
 export const countTransactions = async (_userid: number): Promise<number> => {
   let result: number = 0;
 
-  await prisma.transaction.count({
-    where: {
-      AND: [
-        {
-          parties: {
-            has: _userid,
+  console.log("[TRANSACTION]:countTransaction for", _userid);
+  await prisma.transaction
+    .count({
+      where: {
+        AND: [
+          {
+            parties: {
+              has: _userid,
+            },
           },
-        },
-        {
-          OR: [
-            {
-              status: TransactionStatus.PENDING,
-            },
-            {
-              status: TransactionStatus.COMPLETED,
-            },
-            {
-              status: TransactionStatus.REJECTED,
-            },
-          ],
-        },
-      ],
-    },
-  });
+          {
+            OR: [
+              {
+                status: TransactionStatus.PENDING,
+              },
+              {
+                status: TransactionStatus.COMPLETED,
+              },
+              {
+                status: TransactionStatus.REJECTED,
+              },
+            ],
+          },
+        ],
+      },
+    })
+    .then((value: number) => (result = value));
 
+  console.log("[TRANSACTION]:countTransaction result is", result);
   return result;
 };

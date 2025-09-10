@@ -75,21 +75,25 @@ export const loadJobById = async (_id: number): Promise<tJob | null> => {
 };
 
 export const runInngestOtpJob = async (_jobid: number): Promise<void> => {
-  await inngest.send({
-    name: "europay/otpjob.create",
-    data: {
-      jobid: _jobid,
-    },
-  });
+  await inngest
+    .send({
+      name: "europay/otpjob.create",
+      data: {
+        jobid: _jobid,
+      },
+    })
+    .catch(() => {});
 };
 
 export const suspendInngestOtpJob = async (_jobid: number): Promise<void> => {
-  await inngest.send({
-    name: "europay/otpjob.suspend",
-    data: {
-      jobid: _jobid,
-    },
-  });
+  await inngest
+    .send({
+      name: "europay/otpjob.suspend",
+      data: {
+        jobid: _jobid,
+      },
+    })
+    .catch(() => {});
 };
 
 export const changeJobStatus = async (
@@ -246,18 +250,22 @@ export const runInngestJob = async (
   _name: string,
   _data: any
 ): Promise<void> => {
-  await inngest.send({
-    name: `europay/${_name}`,
-    data: _data,
-  });
+  await inngest
+    .send({
+      name: `europay/${_name}`,
+      data: _data,
+    })
+    .catch(() => {});
 };
 
 export const suspendInngestJob = async (
   _name: string,
   _data: any
 ): Promise<void> => {
-  await inngest.send({
-    name: `europay/${_name}.suspend`,
-    data: _data,
-  });
+  await inngest
+    .send({
+      name: `europay/${_name}.suspend`,
+      data: _data,
+    })
+    .catch(() => {});
 };

@@ -8,6 +8,13 @@ export type tTimingGroup = {
 
 export const timings: tTimingGroup[] = [
   {
+    group: "seconds",
+    char: '"',
+    notation: "&#0022;",
+    accumulator: 1000,
+    values: [5, 10, 30, 45],
+  },
+  {
     group: "minutes",
     char: "'",
     notation: "&apos;",
