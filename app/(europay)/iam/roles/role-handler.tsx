@@ -37,7 +37,7 @@ const RoleHandler = ({
   policies: tPolicy[];
 }) => {
   const { push } = useRouter();
-  const { getToastDuration } = useToastSettings();
+  const { isToastOn, getToastDuration } = useToastSettings();
 
   const [entity, setEntity] = useState<RoleEntity>(defaultRoleEntity);
   const [linkedPolicies, setLinkedPolicies] = useState<number[]>([]);
@@ -70,7 +70,12 @@ const RoleHandler = ({
   const [alert, setAlert] = useState<tAlert | undefined>(undefined);
 
   const processDeletedRole = (_name: string): void => {
-    showToast(ToastType.SUCCESS, `Deleted role ${_name}`, getToastDuration());
+    showToast(
+      isToastOn(),
+      ToastType.SUCCESS,
+      `Deleted role ${_name}`,
+      getToastDuration()
+    );
 
     push(absoluteUrl(`/iam/roles/id`));
   };

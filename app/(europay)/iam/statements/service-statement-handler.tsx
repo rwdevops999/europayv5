@@ -49,7 +49,7 @@ const ServiceStatementHandler = ({
   services: tService[];
 }) => {
   const { push } = useRouter();
-  const { getToastDuration } = useToastSettings();
+  const { isToastOn, getToastDuration } = useToastSettings();
 
   const [tableData, setTableData] = useState<Data[]>([]);
 
@@ -135,6 +135,7 @@ const ServiceStatementHandler = ({
 
   const processDeletedStatement = (_ssname: string): void => {
     showToast(
+      isToastOn(),
       ToastType.SUCCESS,
       `Deleted statement ${_ssname}`,
       getToastDuration()

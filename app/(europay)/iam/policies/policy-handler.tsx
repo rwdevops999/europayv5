@@ -64,7 +64,7 @@ const PolicyHandler = ({
   servicestatements: tServiceStatement[];
 }) => {
   const { push } = useRouter();
-  const { getToastDuration } = useToastSettings();
+  const { isToastOn, getToastDuration } = useToastSettings();
 
   const [entity, setEntity] = useState<PolicyEntity>(defaultPolicyEntity);
   const [linkedStatements, setLinkedStatements] = useState<number[]>([]);
@@ -102,7 +102,12 @@ const PolicyHandler = ({
   const [alert, setAlert] = useState<tAlert | undefined>(undefined);
 
   const processDeletedPolicy = (_name: string): void => {
-    showToast(ToastType.SUCCESS, `Deleted policy ${_name}`, getToastDuration());
+    showToast(
+      isToastOn(),
+      ToastType.SUCCESS,
+      `Deleted policy ${_name}`,
+      getToastDuration()
+    );
 
     if (tableData.length === 1) {
       push(absoluteUrl(`/iam/policies/id`));

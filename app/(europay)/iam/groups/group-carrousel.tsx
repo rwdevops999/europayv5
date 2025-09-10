@@ -64,7 +64,7 @@ enum Pages {
 
 const GroupCarrousel = (props: GroupCarrouselProps) => {
   const { push } = useRouter();
-  const { getToastDuration } = useToastSettings();
+  const { isToastOn, getToastDuration } = useToastSettings();
 
   const [disabled, setDisabled] = useState<boolean>(false);
 
@@ -383,6 +383,7 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
     await createGroup(group).then((errorcode: string | undefined) => {
       if (errorcode) {
         showToast(
+          isToastOn(),
           ToastType.ERROR,
           `Group create error ${displayPrismaErrorCode(errorcode)}`,
           getToastDuration()
@@ -391,6 +392,7 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
         displayPrismaErrorCode(errorcode);
       } else {
         showToast(
+          isToastOn(),
           ToastType.SUCCESS,
           `Group '${group.name}' created`,
           getToastDuration()
@@ -433,6 +435,7 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
     await updateGroup(group).then((errorcode: string | undefined) => {
       if (errorcode) {
         showToast(
+          isToastOn(),
           ToastType.ERROR,
           `Group update error ${displayPrismaErrorCode(errorcode)}`,
           getToastDuration()
@@ -441,6 +444,7 @@ const GroupCarrousel = (props: GroupCarrouselProps) => {
         displayPrismaErrorCode(errorcode);
       } else {
         showToast(
+          isToastOn(),
           ToastType.SUCCESS,
           `Group '${group.name}' updated`,
           getToastDuration()

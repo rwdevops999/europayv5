@@ -50,7 +50,7 @@ export interface PolicyFormProps {
 
 const PolicyForm = (props: PolicyFormProps) => {
   const { push } = useRouter();
-  const { getToastDuration } = useToastSettings();
+  const { isToastOn, getToastDuration } = useToastSettings();
 
   const [disabled, setDisabled] = useState(false);
 
@@ -108,6 +108,7 @@ const PolicyForm = (props: PolicyFormProps) => {
     await createPolicy(policy).then((errorcode: string | undefined) => {
       if (errorcode) {
         showToast(
+          isToastOn(),
           ToastType.ERROR,
           `Policy create error ${displayPrismaErrorCode(errorcode)}`,
           getToastDuration()
@@ -116,6 +117,7 @@ const PolicyForm = (props: PolicyFormProps) => {
         displayPrismaErrorCode(errorcode);
       } else {
         showToast(
+          isToastOn(),
           ToastType.SUCCESS,
           `Policy ${policy.name} created`,
           getToastDuration()
@@ -132,6 +134,7 @@ const PolicyForm = (props: PolicyFormProps) => {
     await updatePolicy(policy).then((errorcode: string | undefined) => {
       if (errorcode) {
         showToast(
+          isToastOn(),
           ToastType.ERROR,
           `Policy update error ${displayPrismaErrorCode(errorcode)}`,
           getToastDuration()
@@ -140,6 +143,7 @@ const PolicyForm = (props: PolicyFormProps) => {
         displayPrismaErrorCode(errorcode);
       } else {
         showToast(
+          isToastOn(),
           ToastType.SUCCESS,
           `Policy ${policy.name} updated`,
           getToastDuration()

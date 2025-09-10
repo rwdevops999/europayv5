@@ -101,22 +101,25 @@ export const SLEEP = async (ms: number): Promise<void> => {
  * @param _position the postion where to place the toast
  */
 export const showToast = (
+  _on: boolean,
   _type: string,
   _message: string,
   _durationms: number,
   _position?: string
 ): void => {
-  ToastTypes[_type](_message, {
-    position: _position ?? "top-center",
-    autoClose: _durationms,
-    hideProgressBar: false,
-    closeOnClick: false,
-    pauseOnHover: false,
-    draggable: false,
-    progress: undefined,
-    theme: "dark",
-    transition: Zoom,
-  });
+  if (_on) {
+    ToastTypes[_type](_message, {
+      position: _position ?? "top-center",
+      autoClose: _durationms,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+      theme: "dark",
+      transition: Zoom,
+    });
+  }
 };
 
 /**

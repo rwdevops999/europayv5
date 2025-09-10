@@ -59,117 +59,148 @@ const NavbarUserProfile = () => {
   const { setMarkdown } = useMarkdownSettings();
   const { setHistory } = useHistorySettings();
 
-  const handleUserSettings = async (_user: tUser): Promise<void> => {
-    if (_user.settings.length === 0) {
-      const usersettings: tUserSettingCreate[] = [
-        {
-          key: "Toast",
-          value: process.env.NEXT_PUBLIC_SETTINGS_TOAST_ON ?? "true",
-          users: {
-            connect: {
-              id: _user.id,
+  const handleUserSettings = async (
+    _user: tUser | null = null
+  ): Promise<void> => {
+    if (_user) {
+      if (_user.settings.length === 0) {
+        const usersettings: tUserSettingCreate[] = [
+          {
+            key: "Toast",
+            value: process.env.NEXT_PUBLIC_SETTINGS_TOAST_ON ?? "true",
+            users: {
+              connect: {
+                id: _user.id,
+              },
             },
           },
-        },
-        {
-          key: "ToastDuration",
-          value:
-            process.env.NEXT_PUBLIC_SETTINGS_TOAST_DURATION ??
-            DEFAULT_TOAST_DURATION.toString(),
-          users: {
-            connect: {
-              id: _user.id,
+          {
+            key: "ToastDuration",
+            value:
+              process.env.NEXT_PUBLIC_SETTINGS_TOAST_DURATION ??
+              DEFAULT_TOAST_DURATION.toString(),
+            users: {
+              connect: {
+                id: _user.id,
+              },
             },
           },
-        },
-        {
-          key: "Markdown",
-          value: process.env.NEXT_PUBLIC_SETTINGS_MARKDOWN_ON ?? "true",
-          users: {
-            connect: {
-              id: _user.id,
+          {
+            key: "Markdown",
+            value: process.env.NEXT_PUBLIC_SETTINGS_MARKDOWN_ON ?? "true",
+            users: {
+              connect: {
+                id: _user.id,
+              },
             },
           },
-        },
-        {
-          key: "History",
-          value: process.env.NEXT_PUBLIC_SETTINGS_HISTORY_LEVEL ?? "All",
-          users: {
-            connect: {
-              id: _user.id,
+          {
+            key: "History",
+            value: process.env.NEXT_PUBLIC_SETTINGS_HISTORY_LEVEL ?? "All",
+            users: {
+              connect: {
+                id: _user.id,
+              },
             },
           },
-        },
-      ];
+        ];
 
-      await createUserSettings(usersettings).then(async () => {
-        const updateduser: tUser | null = await loadUserById(_user.id);
+        await createUserSettings(usersettings).then(async () => {
+          const updateduser: tUser | null = await loadUserById(_user.id);
 
-        setUser(updateduser);
-      });
+          setUser(updateduser);
+        });
+      }
+
+      if (_user.settings.length > 0) {
+        let setting: tUserSetting | undefined;
+
+        setting = _user.settings.find(
+          (usersetting: tUserSetting) => usersetting.key === "Toast"
+        );
+        if (setting && setting.value.toLocaleLowerCase() === "false") {
+          setToast(false);
+        } else {
+          setToast(envToastOn ? envToastOn.toLowerCase() === "true" : true);
+        }
+
+        setting = _user.settings.find(
+          (usersetting: tUserSetting) => usersetting.key === "ToastDuration"
+        );
+
+        if (setting) {
+          setToastDuration(parseInt(setting.value));
+        } else {
+          setToastDuration(
+            parseInt(
+              envToastDuration
+                ? envToastDuration
+                : DEFAULT_TOAST_DURATION.toString()
+            )
+          );
+        }
+
+        setting = _user.settings.find(
+          (usersetting: tUserSetting) => usersetting.key === "Markdown"
+        );
+
+        if (setting && setting.value.toLowerCase() === "false") {
+          setMarkdown(false);
+        } else {
+          setMarkdown(
+            envMarkdownOn ? envMarkdownOn.toLowerCase() === "true" : true
+          );
+        }
+
+        setting = _user.settings.find(
+          (usersetting: tUserSetting) => usersetting.key === "History"
+        );
+
+        if (setting) {
+          setHistory(HistoryType[setting.value as keyof typeof HistoryType]);
+        } else {
+          setHistory(
+            envHistoryLevel
+              ? HistoryType[envHistoryLevel as keyof typeof HistoryType]
+              : HistoryType.ALL
+          );
+        }
+      }
+    } else {
+      setToast(envToastOn ? envToastOn.toLowerCase() === "true" : true);
+      setToastDuration(
+        parseInt(
+          envToastDuration
+            ? envToastDuration
+            : DEFAULT_TOAST_DURATION.toString()
+        )
+      );
+      setMarkdown(
+        envMarkdownOn ? envMarkdownOn.toLowerCase() === "true" : true
+      );
+      setHistory(
+        envHistoryLevel
+          ? HistoryType[envHistoryLevel as keyof typeof HistoryType]
+          : HistoryType.ALL
+      );
     }
+  };
 
-    if (_user.settings.length > 0) {
-      let setting: tUserSetting | undefined;
-
-      setting = _user.settings.find(
-        (usersetting: tUserSetting) => usersetting.key === "Toast"
-      );
-      if (setting && setting.value.toLocaleLowerCase() === "false") {
-        setToast(false);
-      } else {
-        setToast(envToastOn ? envToastOn.toLowerCase() === "true" : true);
-      }
-
-      setting = _user.settings.find(
-        (usersetting: tUserSetting) => usersetting.key === "ToastDuration"
-      );
-
-      if (setting) {
-        setToastDuration(parseInt(setting.value));
-      } else {
-        setToastDuration(
-          parseInt(
-            envToastDuration
-              ? envToastDuration
-              : DEFAULT_TOAST_DURATION.toString()
-          )
-        );
-      }
-
-      setting = _user.settings.find(
-        (usersetting: tUserSetting) => usersetting.key === "Markdown"
-      );
-
-      if (setting && setting.value.toLowerCase() === "false") {
-        setMarkdown(false);
-      } else {
-        setMarkdown(
-          envMarkdownOn ? envMarkdownOn.toLowerCase() === "true" : true
-        );
-      }
-
-      setting = _user.settings.find(
-        (usersetting: tUserSetting) => usersetting.key === "History"
-      );
-
-      if (setting) {
-        setHistory(HistoryType[setting.value as keyof typeof HistoryType]);
-      } else {
-        setHistory(
-          envHistoryLevel
-            ? HistoryType[envHistoryLevel as keyof typeof HistoryType]
-            : HistoryType.ALL
-        );
-      }
-    }
+  const setupTransactionPoller = async (_user: tUser): Promise<void> => {
+    console.log("Setting up transaction poller");
   };
 
   useEffect(() => {
     if (user) {
+      // user logged in
+
       // load/set settings
       handleUserSettings(user);
       // start transactionPoller job
+      setupTransactionPoller(user);
+    } else {
+      // user logged out
+      handleUserSettings();
     }
   }, [user]);
 

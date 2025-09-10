@@ -54,9 +54,7 @@ const SetupToast = () => {
   };
 
   const handleTestToast = (): void => {
-    if (isToastOn()) {
-      showToast(ToastType.DEFAULT, "👋 Europay", getToastDuration());
-    }
+    showToast(isToastOn(), ToastType.DEFAULT, "👋 Europay", getToastDuration());
   };
 
   return (

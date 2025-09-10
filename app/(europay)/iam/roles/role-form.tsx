@@ -46,7 +46,7 @@ export interface RoleFormProps {
 
 const RoleForm = (props: RoleFormProps) => {
   const { push } = useRouter();
-  const { getToastDuration } = useToastSettings();
+  const { isToastOn, getToastDuration } = useToastSettings();
 
   const [disabled, setDisabled] = useState(false);
 
@@ -104,6 +104,7 @@ const RoleForm = (props: RoleFormProps) => {
     await createRole(role).then((errorcode: string | undefined) => {
       if (errorcode) {
         showToast(
+          isToastOn(),
           ToastType.ERROR,
           `Role create error ${displayPrismaErrorCode(errorcode)}`,
           getToastDuration()
@@ -112,6 +113,7 @@ const RoleForm = (props: RoleFormProps) => {
         displayPrismaErrorCode(errorcode);
       } else {
         showToast(
+          isToastOn(),
           ToastType.SUCCESS,
           `Role ${role.name} created`,
           getToastDuration()
@@ -128,6 +130,7 @@ const RoleForm = (props: RoleFormProps) => {
     await updateRole(role).then((errorcode: string | undefined) => {
       if (errorcode) {
         showToast(
+          isToastOn(),
           ToastType.ERROR,
           `Role update error ${displayPrismaErrorCode(errorcode)}`,
           getToastDuration()
@@ -136,6 +139,7 @@ const RoleForm = (props: RoleFormProps) => {
         displayPrismaErrorCode(errorcode);
       } else {
         showToast(
+          isToastOn(),
           ToastType.SUCCESS,
           `Role ${role.name} updated`,
           getToastDuration()

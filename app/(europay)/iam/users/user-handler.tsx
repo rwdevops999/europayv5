@@ -44,7 +44,7 @@ const UserHandler = ({
   countries: tCountry[];
 }) => {
   const { push } = useRouter();
-  const { getToastDuration } = useToastSettings();
+  const { isToastOn, getToastDuration } = useToastSettings();
 
   const [tableData, setTableData] = useState<Data[]>([]);
   const [entity, setEntity] = useState<UserEntity>(defaultUserEntity);
@@ -61,7 +61,12 @@ const UserHandler = ({
   }, [users]);
 
   const processDeletedUser = (_name: string): void => {
-    showToast(ToastType.SUCCESS, `Deleted user ${_name}`, getToastDuration());
+    showToast(
+      isToastOn(),
+      ToastType.SUCCESS,
+      `Deleted user ${_name}`,
+      getToastDuration()
+    );
 
     push(absoluteUrl(`/iam/users/id`));
   };

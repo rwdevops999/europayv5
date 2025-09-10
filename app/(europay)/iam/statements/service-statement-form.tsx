@@ -50,7 +50,7 @@ export interface StatementFormProps {
 
 const ServiceStatementForm = (props: StatementFormProps) => {
   const { push } = useRouter();
-  const { getToastDuration } = useToastSettings();
+  const { isToastOn, getToastDuration } = useToastSettings();
 
   const formMethods = useForm({
     defaultValues: props.entity,
@@ -130,6 +130,7 @@ const ServiceStatementForm = (props: StatementFormProps) => {
       (errorcode: string | undefined) => {
         if (errorcode) {
           showToast(
+            isToastOn(),
             ToastType.ERROR,
             `Statement create error ${displayPrismaErrorCode(errorcode)}`,
             getToastDuration()
@@ -138,6 +139,7 @@ const ServiceStatementForm = (props: StatementFormProps) => {
           displayPrismaErrorCode(errorcode);
         } else {
           showToast(
+            isToastOn(),
             ToastType.SUCCESS,
             `Statement ${statement.ssname} created`,
             getToastDuration()
@@ -161,6 +163,7 @@ const ServiceStatementForm = (props: StatementFormProps) => {
       (errorcode: string | undefined) => {
         if (errorcode) {
           showToast(
+            isToastOn(),
             ToastType.ERROR,
             `Statement update error ${displayPrismaErrorCode(errorcode)}`,
             getToastDuration()
@@ -169,6 +172,7 @@ const ServiceStatementForm = (props: StatementFormProps) => {
           displayPrismaErrorCode(errorcode);
         } else {
           showToast(
+            isToastOn(),
             ToastType.SUCCESS,
             `Statement ${statement.ssname} updated`,
             getToastDuration()

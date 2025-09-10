@@ -72,7 +72,7 @@ const generateOTP = (): string => {
 const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
   const { login } = useUser();
   const { getTimingValue, getTimingNotation } = useOTPSettings();
-  const { getToastDuration } = useToastSettings();
+  const { isToastOn, getToastDuration } = useToastSettings();
 
   const [processing, setProcessing] = useState<boolean>(false);
 
@@ -291,6 +291,7 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
                 }
 
                 showToast(
+                  isToastOn(),
                   ToastType.SUCCESS,
                   `Welcome ${welcome}`,
                   getToastDuration()
@@ -336,7 +337,12 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
           welcome = `${user.firstname} ${user.lastname}`;
         }
 
-        showToast(ToastType.SUCCESS, `Welcome ${welcome}`, getToastDuration());
+        showToast(
+          isToastOn(),
+          ToastType.SUCCESS,
+          `Welcome ${welcome}`,
+          getToastDuration()
+        );
         login(user);
         back();
         // redirect(absoluteUrl("/dashboard"));

@@ -447,3 +447,34 @@ export const executePayment = async (
 
 // revalidatePath(absoluteUrl("/user"));
 // };
+
+export const countTransactions = async (_userid: number): Promise<number> => {
+  let result: number = 0;
+
+  await prisma.transaction.count({
+    where: {
+      AND: [
+        {
+          parties: {
+            has: _userid,
+          },
+        },
+        {
+          OR: [
+            {
+              status: TransactionStatus.PENDING,
+            },
+            {
+              status: TransactionStatus.COMPLETED,
+            },
+            {
+              status: TransactionStatus.REJECTED,
+            },
+          ],
+        },
+      ],
+    },
+  });
+
+  return result;
+};

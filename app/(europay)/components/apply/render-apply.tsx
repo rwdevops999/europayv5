@@ -19,7 +19,7 @@ import { $iam_user_has_action } from "@/app/client/iam-access";
 const RenderApply = () => {
   const { user } = useUser();
   const { setTaskAvailable } = useTask();
-  const { getToastDuration } = useToastSettings();
+  const { isToastOn, getToastDuration } = useToastSettings();
 
   const [openApplyDialog, setOpenApplyDialog] = useState<boolean>(false);
 
@@ -60,6 +60,7 @@ const RenderApply = () => {
     await createTask(linkedtask, taskId).then(() => setTaskAvailable(true));
 
     showToast(
+      isToastOn(),
       "info",
       "Your application is registered. On completion you'll receive an email",
       getToastDuration()

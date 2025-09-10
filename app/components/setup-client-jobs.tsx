@@ -72,6 +72,7 @@ const SetupClientJobs = ({
     const delay = createDelayExpression(
       getJobTimingNotation(TaskPollerJobName)
     );
+
     await createClientJob(TaskPollerJobName, { delayexpression: delay }).then(
       async (job: tJob | null) => {
         if (job) {

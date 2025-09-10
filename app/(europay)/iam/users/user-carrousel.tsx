@@ -107,7 +107,7 @@ enum Pages {
 const UserCarrousel = (props: UserCarrouselProps) => {
   const { push } = useRouter();
   const { user, setUser } = useUser();
-  const { getToastDuration } = useToastSettings();
+  const { isToastOn, getToastDuration } = useToastSettings();
 
   const currentPage = useRef<string>(Pages.DETAILS);
   const showCurrentPage = (_page: string): void => {
@@ -736,6 +736,7 @@ const UserCarrousel = (props: UserCarrouselProps) => {
     await createUser(user).then((errorcode: string | undefined | tUser) => {
       if (errorcode && typeof errorcode === "string") {
         showToast(
+          isToastOn(),
           ToastType.ERROR,
           `User create error ${displayPrismaErrorCode(errorcode)}`,
           getToastDuration()
@@ -744,6 +745,7 @@ const UserCarrousel = (props: UserCarrouselProps) => {
         displayPrismaErrorCode(errorcode);
       } else {
         showToast(
+          isToastOn(),
           ToastType.SUCCESS,
           `User '${user.firstname} ${user.lastname}' created`,
           getToastDuration()
@@ -816,6 +818,7 @@ const UserCarrousel = (props: UserCarrouselProps) => {
     await updateUser(_user).then(async (errorcode: string | undefined) => {
       if (errorcode) {
         showToast(
+          isToastOn(),
           ToastType.ERROR,
           `User update error ${displayPrismaErrorCode(errorcode)}`,
           getToastDuration()
@@ -824,6 +827,7 @@ const UserCarrousel = (props: UserCarrouselProps) => {
         displayPrismaErrorCode(errorcode);
       } else {
         showToast(
+          isToastOn(),
           ToastType.SUCCESS,
           `User '${_user.firstname} ${_user.lastname}' updated`,
           getToastDuration()

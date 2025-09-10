@@ -44,7 +44,7 @@ const GroupHandler = ({
   linkedusers: number[];
 }) => {
   const { push } = useRouter();
-  const { getToastDuration } = useToastSettings();
+  const { isToastOn, getToastDuration } = useToastSettings();
 
   const [tableData, setTableData] = useState<Data[]>([]);
   const [entity, setEntity] = useState<GroupEntity>(defaultGroupEntity);
@@ -62,7 +62,12 @@ const GroupHandler = ({
   }, [policies, , roles, users]);
 
   const processDeletedGroup = (_name: string): void => {
-    showToast(ToastType.SUCCESS, `Deleted group ${_name}`, getToastDuration());
+    showToast(
+      isToastOn(),
+      ToastType.SUCCESS,
+      `Deleted group ${_name}`,
+      getToastDuration()
+    );
 
     push(absoluteUrl(`/iam/groups/id`));
   };
