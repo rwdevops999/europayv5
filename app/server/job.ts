@@ -96,14 +96,16 @@ export const changeJobStatus = async (
   _id: number,
   _status: JobStatus
 ): Promise<void> => {
-  await prisma.job.update({
-    where: {
-      id: _id,
-    },
-    data: {
-      status: _status,
-    },
-  });
+  await prisma.job
+    .update({
+      where: {
+        id: _id,
+      },
+      data: {
+        status: _status,
+      },
+    })
+    .catch(() => {});
 };
 
 export const clearRunningJobs = async (

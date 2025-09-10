@@ -87,9 +87,14 @@ const SetupClientJobs = ({
 
   const taskListenerFunction = async (data: any): Promise<void> => {
     const { key, value } = data;
+    console.log("[TASKPOLLER] Received inngest message", key, value);
 
     if (key === taskKey) {
-      setTaskAvailable(value > 0);
+      console.log("[TASKPOLLER] key matches", taskKey);
+      if (value > 0) {
+        setTaskAvailable(value > 0);
+      }
+      console.log("[TASKPOLLER] Increment Jobs Changed", taskKey);
       incrementJobsChanged();
     }
   };

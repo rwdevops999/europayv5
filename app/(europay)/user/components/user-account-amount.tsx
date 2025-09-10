@@ -9,7 +9,7 @@ const cid: string = "UserAccountAmount";
 
 const UserAccountAmount = () => {
   const { user } = useUser();
-  const { transactionAvailable } = useTransaction();
+  const { transactions } = useTransaction();
 
   const [amount, setAmount] = useState<string | null>(null);
 
@@ -31,7 +31,7 @@ const UserAccountAmount = () => {
 
   useEffect(() => {
     loadAccountAmount();
-  }, [transactionAvailable]);
+  }, [transactions]);
 
   return <div>{amount}</div>;
 };

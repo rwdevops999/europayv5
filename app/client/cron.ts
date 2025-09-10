@@ -1,3 +1,4 @@
+import { json } from "@/lib/util";
 import { timings, tTimingGroup } from "./data/timings-data";
 
 export const createCronExpression = (_timing: string): string => {
@@ -41,8 +42,9 @@ export const createDelayExpression = (_timing: string): string => {
   let delay: string = "";
 
   const chars = _timing.split("");
+  console.log("[DELAY]", json(chars));
 
-  const value: number = parseInt(chars[0]);
+  const value: number = parseInt(_timing.slice(0, _timing.length - 1));
   const timingchar = chars[chars.length - 1];
 
   const timinggroup: tTimingGroup | undefined = timings.find(

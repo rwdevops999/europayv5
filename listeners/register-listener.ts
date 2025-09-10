@@ -19,3 +19,14 @@ export const registerListener = async (
     notificationFunction: notificationFunction,
   });
 };
+
+export const unregisterListener = async (
+  socket: any,
+  notificationKey: string
+) => {
+  listenNotificationSocket({
+    socket,
+    notificationKey: notificationKey,
+    notificationFunction: (data: any) => {},
+  });
+};

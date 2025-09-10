@@ -3,8 +3,8 @@
 import { createContext, ReactNode, useContext, useRef, useState } from "react";
 
 interface TransactionContextInterface {
-  transactionAvailable: boolean;
-  setTransactionAvailable: (value: boolean) => void;
+  transactions: number;
+  setTransactions: (value: number) => void;
 }
 
 const TransactionContext = createContext<
@@ -20,13 +20,10 @@ export const useTransaction = () => {
 };
 
 export const TransactionProvider = ({ children }: { children: ReactNode }) => {
-  const [transactionAvailable, setTransactionAvailable] =
-    useState<boolean>(false);
+  const [transactions, setTransactions] = useState<number>(0);
 
   return (
-    <TransactionContext.Provider
-      value={{ transactionAvailable, setTransactionAvailable }}
-    >
+    <TransactionContext.Provider value={{ transactions, setTransactions }}>
       {children}
     </TransactionContext.Provider>
   );

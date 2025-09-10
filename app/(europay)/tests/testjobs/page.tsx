@@ -16,8 +16,8 @@ const TestJobs = () => {
       ]}
       className="border-1 border-blue-500"
     >
-      {/* <CronTest /> */}
-      <JobTest />
+      <CronTest />
+      {/* <JobTest /> */}
     </PageContent>
   );
 };

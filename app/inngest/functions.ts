@@ -14,73 +14,6 @@ import { setOtpStatus } from "../server/otp";
 import { countNonCompletedTasks } from "../server/tasks";
 import { countTransactions } from "../server/transaction";
 
-const createClientJob = inngest.createFunction(
-  { id: "create-client-job", name: "Create Client Job" },
-  { event: "europay/create.client.job" },
-  async ({ event }) => {
-    // await prisma.job
-    //   .create({
-    //     data: {
-    //       jobname: event.data.jobname,
-    //       status: JobStatus.RUNNING,
-    //       description: event.data.jobdescription,
-    //       model: JobModel.CLIENT,
-    //     },
-    //   })
-    //   .catch((reason: any) => {});
-  }
-);
-
-const transactionPoller = inngest.createFunction(
-  {
-    id: "transaction-poller-scheduled",
-    name: "Transaction Poller",
-    cancelOn: [
-      {
-        event: "europay/TransactionPoller.suspend",
-        // ensure the async (future) event's userId matches the trigger userId
-        match: "data.jobid",
-      },
-    ],
-  },
-  { event: "europay/TransactionPoller" },
-  async ({ event }) => {
-    const { jobid, userid } = event.data;
-    await prisma.transaction
-      .count({
-        where: {
-          AND: [
-            {
-              parties: {
-                has: userid,
-              },
-            },
-            {
-              OR: [
-                {
-                  status: TransactionStatus.PENDING,
-                },
-                {
-                  status: TransactionStatus.COMPLETED,
-                },
-                {
-                  status: TransactionStatus.REJECTED,
-                },
-              ],
-            },
-          ],
-        },
-      })
-      .then(async (_value: number) => {
-        await fetch(
-          absoluteUrl(
-            `/api/notification/send?key=${transactionKey}:${userid}&value=${_value}`
-          )
-        );
-      });
-  }
-);
-
 const createOTPJob = inngest.createFunction(
   {
     id: "create-otp-job",
@@ -139,7 +72,13 @@ const taskPoller = inngest.createFunction(
     const { jobid, delayexpression } = event.data;
 
     await step.run("run-job", async () => {
-      await changeJobStatus(jobid, JobStatus.RUNNING);
+      await changeJobStatus(jobid, JobStatus.RUNNING).then(async () => {
+        const tasks: number = -1;
+
+        await fetch(
+          absoluteUrl(`/api/notification/send?key=${taskKey}&value=${tasks}`)
+        );
+      });
     });
 
     await step.sleep("delay-job", delayexpression);
@@ -147,10 +86,10 @@ const taskPoller = inngest.createFunction(
     await step.run("complete-job", async () => {
       const tasks: number = await countNonCompletedTasks();
 
-      await fetch(
-        absoluteUrl(`/api/notification/send?key=${taskKey}&value=${tasks}`)
-      ).then(async () => {
-        await changeJobStatus(jobid, JobStatus.COMPLETED);
+      await changeJobStatus(jobid, JobStatus.COMPLETED).then(async () => {
+        await fetch(
+          absoluteUrl(`/api/notification/send?key=${taskKey}&value=${tasks}`)
+        );
       });
     });
 
@@ -161,7 +100,7 @@ const taskPoller = inngest.createFunction(
   }
 );
 
-const xtransactionPoller = inngest.createFunction(
+const transactionPoller = inngest.createFunction(
   {
     id: "transaction-poller-scheduled",
     name: "Transaction Poller",
@@ -178,7 +117,14 @@ const xtransactionPoller = inngest.createFunction(
     const { jobid, userid, delayexpression } = event.data;
 
     await step.run("run-job", async () => {
-      await changeJobStatus(jobid, JobStatus.RUNNING);
+      const transactions: number = -1;
+      await changeJobStatus(jobid, JobStatus.RUNNING).then(async () => {
+        await fetch(
+          absoluteUrl(
+            `/api/notification/send?key=${transactionKey}:${userid}&value=${transactions}`
+          )
+        );
+      });
     });
 
     await step.sleep("delay-job", delayexpression);
@@ -186,12 +132,12 @@ const xtransactionPoller = inngest.createFunction(
     await step.run("complete-job", async () => {
       const transactions: number = await countTransactions(userid);
 
-      await fetch(
-        absoluteUrl(
-          `/api/notification/send?key=${transactionKey}:${userid}&value=${transactions}`
-        )
-      ).then(async () => {
-        await changeJobStatus(jobid, JobStatus.COMPLETED);
+      await changeJobStatus(jobid, JobStatus.COMPLETED).then(async () => {
+        await fetch(
+          absoluteUrl(
+            `/api/notification/send?key=${transactionKey}:${userid}&value=${transactions}`
+          )
+        );
       });
     });
 

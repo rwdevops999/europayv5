@@ -24,6 +24,7 @@ import {
   deleteJob,
   findJobByName,
   runInngestJob,
+  suspendInngestJob,
 } from "@/app/server/job";
 import { HistoryType, JobModel, JobStatus } from "@/generated/prisma";
 import { useTransaction } from "@/hooks/use-transaction";
@@ -36,6 +37,7 @@ import { useHistorySettings } from "@/hooks/use-history-settings";
 import { createUserSettings } from "@/app/server/usersettings";
 import { json } from "@/lib/util";
 import { loadUserById } from "@/app/server/users";
+import { createDelayExpression } from "@/app/client/cron";
 
 // const JOB_NAME: string = "TransactionPoller";
 // const JOB_TIMING: number = 1 * 60 * 1000;
@@ -52,8 +54,8 @@ const envHistoryLevel: string | undefined =
 const NavbarUserProfile = () => {
   const { user, setUser } = useUser();
   const { socket, isConnected } = useSocket();
-  const { setTransactionAvailable } = useTransaction();
-  const { getJobTiming } = useJob();
+  const { setTransactions } = useTransaction();
+  const { getJobTimingNotation, incrementJobsChanged } = useJob();
 
   const { setToast, setToastDuration } = useToastSettings();
   const { setMarkdown } = useMarkdownSettings();
@@ -186,8 +188,102 @@ const NavbarUserProfile = () => {
     }
   };
 
+  const transactionListenerFunction = async (data: any): Promise<void> => {
+    console.log("[TRANSACTIONPOLLER] Received event from Inngest");
+    const expectedkey: string = `${transactionKey}:${user?.id}`;
+
+    const { key, value } = data;
+    console.log("[TRANSACTIONPOLLER] Received", key);
+
+    if (key === expectedkey) {
+      console.log("[TRANSACTIONPOLLER] Key matches", "transactions", value);
+      if (value >= 0) {
+        setTransactions(value);
+      }
+      incrementJobsChanged();
+    }
+  };
+
+  const createClientJob = async (
+    _jobname: string,
+    _data: any
+  ): Promise<tJob | null> => {
+    const job: tJob | null = await createJob(
+      _jobname,
+      JobModel.CLIENT,
+      _data,
+      JobStatus.CREATED
+    );
+
+    return job;
+  };
+
+  const startupJob = async (_user: tUser): Promise<void> => {
+    const expectedJobname: string = `${TransactionPollerJobName}:${_user.id}`;
+
+    console.log(
+      "[TRANSACTIONPOLLER]:startupJob",
+      "Looking up job",
+      expectedJobname
+    );
+    const job: tJob | null = await findJobByName(expectedJobname);
+
+    if (job) {
+      console.log(
+        "[TRANSACTIONPOLLER]:startupJob",
+        "Job found",
+        expectedJobname
+      );
+      if (job.status === JobStatus.RUNNING) {
+        console.log(
+          "[TRANSACTIONPOLLER]:startupJob",
+          "Job is running => suspend Inngest job"
+        );
+        await suspendInngestJob(TransactionPollerJobName, {
+          jobid: job.id,
+        });
+      }
+
+      console.log("[TRANSACTIONPOLLER]:startupJob", "Delete job", job.id);
+      await deleteJob(job.id);
+    }
+
+    const delay = createDelayExpression(
+      getJobTimingNotation(TransactionPollerJobName)
+    );
+    console.log("[TRANSACTIONPOLLER]:startupJob", "Delay", delay);
+
+    console.log(
+      "[TRANSACTIONPOLLER]:startupJob",
+      "Creating client job",
+      expectedJobname
+    );
+    await createClientJob(expectedJobname, { delayexpression: delay }).then(
+      async (job: tJob | null) => {
+        if (job) {
+          console.log(
+            "[TRANSACTIONPOLLER]:startupJob",
+            "Job is created",
+            "Starting Inngest job",
+            TransactionPollerJobName
+          );
+          await runInngestJob(TransactionPollerJobName, {
+            jobid: job.id,
+            userid: _user.id,
+            delayexpression: delay,
+          }).then(() => incrementJobsChanged());
+        }
+      }
+    );
+  };
+
   const setupTransactionPoller = async (_user: tUser): Promise<void> => {
-    console.log("Setting up transaction poller");
+    console.log("[TRANSACTIONPOLLER] Setting up transaction poller");
+
+    const key: string = `${transactionKey}:${_user.id}`;
+    console.log("[TRANSACTIONPOLLER] Register listener for", key);
+    registerListener(socket, key, transactionListenerFunction);
+    startupJob(_user);
   };
 
   useEffect(() => {
