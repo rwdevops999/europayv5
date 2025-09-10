@@ -37,3 +37,18 @@ export const transactionKey: string = "key:transaction";
 
 export const GROUP_ADMINS = "ADMIN";
 export const GROUP_CLIENTS = "CLIENT";
+
+export const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];

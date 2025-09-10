@@ -346,7 +346,7 @@ model Transaction {
 
   parties Int[]
 
-  transactionDate DateTime? @default(now())
+  transactionDate DateTime @default(now())
   createDate DateTime? @default(now())
   updateDate DateTime? @updatedAt
 }

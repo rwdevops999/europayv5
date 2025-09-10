@@ -2,8 +2,10 @@ import { absoluteUrl } from "@/lib/util";
 import PageContent from "@/ui/page-content";
 import PageItemContainer from "@/ui/page-item-container";
 import UserAccount from "./components/user-account";
+import UserTransactionsList from "./components/user-transactions-list";
 
 const UserPage = () => {
+  console.log("[UserPage]:RENDER");
   return (
     <PageContent
       breadcrumbs={[
@@ -24,9 +26,9 @@ const UserPage = () => {
           </PageItemContainer> */}
         </div>
         <div className="col-span-2 m-1 group relative flex flex-col overflow-hidden rounded-md shadow transition-all duration-200 ease-in-out hover:z-30 space-y-2">
-          {/* <PageItemContainer title="transactions" border>
+          <PageItemContainer title="transactions" border>
             <UserTransactionsList />
-          </PageItemContainer> */}
+          </PageItemContainer>
         </div>
         <div className="col-span-2 m-1 group relative flex flex-col overflow-hidden rounded-md shadow transition-all duration-200 ease-in-out hover:z-30 space-y-2">
           {/* <PageItemContainer title="linked banks" border>

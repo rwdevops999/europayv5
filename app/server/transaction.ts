@@ -1,4 +1,6 @@
-import { tTransaction, tUser } from "@/lib/prisma-types";
+"use server";
+
+import { tTransaction, tTransactionDetail, tUser } from "@/lib/prisma-types";
 import { generateUUID, validEmail } from "@/lib/util";
 import { TransactionStatus } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
@@ -334,120 +336,6 @@ export const executePayment = async (
   return statusmessage;
 };
 
-// senderId = sender.id;
-// senderAccountAmount = sender.account?.amount;
-
-// // let bankId: number|undefined = getLinkedBankIdOfUser(sender, _to);
-// // isTransferToBank = isLinkedBankOfUser(sender, _to);
-
-//  email.destination = sender.email;
-
-// has sender enough on his account ?
-// if (sender.account) {
-// } else {
-
-// }
-
-// if (sender) {
-//   isTransferToBank = isLinkedBankOfUser(sender, _to);
-// }
-
-// if (sender && isTransferToBank) {
-// if (sender && isTransferToBank) {
-// } else {
-//   if (sender) {
-//     let senderAvailableAmount: number = 0;
-//     if (receiver) {
-//       if (sender.account) {
-//         senderAvailableAmount = sender.account.amount;
-//       }
-
-//       if (senderAvailableAmount < _amount) {
-//       } else {
-//         const _currencySender: string =
-//           sender.address?.country?.currencycode!;
-//         const _currencySenderSymbol: string = decode(
-//           sender.address?.country?.symbol!
-//         );
-//         const _currencyReceiver: string =
-//           receiver.address?.country?.currencycode!;
-
-//         let amountPayableToReceiver: number = 0;
-//         await fetch(
-//           `https://v6.exchangerate-api.com/v6/${process.env.CURRENCY_API_KEY}/pair/${_currencySender}/${_currencyReceiver}/${_amount}`
-//         )
-//           .then((response: Response) => response.json())
-//           .then(
-//             (value: any) =>
-//               (amountPayableToReceiver = value.conversion_result)
-//           );
-
-//         const transactionID: string = generateUUID();
-//         createTransaction(
-//           transactionID,
-//           _from,
-//           sender.account?.id,
-//           sender.account?.amount,
-//           _amount,
-//           _message ?? null,
-//           _to,
-//           receiver.account?.id,
-//           receiver.account?.amount,
-//           amountPayableToReceiver
-//         );
-
-//         await removePayment(sender.account?.id, _amount, _to, transactionID);
-//         await addPayment(
-//           receiver.account?.id,
-//           amountPayableToReceiver,
-//           _from,
-//           transactionID
-//         );
-
-//         email.destination = receiver.email;
-//         email.cc = sender.email;
-
-//         // "parameters": "{receiverfirstname, receiverlastname, senderfirstname, senderlastname, senderamount, sendercurrencysymbol, sendercurrencycode, sendermessage, transactionid, transactiondate, transactiondirection}",
-//         const transactionDate: Date = new Date();
-
-//         email.params = {
-//           receiverfirstname: receiver.firstname,
-//           receiverlastname: receiver.lastname,
-//           senderfirstname: sender.firstname,
-//           senderlastname: sender.lastname,
-//           senderamount: _amount.toFixed(2),
-//           sendercurrencysymbol: _currencySenderSymbol,
-//           sendercurrencycode: _currencySender,
-//           transactionid: transactionID,
-//           transactiondate: renderDateInfo(transactionDate.toString()),
-//           transactiondirection: "received",
-//         };
-
-//         if (_message) {
-//           email.template = "EMAIL_WITH_TRANSACTION_MESSAGE";
-//           email.params.sendermessage = _message;
-//         } else {
-//           email.template = "EMAIL_WITH_TRANSACTION_NO_MESSAGE";
-//         }
-
-//         paymentoutcome = "Payment OK";
-//       }
-//     } else {
-//       paymentoutcome += ": receiver unknown in Europay";
-//       email.destination = sender.email;
-//     }
-//   } else {
-//     paymentoutcome += ": sender unknown in Europay";
-//   }
-
-//   if (email.destination) {
-//     await sendEmail(email);
-//   }
-// }
-
-// revalidatePath(absoluteUrl("/user"));
-// };
-
 export const countTransactions = async (_userid: number): Promise<number> => {
   let result: number = 0;
 
@@ -480,5 +368,75 @@ export const countTransactions = async (_userid: number): Promise<number> => {
     .then((value: number) => (result = value));
 
   console.log("[TRANSACTION]:countTransaction result is", result);
+  return result;
+};
+
+export const loadTransactionsByUsernameOrEmailAsSender = async (
+  _username: string | null,
+  _email: string
+): Promise<tTransaction[]> => {
+  let result: tTransaction[] = [];
+
+  await prisma.transaction
+    .findMany({
+      where: {
+        OR: [
+          {
+            sender: _username ?? "",
+          },
+          {
+            sender: _email,
+          },
+        ],
+      },
+      orderBy: {
+        transactionDate: "desc",
+      },
+    })
+    .then((transactions: tTransaction[]) => (result = transactions));
+
+  return result;
+};
+
+export const loadTransactionsByUsernameOrEmailAsReceiver = async (
+  _username: string | null,
+  _email: string
+): Promise<tTransaction[]> => {
+  let result: tTransaction[] = [];
+
+  await prisma.transaction
+    .findMany({
+      where: {
+        OR: [
+          {
+            receiver: _username ?? "",
+          },
+          {
+            receiver: _email,
+          },
+        ],
+      },
+      orderBy: {
+        transactionDate: "desc",
+      },
+    })
+    .then((transactions: tTransaction[]) => (result = transactions));
+
+  return result;
+};
+
+export const loadTransactionDetails = async (
+  _transactionId: string
+): Promise<tTransactionDetail[]> => {
+  let result: tTransactionDetail[] = [];
+
+  await prisma.transactionDetail
+    .findMany({
+      where: {
+        transactionid: _transactionId,
+      },
+    })
+    .then((values: tTransactionDetail[]) => (result = values));
+
   return result;
 };

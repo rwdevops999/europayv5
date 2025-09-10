@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import {
+  months,
   ToastTypes,
   URL_ENCODING_AMPERSAND,
   URL_ENCODING_ASSIGNMENT,
@@ -208,4 +209,12 @@ export const generateClientId = (): string => {
   const params: string[] = uuidv4().split("-");
 
   return params[params.length - 1];
+};
+
+export const renderDateInfo = (dateValue: string): string => {
+  const date = new Date(dateValue);
+
+  return (
+    date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear()
+  );
 };
