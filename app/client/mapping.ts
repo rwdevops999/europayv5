@@ -384,7 +384,7 @@ export const mapTransactions = (
         id: transaction.id,
         transactionId: transaction.transactionid,
         amount:
-          transaction.amount.toFixed(2) +
+          transaction.senderAmount.toFixed(2) +
           " " +
           decode(transaction.senderAccount?.user?.address?.country?.symbol) +
           " (" +

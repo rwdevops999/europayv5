@@ -103,7 +103,7 @@ export const executePayment = async (
       if (_amount > senderEntity.account.amount) {
         // CASE A
         status = TransactionStatus.REJECTED;
-        statusmessage = "Amount not sufficient";
+        statusmessage = "Account amount not sufficient";
         paymentOutcome =
           "Payment REJECTED: Sender has insufficient amount on its account";
         createTransaction = true;
