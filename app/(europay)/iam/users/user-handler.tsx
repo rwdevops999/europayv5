@@ -192,6 +192,7 @@ const UserHandler = ({
               dialCode: appuser.address?.country?.dialCode ?? "",
             },
           },
+          account: appuser.account !== null,
         };
 
         let linked: number[] = appuser.policies.map(

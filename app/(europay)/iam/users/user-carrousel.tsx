@@ -6,7 +6,7 @@ import { BiSolidUserDetail } from "react-icons/bi";
 import { CiAt } from "react-icons/ci";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { GiScrollUnfurled } from "react-icons/gi";
-import { MdPolicy } from "react-icons/md";
+import { MdAccountBalance, MdPolicy } from "react-icons/md";
 import { PiPassword } from "react-icons/pi";
 import { useRouter } from "next/navigation";
 import { columnsPolicies } from "./table/colums-policies";
@@ -39,6 +39,7 @@ import Button from "@/ui/button";
 import ValidationConflictsDialog from "@/ui/validation-conflicts-dialog";
 import { PaginationState } from "@tanstack/react-table";
 import DataRenderer from "./data-renderer";
+import { AccountStatus } from "@/generated/prisma";
 
 export interface CountryEntity {
   id?: number;
@@ -70,12 +71,12 @@ export interface UserEntity {
   blocked?: boolean;
   managed?: boolean;
   address: AddressEntity;
+  account?: boolean;
 }
 
 export const defaultUserEntity: UserEntity = {
   lastname: "",
   firstname: "",
-  username: "",
   email: "",
   password: "",
   managed: false,
@@ -84,6 +85,7 @@ export const defaultUserEntity: UserEntity = {
   address: {
     country: {},
   },
+  account: true,
 };
 
 export interface UserCarrouselProps {
@@ -102,6 +104,7 @@ enum Pages {
   POLICIES = "policies",
   ROLES = "roles",
   GROUPS = "groups",
+  ACCOUNT = "account",
 }
 
 const UserCarrousel = (props: UserCarrouselProps) => {
@@ -599,6 +602,34 @@ const UserCarrousel = (props: UserCarrouselProps) => {
     );
   };
 
+  const AccountFormControl = (): JSX.Element => {
+    console.log("[PEI]", props.entity.id);
+
+    return (
+      <div className="grid grid-cols-[1%_15%_2%] py-1.5">
+        <div className="col-start-2">
+          <label className="text-sm">Create account:</label>
+        </div>
+        <div className="col-start-3 -mt-0.5">
+          <input
+            type="checkbox"
+            className="checkbox checkbox-xs rounded-sm"
+            disabled={props.entity.id !== undefined}
+            {...register("account")}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const Account = (): JSX.Element => {
+    return (
+      <div className="grid w-[100%] grid-rows-[10%_55%_35%] space-y-1">
+        <AccountFormControl />
+      </div>
+    );
+  };
+
   const handleDetailsPage = (): void => {
     currentPage.current = Pages.DETAILS;
     location.href = "#details";
@@ -619,6 +650,11 @@ const UserCarrousel = (props: UserCarrouselProps) => {
     location.href = "#groups";
   };
 
+  const handleAccountPage = (): void => {
+    currentPage.current = Pages.ACCOUNT;
+    location.href = "#account";
+  };
+
   const Carrousel = (): JSX.Element => {
     return (
       <>
@@ -634,6 +670,9 @@ const UserCarrousel = (props: UserCarrouselProps) => {
           </div>
           <div id="groups" className="carousel-item w-full">
             <Groups />
+          </div>
+          <div id="account" className="carousel-item w-full">
+            <Account />
           </div>
         </div>
         <div className="flex w-full justify-center gap-2 py-2">
@@ -672,14 +711,43 @@ const UserCarrousel = (props: UserCarrouselProps) => {
             <FaPeopleGroup size={16} />
             <label className="cursor-pointer text-xs">Groups</label>
           </button>
+
+          <button
+            type="button"
+            onClick={handleAccountPage}
+            className="flex items-center space-x-2"
+          >
+            <MdAccountBalance size={16} />
+            <label className="cursor-pointer text-xs">Account</label>
+          </button>
         </div>
       </>
     );
   };
 
   const provisionUserForCreate = (_entity: UserEntity): tUserCreate => {
+    const getAccountSection = (entity: UserEntity): any => {
+      let accountInfo = {};
+
+      if (entity.account) {
+        accountInfo = {
+          create: {
+            amount: 0,
+            status: AccountStatus.OPEN,
+          },
+        };
+      }
+
+      return accountInfo;
+    };
+
+    console.log("UN1", _entity.username);
+    console.log("UN2", _entity.username === null);
+    console.log("UN3", _entity.username === undefined);
+    console.log("UN4", _entity.username === "");
+
     const result: tUserCreate = {
-      username: _entity.username,
+      username: _entity.username === "" ? null : _entity.username,
 
       firstname: _entity.firstname,
       lastname: _entity.lastname,
@@ -725,6 +793,8 @@ const UserCarrousel = (props: UserCarrouselProps) => {
           return { id: _id };
         }),
       },
+
+      account: getAccountSection(_entity),
     };
 
     return result;

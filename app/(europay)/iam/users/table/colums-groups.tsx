@@ -51,7 +51,7 @@ export const columnsGroups: ColumnDef<Data>[] = [
   {
     accessorKey: "name",
 
-    size: 414,
+    size: 344,
 
     header: ({ column }) => (
       <DataTableColumnHeader
