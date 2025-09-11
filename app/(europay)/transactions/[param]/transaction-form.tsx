@@ -20,14 +20,14 @@ import { PiArrowFatLineRightDuotone } from "react-icons/pi";
 type UserInfo = {
   firstname: string;
   lastname: string;
-  avatar: string | null;
+  useravatar: string | null;
   amount: string;
   currencysymbol: string;
   currencycode: string;
 };
 type BankInfo = {
   IBAN: string;
-  avatar: string;
+  bankavatar: string;
   amount: string;
   currencysymbol: string;
   currencycode: string;
@@ -38,7 +38,7 @@ type TransactionInfo = {
   message: string | null;
   status: string;
   statustext: string;
-  sender: UserInfo;
+  sender?: UserInfo;
   receiver?: UserInfo;
   bank?: BankInfo;
 };
@@ -57,15 +57,7 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
     sender: {
       firstname: "",
       lastname: "",
-      avatar: "john.doe.png",
-      amount: "0.00",
-      currencysymbol: "",
-      currencycode: "",
-    },
-    receiver: {
-      firstname: "",
-      lastname: "",
-      avatar: "john.doe.png",
+      useravatar: "john.doe.png",
       amount: "0.00",
       currencysymbol: "",
       currencycode: "",
@@ -79,13 +71,72 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
 
     if (transaction) {
       console.log("[LOADED TRANSACTION]", json(transaction));
-      let tsender: tUser = transaction.senderAccount?.user as tUser;
-      let treceiver: tUser = transaction.receiverAccount?.user as tUser;
+      let treceiver: tUser | null = transaction.receiverAccount
+        ?.user as tUser | null;
 
       const isBank: boolean = transaction.isBankTransaction;
       isBankTransfer.current = isBank;
 
-      console.log("RECEIVER", json(treceiver));
+      const getSenderInfo = (
+        transaction: tTransaction
+      ): UserInfo | undefined => {
+        let senderInfo: UserInfo | undefined = undefined;
+
+        let tsender: tUser = transaction.senderAccount?.user as tUser;
+
+        if (tsender) {
+          senderInfo = {
+            firstname: tsender.firstname,
+            lastname: tsender.lastname,
+            useravatar: tsender.avatar === "" ? "john.doe.png" : tsender.avatar,
+            amount: transaction.senderAmount.toString(),
+            currencysymbol: decode(tsender.address?.country?.symbol),
+            currencycode: tsender.address?.country?.currencycode ?? "",
+          };
+        }
+
+        return senderInfo;
+      };
+
+      const getReceiverInfo = (
+        transaction: tTransaction
+      ): UserInfo | undefined => {
+        let receiverInfo: UserInfo | undefined = undefined;
+
+        let treceiver: tUser = transaction.receiverAccount?.user as tUser;
+
+        if (treceiver) {
+          receiverInfo = {
+            firstname: treceiver.firstname,
+            lastname: treceiver.lastname,
+            useravatar:
+              treceiver.avatar === "" ? "john.doe.png" : treceiver.avatar,
+            amount: transaction.senderAmount.toString(),
+            currencysymbol: decode(treceiver.address?.country?.symbol),
+            currencycode: treceiver.address?.country?.currencycode ?? "",
+          };
+        }
+
+        return receiverInfo;
+      };
+
+      const getBankInfo = (transaction: tTransaction): BankInfo | undefined => {
+        let bankInfo: BankInfo | undefined = undefined;
+
+        let tsender: tUser = transaction.senderAccount?.user as tUser;
+
+        if (transaction.isBankTransaction) {
+          bankInfo = {
+            IBAN: transaction.receiver!,
+            amount: transaction.senderAmount.toString(),
+            bankavatar: "bank.png",
+            currencysymbol: decode(tsender.address?.country?.symbol),
+            currencycode: tsender.address?.country?.currencycode ?? "",
+          };
+        }
+
+        return bankInfo;
+      };
 
       const trInfo: TransactionInfo = {
         transactionId: transaction.transactionid,
@@ -93,114 +144,15 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
         message: null,
         status: transaction.status,
         statustext: transaction.statusMessage,
-        sender: {
-          firstname: tsender.firstname,
-          lastname: tsender.lastname,
-          avatar: tsender.avatar === "" ? "john.doe.png" : tsender.avatar,
-          amount: transaction.senderAmount.toString(),
-          currencysymbol: decode(tsender.address?.country?.symbol),
-          currencycode: tsender.address?.country?.currencycode ?? "",
-        },
-        receiver: {
-          firstname: isBank
-            ? "Bank"
-            : treceiver
-            ? treceiver.firstname
-            : transaction.receiver ?? "",
-          lastname: isBank
-            ? `(${transaction.receiver})`
-            : treceiver
-            ? treceiver.lastname
-            : "",
-          avatar: isBank ? "bank.png" : "john.doe.png",
-          amount: transaction.receiverAmount
-            ? transaction.receiverAmount.toString()
-            : "0.00",
-          currencysymbol: isBank
-            ? decode(tsender.address?.country?.symbol)
-            : treceiver?.address?.country
-            ? decode(treceiver?.address?.country?.symbol)
-            : "",
-          currencycode: isBank
-            ? tsender.address?.country?.currencycode ?? ""
-            : treceiver?.address?.country
-            ? treceiver?.address?.country?.currencycode ?? ""
-            : "",
-        },
+        sender: getSenderInfo(transaction),
+        receiver: getReceiverInfo(transaction),
+        bank: getBankInfo(transaction),
       };
 
       console.log("[TRINFO]", json(trInfo));
 
       setTransactionInfo(trInfo);
     }
-
-    // if (transaction) {
-    //   let tsender: tUser = transaction.senderAccount?.user as tUser;
-
-    //   // if (
-    //   //   tsender.account?.bankaccounts.some(
-    //   //     (_bankaccount: tBankaccount) =>
-    //   //       _bankaccount.IBAN === transaction.receiver
-    //   //   )
-    //   // ) {
-    //   //   const bankaccount: tBankaccount | null = await loadBankAccountByIBAN(
-    //   //     transaction.receiver!
-    //   //   );
-
-    //   //   if (bankaccount) {
-    //   //     const trInfo: TransactionInfo = {
-    //   //       transactionId: transaction.transactionid,
-    //   //       transactionDate: transaction.createDate!,
-    //   //       message: transaction.message,
-    //   //       sender: {
-    //   //         firstname: tsender.firstname,
-    //   //         lastname: tsender.lastname,
-    //   //         avatar: tsender.avatar,
-    //   //         amount: transaction.senderAmount.toFixed(2),
-    //   //         currencycode: tsender.address?.country?.currencycode!,
-    //   //         currencysymbol: decode(tsender.address?.country?.symbol),
-    //   //       },
-    //   //       bank: {
-    //   //         IBAN: bankaccount.IBAN,
-    //   //         avatar: "bank.png",
-    //   //         amount: transaction.receiverAmount.toFixed(2),
-    //   //         currencysymbol: decode(tsender.address?.country?.symbol),
-    //   //         currencycode: tsender.address?.country?.currencycode!,
-    //   //       },
-    //   //     };
-
-    //   //     setTransactionInfo(trInfo);
-    //   //   }
-    //   // } else {
-    //   let treceiver: tUser = transaction.receiverAccount?.user as tUser;
-
-    //   const trInfo: TransactionInfo = {
-    //     transactionId: transaction.transactionid,
-    //     transactionDate: transaction.createDate!,
-    //     message: transaction.message,
-    //     sender: {
-    //       firstname: tsender.firstname,
-    //       lastname: tsender.lastname,
-    //       avatar: tsender.avatar,
-    //       amount: transaction.senderAmount.toFixed(2),
-    //       currencycode: tsender.address?.country?.currencycode!,
-    //       currencysymbol: decode(tsender.address?.country?.symbol),
-    //     },
-    //     receiver: {
-    //       firstname: treceiver.firstname,
-    //       lastname: treceiver.lastname,
-    //       avatar: treceiver.avatar!,
-    //       amount: transaction.receiverAmount
-    //         ? transaction.receiverAmount.toFixed(2)
-    //         : "0.00",
-    //       currencysymbol: decode(treceiver.address?.country?.symbol),
-    //       currencycode: treceiver.address?.country?.currencycode!,
-    //     },
-    //   };
-
-    // setTransactionInfo(trInfo);
-    // }
-    // }
   };
 
   useEffect(() => {
@@ -244,61 +196,53 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
                 <div className="w-8 rounded-full hover:cursor-pointer">
                   <img
                     id="avatarsender"
-                    src={`/avatars/${transactionInfo?.sender.avatar}`}
+                    src={`/avatars/${transactionInfo?.sender?.useravatar}`}
                     alt="sender"
                   />
                 </div>
               </div>
               <label className="text-sm">
-                {transactionInfo?.sender.firstname}&nbsp;
-                {transactionInfo?.sender.lastname}
+                {transactionInfo?.sender?.firstname}&nbsp;
+                {transactionInfo?.sender?.lastname}
               </label>
             </div>
           </div>
           <div>
             <PiArrowFatLineRightDuotone />
           </div>
-          <div>
-            {transactionInfo.receiver && (
-              <div className="flex items-center space-x-2">
-                <label className="text-sm">
-                  {transactionInfo?.receiver.firstname}&nbsp;
-                  {transactionInfo?.receiver.lastname}
-                </label>
-                <div className="avatar">
-                  <div
-                    className={clsx(
-                      "w-8",
-                      { "": isBankTransfer.current },
-                      { "rounded-full": !isBankTransfer.current }
-                    )}
-                  >
-                    <img
-                      id="avatarreceiver"
-                      src={`/avatars/${transactionInfo?.receiver.avatar}`}
-                      alt="receiver"
-                    />
-                  </div>
+          {/* {!isBankTransfer.current && (
+            <div className="flex items-center space-x-2">
+              <label className="text-sm">
+                {transactionInfo.receiver?.firstname}&nbsp;
+                {transactionInfo.receiver?.lastname}
+              </label>
+              <div className="avatar">
+                <div className="w-8 rounded-full">
+                  <img
+                    id="avatarreceiver"
+                    src={`/avatars/${transactionInfo.receiver?.useravatar}`}
+                    alt="receiver"
+                  />
                 </div>
               </div>
-            )}
-            {transactionInfo.bank && (
-              <div className="flex items-center space-x-2">
-                <div className="avatar">
-                  <div className="w-6">
-                    <img
-                      id="avatarbank"
-                      src={`/avatars/${transactionInfo?.bank.avatar}`}
-                      alt="bank"
-                    />
-                  </div>
+            </div>
+          )} */}
+          {/* {isBankTransfer.current && (
+            <div className="flex items-center space-x-2">
+              <label className="text-xs">{transactionInfo.bank?.IBAN}</label>
+              <div className="avatar">
+                <div className="w-8">
+                  <img
+                    id="avatarbank"
+                    src={`/avatars/${transactionInfo.bank?.bankavatar}`}
+                    alt="receiver"
+                  />
                 </div>
-                <label className="text-sm">{transactionInfo?.bank.IBAN}</label>
               </div>
-            )}
-          </div>
+            </div>
+          )} */}
         </div>
-        {transactionInfo.message && (
+        {/* {transactionInfo.message && (
           <div className="mt-5 flex flex-col mb-5">
             <label className="text-sm">
               Note from {transactionInfo.sender.firstname}{" "}
@@ -308,7 +252,7 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
               "{transactionInfo.message}"
             </label>
           </div>
-        )}
+        )} */}
       </>
     );
   };
@@ -319,27 +263,27 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
         <div className="space-x-2">
           <label className="text-sm font-bold">Money sent</label>
           <div className="flex space-x-2 text-sm">
-            <div>{transactionInfo?.sender.amount}</div>
-            <div>{transactionInfo?.sender.currencysymbol}</div>
-            <div>{transactionInfo?.sender.currencycode}.</div>
+            <div>{transactionInfo?.sender?.amount}</div>
+            <div>{transactionInfo?.sender?.currencysymbol}</div>
+            <div>{transactionInfo?.sender?.currencycode}.</div>
           </div>
         </div>
         <div className="space-x-2">
           <label className="text-sm font-bold">Money received</label>
-          {transactionInfo.receiver && (
+          {/* {!isBankTransfer.current && (
             <div className="flex space-x-2 text-sm">
-              <div>{transactionInfo?.receiver.amount}</div>
-              <div>{transactionInfo?.receiver.currencysymbol}</div>
-              <div>{transactionInfo?.receiver.currencycode}.</div>
+              <div>{transactionInfo.receiver?.amount}</div>
+              <div>{transactionInfo.receiver?.currencysymbol}</div>
+              <div>{transactionInfo.receiver?.currencycode}</div>
             </div>
-          )}
-          {transactionInfo.bank && (
+          )} */}
+          {/* {isBankTransfer.current && (
             <div className="flex space-x-2 text-sm">
-              <div>{transactionInfo?.bank.amount}</div>
-              <div>{transactionInfo?.bank.currencysymbol}</div>
-              <div>{transactionInfo?.bank.currencycode}.</div>
+              <div>{transactionInfo?.bank?.amount}</div>
+              <div>{transactionInfo?.bank?.currencysymbol}</div>
+              <div>{transactionInfo?.bank?.currencycode}.</div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     );
