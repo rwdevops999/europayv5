@@ -7,6 +7,7 @@ const transactionDataScheme = z.object({
   amount: z.string(),
   sender: z.string(),
   receiver: z.string(),
+  status: z.string(),
   children: z.array(z.any()).optional(),
 });
 

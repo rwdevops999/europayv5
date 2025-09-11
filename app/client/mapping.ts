@@ -392,6 +392,7 @@ export const mapTransactions = (
           ")",
         sender: transaction.sender!,
         receiver: transaction.receiver!,
+        status: transaction.status,
         children: [],
       };
 

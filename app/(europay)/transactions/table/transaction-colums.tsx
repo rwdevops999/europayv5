@@ -4,6 +4,7 @@ import { tTransactionData } from "@/app/server/data/transaction-data";
 import { DataTableColumnHeader } from "@/ui/datatable/data-table-column-header";
 import ProgressLink from "@/ui/progress-link";
 import { ColumnDef } from "@tanstack/react-table";
+import clsx from "clsx";
 import { ReactNode } from "react";
 
 const renderLink = (
@@ -63,7 +64,7 @@ export const columns: ColumnDef<tTransactionData>[] = [
   {
     accessorKey: "sender",
 
-    size: 575,
+    size: 475,
 
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -86,7 +87,7 @@ export const columns: ColumnDef<tTransactionData>[] = [
   {
     accessorKey: "receiver",
 
-    size: 575,
+    size: 475,
 
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -120,5 +121,29 @@ export const columns: ColumnDef<tTransactionData>[] = [
     },
 
     footer: (props) => props.column.id,
+  },
+  {
+    accessorKey: "status",
+
+    size: 200,
+
+    header: ({ column }) => (
+      <DataTableColumnHeader className="-ml-2" column={column} title="Status" />
+    ),
+
+    cell: ({ row, getValue }) => {
+      return (
+        <div
+          className={clsx(
+            "badge badge-neutral badge-sm",
+            { "text-green-500": getValue<string>() === "COMPLETED" },
+            { "text-red-500": getValue<string>() === "REJECTED" },
+            { "text-orange-500": getValue<string>() === "PENDING" }
+          )}
+        >
+          {getValue<string>()}
+        </div>
+      );
+    },
   },
 ];

@@ -9,6 +9,7 @@ import PageContent from "@/ui/page-content";
 import { useEffect, useState } from "react";
 import { columns, initialTableState } from "./table/transaction-colums";
 import { TableMeta } from "@tanstack/react-table";
+import { TransactionToolbar } from "./table/transaction-toolbar";
 
 const TransactionList = ({
   transactions,
@@ -45,6 +46,7 @@ const TransactionList = ({
             columns={columns}
             tablemeta={tableMeta}
             initialState={initialTableState}
+            Toolbar={TransactionToolbar}
           />
         </div>
       </div>
