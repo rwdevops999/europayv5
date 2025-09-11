@@ -1,11 +1,12 @@
 "use client";
 
 import {
+  getFirstDayOfPreviousMonth,
   getFirstDayOfThisMonth,
+  getLastDayOfPreviousMonth,
   getLastDayOfThisMonth,
 } from "@/app/client/date";
-import { getTransactionsByDates } from "@/app/server/transaction";
-import { TransactionStatus } from "@/generated/prisma";
+import { getCompletedTransactionsByDates } from "@/app/server/transaction";
 import { useTransaction } from "@/hooks/use-transaction";
 import { useUser } from "@/hooks/use-user";
 import { cDefaultPeriodValues } from "@/lib/constants";
@@ -28,95 +29,96 @@ const UserProgression = () => {
 
   const [values, setValues] = useState<tPeriodValues>(cDefaultPeriodValues);
 
-  // const getAccountAmount = (
-  //   _user: tUser,
-  //   transaction: tTransaction
-  // ): number => {
-  //   if (transaction.receiver === _user.email) {
-  //     return transaction.receiverAccountAmount!;
-  //   }
+  const getAccountAmount = (
+    _user: tUser,
+    transaction: tTransaction
+  ): number => {
+    if (transaction.receiver === _user.email) {
+      return transaction.receiverAccountAmount!;
+    }
 
-  //   return transaction.senderAccountAmount;
-  // };
+    return transaction.senderAccountAmount;
+  };
 
-  // const getTransactionAmount = (
-  //   _user: tUser,
-  //   transaction: tTransaction
-  // ): number => {
-  //   if (transaction.status === TransactionStatus.COMPLETED && transaction.receiver === _user.email) {
-  //     return transaction.receiverAmount;
-  //   }
+  const getTransactionAmount = (
+    _user: tUser,
+    transaction: tTransaction
+  ): number => {
+    if (transaction.receiver === _user.email) {
+      return transaction.receiverAmount!;
+    }
 
-  //   return transaction.senderAmount * -1;
-  // };
+    return transaction.senderAmount * -1;
+  };
 
-  // const calculateAmounts = (
-  //   _user: tUser,
-  //   _transactions: tTransaction[]
-  // ): AmountInfo[] => {
-  //   let amounts: AmountInfo[] = [];
-  //   if (_transactions.length > 0) {
-  //     amounts = _transactions.reduce<AmountInfo[]>(
-  //       (acc: AmountInfo[], currentTransaction: tTransaction) => {
-  //         const tDate: Date = currentTransaction.createDate!;
-  //         const accountAmount: number = getAccountAmount(
-  //           _user,
-  //           currentTransaction
-  //         );
-  //         const tAmount: number = getTransactionAmount(
-  //           _user,
-  //           currentTransaction
-  //         );
+  const calculateAmounts = (
+    _user: tUser,
+    _transactions: tTransaction[]
+  ): AmountInfo[] => {
+    let amounts: AmountInfo[] = [];
+    if (_transactions.length > 0) {
+      amounts = _transactions.reduce<AmountInfo[]>(
+        (acc: AmountInfo[], currentTransaction: tTransaction) => {
+          const tDate: Date = currentTransaction.createDate!;
+          const accountAmount: number = getAccountAmount(
+            _user,
+            currentTransaction
+          );
+          const tAmount: number = getTransactionAmount(
+            _user,
+            currentTransaction
+          );
 
-  //         let _index: number = 0;
-  //         if (
-  //           acc.some((value: AmountInfo, index: number) => {
-  //             _index = index;
-  //             let infodate: Date = value.transactionDate;
-  //             infodate.setHours(0, 0, 0, 0);
-  //             let transactiondate: Date = tDate;
-  //             transactiondate.setHours(0, 0, 0, 0);
+          let _index: number = 0;
+          if (
+            acc.some((value: AmountInfo, index: number) => {
+              _index = index;
+              let infodate: Date = value.transactionDate;
+              infodate.setHours(0, 0, 0, 0);
+              let transactiondate: Date = tDate;
+              transactiondate.setHours(0, 0, 0, 0);
 
-  //             return infodate.getTime() === transactiondate.getTime();
-  //           })
-  //         ) {
-  //           acc[_index].transactionAmount += tAmount;
-  //         } else {
-  //           const info: AmountInfo = {
-  //             transactionDate: tDate,
-  //             dayOfTheMonth: tDate.getDate(),
-  //             accountAmountBeforeTransaction: accountAmount,
-  //             transactionAmount: tAmount,
-  //           };
+              return infodate.getTime() === transactiondate.getTime();
+            })
+          ) {
+            acc[_index].transactionAmount += tAmount;
+          } else {
+            const info: AmountInfo = {
+              transactionDate: tDate,
+              dayOfTheMonth: tDate.getDate(),
+              accountAmountBeforeTransaction: accountAmount,
+              transactionAmount: tAmount,
+            };
 
-  //           acc.push(info);
-  //         }
+            acc.push(info);
+          }
 
-  //         return acc;
-  //       },
-  //       []
-  //     );
-  //   } else {
-  //     amounts.push({
-  //       dayOfTheMonth: 1,
-  //       accountAmountBeforeTransaction: 0,
-  //       transactionAmount: 0,
-  //       transactionDate: new Date(),
-  //     });
-  //   }
+          return acc;
+        },
+        []
+      );
+    } else {
+      amounts.push({
+        dayOfTheMonth: 1,
+        accountAmountBeforeTransaction: 0,
+        transactionAmount: 0,
+        transactionDate: new Date(),
+      });
+    }
 
-  //   return amounts;
-  // };
+    return amounts;
+  };
 
   const calculateTrend = async (_accountid: number): Promise<void> => {
     const firstDayOfThisMonth: Date = getFirstDayOfThisMonth();
     const lastDayOfThisMonth: Date = getLastDayOfThisMonth();
 
-    const transactionsThisMonth: tTransaction[] = await getTransactionsByDates(
-      _accountid,
-      firstDayOfThisMonth,
-      lastDayOfThisMonth
-    );
+    const transactionsThisMonth: tTransaction[] =
+      await getCompletedTransactionsByDates(
+        _accountid,
+        firstDayOfThisMonth,
+        lastDayOfThisMonth
+      );
 
     console.log(
       "[BREAK]",
@@ -124,37 +126,37 @@ const UserProgression = () => {
       json(transactionsThisMonth)
     );
 
-    // let amounts: AmountInfo[] = calculateAmounts(
-    //   user as tUser,
-    //   transactionsThisMonth
-    // );
+    let amounts: AmountInfo[] = calculateAmounts(
+      user as tUser,
+      transactionsThisMonth
+    );
 
-    // const accountTotalThisMonth: number =
-    //   amounts[amounts.length - 1].accountAmountBeforeTransaction +
-    //   amounts[amounts.length - 1].transactionAmount;
+    const accountTotalThisMonth: number =
+      amounts[amounts.length - 1].accountAmountBeforeTransaction +
+      amounts[amounts.length - 1].transactionAmount;
 
-    // const firstDayOfPreviousMonth: Date = getFirstDayOfPreviousMonth();
-    // const lastDayOfPreviousMonth: Date = getLastDayOfPreviousMonth();
+    const firstDayOfPreviousMonth: Date = getFirstDayOfPreviousMonth();
+    const lastDayOfPreviousMonth: Date = getLastDayOfPreviousMonth();
 
-    // const transactionsPreviousMonth: tTransaction[] =
-    //   await getTransactionsByDates(
-    //     _accountid,
-    //     firstDayOfPreviousMonth,
-    //     lastDayOfPreviousMonth
-    //   );
+    const transactionsPreviousMonth: tTransaction[] =
+      await getCompletedTransactionsByDates(
+        _accountid,
+        firstDayOfPreviousMonth,
+        lastDayOfPreviousMonth
+      );
 
-    // amounts = calculateAmounts(user as tUser, transactionsPreviousMonth);
+    amounts = calculateAmounts(user as tUser, transactionsPreviousMonth);
 
-    // const accountTotalPreviousMonth: number =
-    //   amounts[amounts.length - 1].accountAmountBeforeTransaction +
-    //   amounts[amounts.length - 1].transactionAmount;
+    const accountTotalPreviousMonth: number =
+      amounts[amounts.length - 1].accountAmountBeforeTransaction +
+      amounts[amounts.length - 1].transactionAmount;
 
-    // let periodValues: tPeriodValues = {
-    //   previous: accountTotalPreviousMonth,
-    //   current: accountTotalThisMonth,
-    // };
+    let periodValues: tPeriodValues = {
+      previous: accountTotalPreviousMonth,
+      current: accountTotalThisMonth,
+    };
 
-    // setValues(periodValues);
+    setValues(periodValues);
   };
 
   useEffect(() => {
