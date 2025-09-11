@@ -95,6 +95,8 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
           };
         }
 
+        console.log("SENDER INFO", json(senderInfo));
+
         return senderInfo;
       };
 
@@ -115,7 +117,20 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
             currencysymbol: decode(treceiver.address?.country?.symbol),
             currencycode: treceiver.address?.country?.currencycode ?? "",
           };
+        } else if (!transaction.isBankTransaction) {
+          receiverInfo = {
+            firstname: transaction.receiver ?? "",
+            lastname: "",
+            useravatar: "john.doe.png",
+            amount: transaction.receiverAmount
+              ? transaction.receiverAmount.toString()
+              : "0.00",
+            currencysymbol: "",
+            currencycode: "",
+          };
         }
+
+        console.log("RECEIVER INFO", json(receiverInfo));
 
         return receiverInfo;
       };
@@ -135,13 +150,16 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
           };
         }
 
+        console.log("BANK INFO", json(bankInfo));
+
         return bankInfo;
       };
 
+      console.log("FILLING TR INFO");
       const trInfo: TransactionInfo = {
         transactionId: transaction.transactionid,
         transactionDate: transaction.createDate,
-        message: null,
+        message: transaction.message,
         status: transaction.status,
         statustext: transaction.statusMessage,
         sender: getSenderInfo(transaction),
@@ -210,7 +228,7 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
           <div>
             <PiArrowFatLineRightDuotone />
           </div>
-          {/* {!isBankTransfer.current && (
+          {transactionInfo.receiver && (
             <div className="flex items-center space-x-2">
               <label className="text-sm">
                 {transactionInfo.receiver?.firstname}&nbsp;
@@ -226,8 +244,8 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
                 </div>
               </div>
             </div>
-          )} */}
-          {/* {isBankTransfer.current && (
+          )}
+          {transactionInfo.bank && (
             <div className="flex items-center space-x-2">
               <label className="text-xs">{transactionInfo.bank?.IBAN}</label>
               <div className="avatar">
@@ -235,24 +253,24 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
                   <img
                     id="avatarbank"
                     src={`/avatars/${transactionInfo.bank?.bankavatar}`}
-                    alt="receiver"
+                    alt="bank"
                   />
                 </div>
               </div>
             </div>
-          )} */}
+          )}
         </div>
-        {/* {transactionInfo.message && (
+        {transactionInfo.message && (
           <div className="mt-5 flex flex-col mb-5">
             <label className="text-sm">
-              Note from {transactionInfo.sender.firstname}{" "}
-              {transactionInfo.sender.lastname}:
+              Note from {transactionInfo?.sender?.firstname}{" "}
+              {transactionInfo?.sender?.lastname}:
             </label>
-            <label className="text-xl font-bold break-words">
+            <label className="text-sm font-bold break-words">
               "{transactionInfo.message}"
             </label>
           </div>
-        )} */}
+        )}
       </>
     );
   };
@@ -270,20 +288,20 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
         </div>
         <div className="space-x-2">
           <label className="text-sm font-bold">Money received</label>
-          {/* {!isBankTransfer.current && (
+          {transactionInfo.receiver && (
             <div className="flex space-x-2 text-sm">
               <div>{transactionInfo.receiver?.amount}</div>
               <div>{transactionInfo.receiver?.currencysymbol}</div>
               <div>{transactionInfo.receiver?.currencycode}</div>
             </div>
-          )} */}
-          {/* {isBankTransfer.current && (
+          )}
+          {transactionInfo.bank && (
             <div className="flex space-x-2 text-sm">
-              <div>{transactionInfo?.bank?.amount}</div>
-              <div>{transactionInfo?.bank?.currencysymbol}</div>
-              <div>{transactionInfo?.bank?.currencycode}.</div>
+              <div>{transactionInfo.bank?.amount}</div>
+              <div>{transactionInfo.bank?.currencysymbol}</div>
+              <div>{transactionInfo.bank?.currencycode}</div>
             </div>
-          )} */}
+          )}
         </div>
       </div>
     );
