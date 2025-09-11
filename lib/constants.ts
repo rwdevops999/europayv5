@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import { ToastFn } from "./types";
 import { tSetting } from "./prisma-types";
+import { tPeriodValues } from "@/types";
 
 export const URL_ENCODING_ASSIGNMENT = "%3D";
 export const URL_ENCODING_AMPERSAND = "%26";
@@ -52,3 +53,8 @@ export const months = [
   "November",
   "December",
 ];
+
+export const cDefaultPeriodValues: tPeriodValues = {
+  previous: undefined,
+  current: undefined,
+};

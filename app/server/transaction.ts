@@ -368,7 +368,7 @@ export const getNrOfTransactions = async (
   return result;
 };
 
-export const getTransactionsByDates = async (
+export const getCompletedTransactionsByDates = async (
   _accountId: number,
   _firstDay: Date,
   _lastDay: Date
@@ -378,12 +378,19 @@ export const getTransactionsByDates = async (
   await prisma.transaction
     .findMany({
       where: {
-        OR: [
+        AND: [
           {
-            receiverAccountId: _accountId,
+            status: TransactionStatus.COMPLETED,
           },
           {
-            senderAccountId: _accountId,
+            OR: [
+              {
+                receiverAccountId: _accountId,
+              },
+              {
+                senderAccountId: _accountId,
+              },
+            ],
           },
         ],
         createDate: {

@@ -9,3 +9,8 @@ export type NextApiResponseServerIO = NextApiResponse & {
     };
   };
 };
+
+export type tPeriodValues = {
+  previous: number | undefined;
+  current: number | undefined;
+};
