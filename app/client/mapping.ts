@@ -10,12 +10,15 @@ import {
   tServiceStatement,
   tServiceStatementAction,
   tTask,
+  tTransaction,
   tUser,
 } from "@/lib/prisma-types";
 import { Data, tHistoryData } from "@/lib/types";
 import { tTaskData } from "../server/data/taskdata";
 import { convertDatabaseDateToString, padZero } from "@/lib/util";
 import { JobData } from "../server/data/job-data";
+import { tTransactionData } from "../server/data/transaction-data";
+import { decode } from "html-entities";
 
 /**
  * map serviceactions to Data
@@ -364,6 +367,35 @@ export const mapJobs = (jobs: tJob[]): JobData[] => {
       };
 
       return jobData;
+    });
+  }
+
+  return result;
+};
+
+export const mapTransactions = (
+  _transactions: tTransaction[]
+): tTransactionData[] => {
+  let result: tTransactionData[] = [];
+
+  if (_transactions.length > 0) {
+    result = _transactions.map((transaction: tTransaction) => {
+      const data: tTransactionData = {
+        id: transaction.id,
+        transactionId: transaction.transactionid,
+        amount:
+          transaction.amount.toFixed(2) +
+          " " +
+          decode(transaction.senderAccount?.user?.address?.country?.symbol) +
+          " (" +
+          transaction.senderAccount?.user?.address?.country?.currencycode +
+          ")",
+        sender: transaction.sender!,
+        receiver: transaction.receiver!,
+        children: [],
+      };
+
+      return data;
     });
   }
 

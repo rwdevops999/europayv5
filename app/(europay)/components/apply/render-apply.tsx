@@ -4,7 +4,6 @@ import { applyForUserAccount } from "@/app/server/apply";
 import { ApplyData } from "@/app/server/data/apply-data";
 import { tTaskSetup } from "@/app/server/data/taskdata";
 import { createTask } from "@/app/server/tasks";
-import { TaskStatus } from "@/generated/prisma";
 import { useTask } from "@/hooks/use-task";
 import { useToastSettings } from "@/hooks/use-toast-settings";
 import { showToast } from "@/lib/util";
@@ -15,6 +14,7 @@ import KeyboardShortcut from "../../ui/navigation/keyboard-shortcut";
 import ApplyDialog from "./apply-dialog";
 import { useUser } from "@/hooks/use-user";
 import { $iam_user_has_action } from "@/app/client/iam-access";
+import { TaskStatus } from "@/generated/prisma";
 
 const RenderApply = () => {
   const { user } = useUser();

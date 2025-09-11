@@ -60,7 +60,7 @@ export let menu: MenuItem[] = [
         url: absoluteUrl("/transactions"),
         title: "Transactions",
         disabled: false,
-        visible: false,
+        visible: true,
         icon: <GrTransaction size={16} />,
         subItems: [],
       },

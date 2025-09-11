@@ -113,18 +113,55 @@
   },
   {
     "role": "EMAIL",
-    "name": "TRANSACTION_INVALID_PARTY",
+    "name": "TRANSACTION_UNKNOWN_PARTY",
     "description": "Payment not executed",
-    "content": "<h1>Hello ${sender}</h1><br/><p>you tried to use Europay.<br/> However, ${party} has no account or has no linked transaction account.</p><br/><p>To complete the account follow the link<a href='${url}' and apply></p><p>The <b>Europay</b> team.</p>",
+    "content": "<h1>Hello ${sender}</h1><br/><p>you tried to use Europay.<br/> However, ${party} is unknown in Europay.</p><br/><p>The <b>Europay</b> team.</p>",
     "managed": true,
-    "parameters": "{sender: #variable, party:  #variable, url: #variable}"
+    "parameters": "{sender: #variable, party:  #variable}"
   },
   {
     "role": "EMAIL",
-    "name": "AMOUNT_INSUFFICIENT",
+    "name": "TRANSACTION_AMOUNT_INSUFFICIENT",
     "description": "Payment not executed",
     "content": "<h1>Hello ${sender}</h1><br/>you tried to send you a payment to ${receiver}.<br/> However, the amount on your account is <b><u>UNSUFFICIENT</u></b> for this payment.<br/><p>So, the payment is <b>rejected</b></p><br/><p>The <b>Europay</b> team.</p>",
     "managed": true,
     "parameters": "{sender:  #variable, receiver: #variable}"
+  },
+  {
+    "role": "EMAIL",
+    "name": "TRANSACTION_PARTY_WITHOUT_ACCOUNT",
+    "description": "Payment not executed",
+    "content": "<h1>Hello ${sender}</h1><br/><p>you tried to use Europay.<br/> However, ${party} has no account linked into Europay.</p><br/><p>The <b>Europay</b> team.</p>",
+    "managed": true,
+    "parameters": "{sender: #variable, party:  #variable}"
+  },
+  {
+    "role": "EMAIL",
+    "name": "EMAIL_WITH_TRANSACTION_MESSAGE",
+    "description": "transaction email with message",
+    "content": "email-with-message.html",
+    "managed": true,
+    "parameters": "{receiverfirstname, receiverlastname, senderfirstname, senderlastname, senderamount, sendercurrencysymbol, sendercurrencycode, sendermessage, transactionid, transactiondate, transactiondirection}",
+    "asHtml": true,
+    "fromFile": true
+  },
+  {
+    "role": "EMAIL",
+    "name": "EMAIL_WITH_TRANSACTION_NO_MESSAGE",
+    "description": "transaction email without message",
+    "content": "email-no-message.html",
+    "managed": true,
+    "parameters": "{receiverfirstname, receiverlastname, senderfirstname, senderlastname, senderamount, sendercurrencysymbol, sendercurrencycode, transactionid, transactiondate, transactiondirection}",
+    "asHtml": true,
+    "fromFile": true
+  },
+  {
+    "role": "EMAIL",
+    "name": "EMAIL_PAYMENT_TO_BANK",
+    "description": "transaction payment to bank",
+    "content": "<h1>Hello ${sender}</h1><br/><p>you successfully transfered ${sendercurrency} ${amount} to the BANK ${bank}.<br/><p>The <b>Europay</b> team.</p>",
+    "managed": true,
+    "parameters": "{sender, sendercurrency, amount, bank}",
+    "asHtml": true
   }
 ]

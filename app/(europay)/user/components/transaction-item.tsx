@@ -1,16 +1,16 @@
 "use client";
 
-import { loadTransactionDetails } from "@/app/server/transaction";
-import { tTransaction, tTransactionDetail, tUser } from "@/lib/prisma-types";
+import { loadUserByEmail, loadUserByUsernameOrEmail } from "@/app/server/users";
+import { tTransaction, tUser } from "@/lib/prisma-types";
 import { json, renderDateInfo } from "@/lib/util";
 import ProgressLink from "@/ui/progress-link";
 import clsx from "clsx";
-import { ReactElement, ReactNode, useEffect, useState } from "react";
+import { decode } from "html-entities";
+import { ReactNode, useEffect, useState } from "react";
 import {
   PiArrowFatLineLeftDuotone,
   PiArrowFatLineRightDuotone,
 } from "react-icons/pi";
-import ReactHtmlParser from "react-html-parser";
 
 type TransactionInfo = {
   transactionId: string;
@@ -18,7 +18,7 @@ type TransactionInfo = {
   inbound: boolean;
   counterpart: string;
   amount: string;
-  symbol: ReactElement;
+  symbol: string;
   currency: string;
 };
 
@@ -35,7 +35,7 @@ const TransactionItem = ({
     inbound: true,
     counterpart: "",
     amount: new Number(0).toFixed(2),
-    symbol: <></>,
+    symbol: "",
     currency: "",
   });
 
@@ -43,63 +43,67 @@ const TransactionItem = ({
     _transaction: tTransaction,
     _user: tUser | null
   ): Promise<void> => {
-    if (_user) {
-      console.log(
-        "Processing transaction:",
-        _transaction.id,
-        _transaction.transactionid
-      );
+    console.log("[TransactionItem] setupTansactionInfo", json(_transaction));
+    if (user) {
+      let inbound: boolean = false;
+      let transactionAmount: string = new Number(0).toFixed(2);
+
+      const currencySymbol: string = decode(user.address?.country?.symbol);
+      let currencyCode: string = user.address?.country?.currencycode!;
+
+      let party: string = "";
+
+      // if (
+      //   user.account?.bankaccounts.some(
+      //     (_bankaccount: tBankaccount) =>
+      //       _bankaccount.IBAN === transaction.receiver
+      //   )
+      // ) {
+      //   party = transaction.receiver!;
+      //   transactionAmount = transaction.receiverAmount.toFixed(2);
+      // } else {
+
+      if (
+        user.email === transaction.receiver ||
+        user.username === transaction.receiver
+      ) {
+        inbound = true;
+        transactionAmount = transaction.receiverAmount.toFixed(2);
+        const counterParty: tUser | null = await loadUserByEmail(
+          transaction.sender!
+        );
+        if (counterParty) {
+          party = `${counterParty.firstname} ${counterParty.lastname}`;
+        }
+      } else {
+        inbound = false;
+        transactionAmount = transaction.senderAmount.toFixed(2);
+        const counterParty: tUser | null = await loadUserByUsernameOrEmail(
+          transaction.receiver!
+        );
+        if (counterParty) {
+          party = `${counterParty.firstname} ${counterParty.lastname}`;
+        }
+      }
+      // }
 
       const transactionInfo: TransactionInfo = {
         transactionId: _transaction.transactionid,
-        transactionDate: _transaction.transactionDate,
-        inbound: false,
-        counterpart: "",
-        amount: "",
-        symbol: <></>,
-        currency: "",
+        transactionDate: _transaction.createDate!,
+        inbound: inbound,
+        counterpart: party,
+        amount: transactionAmount,
+        symbol: currencySymbol,
+        currency: currencyCode,
       };
 
-      if (
-        _transaction.receiver === _user.username ||
-        _transaction.receiver === _user.email
-      ) {
-        transactionInfo.inbound = true;
-        transactionInfo.counterpart = transaction.sender;
-      } else {
-        transactionInfo.inbound = false;
-        transactionInfo.counterpart = transaction.receiver;
-      }
+      console.log("[TransactionInfo]", json(transactionInfo));
 
-      const transactiondetails: tTransactionDetail[] =
-        await loadTransactionDetails(_transaction.transactionid);
-
-      const userTransactionDetail: tTransactionDetail | undefined =
-        transactiondetails.find(
-          (detail: tTransactionDetail) => detail.party === _user?.email
-        );
-
-      if (userTransactionDetail) {
-        const currencySymbol: ReactElement[] = ReactHtmlParser(
-          _user.address?.country?.symbol!
-        );
-        let currencyCode: string = _user.address?.country?.currencycode!;
-
-        transactionInfo.currency = currencyCode;
-        transactionInfo.symbol = currencySymbol[0];
-        transactionInfo.amount = userTransactionDetail.partyAmount.toString();
-      }
-
-      console.log("TRANSACTION INFO", json(transactionInfo));
       setInfo(transactionInfo);
     }
   };
 
   useEffect(() => {
-    console.log(
-      "[TransactionItem]:UE[transaction] Handle transaction",
-      json(transaction)
-    );
     setupTransactionInfo(transaction, user);
   }, [transaction]);
 

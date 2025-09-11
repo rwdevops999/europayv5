@@ -5,7 +5,6 @@ import {
   createServiceStatement,
   updateServiceStatement,
 } from "@/app/server/service-statements";
-import { Permission } from "@/generated/prisma";
 import { absoluteUrl, cn, json, showToast } from "@/lib/util";
 import { displayPrismaErrorCode } from "@/lib/prisma-errors";
 import {
@@ -24,6 +23,7 @@ import { useToastSettings } from "@/hooks/use-toast-settings";
 import ServiceStatementDataRenderer from "./service-statement-data-renderer";
 import { columns } from "./table/dialog-columns";
 import { DataTableToolbar } from "./table/dialog-data-table-toolbar";
+import { Permission } from "@/generated/prisma";
 
 export interface StatementEntity {
   id?: number; // statement id

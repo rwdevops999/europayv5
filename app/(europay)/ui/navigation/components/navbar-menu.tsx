@@ -46,8 +46,14 @@ const NavbarMenu = () => {
         "Show Jobs",
         true
       );
-      // Transaction
-      // menu[1].subItems[2].visible = $iam_user_has_action(user, "Show ...");
+
+      // Transactions
+      newmenu[1].subItems[2].visible = $iam_user_has_action(
+        user,
+        "europay:lists",
+        "Show Transactions",
+        true
+      );
 
       // History
       newmenu[1].subItems[3].visible = $iam_user_has_action(

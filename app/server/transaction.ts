@@ -1,314 +1,66 @@
 "use server";
 
-import { tTransaction, tTransactionDetail, tUser } from "@/lib/prisma-types";
-import { generateUUID, validEmail } from "@/lib/util";
-import { TransactionStatus } from "@/generated/prisma";
-import prisma from "@/lib/prisma";
-import { tEmail } from "./data/email-data";
-import { loadUserByUsernameOrEmail } from "./users";
 import { sendEmail } from "./email";
+import { decode } from "html-entities";
+import prisma from "@/lib/prisma";
+import {
+  cWhatToSelectFromTransaction,
+  tTransaction,
+  tUser,
+} from "@/lib/prisma-types";
+import { loadUserByUsernameOrEmail } from "./users";
+import { generateUUID, json, renderDateInfo, validEmail } from "@/lib/util";
+import { tEmail } from "./data/email-data";
+import { TransactionStatus } from "@/generated/prisma";
 import { updateAccountAmount } from "./account";
 
-const createTransactionDetail = async (
-  _uuid: string,
-  _party: string,
-  _partyAccountAmount: number,
-  _partyAmount: number,
-  _isBankTransaction: boolean,
-  _transactionDate: Date
-): Promise<void> => {
-  await prisma.transactionDetail.create({
-    data: {
-      transactionid: _uuid,
-      party: _party,
-      partyAccountAmount: _partyAccountAmount,
-      partyAmount: _partyAmount,
-      isBankTransaction: _isBankTransaction,
-      transactionDate: _transactionDate,
-    },
-  });
-};
-
-// const createTransaction = async (
-//   _transactionID: string,
-
-//   _from: string,
-//   _to: string,
-//   _amount: number,
-//   _message: string | null,
-//   _status: TransactionStatus,
-
-//   _senderAccountId: number,
-//   _senderAccountAmount: number,
-
-//   _statusMessage: string = "",
-
-//   _receiverId: number | null = null,
-//   _receiverAmount: number = 0
-// ): Promise<void> => {
-//   await prisma.transaction.create({
-//     data: {
-//       transactionid: _transactionID,
-//       sender: _from,
-//       receiver: _to,
-//       amount: _amount,
-
-//       message: _message,
-
-//       status: _status,
-//       statusmessage: _statusMessage,
-
-//       senderAccountId: _senderAccountId,
-//       senderAccountAmount: _senderAccountAmount,
-
-//       receiverAmount: _receiverAmount ?? _amount,
-//       receiverId: _receiverId,
-//     },
-//   });
-// };
-
-const createIncomingTransaction = async (
+const createTheTransaction = async (
   _transactionID: string,
-  _from: string,
-  _to: string,
-  _amount: number,
-  _message?: string
-): Promise<number> => {
-  let result: number = 0;
-
-  await prisma.transaction
-    .create({
-      data: {
-        transactionid: _transactionID,
-        sender: _from,
-        receiver: _to,
-        amount: _amount,
-        message: _message,
-      },
-    })
-    .then((transaction: tTransaction) => {
-      result = transaction.id;
-    });
-
-  return result;
-};
-
-const updateTransactionStatus = async (
-  _id: number,
   _status: TransactionStatus,
   _statusmessage: string,
-  _parties: number[]
+  _isbanktransaction: boolean,
+  _senderAmount: number,
+  _receiverAmount: number | null,
+  _senderAccountAmount: number,
+  _receiverAccountAmount: number | null,
+  _senderAccountId: number,
+  _receiverAccountId: number | null,
+  _sender: string,
+  _receiver: string,
+  _message: string | null
 ): Promise<void> => {
-  await prisma.transaction.update({
-    where: {
-      id: _id,
-    },
+  await prisma.transaction.create({
     data: {
+      transactionid: _transactionID,
       status: _status,
       statusMessage: _statusmessage,
-      parties: _parties,
+      isBankTransaction: _isbanktransaction,
+      senderAmount: _senderAmount,
+      receiverAmount: _receiverAmount,
+      senderAccountAmount: _senderAccountAmount,
+      receiverAccountAmount: _receiverAccountAmount,
+      senderAccountId: _senderAccountId,
+      receiverAccountId: _receiverAccountId,
+      sender: _sender,
+      receiver: _receiver,
+      message: _message,
     },
   });
 };
 
-const findTransactionById = async (
-  _transactionID: number
-): Promise<tTransaction | null> => {
-  let result: tTransaction | null = null;
+const isLinkedBankOfUser = (sender: tUser, _to: string): boolean => {
+  let isLinkedBank: boolean = false;
+  // if (sender && sender.account && sender.account.bankaccounts.length > 0) {
+  //   if (
+  //     sender.account.bankaccounts.some(
+  //       (_bankaccount: tBankaccount) => _bankaccount.IBAN === _to
+  //     )
+  //   ) {
+  //     isLinkedBank = true;
+  //   }
+  // }
 
-  await prisma.transaction
-    .findFirst({
-      where: {
-        id: _transactionID,
-      },
-    })
-    .then((transaction: tTransaction | null) => (result = transaction));
-
-  return result;
-};
-
-export const handlePayment = async (
-  _transactionId: number,
-  _from: string,
-  _to: string,
-  _amount: number
-): Promise<string> => {
-  let status: TransactionStatus;
-  let statusmessage: string = "";
-
-  const sender: tUser | null = await loadUserByUsernameOrEmail(_from);
-
-  const email: tEmail = {
-    destination: undefined,
-    template: "",
-    params: {},
-    asHTML: true,
-  };
-
-  let amountToPay: number = _amount;
-  let isBankAccount: boolean = false;
-  let executePayment: boolean = false;
-
-  let currencySender: string = "";
-  let currencyReceiver: string = "";
-
-  let senderEmail: string = "";
-  let senderAccountId: number = 0;
-  let senderAccountAmount: number = 0;
-
-  let receiverEmail: string = "";
-  let receiverAccountId: number = 0;
-  let receiverAccountAmount: number = 0;
-
-  let receiver: tUser | null = null;
-
-  if (sender && sender.account) {
-    senderEmail = sender.email;
-    senderAccountId = sender.account.id;
-    senderAccountAmount = sender.account.amount;
-    if (sender.account.amount >= _amount) {
-      currencySender = sender.address?.country?.currencycode!;
-
-      // let bankId: number|undefined = getLinkedBankIdOfUser(sender, _to);
-      if (isBankAccount) {
-        currencyReceiver = currencySender;
-        receiverEmail = _to;
-        receiverAccountId = 0;
-        receiverAccountAmount = 0;
-
-        // _to is a bank account
-        status = TransactionStatus.COMPLETED;
-        statusmessage = "Bank payment";
-        executePayment = true;
-      } else {
-        // _to is an email or username
-        receiver = await loadUserByUsernameOrEmail(_to);
-        if (receiver && receiver.account) {
-          receiverEmail = receiver.email;
-          receiverAccountId = receiver.account.id;
-          receiverAccountAmount = receiver.account.amount;
-
-          currencyReceiver = receiver.address?.country?.currencycode!;
-
-          status = TransactionStatus.COMPLETED;
-          statusmessage = "Client payment";
-          executePayment = true;
-        } else {
-          status = TransactionStatus.REJECTED;
-          statusmessage = "Receiver invalid";
-
-          email.destination = _from;
-          email.template = "TRANSACTION_INVALID_PARTY";
-          email.params = {
-            sender: _from,
-            party: _to,
-            url: "http://localhost:3000",
-          };
-        }
-      }
-    } else {
-      status = TransactionStatus.REJECTED;
-      statusmessage = "Amount insufficient";
-
-      email.destination = _from;
-      email.template = "AMOUNT_INSUFFICIENT";
-      email.params = { sender: _from, receiver: _to };
-    }
-  } else {
-    // if (validEmail(_from)) {
-    status = TransactionStatus.REJECTED;
-    statusmessage = "Sender invalid";
-
-    email.destination = _from;
-    email.template = "TRANSACTION_INVALID_PARTY";
-    email.params = {
-      sender: _from,
-      party: _from,
-      url: "http://localhost:3000",
-    };
-  }
-
-  const transaction: tTransaction | null = await findTransactionById(
-    _transactionId
-  );
-
-  if (executePayment) {
-    let amountPayableToReceiver: number = 0;
-    await fetch(
-      `https://v6.exchangerate-api.com/v6/${process.env.CURRENCY_API_KEY}/pair/${currencySender}/${currencyReceiver}/${amountToPay}`
-    )
-      .then((response: Response) => response.json())
-      .then(
-        (value: any) => (amountPayableToReceiver = value.conversion_result)
-      );
-
-    if (transaction?.status === TransactionStatus.PENDING) {
-      await updateAccountAmount(senderAccountId, -amountToPay)
-        .then(async () => {
-          await createTransactionDetail(
-            transaction.transactionid,
-            senderEmail,
-            senderAccountAmount,
-            amountToPay,
-            isBankAccount,
-            transaction.transactionDate ?? new Date()
-          );
-        })
-        .then(async () => {
-          if (!isBankAccount) {
-            await updateAccountAmount(
-              receiverAccountId,
-              amountPayableToReceiver
-            );
-          }
-        })
-        .then(async () => {
-          await createTransactionDetail(
-            transaction.transactionid,
-            receiverEmail,
-            receiverAccountAmount,
-            amountPayableToReceiver,
-            isBankAccount,
-            transaction.transactionDate ?? new Date()
-          );
-        })
-        .then(async () => {
-          let parties: number[] = [];
-
-          parties[0] = sender ? sender.id : 0;
-          parties[1] = receiver ? receiver.id : 0;
-
-          await updateTransactionStatus(
-            transaction.id,
-            status,
-            statusmessage,
-            parties
-          );
-        })
-        .then(async () => {
-          console.log("SEND EMAIL");
-          console.log("SEND EMAIL FOR COMPLETED TRANSACTION");
-        });
-    }
-  } else {
-    if (transaction?.status === TransactionStatus.PENDING) {
-      let parties: number[] = [];
-
-      parties[0] = sender ? sender.id : 0;
-      parties[1] = receiver ? receiver.id : 0;
-
-      await updateTransactionStatus(
-        transaction.id,
-        status,
-        statusmessage,
-        parties
-      ).then(() => {
-        console.log("SEND EMAIL FOR REJECTED TRANSACTION");
-      });
-    }
-  }
-
-  return statusmessage;
+  return isLinkedBank;
 };
 
 export const executePayment = async (
@@ -317,126 +69,338 @@ export const executePayment = async (
   _amount: number,
   _message?: string
 ): Promise<string> => {
+  let paymentOutcome: string = "";
+
   const transactionID: string = generateUUID();
+  let status: TransactionStatus = TransactionStatus.PENDING;
+  let statusmessage: string = "";
+  let isBankTransaction: boolean = false;
+  let senderAmount: number = _amount;
+  let receiverAmount: number | null = null;
+  let senderAccountAmount: number = 0;
+  let receiverAccountAmount: number | null = null;
+  let senderAccountId: number = 0;
+  let receiverAccountId: number | null = null;
+  let sender: string = "";
+  let receiver: string = "";
+  let message: string = _message ?? "";
 
-  const tid: number = await createIncomingTransaction(
-    transactionID,
-    _from,
-    _to,
-    _amount,
-    _message
-  );
+  const email: tEmail = {
+    destination: undefined,
+    template: "",
+    params: {},
+    asHTML: true,
+  };
 
-  const statusmessage: string = await handlePayment(tid, _from, _to, _amount);
+  let createTransaction: boolean = false;
+
+  const senderEntity: tUser | null = await loadUserByUsernameOrEmail(_from);
+  if (senderEntity) {
+    sender = senderEntity.email;
+    if (senderEntity.account) {
+      senderAccountId = senderEntity.account.id;
+      senderAccountAmount = senderEntity.account.amount;
+      if (_amount > senderEntity.account.amount) {
+        // CASE A
+        status = TransactionStatus.REJECTED;
+        statusmessage = "Amount not sufficient";
+        paymentOutcome =
+          "Payment REJECTED: Sender has insufficient amount on its account";
+        createTransaction = true;
+
+        email.destination = senderEntity.email;
+        email.template = "TRANSACTION_AMOUNT_INSUFFICIENT";
+        email.params = { sender: _from, receiver: _to };
+      } else {
+        // isBankTransaction = isLinkedBankOfUser(sender, _to);
+        isBankTransaction = true;
+        if (isBankTransaction) {
+          // CASE B
+          status = TransactionStatus.COMPLETED;
+          statusmessage = "Bank transaction is OK";
+          paymentOutcome = "Payment COMPLETED: Bank transaction done";
+          createTransaction = true;
+
+          const currencySender: string =
+            senderEntity.address?.country?.currencycode!;
+
+          receiver = _to;
+          receiverAmount = senderAmount;
+          email.destination = sender;
+          email.template = "EMAIL_PAYMENT_TO_BANK";
+          email.params = {
+            sender: sender,
+            sendercurrency: currencySender,
+            amount: `${senderAmount}`,
+            bank: receiver,
+          };
+        } else {
+          const receiverEntity: tUser | null = await loadUserByUsernameOrEmail(
+            _to
+          );
+          if (receiverEntity) {
+            receiver = receiverEntity.email;
+            if (receiverEntity.account) {
+              // CASE E
+              createTransaction = true;
+
+              status = TransactionStatus.COMPLETED;
+              statusmessage = "Client transaction is OK";
+              paymentOutcome = "Payment COMPLETED: Client transaction done";
+              receiverAccountId = receiverEntity.account.id;
+              receiverAccountAmount = receiverEntity.account.amount;
+
+              const currencySender: string =
+                senderEntity.address?.country?.currencycode!;
+              const currencyReceiver: string =
+                receiverEntity.address?.country?.currencycode!;
+
+              if (currencySender === currencyReceiver) {
+                receiverAmount = senderAmount;
+              } else {
+                await fetch(
+                  `https://v6.exchangerate-api.com/v6/${process.env.CURRENCY_API_KEY}/pair/${currencySender}/${currencyReceiver}/${_amount}`
+                )
+                  .then((response: Response) => response.json())
+                  .then(
+                    (value: any) => (receiverAmount = value.conversion_result)
+                  );
+              }
+
+              email.destination = receiver;
+              email.cc = sender;
+
+              if (_message) {
+                email.template = "EMAIL_WITH_TRANSACTION_MESSAGE";
+                email.params.sendermessage = _message;
+              } else {
+                email.template = "EMAIL_WITH_TRANSACTION_NO_MESSAGE";
+              }
+
+              const currencySenderSymbol: string = decode(
+                senderEntity.address?.country?.symbol!
+              );
+
+              email.params = {
+                receiverfirstname: receiverEntity.firstname,
+                receiverlastname: receiverEntity.lastname,
+                senderfirstname: senderEntity.firstname,
+                senderlastname: senderEntity.lastname,
+                senderamount: _amount.toFixed(2),
+                sendercurrencysymbol: currencySenderSymbol,
+                sendercurrencycode: currencySender,
+                transactionid: transactionID,
+                transactiondate: renderDateInfo(new Date().toString()),
+                transactiondirection: "received",
+              };
+            } else {
+              createTransaction = true;
+              // CASE D
+              status = TransactionStatus.REJECTED;
+              statusmessage = "Receiver is a client but has no account";
+              paymentOutcome = "Payment REJECTED: Receiver has no account";
+              email.destination = sender;
+              email.cc = receiver;
+              email.template = "TRANSACTION_PARTY_WITHOUT_ACCOUNT";
+              email.params = { sender: _from, party: _to };
+            }
+          } else {
+            // CASE C
+            createTransaction = true;
+            status = TransactionStatus.REJECTED;
+            statusmessage = "Receiver is not a client of Europay";
+            paymentOutcome = "Payment REJECTED: Receiver is no client";
+            email.destination = sender;
+            email.template = "TRANSACTION_UNKNOWN_PARTY";
+            email.params = { sender: _from, party: _to };
+          }
+        }
+      }
+    } else {
+      createTransaction = false;
+      paymentOutcome = "Payment IGNORED: Sender has no account in Europay";
+
+      email.destination = sender;
+      email.template = "TRANSACTION_PARTY_WITHOUT_ACCOUNT";
+      email.params = { sender: _from, party: _from };
+    }
+  } else {
+    paymentOutcome = "Payment IGNORED: Sender not a client of Europay";
+    createTransaction = false;
+
+    if (validEmail(_to)) {
+      email.destination = _to;
+      email.template = "TRANSACTION_UNKNOWN_PARTY";
+      email.params = { sender: _to, party: _to };
+    }
+  }
+
+  if (createTransaction) {
+    await createTheTransaction(
+      transactionID,
+      status,
+      statusmessage,
+      isBankTransaction,
+      senderAmount,
+      receiverAmount,
+      senderAccountAmount,
+      receiverAccountAmount,
+      senderAccountId,
+      receiverAccountId,
+      _from,
+      _to,
+      message
+    );
+
+    console.log("[TRANSACTION]:[CREATE TRANSACTION]");
+
+    if (senderAccountId && status === TransactionStatus.COMPLETED) {
+      updateAccountAmount(senderAccountId, -senderAmount);
+    }
+
+    if (receiverAccountId && status === TransactionStatus.COMPLETED) {
+      updateAccountAmount(receiverAccountId, receiverAmount ?? 0);
+    }
+  }
 
   // if (email.destination) {
   //   await sendEmail(email);
   // }
 
-  return statusmessage;
+  return paymentOutcome;
 };
 
-export const countTransactions = async (_userid: number): Promise<number> => {
+// Preivously loadAllTransactions
+export const loadTransactions = async (): Promise<tTransaction[]> => {
+  let result: tTransaction[] = [];
+
+  await prisma.transaction
+    .findMany({
+      orderBy: {
+        createDate: "desc",
+      },
+      ...cWhatToSelectFromTransaction,
+    })
+    .then((values: tTransaction[]) => (result = values));
+
+  return result;
+};
+
+export const loadTransactionById = async (
+  _id: number
+): Promise<tTransaction | null> => {
+  let result: tTransaction | null = null;
+
+  await prisma.transaction
+    .findFirst({
+      where: {
+        id: _id,
+      },
+      ...cWhatToSelectFromTransaction,
+    })
+    .then((value: tTransaction | null) => (result = value));
+
+  return result;
+};
+
+export const loadTransactionsByTransactionId = async (
+  _transactionId: string
+): Promise<tTransaction[]> => {
+  let result: tTransaction[] = [];
+
+  await prisma.transaction
+    .findMany({
+      where: {
+        transactionid: _transactionId,
+      },
+      ...cWhatToSelectFromTransaction,
+    })
+    .then((values: tTransaction[]) => (result = values));
+
+  return result;
+};
+
+export const loadTransactionByAccountId = async (
+  _accountid: number
+): Promise<tTransaction[]> => {
+  let result: tTransaction[] = [];
+
+  await prisma.transaction
+    .findMany({
+      where: {
+        OR: [
+          {
+            senderAccountId: _accountid,
+          },
+          {
+            receiverAccountId: _accountid,
+          },
+        ],
+      },
+      orderBy: {
+        createDate: "desc",
+      },
+      ...cWhatToSelectFromTransaction,
+    })
+    .then((values: tTransaction[]) => (result = values));
+
+  return result;
+};
+
+export const getNrOfTransactions = async (
+  _accountId: number
+): Promise<number> => {
   let result: number = 0;
 
-  console.log("[TRANSACTION]:countTransaction for", _userid);
   await prisma.transaction
     .count({
       where: {
-        AND: [
+        OR: [
           {
-            parties: {
-              has: _userid,
-            },
+            senderAccountId: _accountId,
           },
           {
-            OR: [
-              {
-                status: TransactionStatus.PENDING,
-              },
-              {
-                status: TransactionStatus.COMPLETED,
-              },
-              {
-                status: TransactionStatus.REJECTED,
-              },
-            ],
+            receiverAccountId: _accountId,
           },
         ],
       },
     })
     .then((value: number) => (result = value));
 
-  console.log("[TRANSACTION]:countTransaction result is", result);
   return result;
 };
 
-export const loadTransactionsByUsernameOrEmailAsSender = async (
-  _username: string | null,
-  _email: string
-): Promise<tTransaction[]> => {
-  let result: tTransaction[] = [];
+export const getTransactionsByDates = async (
+  _accountId: number,
+  _firstDay: Date,
+  _lastDay: Date
+): Promise<any[]> => {
+  let result: any[] = [];
 
   await prisma.transaction
     .findMany({
       where: {
         OR: [
           {
-            sender: _username ?? "",
+            receiverAccountId: _accountId,
           },
           {
-            sender: _email,
+            senderAccountId: _accountId,
           },
         ],
+        createDate: {
+          gte: _firstDay,
+          lte: _lastDay,
+        },
       },
       orderBy: {
-        transactionDate: "desc",
+        createDate: "asc",
       },
+      ...cWhatToSelectFromTransaction,
     })
-    .then((transactions: tTransaction[]) => (result = transactions));
-
-  return result;
-};
-
-export const loadTransactionsByUsernameOrEmailAsReceiver = async (
-  _username: string | null,
-  _email: string
-): Promise<tTransaction[]> => {
-  let result: tTransaction[] = [];
-
-  await prisma.transaction
-    .findMany({
-      where: {
-        OR: [
-          {
-            receiver: _username ?? "",
-          },
-          {
-            receiver: _email,
-          },
-        ],
-      },
-      orderBy: {
-        transactionDate: "desc",
-      },
-    })
-    .then((transactions: tTransaction[]) => (result = transactions));
-
-  return result;
-};
-
-export const loadTransactionDetails = async (
-  _transactionId: string
-): Promise<tTransactionDetail[]> => {
-  let result: tTransactionDetail[] = [];
-
-  await prisma.transactionDetail
-    .findMany({
-      where: {
-        transactionid: _transactionId,
-      },
-    })
-    .then((values: tTransactionDetail[]) => (result = values));
+    .then((values: tTransaction[]) => {
+      result = values;
+    });
 
   return result;
 };
