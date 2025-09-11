@@ -113,7 +113,7 @@ export const executePayment = async (
         email.params = { sender: _from, receiver: _to };
       } else {
         // isBankTransaction = isLinkedBankOfUser(sender, _to);
-        isBankTransaction = true;
+        isBankTransaction = false;
         if (isBankTransaction) {
           // CASE B
           status = TransactionStatus.COMPLETED;
@@ -263,9 +263,9 @@ export const executePayment = async (
     }
   }
 
-  // if (email.destination) {
-  //   await sendEmail(email);
-  // }
+  if (email.destination) {
+    await sendEmail(email);
+  }
 
   return paymentOutcome;
 };
