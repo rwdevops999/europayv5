@@ -252,8 +252,6 @@ export const executePayment = async (
       message
     );
 
-    console.log("[TRANSACTION]:[CREATE TRANSACTION]");
-
     if (senderAccountId && status === TransactionStatus.COMPLETED) {
       updateAccountAmount(senderAccountId, -senderAmount);
     }

@@ -43,7 +43,6 @@ const TransactionItem = ({
     _transaction: tTransaction,
     _user: tUser | null
   ): Promise<void> => {
-    console.log("[TransactionItem] setupTansactionInfo", json(_transaction));
     if (user) {
       let inbound: boolean = false;
       let transactionAmount: string = new Number(0).toFixed(2);
@@ -96,8 +95,6 @@ const TransactionItem = ({
         symbol: currencySymbol,
         currency: currencyCode,
       };
-
-      console.log("[TransactionInfo]", json(transactionInfo));
 
       setInfo(transactionInfo);
     }

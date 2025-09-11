@@ -37,27 +37,12 @@ const UserAuth = () => {
   const cleanupJob = async (_user: tUser): Promise<void> => {
     const expectedJobname: string = `${TransactionPollerJobName}:${_user.id}`;
 
-    console.log(
-      "[TRANSACTIONPOLLER]:cleanupJob",
-      "Looking up job",
-      expectedJobname
-    );
-
     const job: tJob | null = await findJobByName(expectedJobname);
 
     if (job) {
-      console.log(
-        "[TRANSACTIONPOLLER]:cleanupJob",
-        "Job found",
-        expectedJobname
-      );
-
-      console.log("[TRANSACTIONPOLLER]:startupJob", "Suspend Inngest job");
-
       await suspendInngestJob(TransactionPollerJobName, {
         jobid: job.id,
       }).then(async () => {
-        console.log("[TRANSACTIONPOLLER]:startupJob", "Delete job", job.id);
         await deleteJob(job.id).then(() => incrementJobsChanged());
       });
     }
@@ -72,7 +57,6 @@ const UserAuth = () => {
 
   const doLogout = () => {
     if (user) {
-      console.log("[LOGOUT]", "Logoff user", user.id);
       cleanupTransactionPoller(user);
       logout();
       back();

@@ -10,8 +10,6 @@ const UserSettingsDialog = () => {
 
   const id = searchParams?.get("id");
 
-  console.log("SP", id);
-
   const renderComponent = () => {
     return <StartSettings open={id} />;
   };

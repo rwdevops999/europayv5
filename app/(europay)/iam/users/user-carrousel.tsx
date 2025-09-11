@@ -72,6 +72,7 @@ export interface UserEntity {
   managed?: boolean;
   address: AddressEntity;
   account?: boolean;
+  accountamount: string;
 }
 
 export const defaultUserEntity: UserEntity = {
@@ -86,6 +87,7 @@ export const defaultUserEntity: UserEntity = {
     country: {},
   },
   account: true,
+  accountamount: "0",
 };
 
 export interface UserCarrouselProps {
@@ -603,22 +605,35 @@ const UserCarrousel = (props: UserCarrouselProps) => {
   };
 
   const AccountFormControl = (): JSX.Element => {
-    console.log("[PEI]", props.entity.id);
-
     return (
-      <div className="grid grid-cols-[1%_15%_2%] py-1.5">
-        <div className="col-start-2">
-          <label className="text-sm">Create account:</label>
+      <>
+        <div className="grid grid-cols-[1%_15%_2%] py-1.5">
+          <div className="col-start-2">
+            <label className="text-sm">Create account:</label>
+          </div>
+          <div className="col-start-3 -mt-0.5">
+            <input
+              type="checkbox"
+              className="checkbox checkbox-xs rounded-sm"
+              disabled={props.entity.id !== undefined}
+              {...register("account")}
+            />
+          </div>
         </div>
-        <div className="col-start-3 -mt-0.5">
-          <input
-            type="checkbox"
-            className="checkbox checkbox-xs rounded-sm"
-            disabled={props.entity.id !== undefined}
-            {...register("account")}
-          />
+        <div className="grid grid-cols-[1%_15%_15%] py-1.5">
+          <div className="col-start-2">
+            <label className="text-sm">Amount:</label>
+          </div>
+          <div className="col-start-3 -mt-0.5">
+            <input
+              type="text"
+              placeholder="amount..."
+              className="input input-sm w-11/12"
+              {...register("accountamount")}
+            />
+          </div>
         </div>
-      </div>
+      </>
     );
   };
 
@@ -732,7 +747,7 @@ const UserCarrousel = (props: UserCarrouselProps) => {
       if (entity.account) {
         accountInfo = {
           create: {
-            amount: 0,
+            amount: parseFloat(_entity.accountamount),
             status: AccountStatus.OPEN,
           },
         };
@@ -740,11 +755,6 @@ const UserCarrousel = (props: UserCarrouselProps) => {
 
       return accountInfo;
     };
-
-    console.log("UN1", _entity.username);
-    console.log("UN2", _entity.username === null);
-    console.log("UN3", _entity.username === undefined);
-    console.log("UN4", _entity.username === "");
 
     const result: tUserCreate = {
       username: _entity.username === "" ? null : _entity.username,
@@ -829,7 +839,7 @@ const UserCarrousel = (props: UserCarrouselProps) => {
   const provisionUserForUpdate = (_entity: UserEntity): tUserUpdate => {
     const result: tUserUpdate = {
       id: _entity.id,
-      username: _entity.username,
+      username: _entity.username === "" ? null : _entity.username,
       lastname: _entity.lastname,
       firstname: _entity.firstname,
       avatar: _entity.avatar,
@@ -840,6 +850,16 @@ const UserCarrousel = (props: UserCarrouselProps) => {
       blocked: _entity.blocked,
       managed: _entity.managed,
       attemps: 0,
+      account: {
+        update: {
+          where: {
+            userId: _entity.id,
+          },
+          data: {
+            amount: parseFloat(_entity.accountamount),
+          },
+        },
+      },
       address: {
         update: {
           where: {

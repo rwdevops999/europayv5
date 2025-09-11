@@ -81,7 +81,6 @@ export const createUser = async (
     })
     .then((value: tUser) => (result = value))
     .catch((error: any) => {
-      console.log("[USER CREATE]", error);
       result = error.code;
     });
 

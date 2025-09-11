@@ -168,7 +168,7 @@ const UserHandler = ({
       if (appuser) {
         const entity: UserEntity = {
           id: appuser.id,
-          username: appuser.username ?? "",
+          username: appuser.username ?? undefined,
           lastname: appuser.lastname,
           firstname: appuser.firstname,
           avatar: appuser.avatar ?? "john.doe.png",
@@ -193,6 +193,9 @@ const UserHandler = ({
             },
           },
           account: appuser.account !== null,
+          accountamount: appuser.account?.amount
+            ? appuser.account?.amount.toString()
+            : "0",
         };
 
         let linked: number[] = appuser.policies.map(

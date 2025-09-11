@@ -90,10 +90,9 @@ const SetupToast = () => {
                   value={getToastDuration()}
                   className="input-sm"
                   placeholder="milliseconds..."
-                  onChange={(event) => {
-                    console.log("INPUT Changed");
-                    handleToastDurationChange(event.target.value);
-                  }}
+                  onChange={(event) =>
+                    handleToastDurationChange(event.target.value)
+                  }
                 />
               </label>
             </div>

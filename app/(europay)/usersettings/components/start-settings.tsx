@@ -6,7 +6,6 @@ import UserSettingsCarrousel from "./user-settings-carrousel";
 
 const StartSettings = ({ open }: { open: string | null | undefined }) => {
   const handleOpenDialog = (): void => {
-    console.log("[handleOpenDialog]");
     const dialog: HTMLDialogElement = document.getElementById(
       "usersettingsdialog"
     ) as HTMLDialogElement;
@@ -15,8 +14,6 @@ const StartSettings = ({ open }: { open: string | null | undefined }) => {
   };
 
   useEffect(() => {
-    console.log("HANDLE OPEN SETTINGS DIALOG WITH open", open);
-    console.log("HANDLE OPEN SETTINGS DIALOG");
     handleOpenDialog();
   }, [open]);
 

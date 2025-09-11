@@ -19,7 +19,6 @@ export const updateUserSetting = async (
   _id: number,
   _value: string
 ): Promise<void> => {
-  console.log("[UserSettings]", "UPDATE", _id, _value);
   await prisma.userSetting.update({
     where: {
       id: _id,

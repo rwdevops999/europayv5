@@ -70,7 +70,6 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
     );
 
     if (transaction) {
-      console.log("[LOADED TRANSACTION]", json(transaction));
       let treceiver: tUser | null = transaction.receiverAccount
         ?.user as tUser | null;
 
@@ -94,8 +93,6 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
             currencycode: tsender.address?.country?.currencycode ?? "",
           };
         }
-
-        console.log("SENDER INFO", json(senderInfo));
 
         return senderInfo;
       };
@@ -130,8 +127,6 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
           };
         }
 
-        console.log("RECEIVER INFO", json(receiverInfo));
-
         return receiverInfo;
       };
 
@@ -150,12 +145,9 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
           };
         }
 
-        console.log("BANK INFO", json(bankInfo));
-
         return bankInfo;
       };
 
-      console.log("FILLING TR INFO");
       const trInfo: TransactionInfo = {
         transactionId: transaction.transactionid,
         transactionDate: transaction.createDate,
@@ -166,8 +158,6 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
         receiver: getReceiverInfo(transaction),
         bank: getBankInfo(transaction),
       };
-
-      console.log("[TRINFO]", json(trInfo));
 
       setTransactionInfo(trInfo);
     }

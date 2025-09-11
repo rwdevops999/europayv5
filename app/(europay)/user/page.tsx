@@ -5,7 +5,6 @@ import UserAccount from "./components/user-account";
 import UserTransactionsList from "./components/user-transactions-list";
 
 const UserPage = () => {
-  console.log("[UserPage]:RENDER");
   return (
     <PageContent
       breadcrumbs={[

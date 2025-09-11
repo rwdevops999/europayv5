@@ -189,14 +189,11 @@ const NavbarUserProfile = () => {
   };
 
   const transactionListenerFunction = async (data: any): Promise<void> => {
-    console.log("[TRANSACTIONPOLLER] Received event from Inngest");
     const expectedkey: string = `${transactionKey}:${user?.id}`;
 
     const { key, value } = data;
-    console.log("[TRANSACTIONPOLLER] Received", key);
 
     if (key === expectedkey) {
-      console.log("[TRANSACTIONPOLLER] Key matches", "transactions", value);
       if (value >= 0) {
         setTransactions(value);
       }
@@ -221,52 +218,24 @@ const NavbarUserProfile = () => {
   const startupJob = async (_user: tUser): Promise<void> => {
     const expectedJobname: string = `${TransactionPollerJobName}:${_user.id}`;
 
-    console.log(
-      "[TRANSACTIONPOLLER]:startupJob",
-      "Looking up job",
-      expectedJobname
-    );
     const job: tJob | null = await findJobByName(expectedJobname);
 
     if (job) {
-      console.log(
-        "[TRANSACTIONPOLLER]:startupJob",
-        "Job found",
-        expectedJobname
-      );
       if (job.status === JobStatus.RUNNING) {
-        console.log(
-          "[TRANSACTIONPOLLER]:startupJob",
-          "Job is running => suspend Inngest job"
-        );
         await suspendInngestJob(TransactionPollerJobName, {
           jobid: job.id,
         });
       }
 
-      console.log("[TRANSACTIONPOLLER]:startupJob", "Delete job", job.id);
       await deleteJob(job.id);
     }
 
     const delay = createDelayExpression(
       getJobTimingNotation(TransactionPollerJobName)
     );
-    console.log("[TRANSACTIONPOLLER]:startupJob", "Delay", delay);
-
-    console.log(
-      "[TRANSACTIONPOLLER]:startupJob",
-      "Creating client job",
-      expectedJobname
-    );
     await createClientJob(expectedJobname, { delayexpression: delay }).then(
       async (job: tJob | null) => {
         if (job) {
-          console.log(
-            "[TRANSACTIONPOLLER]:startupJob",
-            "Job is created",
-            "Starting Inngest job",
-            TransactionPollerJobName
-          );
           await runInngestJob(TransactionPollerJobName, {
             jobid: job.id,
             userid: _user.id,
@@ -278,10 +247,7 @@ const NavbarUserProfile = () => {
   };
 
   const setupTransactionPoller = async (_user: tUser): Promise<void> => {
-    console.log("[TRANSACTIONPOLLER] Setting up transaction poller");
-
     const key: string = `${transactionKey}:${_user.id}`;
-    console.log("[TRANSACTIONPOLLER] Register listener for", key);
     registerListener(socket, key, transactionListenerFunction);
     startupJob(_user);
   };
