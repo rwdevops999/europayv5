@@ -115,11 +115,30 @@ export const definePolicies = async (): Promise<void> => {
 
       await createPolicy(create);
     }
-    // await defineServiceStatement(
-    //   statementName,
-    //   AllowedManagedServiceStatements[statementName]
-    // ).then(() => {
-    //   definePolicies(ManagedPolicies);
-    // });
   }
+};
+
+export const getPolicyIdByName = async (_name: string): Promise<number> => {
+  let result: number = -1;
+
+  await prisma.policy
+    .findFirst({
+      where: {
+        name: _name,
+      },
+      select: {
+        id: true,
+      },
+    })
+    .then((value: any | null) => {
+      if (value) {
+        result = value.id;
+      }
+    });
+
+  if (result === -1) {
+    console.log("ERROR: YOU LOOKED UP AN UNKNOW POLICY", _name);
+  }
+
+  return result;
 };

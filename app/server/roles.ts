@@ -7,6 +7,8 @@ import {
   tRoleUpdate,
 } from "@/lib/prisma-types";
 import prisma from "@/lib/prisma";
+import { ManagedRoles } from "./setup/managed-iam";
+import { getPolicyIdByName } from "./policies";
 /**
  * create a role
  * @param _role the role to create
@@ -74,4 +76,35 @@ export const loadRoles = async (): Promise<tRole[]> => {
     .then((values: tRole[]) => (result = values));
 
   return result;
+};
+
+export const defineRoles = async (): Promise<void> => {
+  // TRUNCATE Role
+
+  const roleNames: string[] = Object.keys(ManagedRoles);
+
+  for (let roleName of roleNames) {
+    console.log("DEFINING", roleName);
+
+    const roleInfo: any = ManagedRoles[roleName];
+
+    const policies: string[] = roleInfo.policy;
+
+    const policyids: any[] = [];
+    for (let policyName of policies) {
+      policyids.push({
+        id: await getPolicyIdByName(policyName),
+      });
+
+      const create: tRoleCreate = {
+        name: roleName,
+        description: roleInfo.description,
+        policies: {
+          connect: policyids,
+        },
+      };
+
+      await createRole(create);
+    }
+  }
 };

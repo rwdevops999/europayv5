@@ -386,6 +386,10 @@ export const ManagedPolicies: Record<string, any> = {
     description: "History settings",
     statement: ["ChangeHistorySettings"],
   },
+  ToastSettingsPolicy: {
+    description: "Toast settings",
+    statement: ["ChangeToastSettings"],
+  },
   GeneralPolicy: {
     description: "General settings",
     statement: [
@@ -458,7 +462,7 @@ export const ManagedPolicies: Record<string, any> = {
   },
 };
 
-const ManagedRoles: Record<string, any> = {
+export const ManagedRoles: Record<string, any> = {
   IamAdminRole: {
     description: "IAM admin",
     policy: [
@@ -495,6 +499,7 @@ const ManagedRoles: Record<string, any> = {
       "StoragePolicy",
     ],
   },
+
   JobAdminRole: {
     description: "Job admin",
     policy: ["JobsViewPolicy", "JobsPolicy"],
