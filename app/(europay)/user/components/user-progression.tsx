@@ -33,7 +33,11 @@ const UserProgression = () => {
     _user: tUser,
     transaction: tTransaction
   ): number => {
-    if (transaction.receiver === _user.email) {
+    if (
+      [_user.email, _user.username].some(
+        (x: string | null) => x === transaction.receiver
+      )
+    ) {
       return transaction.receiverAccountAmount!;
     }
 
@@ -44,7 +48,11 @@ const UserProgression = () => {
     _user: tUser,
     transaction: tTransaction
   ): number => {
-    if (transaction.receiver === _user.email) {
+    if (
+      [_user.email, _user.username].some(
+        (x: string | null) => x === transaction.receiver
+      )
+    ) {
       return transaction.receiverAmount!;
     }
 
@@ -130,6 +138,8 @@ const UserProgression = () => {
       user as tUser,
       transactionsThisMonth
     );
+
+    console.log("[BREAK] Amounts", json(amounts));
 
     const accountTotalThisMonth: number =
       amounts[amounts.length - 1].accountAmountBeforeTransaction +

@@ -67,19 +67,24 @@ const TransactionItem = ({
         user.username === transaction.receiver
       ) {
         inbound = true;
-        transactionAmount = transaction.receiverAmount.toFixed(2);
-        const counterParty: tUser | null = await loadUserByEmail(
+        transactionAmount = transaction.receiverAmount?.toFixed(2)!;
+        const counterParty: tUser | null = await loadUserByUsernameOrEmail(
           transaction.sender!
         );
+        console.log("[LIST]:CP", json(counterParty));
         if (counterParty) {
           party = `${counterParty.firstname} ${counterParty.lastname}`;
         }
+        console.log("[LIST]:CP => PARTY", party);
       } else {
         inbound = false;
         transactionAmount = transaction.senderAmount.toFixed(2);
         const counterParty: tUser | null = await loadUserByUsernameOrEmail(
           transaction.receiver!
         );
+
+        console.log("[LIST]:CP", json(counterParty));
+
         if (counterParty) {
           party = `${counterParty.firstname} ${counterParty.lastname}`;
         }
@@ -101,6 +106,7 @@ const TransactionItem = ({
   };
 
   useEffect(() => {
+    console.log("[LIST]:UE");
     setupTransactionInfo(transaction, user);
   }, [transaction]);
 

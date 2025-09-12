@@ -168,7 +168,7 @@ const UserHandler = ({
       if (appuser) {
         const entity: UserEntity = {
           id: appuser.id,
-          username: appuser.username ?? undefined,
+          username: appuser.username ?? "",
           lastname: appuser.lastname,
           firstname: appuser.firstname,
           avatar: appuser.avatar ?? "john.doe.png",
@@ -222,7 +222,7 @@ const UserHandler = ({
 
   // TODO => GROUPS
   const handleSetEntityAndOpenDialog = (): void => {
-    let entity = { ...defaultUserEntity };
+    let entity = { ...defaultUserEntity, username: "" };
 
     setLinkedPolicies([]);
     setLinkedRoles([]);
