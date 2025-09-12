@@ -287,6 +287,7 @@ export const defineManagedUsers = async (): Promise<void> => {
       email: userInfo.email,
       password: userInfo.password,
       passwordless: userInfo.passwordless,
+      managed: true,
       type: UserType[
         userInfo.type.toLocaleUpperCase() as keyof typeof UserType
       ],

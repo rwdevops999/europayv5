@@ -136,6 +136,7 @@ export const defineManagedGroups = async (): Promise<void> => {
     const create: tGroupCreate = {
       name: groupName,
       description: groupInfo.description,
+      managed: true,
       roles: {
         connect: roleids,
       },

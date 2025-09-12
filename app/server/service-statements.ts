@@ -187,6 +187,7 @@ const defineServiceStatement = async (
         ssname: _statementName,
         description: _statementInfo.description,
         serviceid: _serviceId,
+        managed: true,
       };
 
       const actions: string[] = _statementInfo.actions;

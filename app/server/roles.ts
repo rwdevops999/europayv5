@@ -97,6 +97,7 @@ export const defineManagedRoles = async (): Promise<void> => {
       const create: tRoleCreate = {
         name: roleName,
         description: roleInfo.description,
+        managed: true,
         policies: {
           connect: policyids,
         },

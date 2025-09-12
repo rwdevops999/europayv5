@@ -106,6 +106,7 @@ export const defineManagedPolicies = async (): Promise<void> => {
       const create: tPolicyCreate = {
         name: policyName,
         description: policyInfo.description,
+        managed: true,
         servicestatements: {
           connect: statementids,
         },
