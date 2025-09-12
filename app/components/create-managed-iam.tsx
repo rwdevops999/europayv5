@@ -8,6 +8,9 @@ import {
 } from "../server/setup/services-and-actions";
 import { createGroup } from "../server/groups";
 import { tGroupCreate } from "@/lib/prisma-types";
+import { provisionManagedIAM } from "../server/managed";
+import { createHistoryEntry } from "../server/history";
+import { HistoryType } from "@/generated/prisma";
 
 const CreateManagedIam = ({
   start,
@@ -16,26 +19,33 @@ const CreateManagedIam = ({
   start: boolean;
   proceed: (value: boolean) => void;
 }) => {
-  // const { getHistory } = useHistorySettings();
+  const { getHistory } = useHistorySettings();
 
-  const createManagedGroup = async (
-    _group: string,
-    _groupData: managedGroupInfo
-  ): Promise<void> => {
-    const groupCreation: tGroupCreate = {
-      name: _group,
-      description: _groupData.description,
-    };
+  const uploadManagedEntitiesNeeded = async (): Promise<boolean> => {
+    let result: boolean = true;
 
-    await createGroup(groupCreation);
+    return result;
   };
 
-  const setup = (): void => {
-    Object.keys(managedgroups).forEach((group: string) => {
-      createManagedGroup(group, managedgroups[group]);
-    });
+  const setup = async (): Promise<void> => {
+    let message: string = "MANAGED ENTITIES";
 
-    proceed(true);
+    if (await uploadManagedEntitiesNeeded()) {
+      const uploaded: boolean = await provisionManagedIAM();
+
+      if (!uploaded) {
+        let message: string = "MANAGED ENTITIES NOT";
+      }
+      await createHistoryEntry(
+        HistoryType.INFO,
+        getHistory(),
+        "INITIALISATION",
+        { subject: `${message}` },
+        "Initialise:SetupServices"
+      ).then(() => {
+        proceed(true);
+      });
+    }
   };
 
   useEffect(() => {

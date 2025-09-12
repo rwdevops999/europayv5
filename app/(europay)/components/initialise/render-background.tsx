@@ -1,6 +1,5 @@
 import Image from "next/image";
-import React from "react";
-import { GiTrafficLightsReadyToGo } from "react-icons/gi";
+import React, { useEffect } from "react";
 
 const RenderBackground = () => {
   return (

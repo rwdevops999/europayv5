@@ -49,7 +49,7 @@ const Initialisation = () => {
       {/* <DeleteClientJobs start={deleteClientJobs} proceed={setSetupServerJobs} /> */}
       {/* <SetupServerJobs start={setupServerJobs} proceed={setSetupClientJobs} /> */}
       <SetupClientJobs start={setupClientJobs} proceed={setInitIam} />
-      {/* <CreateManagedIam start={initIam} proceed={setEnableCursor} /> */}
+      <CreateManagedIam start={initIam} proceed={() => {}} />
     </>
   );
 };
