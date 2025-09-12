@@ -78,14 +78,12 @@ export const loadRoles = async (): Promise<tRole[]> => {
   return result;
 };
 
-export const defineRoles = async (): Promise<void> => {
+export const defineManagedRoles = async (): Promise<void> => {
   // TRUNCATE Role
 
   const roleNames: string[] = Object.keys(ManagedRoles);
 
   for (let roleName of roleNames) {
-    console.log("DEFINING", roleName);
-
     const roleInfo: any = ManagedRoles[roleName];
 
     const policies: string[] = roleInfo.policy;

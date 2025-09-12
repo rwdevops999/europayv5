@@ -128,18 +128,10 @@ const UserProgression = () => {
         lastDayOfThisMonth
       );
 
-    console.log(
-      "[BREAK]",
-      "Transactions of this month",
-      json(transactionsThisMonth)
-    );
-
     let amounts: AmountInfo[] = calculateAmounts(
       user as tUser,
       transactionsThisMonth
     );
-
-    console.log("[BREAK] Amounts", json(amounts));
 
     const accountTotalThisMonth: number =
       amounts[amounts.length - 1].accountAmountBeforeTransaction +

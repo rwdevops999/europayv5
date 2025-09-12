@@ -1,10 +1,11 @@
 "use client";
 
-import { defineGroups } from "@/app/server/groups";
-import { definePolicies } from "@/app/server/policies";
-import { defineRoles } from "@/app/server/roles";
-import { defineServiceStatements } from "@/app/server/service-statements";
-import { defineUsers } from "@/app/server/users";
+import { defineManagedGroups } from "@/app/server/groups";
+import { provisionManagedIAM } from "@/app/server/managed";
+import { defineManagedPolicies } from "@/app/server/policies";
+import { defineManagedRoles } from "@/app/server/roles";
+import { defineManagedServiceStatements } from "@/app/server/service-statements";
+import { defineManagedUsers } from "@/app/server/users";
 // import { defineServiceStatements } from "@/app/server/service-statements";
 import { tServiceStatementCreate } from "@/lib/prisma-types";
 import { json } from "@/lib/util";
@@ -13,23 +14,31 @@ import React from "react";
 
 const UploadManaged = () => {
   const handleUploadServiceStatements = async (): Promise<void> => {
-    await defineServiceStatements();
+    await defineManagedServiceStatements();
   };
 
   const handleUploadPolicies = async (): Promise<void> => {
-    await definePolicies();
+    await defineManagedPolicies();
   };
 
   const handleUploadRoles = async (): Promise<void> => {
-    await defineRoles();
+    await defineManagedRoles();
   };
 
   const handleUploadUsers = async (): Promise<void> => {
-    await defineUsers();
+    await defineManagedUsers();
   };
 
   const handleUploadGroups = async (): Promise<void> => {
-    await defineGroups();
+    await defineManagedGroups();
+  };
+
+  const handleUploadAll = async (): Promise<void> => {
+    console.log("UPLOADING ALL");
+
+    const uploaded: boolean = await provisionManagedIAM();
+
+    console.log("UPLOADED:", uploaded);
   };
 
   const testOmit = async (): Promise<void> => {
@@ -51,6 +60,7 @@ const UploadManaged = () => {
       <Button name="ROL" onClick={handleUploadRoles} />
       <Button name="USER" onClick={handleUploadUsers} />
       <Button name="GRP" onClick={handleUploadGroups} />
+      <Button name="ALL" onClick={handleUploadAll} />
     </>
   );
   // return <Button name="upload" onClick={testOmit} />;

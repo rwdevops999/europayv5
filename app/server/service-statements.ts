@@ -88,10 +88,6 @@ export const createServiceStatementWithResult = async (
 ): Promise<tServiceStatement | null> => {
   let result: tServiceStatement | null = null;
 
-  console.log("CSSR", json(_statement));
-  // const serviceid: number = _statement.serviceid;
-  // delete (_statement as { serviceid?: number }).serviceid;
-
   await prisma.serviceStatement
     .create({
       data: _statement,
@@ -206,7 +202,7 @@ const defineServiceStatement = async (
   );
 };
 
-export const defineServiceStatements = async (): Promise<void> => {
+export const defineManagedServiceStatements = async (): Promise<void> => {
   // TRUNCATE ServiceStatements => doest also ServiceStatementAction
 
   const statementNames: string[] = Object.keys(AllowedManagedServiceStatements);

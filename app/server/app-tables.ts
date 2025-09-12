@@ -28,6 +28,15 @@ const resetTable = async (
   }
 };
 
+export const resetTables = async (
+  _tables: string[],
+  _cascadedelete: boolean = true
+): Promise<void> => {
+  for (let table of _tables) {
+    await resetTable(table, _cascadedelete);
+  }
+};
+
 /**
  * clear the tables in the db
  *

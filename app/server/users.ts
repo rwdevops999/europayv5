@@ -272,14 +272,12 @@ export const loadUserByUsernameOrEmail = async (
   return result;
 };
 
-export const defineUsers = async (): Promise<void> => {
+export const defineManagedUsers = async (): Promise<void> => {
   // TRUNCATE User => Address, Account, Transaction
 
   const userNames: string[] = Object.keys(ManagedUsers);
 
   for (let userName of userNames) {
-    console.log("DEFINING", userName);
-
     const userInfo: any = ManagedUsers[userName];
 
     const create: tUserCreate = {

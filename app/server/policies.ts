@@ -87,14 +87,12 @@ export const deletePolicy = async (_id: number): Promise<void> => {
   });
 };
 
-export const definePolicies = async (): Promise<void> => {
+export const defineManagedPolicies = async (): Promise<void> => {
   // TRUNCATE Policy
 
   const policyNames: string[] = Object.keys(ManagedPolicies);
 
   for (let policyName of policyNames) {
-    console.log("DEFINING", policyName);
-
     const policyInfo: any = ManagedPolicies[policyName];
 
     const statements: string[] = policyInfo.statement;

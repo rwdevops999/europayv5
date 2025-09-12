@@ -10,7 +10,7 @@ import prisma from "@/lib/prisma";
 import { Group } from "@/generated/prisma";
 import { ManagedGroups } from "./setup/managed-iam";
 import { getRoleIdByName } from "./roles";
-import { getUserIdByNames, getUserIdByUsername } from "./users";
+import { getUserIdByNames } from "./users";
 import { json } from "@/lib/util";
 
 export const createGroup = async (
@@ -109,14 +109,12 @@ export const addUserToGroup = async (
   return result;
 };
 
-export const defineGroups = async (): Promise<void> => {
+export const defineManagedGroups = async (): Promise<void> => {
   // TRUNCATE Group
 
   const groupNames: string[] = Object.keys(ManagedGroups);
 
   for (let groupName of groupNames) {
-    console.log("DEFINING", groupName);
-
     const groupInfo: any = ManagedGroups[groupName];
 
     const roles: string[] = groupInfo.roles;
@@ -126,7 +124,6 @@ export const defineGroups = async (): Promise<void> => {
         id: await getRoleIdByName(roleName),
       });
     }
-    console.log("ROLE IDS", json(roleids));
 
     const users: any[] = groupInfo.users;
     const userids: any[] = [];
@@ -135,7 +132,6 @@ export const defineGroups = async (): Promise<void> => {
         id: await getUserIdByNames(userName),
       });
     }
-    console.log("USER IDS", json(userids));
 
     const create: tGroupCreate = {
       name: groupName,
