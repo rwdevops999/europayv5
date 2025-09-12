@@ -1,5 +1,6 @@
 "use client";
 
+import { defineGroups } from "@/app/server/groups";
 import { definePolicies } from "@/app/server/policies";
 import { defineRoles } from "@/app/server/roles";
 import { defineServiceStatements } from "@/app/server/service-statements";
@@ -27,6 +28,10 @@ const UploadManaged = () => {
     await defineUsers();
   };
 
+  const handleUploadGroups = async (): Promise<void> => {
+    await defineGroups();
+  };
+
   const testOmit = async (): Promise<void> => {
     let cx: tServiceStatementCreate = {
       ssname: "SSNAME",
@@ -45,6 +50,7 @@ const UploadManaged = () => {
       <Button name="POL" onClick={handleUploadPolicies} />
       <Button name="ROL" onClick={handleUploadRoles} />
       <Button name="USER" onClick={handleUploadUsers} />
+      <Button name="GRP" onClick={handleUploadGroups} />
     </>
   );
   // return <Button name="upload" onClick={testOmit} />;

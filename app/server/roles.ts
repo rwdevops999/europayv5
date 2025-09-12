@@ -108,3 +108,28 @@ export const defineRoles = async (): Promise<void> => {
     }
   }
 };
+
+export const getRoleIdByName = async (_name: string): Promise<number> => {
+  let result: number = -1;
+
+  await prisma.role
+    .findFirst({
+      where: {
+        name: _name,
+      },
+      select: {
+        id: true,
+      },
+    })
+    .then((value: any | null) => {
+      if (value) {
+        result = value.id;
+      }
+    });
+
+  if (result === -1) {
+    console.log("ERROR: YOU LOOKED UP AN UNKNOWN ROLE", _name);
+  }
+
+  return result;
+};

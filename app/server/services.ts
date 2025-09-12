@@ -27,7 +27,7 @@ export const getServiceIdByName = async (
     });
 
   if (result === -1) {
-    console.log("ERROR: YOU LOOKED UP AN UNKNOW SERVICE", _servicename);
+    console.log("ERROR: YOU LOOKED UP AN UNKNOWN SERVICE", _servicename);
   }
 
   return result;

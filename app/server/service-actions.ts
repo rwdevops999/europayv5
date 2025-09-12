@@ -24,7 +24,7 @@ export const getServiceActionIdByName = async (
     });
 
   if (result === -1) {
-    console.log("ERROR: YOU LOOKED UP AN UNKNOW SERVICE ACTION", _name);
+    console.log("ERROR: YOU LOOKED UP AN UNKNOWN SERVICE ACTION", _name);
   }
 
   return result;

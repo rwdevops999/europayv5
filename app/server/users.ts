@@ -273,7 +273,7 @@ export const loadUserByUsernameOrEmail = async (
 };
 
 export const defineUsers = async (): Promise<void> => {
-  // TRUNCATE Users => Address, Account, Transaction
+  // TRUNCATE User => Address, Account, Transaction
 
   const userNames: string[] = Object.keys(ManagedUsers);
 
@@ -283,7 +283,7 @@ export const defineUsers = async (): Promise<void> => {
     const userInfo: any = ManagedUsers[userName];
 
     const create: tUserCreate = {
-      username: userInfo.username,
+      username: userName,
       lastname: userInfo.lastname,
       firstname: userInfo.firstname,
       email: userInfo.email,
@@ -311,4 +311,35 @@ export const defineUsers = async (): Promise<void> => {
 
     await createUser(create);
   }
+};
+
+export const getUserIdByNames = async (_names: {
+  lastname: string;
+  firstname: string;
+}): Promise<number> => {
+  let result: number = -1;
+
+  await prisma.user
+    .findFirst({
+      where: {
+        AND: [
+          {
+            lastname: _names.lastname,
+          },
+          {
+            firstname: _names.firstname,
+          },
+        ],
+      },
+      select: {
+        id: true,
+      },
+    })
+    .then((value: any) => (result = value.id));
+
+  if (result === -1) {
+    console.log("ERROR: YOU LOOKED UP AN UNKNOWN USER", json(_names));
+  }
+
+  return result;
 };

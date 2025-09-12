@@ -137,7 +137,7 @@ export const getPolicyIdByName = async (_name: string): Promise<number> => {
     });
 
   if (result === -1) {
-    console.log("ERROR: YOU LOOKED UP AN UNKNOW POLICY", _name);
+    console.log("ERROR: YOU LOOKED UP AN UNKNOWN POLICY", _name);
   }
 
   return result;

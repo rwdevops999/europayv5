@@ -524,9 +524,9 @@ export const ManagedRoles: Record<string, any> = {
   },
 };
 
+// the string in the record will be used for username
 export const ManagedUsers: Record<string, any> = {
   BBB1: {
-    username: "BBB1",
     lastname: "Bbb1",
     firstname: "bbb1",
     email: "rwdevops999@gmail.com",
@@ -536,7 +536,6 @@ export const ManagedUsers: Record<string, any> = {
     country: "Belgium",
   },
   AAA1: {
-    username: "AAA1",
     lastname: "Aaa1",
     firstname: "aaa1",
     email: "rudi.welter@gmail.com",
@@ -547,7 +546,7 @@ export const ManagedUsers: Record<string, any> = {
   },
 };
 
-const ManagedGroups: Record<string, any> = {
+export const ManagedGroups: Record<string, any> = {
   CLIENTS: {
     decription: "Clients",
     roles: ["ClientRole"],

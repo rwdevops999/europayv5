@@ -56,7 +56,7 @@ export const getServiceStatementIdByName = async (
     });
 
   if (result === -1) {
-    console.log("ERROR: YOU LOOKED UP AN UNKNOW SERVICE ACTION", _name);
+    console.log("ERROR: YOU LOOKED UP AN UNKNOWN SERVICE STATEMENT", _name);
   }
 
   return result;
