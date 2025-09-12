@@ -15,7 +15,7 @@ import { ServiceStatementInfo } from "./setup/services-and-actions";
 import { getServiceIdByName } from "./services";
 import { getServiceActionIdByName } from "./service-actions";
 import {
-  AllowedManagedServiceStatements,
+  AllowedSystemServiceStatements,
   ManagedPolicies,
 } from "./setup/managed-iam";
 import { definePolicies } from "./policies";
@@ -188,6 +188,7 @@ const defineServiceStatement = async (
         description: _statementInfo.description,
         serviceid: _serviceId,
         managed: true,
+        system: true,
       };
 
       const actions: string[] = _statementInfo.actions;
@@ -203,18 +204,37 @@ const defineServiceStatement = async (
   );
 };
 
-export const defineManagedServiceStatements = async (): Promise<void> => {
+export const defineSystemServiceStatements = async (): Promise<void> => {
   // TRUNCATE ServiceStatements => doest also ServiceStatementAction
 
-  const statementNames: string[] = Object.keys(AllowedManagedServiceStatements);
+  const statementNames: string[] = Object.keys(AllowedSystemServiceStatements);
 
   for (let statementName of statementNames) {
     await defineServiceStatement(
       statementName,
-      AllowedManagedServiceStatements[statementName]
+      AllowedSystemServiceStatements[statementName]
     );
     // .then(async () => {
     //   await definePolicies();
     // });
   }
+};
+
+/**
+ * Count the services in the DB
+ *
+ * @returns the nr of  services available
+ */
+export const countSystemServiceStatements = async (): Promise<number> => {
+  let result: number = 0;
+
+  await prisma.serviceStatement
+    .count({
+      where: {
+        system: true,
+      },
+    })
+    .then((value: number) => (result = value));
+
+  return result;
 };

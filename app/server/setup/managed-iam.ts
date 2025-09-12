@@ -1,4 +1,4 @@
-export const AllowedManagedServiceStatements: Record<string, any> = {
+export const AllowedSystemServiceStatements: Record<string, any> = {
   DeleteManagedGroup: {
     description: "Delete managed groups",
     service: "europay:iam:groups",
@@ -307,7 +307,7 @@ export const AllowedManagedServiceStatements: Record<string, any> = {
   },
 };
 
-export const ManagedPolicies: Record<string, any> = {
+export const SystemPolicies: Record<string, any> = {
   GroupDeletePolicy: {
     description: "Delete managed groups",
     statement: ["DeleteManagedGroup"],
@@ -462,7 +462,7 @@ export const ManagedPolicies: Record<string, any> = {
   },
 };
 
-export const ManagedRoles: Record<string, any> = {
+export const SystemRoles: Record<string, any> = {
   IamAdminRole: {
     description: "IAM admin",
     policy: [
@@ -525,7 +525,7 @@ export const ManagedRoles: Record<string, any> = {
 };
 
 // the string in the record will be used for username
-export const ManagedUsers: Record<string, any> = {
+export const SystemUsers: Record<string, any> = {
   BBB1: {
     lastname: "Bbb1",
     firstname: "bbb1",
@@ -546,7 +546,7 @@ export const ManagedUsers: Record<string, any> = {
   },
 };
 
-export const ManagedGroups: Record<string, any> = {
+export const SystemGroups: Record<string, any> = {
   CLIENTS: {
     decription: "Clients",
     roles: ["ClientRole"],

@@ -8,11 +8,12 @@ import {
 } from "../server/setup/services-and-actions";
 import { createGroup } from "../server/groups";
 import { tGroupCreate } from "@/lib/prisma-types";
-import { provisionManagedIAM } from "../server/managed";
 import { createHistoryEntry } from "../server/history";
 import { HistoryType } from "@/generated/prisma";
+import { provisionSystemIAM } from "../server/managed";
+import { countSystemServiceStatements } from "../server/service-statements";
 
-const CreateManagedIam = ({
+const CreateSystemIam = ({
   start,
   proceed,
 }: {
@@ -24,6 +25,10 @@ const CreateManagedIam = ({
   const uploadManagedEntitiesNeeded = async (): Promise<boolean> => {
     let result: boolean = true;
 
+    const systemServices: number = await countSystemServiceStatements();
+
+    result = systemServices === 0;
+
     return result;
   };
 
@@ -31,21 +36,22 @@ const CreateManagedIam = ({
     let message: string = "MANAGED ENTITIES";
 
     if (await uploadManagedEntitiesNeeded()) {
-      const uploaded: boolean = await provisionManagedIAM();
+      const uploaded: boolean = await provisionSystemIAM();
 
       if (!uploaded) {
-        let message: string = "MANAGED ENTITIES NOT";
+        message = "MANAGED ENTITIES NOT";
       }
-      await createHistoryEntry(
-        HistoryType.INFO,
-        getHistory(),
-        "INITIALISATION",
-        { subject: `${message}` },
-        "Initialise:SetupServices"
-      ).then(() => {
-        proceed(true);
-      });
     }
+
+    await createHistoryEntry(
+      HistoryType.INFO,
+      getHistory(),
+      "INITIALISATION",
+      { subject: `${message}` },
+      "Initialise:SetupServices"
+    ).then(() => {
+      proceed(true);
+    });
   };
 
   useEffect(() => {
@@ -57,4 +63,4 @@ const CreateManagedIam = ({
   return null;
 };
 
-export default CreateManagedIam;
+export default CreateSystemIam;

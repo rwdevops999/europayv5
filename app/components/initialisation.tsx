@@ -11,8 +11,8 @@ import DeleteClientJobs from "./delete-client-jobs";
 import SetupServerJobs from "./setup-server-jobs";
 import SetupClientJobs from "./setup-client-jobs";
 import ProcessSettings from "../(europay)/components/initialise/process-settings";
-import CreateManagedIam from "./create-managed-iam";
 import EnableCursor from "./enable-cursor";
+import CreateSystemIam from "./create-system-iam";
 
 const Initialisation = () => {
   const createStartupHistoryEntry = async (): Promise<void> => {
@@ -49,7 +49,7 @@ const Initialisation = () => {
       {/* <DeleteClientJobs start={deleteClientJobs} proceed={setSetupServerJobs} /> */}
       {/* <SetupServerJobs start={setupServerJobs} proceed={setSetupClientJobs} /> */}
       <SetupClientJobs start={setupClientJobs} proceed={setInitIam} />
-      <CreateManagedIam start={initIam} proceed={() => {}} />
+      <CreateSystemIam start={initIam} proceed={() => {}} />
     </>
   );
 };

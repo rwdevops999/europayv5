@@ -8,7 +8,7 @@ import {
   tServiceStatement,
 } from "@/lib/prisma-types";
 import prisma from "@/lib/prisma";
-import { ManagedPolicies } from "./setup/managed-iam";
+import { SystemPolicies } from "./setup/managed-iam";
 import { getServiceStatementIdByName } from "./service-statements";
 
 /**
@@ -87,10 +87,10 @@ export const deletePolicy = async (_id: number): Promise<void> => {
   });
 };
 
-export const defineManagedPolicies = async (): Promise<void> => {
+export const defineSystemPolicies = async (): Promise<void> => {
   // TRUNCATE Policy
 
-  const policyNames: string[] = Object.keys(ManagedPolicies);
+  const policyNames: string[] = Object.keys(SystemPolicies);
 
   for (let policyName of policyNames) {
     const policyInfo: any = ManagedPolicies[policyName];
@@ -107,6 +107,7 @@ export const defineManagedPolicies = async (): Promise<void> => {
         name: policyName,
         description: policyInfo.description,
         managed: true,
+        system: true,
         servicestatements: {
           connect: statementids,
         },

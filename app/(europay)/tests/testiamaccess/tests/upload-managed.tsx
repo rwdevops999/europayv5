@@ -1,12 +1,11 @@
 "use client";
 
-import { defineManagedGroups } from "@/app/server/groups";
-import { provisionManagedIAM } from "@/app/server/managed";
-import { defineManagedPolicies } from "@/app/server/policies";
-import { defineManagedRoles } from "@/app/server/roles";
-import { defineManagedServiceStatements } from "@/app/server/service-statements";
-import { defineManagedUsers } from "@/app/server/users";
-// import { defineServiceStatements } from "@/app/server/service-statements";
+import { defineSystemGroups } from "@/app/server/groups";
+import { provisionSystemIAM } from "@/app/server/managed";
+import { defineSystemPolicies } from "@/app/server/policies";
+import { defineSystemRoles } from "@/app/server/roles";
+import { defineSystemServiceStatements } from "@/app/server/service-statements";
+import { defineSystemUsers } from "@/app/server/users";
 import { tServiceStatementCreate } from "@/lib/prisma-types";
 import { json } from "@/lib/util";
 import Button from "@/ui/button";
@@ -14,29 +13,29 @@ import React from "react";
 
 const UploadManaged = () => {
   const handleUploadServiceStatements = async (): Promise<void> => {
-    await defineManagedServiceStatements();
+    await defineSystemServiceStatements();
   };
 
   const handleUploadPolicies = async (): Promise<void> => {
-    await defineManagedPolicies();
+    await defineSystemPolicies();
   };
 
   const handleUploadRoles = async (): Promise<void> => {
-    await defineManagedRoles();
+    await defineSystemRoles();
   };
 
   const handleUploadUsers = async (): Promise<void> => {
-    await defineManagedUsers();
+    await defineSystemUsers();
   };
 
   const handleUploadGroups = async (): Promise<void> => {
-    await defineManagedGroups();
+    await defineSystemGroups();
   };
 
   const handleUploadAll = async (): Promise<void> => {
     console.log("UPLOADING ALL");
 
-    const uploaded: boolean = await provisionManagedIAM();
+    const uploaded: boolean = await provisionSystemIAM();
 
     console.log("UPLOADED:", uploaded);
   };

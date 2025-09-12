@@ -53,6 +53,7 @@ model ServiceStatement {
 
   permission Permission? @default(ALLOW)
   managed Boolean? @default(false)
+  system Boolean? @default(false)
 
   createDate DateTime? @default(now())
   updateDate DateTime? @updatedAt
@@ -94,6 +95,7 @@ model Policy {
   description String? @default("")
 
   managed Boolean? @default(false)
+  system Boolean? @default(false)
 
   createDate DateTime? @default(now())
   updateDate DateTime? @updatedAt
@@ -120,6 +122,7 @@ model Role {
   description String? @default("")
 
   managed Boolean? @default(false)
+  system Boolean? @default(false)
 
   createDate DateTime? @default(now())
   updateDate DateTime? @updatedAt
@@ -169,6 +172,8 @@ model User {
   attemps Int? @default(0)
   blocked Boolean? @default(false)
   managed Boolean? @default(false)
+  system Boolean? @default(false)
+
   loggedinDate DateTime?
   type UserType @default(EUROPAY)
   createDate DateTime? @default(now())
@@ -200,6 +205,8 @@ model Group {
   name String @unique
   description String? @default("")
   managed Boolean? @default(false)
+  system Boolean? @default(false)
+
   createDate DateTime? @default(now())
   updateDate DateTime? @updatedAt
   policies Policy[]
