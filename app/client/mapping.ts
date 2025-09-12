@@ -146,6 +146,7 @@ export const mapServiceStatements = (
           servicename: statement.service.servicename,
           managed: statement.managed ?? undefined,
           access: statement.permission ?? undefined,
+          system: statement.system ?? undefined,
         },
       };
     });
@@ -185,6 +186,7 @@ export const mapPolicies = (
           subject: "Policy",
           servicename: servicename,
           managed: _policy.managed ?? undefined,
+          system: _policy.system ?? undefined,
         },
       };
     });
@@ -205,6 +207,7 @@ export const mapRoles = (roles: tRole[], _depth: number = 2): Data[] => {
         extra: {
           subject: "Role",
           managed: role.managed ?? undefined,
+          system: role.system ?? undefined,
         },
       };
     });
@@ -248,6 +251,7 @@ export const mapUsers = (users: tUser[]): Data[] => {
         subject: "User",
         additional: user.blocked,
         managed: user.managed ?? undefined,
+        system: user.system ?? undefined,
       },
     };
   });
@@ -289,6 +293,7 @@ export const mapGroups = (groups: tGroup[]): Data[] => {
       extra: {
         subject: "Group",
         managed: group.managed ?? undefined,
+        system: group.system ?? undefined,
       },
     };
   });

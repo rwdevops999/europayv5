@@ -3,6 +3,7 @@ import z from "zod";
 const extraScheme = z.object({
   subject: z.string().optional(),
   managed: z.boolean().optional(),
+  system: z.boolean().optional(),
   access: z.string().optional(),
   serviceId: z.number().optional(),
   servicename: z.string().optional(),

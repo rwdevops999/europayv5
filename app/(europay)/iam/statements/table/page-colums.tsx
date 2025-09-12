@@ -33,7 +33,11 @@ export const columns: ColumnDef<Data>[] = [
           <div className="flex items-center h-[10px] ml-3">
             {row.original.children && row.original.children.length > 0 ? (
               <>
-                {row.original.extra?.managed ? "Ⓜ️" : ""}
+                {row.original.extra?.system
+                  ? "⛔"
+                  : row.original.extra?.managed
+                  ? "Ⓜ️"
+                  : ""}
                 <Button
                   name={row.getIsExpanded() ? "📭" : "📬"}
                   size="small"

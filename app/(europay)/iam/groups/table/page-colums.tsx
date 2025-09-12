@@ -27,7 +27,11 @@ export const columns: ColumnDef<Data>[] = [
         <div style={{ paddingLeft: `${row.depth * 1}rem` }}>
           <div className="grid grid-cols-[2%_2%_2%_94%]">
             <div className="col-start-2">
-              {row.original.extra?.managed && row.depth === 0 ? "Ⓜ️" : ""}
+              {row.original.extra?.system && row.depth === 0
+                ? "⛔"
+                : row.original.extra?.managed && row.depth === 0
+                ? "Ⓜ️"
+                : ""}
             </div>
             <div className="col-start-3">
               {row.depth === 0 &&
