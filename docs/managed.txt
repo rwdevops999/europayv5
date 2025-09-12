@@ -1,0 +1,530 @@
+EXPORT
+
+SS
+"", {description: "", service: "", actions: ["", ""]}
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: DeleteManagedUser DESCRIPTION: Delete managed users SERVICE: europay:iam:users
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Delete Managed
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: DeleteManagedRole DESCRIPTION: Delete manages roles SERVICE: europay:iam::roles
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Delete Managed
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: DeleteManagedPolicy DESCRIPTION: Delete managed policies SERVICE: europay:iam:policies
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Delete Managed
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: DeleteManagedStatement DESCRIPTION: Delete managed statements SERVICE: europay:iam:statements
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Delete Managed
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowIAMEntities DESCRIPTION: Show IAM item SERVICE: europay:iam
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Handle Groups
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Handle Users
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Handle Roles
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Handle Policies
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Handle Statements
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowIAMServices DESCRIPTION: Show services submenu SERVICE: europay:iam
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Show Services
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ExecuteSocialMedia DESCRIPTION: Execute social media item SERVICE: europay:socialmedia
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Execute
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: Authorisation DESCRIPTION: Login and logout SERVICE: europay:authorisation
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Login
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Logout
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: AuthorisationSetting DESCRIPTION: Settings SERVICE: europay:authorisation
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Setting
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ManualShowChapters DESCRIPTION: View chaper sections SERVICE: europay:manual
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Show Chapters
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ImportIAM DESCRIPTION: Import IAM data SERVICE: europay:settings:import:iam
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Import
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ImportShowIAM DESCRIPTION: View IAM section SERVICE: europay:settings:import
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Show IAM
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ExportData DESCRIPTION: Export data SERVICE: europay:settings:export
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Export To View
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Export To DB
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Copy To Clipboard
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ChangeJobLimits DESCRIPTION: Change job limits SERVICE: europay:settings:limits:jobs
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Transaction
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Task
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: LimitsShowJobs DESCRIPTION: Show job limit section SERVICE: europay:settings:limits
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Show Job Limits
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ClearSelectedTables DESCRIPTION: Clear entities SERVICE: europay:settings:storage:selective
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Clear
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: SelectTables DESCRIPTION: select entities SERVICE: europay:settings:storage:selective
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Select
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: LoadDependencies DESCRIPTION: Load services and countries SERVICE: europay:settings:storage:database
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Load Services
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Load Countries
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ClearWorkingTables DESCRIPTION: Clear working tables SERVICE: europay:settings:storage:database
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Clear Work
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ProvisionCountries DESCRIPTION: Provision countries by clear SERVICE: europay:settings:storage:database
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Provision Countries
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ClearAllTables DESCRIPTION: Clear all tables SERVICE: europay:settings:storage:database
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Clear Full
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: StorageShowSelective DESCRIPTION: View  selective section SERVICE: europay:settings:storage
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: View Selective
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: StorageShowDatabase DESCRIPTION: View datbase section SERVICE: europay:settings:storage
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: View Database
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ChangeMarkdownSettings DESCRIPTION: Change markdown settings SERVICE: europay:settings:general:markdown
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Change
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ChangeOTPSettings DESCRIPTION: Change OTP settings SERVICE: europay:settings:general:otp
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Change
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ChangeHistorySettings DESCRIPTION: Change history settings SERVICE: europay:settings:general:history
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Change
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ChangeToastSettings DESCRIPTION: Change toast settings SERVICE: europay:settings:general:toast
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Change
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: GeneralShowMarkdown DESCRIPTION: View markdown section SERVICE: europay:settings:general
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: View Markdown
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: GeneralShowToast DESCRIPTION: View toast section SERVICE: europay:settings:general
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: View Toast
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: GeneralShowOTP DESCRIPTION: View OTP Section SERVICE: europay:settings:general
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: View OTP
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: GeneralShowHistory DESCRIPTION: View history section SERVICE: europay:settings:general
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: View History
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowSettingsImportMenu DESCRIPTION: Show import submenu SERVICE: europay:settings
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Show Import
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowSettingsExportMenu DESCRIPTION: Show export submenu SERVICE: europay:settings
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Show Export
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowSettingsLimitsMenu DESCRIPTION: Show limits submenu SERVICE: europay:settings
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Show Limits
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowSettingsStorageMenu DESCRIPTION: Show storage submenu SERVICE: europay:settings
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Show Storage
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowSettingsGeneralMenu DESCRIPTION: Show general submenu SERVICE: europay:settings
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Show General
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: RemoveJobs DESCRIPTION: Remove jobs SERVICE: europay:lists:jobs
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Remove
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: RestartJobs DESCRIPTION: Restart jobs SERVICE: europay:lists:jobs
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Restart
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: SuspendJobs DESCRIPTION: Suspend jobs SERVICE: europay:lists:jobs
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Suspend
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: HandleTaks DESCRIPTION: Handle tasks SERVICE: europay:lists:tasks
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Handle
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowListsHistoryMenu DESCRIPTION: Show history submenu SERVICE: europay:lists
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Show History
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowListsJobsMenu DESCRIPTION: Show jobs submenu SERVICE: europay:lists
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Show Jobs
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowListsTasksMenu DESCRIPTION: Show tasks submenu SERVICE: europay:lists
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Show Tasks
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: DashboardCountryChange DESCRIPTION: Change country SERVICE: europay:dashboard:country
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Change
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: DashboardShowCountry DESCRIPTION: Show country section SERVICE: europay:dashboard
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Show Country
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: DashboardShowWifi DESCRIPTION: Show wifi section SERVICE: europay:dashboard
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Show Wifi
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: DashboardShowVersion DESCRIPTION: Show version section SERVICE: europay:dashboard
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Show Version
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: DashboardShowEnvironment DESCRIPTION: Show environment section SERVICE: europay:dashboard
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Show Environment
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: AllowApply DESCRIPTION: Apply for an account SERVICE: europay
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Apply
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowAdminMenu DESCRIPTION: Show admin menu SERVICE: europay
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: View Admin
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowUserMenu DESCRIPTION: Show user menu SERVICE: europay
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: View User
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowSocialMedia DESCRIPTION: Show social media icons SERVICE: europay
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: View Social Media
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: AccessAuthAllowed DESCRIPTION: Access authorisation SERVICE: europay
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Access Auth
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowManualMenu DESCRIPTION: Show manual menu SERVICE: europay
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: View Manual
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowIAMMenu DESCRIPTION: Show IAM menu SERVICE: europay
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: View IAM
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowSettingsMenu DESCRIPTION: Show settings menu SERVICE: europay
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: View Settings
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowListsMenu DESCRIPTION: Show lists menu SERVICE: europay
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: View Lists
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: ShowDashboardMenu DESCRIPTION: Show dashboard menu SERVICE: europay
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: View Dashboard
+
+- [x] [SERVICE STATEMENT] Ⓜ️	 (ALLOW) NAME: GotoHome DESCRIPTION: Enable home visit SERVICE: europay
+- [x] [SERVICE STATEMENT ACTION] SERVICE ACTION: Goto Home
+AllowedManagedServiceStatements = {
+"DeleteManagedGroup", {description: "Delete managed groups", service: "europay:iam:groups", actions: ["Delete Managed"]}
+"DeleteManagedUser", {description: "Delete managed users", service: "europay:iam:users", actions: ["Delete Managed"]}
+"DeleteManagedRole", {description: "Delete managed roles", service: "europay:iam::roles", actions: ["Delete Managed"]}
+"DeleteManagedPolicy", {description: "Delete managed policies", service: "europay:iam::policies", actions: ["Delete Managed"]}
+"DeleteManagedStatement", {description: "Delete managed statements", service: "europay:iam::statements", actions: ["Delete Managed"]}
+"ShowIAMEntites", {description: "Show IAM item", service: "europay:iam", actions: ["Handle Groups", "Handle Users", "Handle Roles", "Handle Policies", "Handle Statements"]}
+"ShowIAMServices", {description: "Show services submenu", service: "europay:iam", actions: ["Show Services"]}
+"ExecuteSocialMedia", {description: "Execute social media item", service: "europay:socialmedia", actions: ["Execute"]}
+"Authorisation", {description: "Login and logout", service: "europay:authorisation", actions: ["Login", "Logout"]}
+"AuthorisationSetting", {description: "User settings", service: "europay:authorisation", actions: ["Setting"]}
+"ManualShowChapters", {description: "View chapters", service: "europay:manual", actions: ["Show Chapters"]}
+"ImportIAM", {description: "Import IAM data", service: "europay:settings:import:iam", actions: ["Import"]}
+"ImportShowIAM", {description: "View IAM import", service: "europay:settings:import", actions: ["Show IAM"]}
+"ExportData", {description: "Export data", service: "europay:settings:export", actions: ["Export To View", "Export To DB", "Copy To Clipboard"]}
+"ChangeJobLimits", {description: "Change job limits", service: "europay:settings:limits:jobs", actions: ["Transaction", "Task"]}
+"LimitsShowJobs", {description: "Show job limit section", service: "europay:settings:limits", actions: ["Transaction", "Show Job Limits"]}
+"ClearSelectedTables", {description: "Clear entities", service: "europay:settings:storage:selective", actions: ["Clear"]}
+"SelectTables", {description: "Select entities", service: "europay:settings:storage:selective", actions: ["Select"]}
+"LoadDependencies", {description: "Select services and countries", service: "europay:settings:storage:database", actions: ["Load Services", "Load Countries"]}
+"ClearWorkingTables", {description: "Clear working tables", service: "europay:settings:storage:database", actions: ["Clear Work"]}
+"ProvisionCountries", {description: "Provision countries after clear", service: "europay:settings:storage:database", actions: ["Provision Countries"]}
+"ClearAllTables", {description: "Clear all tables", service: "europay:settings:storage:database", actions: ["Clear Full"]}
+"StorageShowSelective", {description: "View selective section", service: "europay:settings:storage", actions: ["View Selective"]}
+"StorageShowDatabase", {description: "View database section", service: "europay:settings:storage", actions: ["View Database"]}
+"ChangeMarkdownSettings", {description: "Change markdown settings", service: "europay:settings:general:markdown", actions: ["Change"]}
+"ChangeOTPSettings", {description: "Change OTP settings", service: "europay:settings:general:otp", actions: ["Change"]}
+"ChangeToastSettings", {description: "Change toast settings", service: "europay:settings:general:toast", actions: ["Change"]}
+"GeneralShowToast", {description: "View toast section", service: "europay:settings:general", actions: ["View Toast"]}
+"GeneralShowOTP", {description: "View OTP section", service: "europay:settings:general", actions: ["View OTP"]}
+"GeneralShowHistory", {description: "View history section", service: "europay:settings:general", actions: ["View History"]}
+"ShowSettingsImportMenu", {description: "Show import submenu", service: "europay:settings", actions: ["Show Import"]}
+"ShowSettingsExportMenu", {description: "Show export submenu", service: "europay:settings", actions: ["Show Export"]}
+"ShowSettingsLimitsMenu", {description: "Show limits submenu", service: "europay:settings", actions: ["Show Limits"]}
+"ShowSettingsStorageMenu", {description: "Show storage submenu", service: "europay:settings", actions: ["Show Storage"]}
+"ShowSettingsGeneralMenu", {description: "Show general submenu", service: "europay:settings", actions: ["Show General"]}
+"RemoveJobs", {description: "Remove jobs", service: "europay:lists:jobs", actions: ["Remove"]}
+"RestartJobs", {description: "Restart jobs", service: "europay:lists:jobs", actions: ["Restart"]}
+"SuspendJobs", {description: "Suspend jobs", service: "europay:lists:jobs", actions: ["Suspend"]}
+"HandleTasks", {description: "Handle tasks", service: "europay:lists:tasks", actions: ["Handle"]}
+"ShowListsHistoryMenu", {description: "Show history submenu", service: "europay:lists", actions: ["Show History"]}
+"ShowListsJobsMenu", {description: "Show jobs submenu", service: "europay:lists", actions: ["Show Jobs"]}
+"ShowListsTasksMenu", {description: "Show tasks submenu", service: "europay:lists", actions: ["Show Tasks"]}
+"DashboardCountryChange", {description: "Change country", service: "europay:dashboard:country", actions: ["Change"]}
+"DashboardShowCountry", {description: "Show country section", service: "europay:dashboard", actions: ["Show Country"]}
+"DashboardShowWifi", {description: "Show wifi section", service: "europay:dashboard", actions: ["Show Wifi"]}
+"DashboardShowVersion", {description: "Show version section", service: "europay:dashboard", actions: ["Show Version"]}
+"DashboardShowEnvironment", {description: "Show environment section", service: "europay:dashboard", actions: ["Show Environment"]}
+"AllowApply", {description: "ApplyForAnAccount", service: "europay", actions: ["Apply"]}
+"ShowAdminMenu", {description: "Show admin menu", service: "europay", actions: ["View Admin"]}
+"ShowUserMenu", {description: "Show user menu", service: "europay", actions: ["View User"]}
+"ShowSocialMedia", {description: "Show social media icons", service: "europay", actions: ["View Social Media"]}
+"AccessAuthAllowed", {description: "Access authorisation", service: "europay", actions: ["Access Auth"]}
+"ShowManualMenu", {description: "Show manual menu", service: "europay", actions: ["View Manual"]}
+"ShowIAMMenu", {description: "Show IAM menu", service: "europay", actions: ["View IAM"]}
+"ShowSettingsMenu", {description: "Show settings menu", service: "europay", actions: ["View Settings"]}
+"ShowListsMenu", {description: "Show lists menu", service: "europay", actions: ["View Lists"]}
+"ShowDashboardMenu", {description: "Show dashboard menu", service: "europay", actions: ["View Dashboard"]}
+"GotoHome", {description: "Enable home visit", service: "europay", actions: ["Goto Home"]}
+}
+
+P
+"", {description: "", statement: ["", ""]}
+
+- [x] [POLICY] Ⓜ️	 NAME: GroupDeletePolicy DESCRIPTION: Policy for delete managed groups
+- [x] [SERVICE STATEMENT] NAME: DeleteManagedGroup
+
+- [x] [POLICY] Ⓜ️	 NAME: UserDeletePolicy DESCRIPTION: Policy for delete managed users
+- [x] [SERVICE STATEMENT] NAME: DeleteManagedUser
+
+- [x] [POLICY] Ⓜ️	 NAME: RoleDeletePolicy DESCRIPTION: Policy for delete managed roles
+- [x] [SERVICE STATEMENT] NAME: DeleteManagedRole
+
+- [x] [POLICY] Ⓜ️	 NAME: PolicyDeletePolicy DESCRIPTION: Policy for delete managed policies
+- [x] [SERVICE STATEMENT] NAME: DeleteManagedPolicy
+
+- [x] [POLICY] Ⓜ️	 NAME: StatementDeletePolicy DESCRIPTION: Policy for delete managed statement
+- [x] [SERVICE STATEMENT] NAME: DeleteManagedStatement
+
+- [x] [POLICY] Ⓜ️	 NAME: IAMPolicy DESCRIPTION: Policy for IAM
+- [x] [SERVICE STATEMENT] NAME: ShowIAMEntities
+
+- [x] [POLICY] Ⓜ️	 NAME: IAMDefaultPolicy DESCRIPTION: Policy for default iam view
+- [x] [SERVICE STATEMENT] NAME: ShowIAMServices
+
+- [x] [POLICY] Ⓜ️	 NAME: SocialMediaPolicy DESCRIPTION: Policy for social media
+- [x] [SERVICE STATEMENT] NAME: ExecuteSocialMedia
+
+- [x] [POLICY] Ⓜ️	 NAME: AuthPolicy DESCRIPTION: Policy for authorisation
+- [x] [SERVICE STATEMENT] NAME: Authorisation
+
+- [x] [POLICY] Ⓜ️	 NAME: AuthSettingsPolicy DESCRIPTION: Policy for user settings
+- [x] [SERVICE STATEMENT] NAME: AuthorisationSetting
+
+- [x] [POLICY] Ⓜ️	 NAME: ManualPolicy DESCRIPTION: Policy for manual page
+- [x] [SERVICE STATEMENT] NAME: ManualShowChapters
+
+- [x] [POLICY] Ⓜ️	 NAME: IAMImportPolicy DESCRIPTION: Policy for import IAM
+- [x] [SERVICE STATEMENT] NAME: ImportIAM
+
+- [x] [POLICY] Ⓜ️	 NAME: ImportPolicy DESCRIPTION: Policy for import
+- [x] [SERVICE STATEMENT] NAME: ImportShowIAM
+
+- [x] [POLICY] Ⓜ️	 NAME: ExportPolicy DESCRIPTION: Policy for export
+- [x] [SERVICE STATEMENT] NAME: ExportData
+
+- [x] [POLICY] Ⓜ️	 NAME: JobLimitsPolicy DESCRIPTION: Policy for job limits
+- [x] [SERVICE STATEMENT] NAME: ChangeJobLimits
+
+- [x] [POLICY] Ⓜ️	 NAME: LimitsPolicy DESCRIPTION: Policy for limit settings
+- [x] [SERVICE STATEMENT] NAME: LimitsShowJobs
+
+- [x] [POLICY] Ⓜ️	 NAME: SelectivePolicy DESCRIPTION: Policy for selective tables
+- [x] [SERVICE STATEMENT] NAME: SelectTables
+- [x] [SERVICE STATEMENT] NAME: ClearSelectedTables
+
+- [x] [POLICY] Ⓜ️	 NAME: DatabasePolicy DESCRIPTION: Policy for database
+- [x] [SERVICE STATEMENT] NAME: ClearAllTables
+- [x] [SERVICE STATEMENT] NAME: ProvisionCountries
+- [x] [SERVICE STATEMENT] NAME: ClearWorkingTables
+- [x] [SERVICE STATEMENT] NAME: LoadDependencies
+
+- [x] [POLICY] Ⓜ️	 NAME: StoragePolicy DESCRIPTION: Policy for storage
+- [x] [SERVICE STATEMENT] NAME: StorageShowDatabase
+- [x] [SERVICE STATEMENT] NAME: StorageShowSelective
+
+- [x] [POLICY] Ⓜ️	 NAME: MarkdownSettingsPolicy DESCRIPTION: Policy for markdown settings
+- [x] [SERVICE STATEMENT] NAME: ChangeMarkdownSettings
+
+- [x] [POLICY] Ⓜ️	 NAME: OTPSettingsPolicy DESCRIPTION: Policy for OTP settings
+- [x] [SERVICE STATEMENT] NAME: ChangeOTPSettings
+
+- [x] [POLICY] Ⓜ️	 NAME: HistorySettingsPolicy DESCRIPTION: Policy for history settings
+- [x] [SERVICE STATEMENT] NAME: ChangeHistorySettings
+
+- [x] [POLICY] Ⓜ️	 NAME: ToastSettingsPolicy DESCRIPTION: Policy for toast settings
+- [x] [SERVICE STATEMENT] NAME: ChangeToastSettings
+
+- [x] [POLICY] Ⓜ️	 NAME: GeneralPolicy DESCRIPTION: Policy for general settings
+- [x] [SERVICE STATEMENT] NAME: GeneralShowHistory
+- [x] [SERVICE STATEMENT] NAME: GeneralShowOTP
+- [x] [SERVICE STATEMENT] NAME: GeneralShowToast
+- [x] [SERVICE STATEMENT] NAME: GeneralShowMarkdown
+
+- [x] [POLICY] Ⓜ️	 NAME: SettingsPolicy DESCRIPTION: Policy for settings
+- [x] [SERVICE STATEMENT] NAME: ShowSettingsGeneralMenu
+- [x] [SERVICE STATEMENT] NAME: ShowSettingsStorageMenu
+- [x] [SERVICE STATEMENT] NAME: ShowSettingsLimitsMenu
+- [x] [SERVICE STATEMENT] NAME: ShowSettingsExportMenu
+- [x] [SERVICE STATEMENT] NAME: ShowSettingsImportMenu
+
+- [x] [POLICY] Ⓜ️	 NAME: JobsPolicy DESCRIPTION: Policy for jobs
+- [x] [SERVICE STATEMENT] NAME: SuspendJobs
+- [x] [SERVICE STATEMENT] NAME: RestartJobs
+- [x] [SERVICE STATEMENT] NAME: RemoveJobs
+
+- [x] [POLICY] Ⓜ️	 NAME: TasksPolicy DESCRIPTION: Policy for tasks
+- [x] [SERVICE STATEMENT] NAME: HandleTaks
+
+- [x] [POLICY] Ⓜ️	 NAME: HistoryViewPolicy DESCRIPTION: Policy for history view
+- [x] [SERVICE STATEMENT] NAME: ShowListsHistoryMenu
+
+- [x] [POLICY] Ⓜ️	 NAME: JobsViewPolicy DESCRIPTION: Policy for jobs view
+- [x] [SERVICE STATEMENT] NAME: ShowListsJobsMenu
+
+- [x] [POLICY] Ⓜ️	 NAME: TasksViewPolicy DESCRIPTION: Policy for tasks view
+- [x] [SERVICE STATEMENT] NAME: ShowListsTasksMenu
+
+- [x] [POLICY] Ⓜ️	 NAME: DashboardCountryPolicy DESCRIPTION: Policy for dashboard country
+- [x] [SERVICE STATEMENT] NAME: DashboardCountryChange
+
+- [x] [POLICY] Ⓜ️	 NAME: DashboardPolicy DESCRIPTION: Policy for dashboard
+- [x] [SERVICE STATEMENT] NAME: DashboardShowEnvironment
+- [x] [SERVICE STATEMENT] NAME: DashboardShowVersion
+- [x] [SERVICE STATEMENT] NAME: DashboardShowWifi
+- [x] [SERVICE STATEMENT] NAME: DashboardShowCountry
+
+- [x] [POLICY] Ⓜ️	 NAME: AdminDefaultPolicy DESCRIPTION: Default policy for admin
+- [x] [SERVICE STATEMENT] NAME: ShowAdminMenu
+
+- [x] [POLICY] Ⓜ️	 NAME: ClientDefaultPolicy DESCRIPTION: Default policy for clients
+- [x] [SERVICE STATEMENT] NAME: ShowSocialMedia
+- [x] [SERVICE STATEMENT] NAME: ShowUserMenu
+
+- [x] [POLICY] Ⓜ️	 NAME: DefaultPolicy DESCRIPTION: Default policy
+- [x] [SERVICE STATEMENT] NAME: ShowManualMenu
+- [x] [SERVICE STATEMENT] NAME: AccessAuthAllowed
+- [x] [SERVICE STATEMENT] NAME: AllowApply
+
+- [x] [POLICY] Ⓜ️	 NAME: IAMViewPolicy DESCRIPTION: Policy for IAM view
+- [x] [SERVICE STATEMENT] NAME: ShowIAMMenu
+
+- [x] [POLICY] Ⓜ️	 NAME: SettingsViewPolicy DESCRIPTION: Policy for settings view
+- [x] [SERVICE STATEMENT] NAME: ShowSettingsMenu
+
+- [x] [POLICY] Ⓜ️	 NAME: DefaultViewPolicy DESCRIPTION: Policy for default views
+- [x] [SERVICE STATEMENT] NAME: GotoHome
+- [x] [SERVICE STATEMENT] NAME: ShowDashboardMenu
+- [x] [SERVICE STATEMENT] NAME: ShowListsMenu
+
+ManagedPolicies = {
+"GroupDeletePolicy", {description: "Delete managed groups", statement: ["DeleteManagedGroup"]}
+"UserDeletePolicy", {description: "Delete managed users", statement: ["DeleteManagedUser"]}
+"RoleDeletePolicy", {description: "Delete managed roles", statement: ["DeleteManagedRole"]}
+"PolicyDeletePolicy", {description: "Delete managed policies", statement: ["DeleteManagedPolicy"]}
+"StatementDeletePolicy", {description: "Delete managed statement", statement: ["DeleteManagedStatement"]}
+"IAMPolicy", {description: "Policy for IAM", statement: ["ShowIAMEntities"]}
+"IAMDefaultPolicy", {description: "Default iam view", statement: ["ShowIAMServices"]}
+"SocialMediaPolicy", {description: "Social Media", statement: ["ExecuteSocialMedia"]}
+"AuthPolicy", {description: "Authorisation", statement: ["Authorisation"]}
+"AuthSettingsPolicy", {description: "User settings", statement: ["AuthorisationSetting"]}
+"ManualPolicy", {description: "Manual page chapters", statement: ["ManualShowChapters"]}
+"IAMImportPolicy", {description: "Import IAM", statement: ["ImportIAM"]}
+"ImportPolicy", {description: "Import", statement: ["ImportShowIAM"]}
+"ExportPolicy", {description: "Export", statement: ["ExportData"]}
+"JobLimitsPolicy", {description: "Job limits", statement: ["ChangeJobLimits"]}
+"LimitsPolicy", {description: "Limits settings", statement: ["LimitsShowJobs"]}
+"SelectivePolicy", {description: "Selective tables", statement: ["SelectTables", "ClearSelectedTables"]}
+"DatabasePolicy", {description: "Database", statement: ["ClearAllTables", "ProvisionCountries", "ClearWorkingTables", "LoadDependencies"]}
+"StoragePolicy", {description: "Storage", statement: ["StorageShowDatabase", "StorageShowSelective"]}
+"MarkdownSettingsPolicy", {description: "Markdown settings", statement: ["ChangeMarkdownSettings"]}
+"OTPSettingsPolicy", {description: "OTP settings", statement: ["ChangeOTPSettings"]}
+"HistorySettingsPolicy", {description: "History settings", statement: ["ChangeHistorySettings"]}
+"GeneralPolicy", {description: "General settings", statement: ["GeneralShowHistory", "GeneralShowOTP", "GeneralShowToast", "GeneralShowMarkdown"]}
+"SettingsPolicy", {description: "Settings", statement: ["ShowSettingsGeneralMenu", "ShowSettingsStorageMenu", "ShowSettingsLimitsMenu", "ShowSettingsExportMenu", "ShowSettingsImportMenu"]}
+"JobsPolicy", {description: "Jobs", statement: ["SuspendJobs", "RestartJobs", "RemoveJobs"]}
+"TasksPolicy", {description: "Tasks", statement: ["HandleTasks"]}
+"HistoryViewPolicy", {description: "History view", statement: ["ShowListsHistoryMenu"]}
+"JobsViewPolicy", {description: "Jobs view", statement: ["ShowListsJobsMenu"]}
+"TasksViewPolicy", {description: "Tasks view", statement: ["ShowListsTasksMenu"]}
+"DashboardCountryPolicy", {description: "Dashboard country", statement: ["DashboardCountryChange"]}
+"DashboardPolicy", {description: "Dashboard", statement: ["DashboardShowEnvironment", "DashboardShowVersion", "DashboardShowWifi", "DashboardShowCountry"]}
+"AdminDefaultPolicy", {description: "Default admin", statement: ["ShowAdminMenu"]}
+"ClientDefaultPolicy", {description: "Default client", statement: ["ShowSocialMedia", "ShowUserMenu"]}
+"DefaultPolicy", {description: "Default", statement: ["ShowManualMenu", "AccessAuthAllowed", "AllowApply"]}
+"IAMViewPolicy", {description: "IAM view", statement: ["ShowIAMMenu"]}
+"SettingsViewPolicy", {description: "Settings view", statement: ["ShowSettingsMenu"]}
+"DefaultViewPolicy", {description: "Default views", statement: ["GotoHome", "ShowDashboardMenu", "ShowListsMenu"]}
+}
+
+R
+"", {description: "", policy: ["", ""]}
+- [x] [ROLE] Ⓜ️	 NAME: IamAdminRole DESCRIPTION: Role for IAM admin
+- [x] [POLICY] NAME: IAMPolicy
+- [x] [POLICY] NAME: StatementDeletePolicy
+- [x] [POLICY] NAME: PolicyDeletePolicy
+- [x] [POLICY] NAME: RoleDeletePolicy
+- [x] [POLICY] NAME: UserDeletePolicy
+- [x] [POLICY] NAME: GroupDeletePolicy
+
+- [x] [ROLE] Ⓜ️	 NAME: AdminRole DESCRIPTION: Role for admin
+- [x] [POLICY] NAME: AdminDefaultPolicy
+
+- [x] [ROLE] Ⓜ️	 NAME: ClientRole DESCRIPTION: Role for client
+- [x] [POLICY] NAME: ClientDefaultPolicy
+- [x] [POLICY] NAME: SocialMediaPolicy
+- [x] [POLICY] NAME: AuthSettingPolicy
+
+- [x] [ROLE] Ⓜ️	 NAME: SettingsAdminRole DESCRIPTION: Role for settings admin
+- [x] [POLICY] NAME: SettingsViewPolicy
+- [x] [POLICY] NAME: SettingsPolicy
+- [x] [POLICY] NAME: GeneralPolicy
+- [x] [POLICY] NAME: ToastSettingsPolicy
+- [x] [POLICY] NAME: HistorySettingsPolicy
+- [x] [POLICY] NAME: OTPSettingsPolicy
+- [x] [POLICY] NAME: MarkdownSettingsPolicy
+- [x] [POLICY] NAME: DatabasePolicy
+- [x] [POLICY] NAME: SelectivePolicy
+- [x] [POLICY] NAME: LimitsPolicy
+- [x] [POLICY] NAME: JobLimitsPolicy
+- [x] [POLICY] NAME: ExportPolicy
+- [x] [POLICY] NAME: ImportPolicy
+- [x] [POLICY] NAME: IAMImportPolicy
+- [x] [POLICY] NAME: StoragePolicy
+
+- [x] [ROLE] Ⓜ️	 NAME: JobAdminRole DESCRIPTION: Role for job admin
+- [x] [POLICY] NAME: JobsViewPolicy
+- [x] [POLICY] NAME: JobsPolicy
+
+- [x] [ROLE] Ⓜ️	 NAME: TaskAdminRole DESCRIPTION: Role for task admin
+- [x] [POLICY] NAME: TasksViewPolicy
+- [x] [POLICY] NAME: TasksPolicy
+
+- [x] [ROLE] Ⓜ️	 NAME: DefaultRole DESCRIPTION: Default role
+- [x] [POLICY] NAME: DefaultViewPolicy
+- [x] [POLICY] NAME: IAMViewPolicy
+- [x] [POLICY] NAME: DefaultPolicy
+- [x] [POLICY] NAME: DashboardPolicy
+- [x] [POLICY] NAME: DashboardCountryPolicy
+- [x] [POLICY] NAME: HistoryViewPolicy
+- [x] [POLICY] NAME: ManualPolicy
+- [x] [POLICY] NAME: IAMDefaultPolicy
+- [x] [POLICY] NAME: AuthPolicy
+ManagedPolicies = {
+"IamAdminRole", {description: "IAM admin", policy: ["IAMPolicy", "StatementDeletePolicy", "PolicyDeletePolicy", "RoleDeletePolicy", "UserDeletePolicy", "GroupDeletePolicy"]}
+"AdminRole", {description: "Admin", policy: ["AdminDefaultPolicy"]}
+"ClientRole", {description: "Client", policy: ["ClientDefaultPolicy", "SocialMediaPolicy", "AuthSettingsPolicy"]}
+"SettingsAdminRole", {description: "Settings admin", policy: ["SettingsViewPolicy", "SettingsPolicy", "GeneralPolicy", "ToastSettingsPolicy", "HistorySettingsPolicy", "OTPSettingsPolicy", "MarkdownSettingsPolicy", "DatabasePolicy", "SelectivePolicy", "LimitsPolicy", "JobLimitsPolicy", "ExportPolicy", "ImportPolicy", "IAMImportPolicy", "StoragePolicy"]}
+"JobAdminRole", {description: "Job admin", policy: ["JobsViewPolicy", "JobsPolicy"]}
+"TaskAdminRole", {description: "Task admin", policy: ["TasksViewPolicy", "TasksPolicy"]}
+"DefaultRole", {description: "Default", policy: ["DefaultViewPolicy", "IAMViewPolicy", "DefaultPolicy", "DashboardPolicy", "DashboardCountryPolicy", "HistoryViewPolicy", "ManualPolicy", "IAMDefaultPolicy", "AuthPolicy"]}
+}
+
+U
+
+"", {username: "", lastname: "", firstname: "", email: "", password: "", passwordless: false, type: "EUROPAY", country: "Belgium"}
+- [x] [USER]  	  	 USERNAME: BBB1 LASTNAME: Bbb1 FIRSTNAME: bbb1 EMAIL: rwdevops999@gmail.com PASSWORD: ******** PASSWORDLESS: false TYPE: EUROPAY COUNTRY: Belgium
+- [x] [USER]  	  	 USERNAME: AAA1 LASTNAME: Aaa1 FIRSTNAME: aaa1 EMAIL: rudi.welter@gmail.com PASSWORD: ******** PASSWORDLESS: false TYPE: EUROPAY COUNTRY: Belgium
+ManagedUsers = {
+"BBB1", {username: "BBB1", lastname: "Bbb1", firstname: "bbb1", email: "rwdevops999@gmail.com", password: "27X11x49@", passwordless: false, type: "EUROPAY", country: "Belgium"}
+"AAA1", {username: "AAA1", lastname: "Aaa1", firstname: "aaa1", email: "rudi.welter@gmail.com", password: "27X11x49@", passwordless: false, type: "EUROPAY", country: "Belgium"}
+}
+
+G
+
+"", {decription: "", roles: [], users: []}
+
+- [x] [GROUP] Ⓜ️	 NAME: CLIENTS DESCRIPTION: Clients group
+- [x] [ROLE] NAME: ClientRole
+- [x] [USER] LASTNAME: Bbb1 FIRSTNAME: bbb1
+- [x] [USER] LASTNAME: Aaa1 FIRSTNAME: aaa1
+
+- [x] [GROUP] Ⓜ️	 NAME: DEFAULT DESCRIPTION: Default group
+- [x] [ROLE] NAME: DefaultRole
+- [x] [USER] LASTNAME: Bbb1 FIRSTNAME: bbb1
+- [x] [USER] LASTNAME: Aaa1 FIRSTNAME: aaa1
+
+- [x] [GROUP] Ⓜ️	 NAME: ADMINS DESCRIPTION: Admins group
+- [x] [ROLE] NAME: TaskAdminRole
+- [x] [ROLE] NAME: JobAdminRole
+- [x] [ROLE] NAME: SettingsAdminRole
+- [x] [ROLE] NAME: AdminRole
+- [x] [ROLE] NAME: IamAdminRole
+- [x] [USER] LASTNAME: Bbb1 FIRSTNAME: bbb1
+- [x] [USER] LASTNAME: Aaa1 FIRSTNAME: aaa1
+ManagedGroups = {
+"CLIENTS", {decription: "Clients", roles: ["ClientRole"], users: [{lastname: "Bbb1", firstname: "bbb1"}, {lastname: "Aaa1", firstname: "aaa1"}]}
+"DEFAULT", {decription: "Default", roles: ["DefaultRole"], users: [{lastname: "Bbb1", firstname: "bbb1"}, {lastname: "Aaa1", firstname: "aaa1"}]}
+"ADMINS", {decription: "Admins", roles: ["TaskAdminRole", "JobAdminRole", "SettingsAdminRole", "AdminRole", "IamAdminRole"], users: [{lastname: "Bbb1", firstname: "bbb1"}, {lastname: "Aaa1", firstname: "aaa1"}]}
+}
