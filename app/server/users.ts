@@ -8,8 +8,9 @@ import {
   tUserUpdate,
 } from "@/lib/prisma-types";
 import { decrypt, encrypt } from "./encrypt";
-import { UserType } from "@/generated/prisma";
+import { AccountStatus, UserType } from "@/generated/prisma";
 import { json } from "@/lib/util";
+import { ManagedUsers } from "./setup/managed-iam";
 
 export const loadUserById = async (_userId: number): Promise<tUser | null> => {
   let result: tUser | null = null;
@@ -269,4 +270,45 @@ export const loadUserByUsernameOrEmail = async (
     });
 
   return result;
+};
+
+export const defineUsers = async (): Promise<void> => {
+  // TRUNCATE Users => Address, Account, Transaction
+
+  const userNames: string[] = Object.keys(ManagedUsers);
+
+  for (let userName of userNames) {
+    console.log("DEFINING", userName);
+
+    const userInfo: any = ManagedUsers[userName];
+
+    const create: tUserCreate = {
+      username: userInfo.username,
+      lastname: userInfo.lastname,
+      firstname: userInfo.firstname,
+      email: userInfo.email,
+      password: userInfo.password,
+      passwordless: userInfo.passwordless,
+      type: UserType[
+        userInfo.type.toLocaleUpperCase() as keyof typeof UserType
+      ],
+      address: {
+        create: {
+          country: {
+            connect: {
+              name: userInfo.country,
+            },
+          },
+        },
+      },
+      account: {
+        create: {
+          amount: 0,
+          status: AccountStatus.OPEN,
+        },
+      },
+    };
+
+    await createUser(create);
+  }
 };

@@ -3,6 +3,7 @@
 import { definePolicies } from "@/app/server/policies";
 import { defineRoles } from "@/app/server/roles";
 import { defineServiceStatements } from "@/app/server/service-statements";
+import { defineUsers } from "@/app/server/users";
 // import { defineServiceStatements } from "@/app/server/service-statements";
 import { tServiceStatementCreate } from "@/lib/prisma-types";
 import { json } from "@/lib/util";
@@ -22,6 +23,10 @@ const UploadManaged = () => {
     await defineRoles();
   };
 
+  const handleUploadUsers = async (): Promise<void> => {
+    await defineUsers();
+  };
+
   const testOmit = async (): Promise<void> => {
     let cx: tServiceStatementCreate = {
       ssname: "SSNAME",
@@ -39,6 +44,7 @@ const UploadManaged = () => {
       <Button name="SS" onClick={handleUploadServiceStatements} />
       <Button name="POL" onClick={handleUploadPolicies} />
       <Button name="ROL" onClick={handleUploadRoles} />
+      <Button name="USER" onClick={handleUploadUsers} />
     </>
   );
   // return <Button name="upload" onClick={testOmit} />;

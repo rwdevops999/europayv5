@@ -524,7 +524,7 @@ export const ManagedRoles: Record<string, any> = {
   },
 };
 
-const ManagedUsers: Record<string, any> = {
+export const ManagedUsers: Record<string, any> = {
   BBB1: {
     username: "BBB1",
     lastname: "Bbb1",
