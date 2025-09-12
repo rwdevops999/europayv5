@@ -4,13 +4,21 @@ import { capitalize, json } from "@/lib/util";
 import prisma from "@/lib/prisma";
 import {
   cWhatToSelectFromServiceStatement,
+  tService,
+  tServiceAction,
   tServiceStatement,
+  tServiceStatementActionCreate,
   tServiceStatementCreate,
   tServiceStatementUpdate,
 } from "@/lib/prisma-types";
 import { ServiceStatementInfo } from "./setup/services-and-actions";
 import { getServiceIdByName } from "./services";
 import { getServiceActionIdByName } from "./service-actions";
+import {
+  AllowedManagedServiceStatements,
+  ManagedPolicies,
+} from "./setup/managed-iam";
+import { definePolicies } from "./policies";
 
 export const loadServiceStatements = async (): Promise<tServiceStatement[]> => {
   let result: tServiceStatement[] = [];
@@ -23,6 +31,33 @@ export const loadServiceStatements = async (): Promise<tServiceStatement[]> => {
       ...cWhatToSelectFromServiceStatement,
     })
     .then((values: tServiceStatement[]) => (result = values));
+
+  return result;
+};
+
+export const getServiceStatementIdByName = async (
+  _name: string
+): Promise<number> => {
+  let result: number = -1;
+
+  await prisma.serviceStatement
+    .findFirst({
+      where: {
+        ssname: _name,
+      },
+      select: {
+        id: true,
+      },
+    })
+    .then((value: any | null) => {
+      if (value) {
+        result = value.id;
+      }
+    });
+
+  if (result === -1) {
+    console.log("ERROR: YOU LOOKED UP AN UNKNOW SERVICE ACTION", _name);
+  }
 
   return result;
 };
@@ -48,6 +83,25 @@ export const createServiceStatement = async (
   return errorcode;
 };
 
+export const createServiceStatementWithResult = async (
+  _statement: tServiceStatementCreate
+): Promise<tServiceStatement | null> => {
+  let result: tServiceStatement | null = null;
+
+  console.log("CSSR", json(_statement));
+  // const serviceid: number = _statement.serviceid;
+  // delete (_statement as { serviceid?: number }).serviceid;
+
+  await prisma.serviceStatement
+    .create({
+      data: _statement,
+      ...cWhatToSelectFromServiceStatement,
+    })
+    .then((value: tServiceStatement) => (result = value));
+
+  return result;
+};
+
 export const updateServiceStatement = async (
   _statement: tServiceStatementUpdate
 ): Promise<string | undefined> => {
@@ -64,6 +118,14 @@ export const updateServiceStatement = async (
     });
 
   return errorcode;
+};
+
+export const createServiceStatementAction = async (
+  _action: tServiceStatementActionCreate
+): Promise<void> => {
+  await prisma.serviceStatementAction.create({
+    data: _action,
+  });
 };
 
 const defineServiceStatementsForPermission = async (
@@ -100,9 +162,62 @@ const defineServiceStatementsForPermission = async (
   }
 };
 
+const defineServiceStatementAction = async (
+  _statementid: number,
+  _name: string,
+  _actions: string[]
+): Promise<void> => {
+  for (let action of _actions) {
+    const _serviceactionid: number = await getServiceActionIdByName(action);
+
+    const _action: tServiceStatementActionCreate = {
+      ssactionname: _name,
+      serviceactionid: _serviceactionid,
+      statementid: _statementid,
+    };
+
+    await createServiceStatementAction(_action);
+  }
+};
+
+const defineServiceStatement = async (
+  _statementName: string,
+  _statementInfo: any
+): Promise<void> => {
+  // Service Statement
+  await getServiceIdByName(_statementInfo.service).then(
+    async (_serviceId: number) => {
+      const create: tServiceStatementCreate = {
+        ssname: _statementName,
+        description: _statementInfo.description,
+        serviceid: _serviceId,
+      };
+
+      const actions: string[] = _statementInfo.actions;
+
+      await createServiceStatementWithResult(create).then(
+        (statement: tServiceStatement | null) => {
+          if (statement) {
+            defineServiceStatementAction(statement.id, _statementName, actions);
+          }
+        }
+      );
+    }
+  );
+};
+
 export const defineServiceStatements = async (): Promise<void> => {
-  // for (let i = 0; i < Object.values(Permission).length; i++) {
-  //   const permission = Object.values(Permission)[i];
-  //   defineServiceStatementsForPermission(permission, servicestatements);
-  // }
+  // TRUNCATE ServiceStatements => doest also ServiceStatementAction
+
+  const statementNames: string[] = Object.keys(AllowedManagedServiceStatements);
+
+  for (let statementName of statementNames) {
+    await defineServiceStatement(
+      statementName,
+      AllowedManagedServiceStatements[statementName]
+    );
+    // .then(async () => {
+    //   await definePolicies();
+    // });
+  }
 };

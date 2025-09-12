@@ -62,6 +62,8 @@ const cWhatToSelectFromServiceStatementAction: WhatToSelectFromServiceStatementA
 
 export type tServiceStatementAction =
   Prisma.ServiceStatementActionGetPayload<WhatToSelectFromServiceStatementAction>;
+export type tServiceStatementActionCreate =
+  Prisma.ServiceStatementActionUncheckedCreateInput;
 
 /* == SERVICE STATEMENT ========== */
 type SelectNameAndIdOnly = {

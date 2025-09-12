@@ -80,7 +80,7 @@ export const servicesandactions: Record<string, string[]> = {
 
   "europay:iam": [
     "Show Services",
-    "Show Statements",
+    "Handle Statements",
     "Handle Policies",
     "Handle Roles",
     "Handle Users",
@@ -89,7 +89,7 @@ export const servicesandactions: Record<string, string[]> = {
 
   "europay:iam:statements": ["Delete Managed"],
   "europay:iam:policies": ["Delete Managed"],
-  "europay:iam::roles": ["Delete Managed"],
+  "europay:iam:roles": ["Delete Managed"],
   "europay:iam:users": ["Delete Managed"],
   "europay:iam:groups": ["Delete Managed"],
 };

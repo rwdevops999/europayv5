@@ -1,4 +1,4 @@
-const AllowedManagedServiceStatements: Record<string, any> = {
+export const AllowedManagedServiceStatements: Record<string, any> = {
   DeleteManagedGroup: {
     description: "Delete managed groups",
     service: "europay:iam:groups",
@@ -11,20 +11,20 @@ const AllowedManagedServiceStatements: Record<string, any> = {
   },
   DeleteManagedRole: {
     description: "Delete managed roles",
-    service: "europay:iam::roles",
+    service: "europay:iam:roles",
     actions: ["Delete Managed"],
   },
   DeleteManagedPolicy: {
     description: "Delete managed policies",
-    service: "europay:iam::policies",
+    service: "europay:iam:policies",
     actions: ["Delete Managed"],
   },
   DeleteManagedStatement: {
     description: "Delete managed statements",
-    service: "europay:iam::statements",
+    service: "europay:iam:statements",
     actions: ["Delete Managed"],
   },
-  ShowIAMEntites: {
+  ShowIAMEntities: {
     description: "Show IAM item",
     service: "europay:iam",
     actions: [
@@ -53,7 +53,7 @@ const AllowedManagedServiceStatements: Record<string, any> = {
   AuthorisationSetting: {
     description: "User settings",
     service: "europay:authorisation",
-    actions: ["Setting"],
+    actions: ["Settings"],
   },
   ManualShowChapters: {
     description: "View chapters",
@@ -135,6 +135,11 @@ const AllowedManagedServiceStatements: Record<string, any> = {
     service: "europay:settings:general:otp",
     actions: ["Change"],
   },
+  ChangeHistorySettings: {
+    description: "Change history settings",
+    service: "europay:settings:general:history",
+    actions: ["Change"],
+  },
   ChangeToastSettings: {
     description: "Change toast settings",
     service: "europay:settings:general:toast",
@@ -144,6 +149,11 @@ const AllowedManagedServiceStatements: Record<string, any> = {
     description: "View toast section",
     service: "europay:settings:general",
     actions: ["View Toast"],
+  },
+  GeneralShowMarkdown: {
+    description: "View markdown section",
+    service: "europay:settings:general",
+    actions: ["View Markdown"],
   },
   GeneralShowOTP: {
     description: "View OTP section",
@@ -297,7 +307,7 @@ const AllowedManagedServiceStatements: Record<string, any> = {
   },
 };
 
-const ManagedPolicies: Record<string, any> = {
+export const ManagedPolicies: Record<string, any> = {
   GroupDeletePolicy: {
     description: "Delete managed groups",
     statement: ["DeleteManagedGroup"],
