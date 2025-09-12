@@ -25,6 +25,14 @@
   },
   {
     "role": "ALERT",
+    "name": "UNABLE_TO_UPDATE_SYSTEM",
+    "description": "Unable to update",
+    "content": "Unable to update system ${iamType}.",
+    "managed": true,
+    "parameters": "{iamType:  #variable}"
+  },
+  {
+    "role": "ALERT",
     "name": "UNABLE_TO_UPDATE_LINKED",
     "description": "Unable to update",
     "content": "Unable to update ${iamType}. It is used in ${linkedType}",

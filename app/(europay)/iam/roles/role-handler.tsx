@@ -156,23 +156,31 @@ const RoleHandler = ({
         }
       }
     } else {
-      const rol: tRole | undefined = roles.find(
-        (_role: tRole) => _role.id === role.id
-      );
-      if (rol) {
-        const entity: RoleEntity = {
-          id: rol.id,
-          rolename: rol.name,
-          description: rol.description ?? "",
-          managed: rol.managed ?? false,
+      if (role.extra?.system) {
+        const alert: tAlert = {
+          template: "UNABLE_TO_UPDATE_SYSTEM",
+          params: { iamType: "Role" },
         };
-
-        const linked: number[] = rol.policies.map(
-          (policy: tPolicy) => policy.id
+        setAlert(alert);
+      } else {
+        const rol: tRole | undefined = roles.find(
+          (_role: tRole) => _role.id === role.id
         );
-        setEntity(entity);
-        setLinkedPolicies(linked);
-        openTheDialog();
+        if (rol) {
+          const entity: RoleEntity = {
+            id: rol.id,
+            rolename: rol.name,
+            description: rol.description ?? "",
+            managed: rol.managed ?? false,
+          };
+
+          const linked: number[] = rol.policies.map(
+            (policy: tPolicy) => policy.id
+          );
+          setEntity(entity);
+          setLinkedPolicies(linked);
+          openTheDialog();
+        }
       }
     }
   };

@@ -220,28 +220,36 @@ const ServiceStatementHandler = ({
         }
       }
     } else {
-      const stat: tServiceStatement | undefined = servicestatements.find(
-        (_statement: tServiceStatement) => _statement.id === statement.id
-      );
-
-      if (stat) {
-        const entity: StatementEntity = {
-          id: stat.id,
-          ssname: stat.ssname,
-          description: stat.description ?? "",
-          managed: stat.managed ?? false,
-          permission: stat.permission ?? Permission.ALLOW,
-          serviceid: stat.serviceid,
+      if (statement.extra?.system) {
+        const alert: tAlert = {
+          template: "UNABLE_TO_UPDATE_SYSTEM",
+          params: { iamType: "Service Statement" },
         };
-
-        const linked: number[] = stat.servicestatementactions.map(
-          (action: tServiceStatementAction) => action.serviceaction.id
+        setAlert(alert);
+      } else {
+        const stat: tServiceStatement | undefined = servicestatements.find(
+          (_statement: tServiceStatement) => _statement.id === statement.id
         );
 
-        setEntity(entity);
-        setLinkedActions(linked);
+        if (stat) {
+          const entity: StatementEntity = {
+            id: stat.id,
+            ssname: stat.ssname,
+            description: stat.description ?? "",
+            managed: stat.managed ?? false,
+            permission: stat.permission ?? Permission.ALLOW,
+            serviceid: stat.serviceid,
+          };
 
-        openTheDialog();
+          const linked: number[] = stat.servicestatementactions.map(
+            (action: tServiceStatementAction) => action.serviceaction.id
+          );
+
+          setEntity(entity);
+          setLinkedActions(linked);
+
+          openTheDialog();
+        }
       }
     }
   };

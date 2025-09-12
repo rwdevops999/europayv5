@@ -167,56 +167,64 @@ const UserHandler = ({
         }
       }
     } else {
-      const appuser: tUser | undefined = users.find(
-        (_user: tUser) => _user.id === user.id
-      );
-
-      if (appuser) {
-        const entity: UserEntity = {
-          id: appuser.id,
-          username: appuser.username ?? "",
-          lastname: appuser.lastname,
-          firstname: appuser.firstname,
-          avatar: appuser.avatar ?? "john.doe.png",
-          phone: appuser.phone ?? "",
-          email: appuser.email,
-          password: appuser.password,
-          passwordless: appuser.passwordless ?? false,
-          blocked: appuser.blocked ?? false,
-          managed: appuser.managed ?? false,
-          address: {
-            id: appuser.address?.id,
-            street: appuser.address?.street ?? "",
-            number: appuser.address?.number ?? "",
-            box: appuser.address?.box ?? "",
-            city: appuser.address?.city ?? "",
-            postalcode: appuser.address?.postalcode ?? "",
-            county: appuser.address?.county ?? "",
-            country: {
-              id: appuser.address?.country?.id,
-              name: appuser.address?.country?.name,
-              dialCode: appuser.address?.country?.dialCode ?? "",
-            },
-          },
-          account: appuser.account !== null,
-          accountamount: appuser.account?.amount
-            ? appuser.account?.amount.toString()
-            : "0",
+      if (user.extra?.system) {
+        const alert: tAlert = {
+          template: "UNABLE_TO_UPDATE_SYSTEM",
+          params: { iamType: "User" },
         };
-
-        let linked: number[] = appuser.policies.map(
-          (_policy: tPolicy) => _policy.id
+        setAlert(alert);
+      } else {
+        const appuser: tUser | undefined = users.find(
+          (_user: tUser) => _user.id === user.id
         );
-        setLinkedPolicies(linked);
 
-        linked = appuser.roles.map((_role: tRole) => _role.id);
-        setLinkedRoles(linked);
+        if (appuser) {
+          const entity: UserEntity = {
+            id: appuser.id,
+            username: appuser.username ?? "",
+            lastname: appuser.lastname,
+            firstname: appuser.firstname,
+            avatar: appuser.avatar ?? "john.doe.png",
+            phone: appuser.phone ?? "",
+            email: appuser.email,
+            password: appuser.password,
+            passwordless: appuser.passwordless ?? false,
+            blocked: appuser.blocked ?? false,
+            managed: appuser.managed ?? false,
+            address: {
+              id: appuser.address?.id,
+              street: appuser.address?.street ?? "",
+              number: appuser.address?.number ?? "",
+              box: appuser.address?.box ?? "",
+              city: appuser.address?.city ?? "",
+              postalcode: appuser.address?.postalcode ?? "",
+              county: appuser.address?.county ?? "",
+              country: {
+                id: appuser.address?.country?.id,
+                name: appuser.address?.country?.name,
+                dialCode: appuser.address?.country?.dialCode ?? "",
+              },
+            },
+            account: appuser.account !== null,
+            accountamount: appuser.account?.amount
+              ? appuser.account?.amount.toString()
+              : "0",
+          };
 
-        linked = appuser.groups.map((_group: Group) => _group.id);
-        setLinkedGroups(linked);
+          let linked: number[] = appuser.policies.map(
+            (_policy: tPolicy) => _policy.id
+          );
+          setLinkedPolicies(linked);
 
-        setEntity(entity);
-        openTheDialog();
+          linked = appuser.roles.map((_role: tRole) => _role.id);
+          setLinkedRoles(linked);
+
+          linked = appuser.groups.map((_group: Group) => _group.id);
+          setLinkedGroups(linked);
+
+          setEntity(entity);
+          openTheDialog();
+        }
       }
     }
   };

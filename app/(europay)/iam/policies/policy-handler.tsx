@@ -204,27 +204,35 @@ const PolicyHandler = ({
         }
       }
     } else {
-      const pol: tPolicy | undefined = policies.find(
-        (_policy: tPolicy) => _policy.id === policy.id
-      );
-      if (pol) {
-        const entity: PolicyEntity = {
-          id: pol.id,
-          policyname: pol.name,
-          description: pol.description ?? "",
-          managed: pol.managed ?? false,
-          serviceid:
-            pol.servicestatements.length > 0
-              ? pol.servicestatements[0].serviceid
-              : undefined,
+      if (policy.extra?.system) {
+        const alert: tAlert = {
+          template: "UNABLE_TO_UPDATE_SYSTEM",
+          params: { iamType: "Policy" },
         };
-
-        const linked: number[] = pol.servicestatements.map(
-          (statement: tServiceStatement) => statement.id
+        setAlert(alert);
+      } else {
+        const pol: tPolicy | undefined = policies.find(
+          (_policy: tPolicy) => _policy.id === policy.id
         );
-        setEntity(entity);
-        setLinkedStatements(linked);
-        openTheDialog();
+        if (pol) {
+          const entity: PolicyEntity = {
+            id: pol.id,
+            policyname: pol.name,
+            description: pol.description ?? "",
+            managed: pol.managed ?? false,
+            serviceid:
+              pol.servicestatements.length > 0
+                ? pol.servicestatements[0].serviceid
+                : undefined,
+          };
+
+          const linked: number[] = pol.servicestatements.map(
+            (statement: tServiceStatement) => statement.id
+          );
+          setEntity(entity);
+          setLinkedStatements(linked);
+          openTheDialog();
+        }
       }
     }
   };

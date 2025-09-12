@@ -129,31 +129,39 @@ const GroupHandler = ({
         );
       }
     } else {
-      const appgroup: tGroup | undefined = groups.find(
-        (_group: tGroup) => _group.id === group.id
-      );
-
-      if (appgroup) {
-        const entity: GroupEntity = {
-          id: appgroup.id,
-          name: appgroup.name ?? "",
-          description: appgroup.description ?? "",
-          managed: appgroup.managed ?? false,
+      if (group.extra?.system) {
+        const alert: tAlert = {
+          template: "UNABLE_TO_UPDATE_SYSTEM",
+          params: { iamType: "Group" },
         };
-
-        let linked: number[] = appgroup.policies.map(
-          (_policy: tPolicy) => _policy.id
+        setAlert(alert);
+      } else {
+        const appgroup: tGroup | undefined = groups.find(
+          (_group: tGroup) => _group.id === group.id
         );
-        setLinkedPolicies(linked);
 
-        linked = appgroup.roles.map((_role: tRole) => _role.id);
-        setLinkedRoles(linked);
+        if (appgroup) {
+          const entity: GroupEntity = {
+            id: appgroup.id,
+            name: appgroup.name ?? "",
+            description: appgroup.description ?? "",
+            managed: appgroup.managed ?? false,
+          };
 
-        linked = appgroup.users.map((_user: tUser) => _user.id);
-        setLinkedUsers(linked);
+          let linked: number[] = appgroup.policies.map(
+            (_policy: tPolicy) => _policy.id
+          );
+          setLinkedPolicies(linked);
 
-        setEntity(entity);
-        openTheDialog();
+          linked = appgroup.roles.map((_role: tRole) => _role.id);
+          setLinkedRoles(linked);
+
+          linked = appgroup.users.map((_user: tUser) => _user.id);
+          setLinkedUsers(linked);
+
+          setEntity(entity);
+          openTheDialog();
+        }
       }
     }
   };
