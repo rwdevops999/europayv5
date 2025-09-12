@@ -159,7 +159,13 @@ const PolicyHandler = ({
 
   const handleAction = async (action: string, policy: Data) => {
     if (action === DATATABLE_ACTION_DELETE) {
-      if (policy.extra?.managed) {
+      if (policy.extra?.system) {
+        const alert: tAlert = {
+          template: "UNABLE_TO_DELETE_SYSTEM",
+          params: { iamType: "Policy" },
+        };
+        setAlert(alert);
+      } else if (policy.extra?.managed) {
         // replace this allowedToDeleteManaged by $iam function
         const allowedToDeleteManaged: boolean = false;
 

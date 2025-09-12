@@ -115,7 +115,13 @@ const RoleHandler = ({
 
   const handleAction = async (action: string, role: Data) => {
     if (action === DATATABLE_ACTION_DELETE) {
-      if (role.extra?.managed) {
+      if (role.extra?.system) {
+        const alert: tAlert = {
+          template: "UNABLE_TO_DELETE_SYSTEM",
+          params: { iamType: "Role" },
+        };
+        setAlert(alert);
+      } else if (role.extra?.managed) {
         // replace this allowedToDeleteManaged by $iam function
         const allowedToDeleteManaged: boolean = false;
 

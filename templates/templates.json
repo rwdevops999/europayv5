@@ -2,15 +2,23 @@
   {
     "role": "ALERT",
     "name": "UNABLE_TO_DELETE_MANAGED",
-    "description": "Unable to delete managed",
+    "description": "Unable to delete",
     "content": "Unable to delete managed ${iamType}.",
     "managed": true,
     "parameters": "{iamType:  #variable}"
   },
   {
     "role": "ALERT",
+    "name": "UNABLE_TO_DELETE_SYSTEM",
+    "description": "Unable to delete",
+    "content": "Unable to delete system ${iamType}.",
+    "managed": true,
+    "parameters": "{iamType:  #variable}"
+  },
+  {
+    "role": "ALERT",
     "name": "UNABLE_TO_DELETE_LINKED",
-    "description": "Unable to delete linked",
+    "description": "Unable to delete",
     "content": "Unable to delete ${iamType}. It is used in ${linkedType}",
     "managed": true,
     "parameters": "{iamType:  #variable, linkedType: #variable}"
@@ -18,7 +26,7 @@
   {
     "role": "ALERT",
     "name": "UNABLE_TO_UPDATE_LINKED",
-    "description": "Unable to update linked",
+    "description": "Unable to update",
     "content": "Unable to update ${iamType}. It is used in ${linkedType}",
     "managed": true,
     "parameters": "{iamType:  #variable, linkedType: #variable}"

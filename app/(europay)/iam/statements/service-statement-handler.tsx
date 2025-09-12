@@ -177,7 +177,13 @@ const ServiceStatementHandler = ({
 
   const handleAction = async (action: string, statement: Data) => {
     if (action === DATATABLE_ACTION_DELETE) {
-      if (statement.extra?.managed) {
+      if (statement.extra?.system) {
+        const alert: tAlert = {
+          template: "UNABLE_TO_DELETE_SYSTEM",
+          params: { iamType: "Service Statement" },
+        };
+        setAlert(alert);
+      } else if (statement.extra?.managed) {
         // replace this allowedToDeleteManaged by $iam function
         const allowedToDeleteManaged: boolean = false;
 

@@ -122,7 +122,13 @@ const UserHandler = ({
 
   const handleAction = async (action: string, user: Data) => {
     if (action === DATATABLE_ACTION_DELETE) {
-      if (user.extra?.managed) {
+      if (user.extra?.system) {
+        const alert: tAlert = {
+          template: "UNABLE_TO_DELETE_SYSTEM",
+          params: { iamType: "User" },
+        };
+        setAlert(alert);
+      } else if (user.extra?.managed) {
         // replace this allowedToDeleteManaged by $iam function
         const allowedToDeleteManaged: boolean = false;
 

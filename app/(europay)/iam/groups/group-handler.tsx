@@ -102,7 +102,13 @@ const GroupHandler = ({
 
   const handleAction = async (action: string, group: Data) => {
     if (action === DATATABLE_ACTION_DELETE) {
-      if (group.extra?.managed) {
+      if (group.extra?.system) {
+        const alert: tAlert = {
+          template: "UNABLE_TO_DELETE_SYSTEM",
+          params: { iamType: "Group" },
+        };
+        setAlert(alert);
+      } else if (group.extra?.managed) {
         // replace this allowedToDeleteManaged by $iam function
         const allowedToDeleteManaged: boolean = false;
 
