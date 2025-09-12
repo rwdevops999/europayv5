@@ -83,6 +83,8 @@ const SetupClientJobs = ({
         }
       }
     );
+
+    proceed(true);
   };
 
   const taskListenerFunction = async (data: any): Promise<void> => {

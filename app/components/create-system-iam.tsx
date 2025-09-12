@@ -33,14 +33,24 @@ const CreateSystemIam = ({
   };
 
   const setup = async (): Promise<void> => {
-    let message: string = "MANAGED ENTITIES";
+    let uploaded: boolean = false;
+
+    let message: string = "";
 
     if (await uploadManagedEntitiesNeeded()) {
-      const uploaded: boolean = await provisionSystemIAM();
+      uploaded = await provisionSystemIAM();
 
       if (!uploaded) {
-        message = "MANAGED ENTITIES NOT";
+        message = "SYSTEM ENTITIES NOT";
       }
+    } else {
+      message = "SYSTEM ENTITIES NOT";
+    }
+
+    if (uploaded) {
+      message = "SYSTEM ENTITIES";
+    } else {
+      message = "SYSTEM ENTITIES NOT";
     }
 
     await createHistoryEntry(
@@ -52,6 +62,8 @@ const CreateSystemIam = ({
     ).then(() => {
       proceed(true);
     });
+
+    console.log("UPLOADED SYSTEM ENTITIES", uploaded);
   };
 
   useEffect(() => {

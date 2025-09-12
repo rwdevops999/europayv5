@@ -93,7 +93,7 @@ export const defineSystemPolicies = async (): Promise<void> => {
   const policyNames: string[] = Object.keys(SystemPolicies);
 
   for (let policyName of policyNames) {
-    const policyInfo: any = ManagedPolicies[policyName];
+    const policyInfo: any = SystemPolicies[policyName];
 
     const statements: string[] = policyInfo.statement;
 
