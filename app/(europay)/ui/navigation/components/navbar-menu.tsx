@@ -107,7 +107,12 @@ const NavbarMenu = () => {
     }
 
     // Admin
-    newmenu[3].visible = $iam_user_has_action(user, "europay", "View Admin");
+    newmenu[3].visible = $iam_user_has_action(
+      user,
+      "europay",
+      "View Admin",
+      true
+    );
 
     // User
     newmenu[4].visible = $iam_user_has_action(

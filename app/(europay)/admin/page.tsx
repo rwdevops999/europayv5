@@ -1,5 +1,6 @@
 import { absoluteUrl } from "@/lib/util";
 import PageContent from "@/ui/page-content";
+import IamChart from "./components/iam-chart";
 
 const AdminPage = () => {
   return (
@@ -14,7 +15,7 @@ const AdminPage = () => {
         className="rounded-sm grid items-start gap-2 grid-cols-4"
       >
         <div className="col-span-2 group relative flex flex-col overflow-hidden rounded-md transition-all duration-200 ease-in-out hover:z-30 space-y-2">
-          {/* <IamChart /> */}
+          <IamChart />
         </div>
       </div>
     </PageContent>
