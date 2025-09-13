@@ -1,12 +1,11 @@
 "use client";
 
 import { useHistorySettings } from "@/hooks/use-history-settings";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { createHistoryEntry } from "../server/history";
 import { HistoryType, JobModel } from "@/generated/prisma";
-import { clearRunningJobs } from "../server/job";
+import { clearRunningJobs, deletRunningJobsOfType } from "../server/job";
 import { countOngoingOTPs, processOtpsOnServer } from "../server/otp";
-import { cleanDbTables } from "../server/app-tables";
 
 const SetupServerJobs = ({
   start,
@@ -17,15 +16,13 @@ const SetupServerJobs = ({
 }) => {
   const { getHistory } = useHistorySettings();
 
-  const [jobsInitialised, setJobsInitialised] = useState<boolean>(false);
-
   const createHistoryForJobs = async (_message: string): Promise<void> => {
     await createHistoryEntry(
       HistoryType.INFO,
       getHistory(),
       "INITIALISATION",
       { subject: `${_message}` },
-      "Initialise:SetupServices"
+      "Initialise:SetupServerJobs"
     );
   };
 
@@ -34,16 +31,15 @@ const SetupServerJobs = ({
     const needProcessingOtps: boolean = nrOngoingOtps > 0;
 
     if (needProcessingOtps) {
-      await clearRunningJobs(JobModel.SERVER, true).then(async () => {
+      await clearRunningJobs(JobModel.SERVER, false).then(async () => {
         await processOtpsOnServer().then(async () => {
-          setJobsInitialised(true);
           await createHistoryForJobs("OTP JOBS").then(() => {
             proceed(true);
           });
         });
       });
     } else {
-      await cleanDbTables(["jobs"]).then(async () => {
+      await deletRunningJobsOfType(JobModel.SERVER).then(async () => {
         await createHistoryForJobs("OTP JOBS NOT").then(() => {
           proceed(true);
         });

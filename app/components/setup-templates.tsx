@@ -17,6 +17,16 @@ const SetupTemplates = ({
 }) => {
   const { getHistory } = useHistorySettings();
 
+  const createHistoryForTemplates = async (_message: string): Promise<void> => {
+    await createHistoryEntry(
+      HistoryType.INFO,
+      getHistory(),
+      "INITIALISATION",
+      { subject: `${_message}` },
+      "Initialise:SetupTemplates"
+    );
+  };
+
   const uploadTemplatesNeeded = async (): Promise<boolean> => {
     let result: boolean = false;
 
@@ -32,21 +42,17 @@ const SetupTemplates = ({
   };
 
   const setup = async (): Promise<void> => {
+    let message: string = "";
+
     if (await uploadTemplatesNeeded()) {
       await uploadTemplates(process.env.NEXT_PUBLIC_TEMPLATE_FILE, true).then(
-        async () => {
-          await createHistoryEntry(
-            HistoryType.INFO,
-            getHistory(),
-            "INITIALISATION",
-            { subject: "TEMPLATES" },
-            "Initialise:SetupTemplates"
-          );
-        }
+        () => (message = "TEMPLATES")
       );
+    } else {
+      message = "TEMPLATES NOT";
     }
 
-    proceed(true);
+    await createHistoryForTemplates(message).then(() => proceed(true));
   };
 
   useEffect(() => {

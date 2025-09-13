@@ -44,10 +44,8 @@ const Initialisation = () => {
       <SetupServices start={initServices} proceed={setInitCountries} />
       <SetupCountries start={initCountries} proceed={setInitSettings} />
       <SetupSettings start={initSettings} proceed={setProcessSettings} />
-      {/* <ProcessSettings start={processSettings} proceed={setDeleteClientJobs} /> */}
-      <ProcessSettings start={processSettings} proceed={setSetupClientJobs} />
-      {/* <DeleteClientJobs start={deleteClientJobs} proceed={setSetupServerJobs} /> */}
-      {/* <SetupServerJobs start={setupServerJobs} proceed={setSetupClientJobs} /> */}
+      <ProcessSettings start={processSettings} proceed={setSetupServerJobs} />
+      <SetupServerJobs start={setupServerJobs} proceed={setSetupClientJobs} />
       <SetupClientJobs start={setupClientJobs} proceed={setInitIam} />
       <CreateSystemIam start={initIam} proceed={() => {}} />
     </>

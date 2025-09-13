@@ -31,13 +31,15 @@ const SetupClientJobs = ({
   const { getHistory } = useHistorySettings();
   const { setTaskAvailable } = useTask();
 
-  const createHistoryForJobs = async (_message: string): Promise<void> => {
+  const createHistoryForClientJobs = async (
+    _message: string
+  ): Promise<void> => {
     await createHistoryEntry(
       HistoryType.INFO,
       getHistory(),
       "INITIALISATION",
       { subject: `${_message}` },
-      "Initialise:SetupServices"
+      "Initialise:SetupClientJobs"
     );
   };
 
@@ -56,6 +58,7 @@ const SetupClientJobs = ({
   };
 
   const startupJob = async (): Promise<void> => {
+    let message: string = "CLIENT JOBS NOT";
     const job: tJob | null = await findJobByName(TaskPollerJobName);
 
     if (job) {
@@ -79,12 +82,15 @@ const SetupClientJobs = ({
           await runInngestJob(TaskPollerJobName, {
             jobid: job.id,
             delayexpression: delay,
-          }).then(() => incrementJobsChanged());
+          }).then(() => {
+            incrementJobsChanged();
+            message = "CLIENT JOBS";
+          });
         }
       }
     );
 
-    proceed(true);
+    await createHistoryForClientJobs(message).then(() => proceed(true));
   };
 
   const taskListenerFunction = async (data: any): Promise<void> => {

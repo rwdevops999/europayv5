@@ -58,7 +58,7 @@ const CreateSystemIam = ({
       getHistory(),
       "INITIALISATION",
       { subject: `${message}` },
-      "Initialise:SetupServices"
+      "Initialise:SetupSystemIam"
     ).then(() => {
       proceed(true);
     });

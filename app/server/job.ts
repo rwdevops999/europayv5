@@ -157,22 +157,9 @@ export const clearRunningJobs = async (
       result = suspended && true;
     });
   } else {
-    await prisma.job
-      .deleteMany({
-        where: {
-          AND: [
-            {
-              model: _type,
-            },
-            {
-              status: JobStatus.RUNNING,
-            },
-          ],
-        },
-      })
-      .then(() => {
-        result = suspended && true;
-      });
+    await deletRunningJobsOfType(JobModel.SERVER).then(() => {
+      result = suspended && true;
+    });
   }
 
   return result;
@@ -268,4 +255,21 @@ export const suspendInngestJob = async (
       data: _data,
     })
     .catch(() => {});
+};
+
+export const deletRunningJobsOfType = async (
+  _type: JobModel
+): Promise<void> => {
+  await prisma.job.deleteMany({
+    where: {
+      AND: [
+        {
+          model: _type,
+        },
+        {
+          status: JobStatus.RUNNING,
+        },
+      ],
+    },
+  });
 };
