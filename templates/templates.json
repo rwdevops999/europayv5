@@ -179,5 +179,29 @@
     "managed": true,
     "parameters": "{sender, sendercurrency, amount, bank}",
     "asHtml": true
+  },
+  {
+    "role": "NOTIFICATION",
+    "name": "IBAN_INVALID",
+    "description": "IBAN is invalid",
+    "content": "the IBAN ${iban} is invalid",
+    "managed": true,
+    "parameters": "{iban:  #variable}"
+  },
+  {
+    "role": "NOTIFICATION",
+    "name": "DESTINARY_INVALID",
+    "description": "Destination is invalid",
+    "content": "Select a valid client or bank",
+    "managed": true,
+    "parameters": "{}"
+  },
+  {
+    "role": "NOTIFICATION",
+    "name": "AMOUNT_INVALID",
+    "description": "Amount is invalid",
+    "content": "Enter a valid amount (1 digit or more)",
+    "managed": true,
+    "parameters": "{}"
   }
 ]

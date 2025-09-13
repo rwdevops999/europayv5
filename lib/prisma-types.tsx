@@ -214,25 +214,25 @@ export type tAddress = Prisma.AddressGetPayload<WhatToSelectFromAddress>;
 type WhatToSelectFromAccount = {
   include: {
     user: boolean;
-    // sendertransactions: boolean;
-    // receivertransactions: boolean;
-    // bankaccounts: {
-    //   include: {
-    //     account: boolean;
-    //   };
-    // };
+    sendertransactions: boolean;
+    receivertransactions: boolean;
+    bankaccounts: {
+      include: {
+        account: boolean;
+      };
+    };
   };
 };
 export const cWhatToSelectFromAccount: WhatToSelectFromAccount = {
   include: {
     user: true,
-    // sendertransactions: true,
-    // receivertransactions: true,
-    // bankaccounts: {
-    //   include: {
-    //     account: true,
-    //   },
-    // },
+    sendertransactions: true,
+    receivertransactions: true,
+    bankaccounts: {
+      include: {
+        account: true,
+      },
+    },
   },
 };
 export type tAccount = Prisma.AccountGetPayload<WhatToSelectFromAccount>;
@@ -365,6 +365,7 @@ export type tJob = Prisma.JobGetPayload<{}>;
 export type tJobCreate = Prisma.JobUncheckedCreateInput;
 export type tJobUpdate = Prisma.JobUncheckedUpdateInput;
 
+/* == TRANSACTIONS ========== */
 type WhatToSelectFromTransaction = {
   include: {
     receiverAccount: {
@@ -390,9 +391,9 @@ type WhatToSelectFromTransaction = {
               };
             };
             account: {
-              // include: {
-              //   bankaccounts: boolean;
-              // };
+              include: {
+                bankaccounts: boolean;
+              };
             };
           };
         };
@@ -426,9 +427,9 @@ export const cWhatToSelectFromTransaction: WhatToSelectFromTransaction = {
               },
             },
             account: {
-              // include: {
-              //   bankaccounts: true,
-              // },
+              include: {
+                bankaccounts: true,
+              },
             },
           },
         },
@@ -441,3 +442,19 @@ export type tTransaction =
   Prisma.TransactionGetPayload<WhatToSelectFromTransaction>;
 export type tTransactionCreate = Prisma.TransactionUncheckedCreateInput;
 export type tTransactionUpdate = Prisma.TransactionUncheckedUpdateInput;
+
+/* == BANK ACCOUNTS ========== */
+type WhatToSelectFromBankaccount = {
+  include: {
+    account: boolean;
+  };
+};
+
+export const cWhatToSelectFromBankaccount: WhatToSelectFromBankaccount = {
+  include: {
+    account: true,
+  },
+};
+
+export type tBankaccount =
+  Prisma.BankAccountGetPayload<WhatToSelectFromBankaccount>;

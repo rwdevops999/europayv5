@@ -232,8 +232,7 @@ model Account {
   updateDate DateTime @updatedAt
   sendertransactions Transaction[] @relation("Sender")
   receivertransactions Transaction[] @relation("Receiver")
-
-  // bankaccounts BankAccount[]
+  bankaccounts BankAccount[]
 }
 
 enum AccountStatus {
@@ -373,3 +372,17 @@ enum TransactionStatus {
   COMPLETED
 }
 
+model BankAccount {
+  id Int @id @default(autoincrement())
+  IBAN String @unique
+  status IBANStatus
+  createDate DateTime @default(now())
+  updateDate DateTime @updatedAt
+  account Account? @relation(fields: [accountId], references: [id])
+  accountId Int
+}
+
+enum IBANStatus {
+  VALID
+  INVALID
+}

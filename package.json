@@ -20,6 +20,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "html-entities": "^2.6.0",
+    "ibantools": "1.2.0",
     "inngest": "^3.40.1",
     "next": "15.4.4",
     "nodemailer": "^7.0.5",

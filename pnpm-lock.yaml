@@ -35,6 +35,9 @@ importers:
       html-entities:
         specifier: ^2.6.0
         version: 2.6.0
+      ibantools:
+        specifier: 1.2.0
+        version: 1.2.0
       inngest:
         specifier: ^3.40.1
         version: 3.40.1(next@15.4.4(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(typescript@5.8.3)
@@ -2486,6 +2489,9 @@ packages:
   human-signals@2.1.0:
     resolution: {integrity: sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==}
     engines: {node: '>=10.17.0'}
+
+  ibantools@1.2.0:
+    resolution: {integrity: sha512-pF+PLn655NxV5OG8xLyEXHPghV7NpIR5b66FjMTKVc/hB5cUCp9awz66niX2d3cCwt4gPXRgKcn9G6UPtPImhg==}
 
   iconv-lite@0.6.3:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
@@ -6452,6 +6458,8 @@ snapshots:
       - supports-color
 
   human-signals@2.1.0: {}
+
+  ibantools@1.2.0: {}
 
   iconv-lite@0.6.3:
     dependencies:

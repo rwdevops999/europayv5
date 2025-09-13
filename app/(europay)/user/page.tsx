@@ -3,6 +3,8 @@ import PageContent from "@/ui/page-content";
 import PageItemContainer from "@/ui/page-item-container";
 import UserAccount from "./components/user-account";
 import UserTransactionsList from "./components/user-transactions-list";
+import BankAccounts from "./components/bank-accounts";
+import UserPayment from "./components/user-payment";
 
 const UserPage = () => {
   return (
@@ -14,15 +16,15 @@ const UserPage = () => {
     >
       <div
         id="userlayout"
-        className="w-[98vw] h-[84vh] rounded-sm grid flex-1 items-start gap-2 grid-cols-8"
+        className="w-[98vw] h-[84vh] rounded-sm grid flex-1 items-start gap-2 grid-cols-8 border-2 border-purple-500"
       >
         <div className="col-span-2 m-1 group relative flex flex-col overflow-hidden rounded-md shadow transition-all duration-200 ease-in-out hover:z-30 space-y-2">
           <PageItemContainer title="user account" border>
             <UserAccount />
           </PageItemContainer>
-          {/* <PageItemContainer title="payment" border>
+          <PageItemContainer title="payment" border>
             <UserPayment />
-          </PageItemContainer> */}
+          </PageItemContainer>
         </div>
         <div className="col-span-2 m-1 group relative flex flex-col overflow-hidden rounded-md shadow transition-all duration-200 ease-in-out hover:z-30 space-y-2">
           <PageItemContainer title="transactions" border>
@@ -30,9 +32,9 @@ const UserPage = () => {
           </PageItemContainer>
         </div>
         <div className="col-span-2 m-1 group relative flex flex-col overflow-hidden rounded-md shadow transition-all duration-200 ease-in-out hover:z-30 space-y-2">
-          {/* <PageItemContainer title="linked banks" border>
+          <PageItemContainer title="linked banks" border>
             <BankAccounts />
-          </PageItemContainer> */}
+          </PageItemContainer>
         </div>
       </div>
     </PageContent>

@@ -5,6 +5,7 @@ import { decode } from "html-entities";
 import prisma from "@/lib/prisma";
 import {
   cWhatToSelectFromTransaction,
+  tBankaccount,
   tTransaction,
   tUser,
 } from "@/lib/prisma-types";
@@ -50,15 +51,15 @@ const createTheTransaction = async (
 
 const isLinkedBankOfUser = (sender: tUser, _to: string): boolean => {
   let isLinkedBank: boolean = false;
-  // if (sender && sender.account && sender.account.bankaccounts.length > 0) {
-  //   if (
-  //     sender.account.bankaccounts.some(
-  //       (_bankaccount: tBankaccount) => _bankaccount.IBAN === _to
-  //     )
-  //   ) {
-  //     isLinkedBank = true;
-  //   }
-  // }
+  if (sender && sender.account && sender.account.bankaccounts.length > 0) {
+    if (
+      sender.account.bankaccounts.some(
+        (_bankaccount: tBankaccount) => _bankaccount.IBAN === _to
+      )
+    ) {
+      isLinkedBank = true;
+    }
+  }
 
   return isLinkedBank;
 };
@@ -112,8 +113,8 @@ export const executePayment = async (
         email.template = "TRANSACTION_AMOUNT_INSUFFICIENT";
         email.params = { sender: _from, receiver: _to };
       } else {
-        // isBankTransaction = isLinkedBankOfUser(sender, _to);
-        isBankTransaction = false;
+        // [TODO] SUPPOSE WE ENTER A BANK ACCOUNT BUT IT IS WRONG OR INVALID ????
+        isBankTransaction = isLinkedBankOfUser(senderEntity, _to);
         if (isBankTransaction) {
           // CASE B
           status = TransactionStatus.COMPLETED;

@@ -59,6 +59,8 @@ type tLoginNotification = {
   _data?: any;
 };
 
+export type tNoficiation = tLoginNotification;
+
 const generateOTP = (): string => {
   let str = "0123456789";
   let n = str.length;
