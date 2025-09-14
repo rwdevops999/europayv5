@@ -11,33 +11,36 @@ import ProgressBar from "@/ui/progress-bar";
 import { ReactNode } from "react";
 import Initialisation from "./components/initialisation";
 import { TransactionProvider } from "@/hooks/use-transaction";
+import { InitProvider } from "@/hooks/use-init";
 
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
-    <SocketProvider>
-      <TransactionProvider>
-        <JobProvider>
-          <HistorySettingsProvider>
-            <OTPSettingsProvider>
-              <TaskProvider>
-                <MarkdownSettingsProvider>
-                  <UserProvider>
-                    <WifiProvider>
-                      <ToastSettingsProvider>
-                        <ProgressBar>
-                          <Initialisation />
-                          {children}
-                        </ProgressBar>
-                      </ToastSettingsProvider>
-                    </WifiProvider>
-                  </UserProvider>
-                </MarkdownSettingsProvider>
-              </TaskProvider>
-            </OTPSettingsProvider>
-          </HistorySettingsProvider>
-        </JobProvider>
-      </TransactionProvider>
-    </SocketProvider>
+    <InitProvider>
+      <SocketProvider>
+        <TransactionProvider>
+          <JobProvider>
+            <HistorySettingsProvider>
+              <OTPSettingsProvider>
+                <TaskProvider>
+                  <MarkdownSettingsProvider>
+                    <UserProvider>
+                      <WifiProvider>
+                        <ToastSettingsProvider>
+                          <ProgressBar>
+                            <Initialisation />
+                            {children}
+                          </ProgressBar>
+                        </ToastSettingsProvider>
+                      </WifiProvider>
+                    </UserProvider>
+                  </MarkdownSettingsProvider>
+                </TaskProvider>
+              </OTPSettingsProvider>
+            </HistorySettingsProvider>
+          </JobProvider>
+        </TransactionProvider>
+      </SocketProvider>
+    </InitProvider>
   );
 };
 

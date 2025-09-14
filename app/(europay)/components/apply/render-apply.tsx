@@ -15,9 +15,11 @@ import ApplyDialog from "./apply-dialog";
 import { useUser } from "@/hooks/use-user";
 import { $iam_user_has_action } from "@/app/client/iam-access";
 import { TaskStatus } from "@/generated/prisma";
+import { useInit } from "@/hooks/use-init";
 
 const RenderApply = () => {
   const { user } = useUser();
+  const { init } = useInit();
   const { setTaskAvailable } = useTask();
   const { isToastOn, getToastDuration } = useToastSettings();
 
@@ -90,20 +92,22 @@ const RenderApply = () => {
 
   return (
     <div className="w-[100vw] h-[20vw] flex justify-center mt-64">
-      <Button
-        id="applybutton"
-        comp={
-          <KeyboardShortcut
-            label="Apply for an account"
-            combo={{ key: "a", command: true }}
-            callParent={handleButtonClick}
-          />
-        }
-        className="bg-custom"
-        size="large"
-        onClick={handleOpenApplyDialog}
-        disabled={ApplyDisabled}
-      />
+      {init && (
+        <Button
+          id="applybutton"
+          comp={
+            <KeyboardShortcut
+              label="Apply for an account"
+              combo={{ key: "a", command: true }}
+              callParent={handleButtonClick}
+            />
+          }
+          className="bg-custom"
+          size="large"
+          onClick={handleOpenApplyDialog}
+          disabled={ApplyDisabled}
+        />
+      )}
       <ApplyDialog
         open={openApplyDialog}
         closeApplyDialog={closeApplyDialog}

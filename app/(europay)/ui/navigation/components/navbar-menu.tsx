@@ -37,7 +37,8 @@ const NavbarMenu = () => {
       newmenu[1].subItems[0].visible = $iam_user_has_action(
         user,
         "europay:lists",
-        "Show Tasks"
+        "Show Tasks",
+        true
       );
       // Jobs
       newmenu[1].subItems[1].visible = $iam_user_has_action(
@@ -68,41 +69,51 @@ const NavbarMenu = () => {
     }
 
     // Settings
-    newmenu[2].visible = $iam_user_has_action(user, "europay", "View Settings");
+    newmenu[2].visible = $iam_user_has_action(
+      user,
+      "europay",
+      "View Settings",
+      true
+    );
     if (newmenu[2].visible && newmenu[2].subItems) {
       // General
       newmenu[2].subItems[0].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show General"
+        "Show General",
+        true
       );
 
       // Storage
       newmenu[2].subItems[1].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show Storage"
+        "Show Storage",
+        true
       );
 
       // Limits
       newmenu[2].subItems[2].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show Limits"
+        "Show Limits",
+        true
       );
 
       // Export
       newmenu[2].subItems[3].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show Export"
+        "Show Export",
+        true
       );
 
       // Import
       newmenu[2].subItems[4].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show Import"
+        "Show Import",
+        true
       );
     }
 

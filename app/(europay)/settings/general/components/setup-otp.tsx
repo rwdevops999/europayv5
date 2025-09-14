@@ -5,22 +5,23 @@ import { updateSetting } from "@/app/server/settings";
 import { useOTPSettings } from "@/hooks/use-otp-settings";
 import { defaultSetting } from "@/lib/constants";
 import { tSetting } from "@/lib/prisma-types";
+import { json } from "@/lib/util";
 import { JSX, useEffect, useState } from "react";
-import ReactHtmlParser from "react-html-parser";
 import { CgPassword } from "react-icons/cg";
+import { decode } from "html-entities";
 
 const SetupOTP = () => {
   const { getTimings, setTiming, getTimingNotation } = useOTPSettings();
 
   const TimingGroup = ({ group }: { group: tTimingGroup }): JSX.Element => {
+    console.log("[TimingGroup]", json(group), decode(group.notation));
     return (
       <>
         {group.values.map((timing: number) => {
           return (
             <option key={group.group + timing} value={timing + group.char}>
               {timing}
-              {ReactHtmlParser(group.notation)}
-              {/* {group.notation} */}
+              {decode(group.notation)}
             </option>
           );
         })}
@@ -64,17 +65,11 @@ const SetupOTP = () => {
               <div className="flex items-center">
                 <select
                   value={selectedTiming}
-                  // value={selectedTaskFunction?.id.toString()}
                   className="select select-sm w-12/12"
                   onChange={(e) => handleTiming(e.target.value)}
                 >
-                  {/* <option disabled>Select a timeout</option> */}
                   {getTimings().map((timinggroup: tTimingGroup) => {
                     return (
-                      // <>
-                      //   <option key={timinggroup.group} disabled>
-                      //     {timinggroup.group}
-                      //   </option>
                       <TimingGroup
                         key={timinggroup.group}
                         group={timinggroup}

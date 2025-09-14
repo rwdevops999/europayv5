@@ -10,7 +10,7 @@ export const timings: tTimingGroup[] = [
   {
     group: "seconds",
     char: '"',
-    notation: "&#0022;",
+    notation: "&#8243;",
     accumulator: 1000,
     values: [5, 10, 30, 45],
   },

@@ -21,7 +21,7 @@ const StorageSettingsPage = () => {
           <SetupDatabase />
         </PageItemContainer>
 
-        <PageItemContainer title="selective" border>
+        <PageItemContainer title="tables" border>
           <SetupSelective />
         </PageItemContainer>
       </div>

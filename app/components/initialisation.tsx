@@ -13,6 +13,7 @@ import SetupClientJobs from "./setup-client-jobs";
 import ProcessSettings from "../(europay)/components/initialise/process-settings";
 import EnableCursor from "./enable-cursor";
 import CreateSystemIam from "./create-system-iam";
+import ShowCursor from "../(europay)/components/initialise/show-cursor";
 
 const Initialisation = () => {
   const createStartupHistoryEntry = async (): Promise<void> => {
@@ -33,10 +34,10 @@ const Initialisation = () => {
   const [initCountries, setInitCountries] = useState<boolean>(false);
   const [initSettings, setInitSettings] = useState<boolean>(false);
   const [processSettings, setProcessSettings] = useState<boolean>(false);
-  const [deleteClientJobs, setDeleteClientJobs] = useState<boolean>(false);
   const [setupServerJobs, setSetupServerJobs] = useState<boolean>(false);
   const [setupClientJobs, setSetupClientJobs] = useState<boolean>(false);
   const [initIam, setInitIam] = useState<boolean>(false);
+  const [showCursor, setShowCursor] = useState<boolean>(false);
 
   return (
     <>
@@ -47,7 +48,8 @@ const Initialisation = () => {
       <ProcessSettings start={processSettings} proceed={setSetupServerJobs} />
       <SetupServerJobs start={setupServerJobs} proceed={setSetupClientJobs} />
       <SetupClientJobs start={setupClientJobs} proceed={setInitIam} />
-      <CreateSystemIam start={initIam} proceed={() => {}} />
+      <CreateSystemIam start={initIam} proceed={setShowCursor} />
+      <ShowCursor start={showCursor} />
     </>
   );
 };

@@ -1,6 +1,6 @@
 export const AllowedSystemServiceStatements: Record<string, any> = {
   DeleteManagedGroup: {
-    description: "Delete managed groups",
+    description: "IAM delete managed group",
     service: "europay:iam:groups",
     actions: ["Delete Managed"],
   },

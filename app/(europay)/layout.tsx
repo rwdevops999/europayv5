@@ -1,10 +1,7 @@
-// import { ToastContainer } from "react-toastify";
-// import Footer from "./components/footer/footer";
-// import Navbar from "./components/navbar/navbar";
-
 import { ToastContainer } from "react-toastify";
 import Navbar from "./ui/navigation/navbar";
 import Footer from "./ui/navigation/components/footer/footer";
+import HideCursor from "./components/initialise/hide-cursor";
 
 interface EuropayLayoutProps {
   children: React.ReactNode;

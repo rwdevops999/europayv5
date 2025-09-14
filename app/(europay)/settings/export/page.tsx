@@ -16,6 +16,7 @@ import PageContent from "@/ui/page-content";
 import PageTitle from "@/ui/page-title";
 import { ScrollArea, ScrollBar } from "@/ui/radix/scroll-area";
 import { Separator } from "@/ui/radix/separator";
+import { ScrollAreaThumb } from "@radix-ui/react-scroll-area";
 import clsx from "clsx";
 import { JSX, useEffect, useRef, useState } from "react";
 import { BiSolidFileExport } from "react-icons/bi";
@@ -99,6 +100,7 @@ const Export = () => {
             </div>
           </div>
         </div>
+
         <div className="h-[80vh]">
           <div className="mt-3">
             <ScrollArea className="overflow-auto col-span-6 h-[640px] w-[100%] bg-base-content/30 border border-base-content/30">
@@ -108,7 +110,9 @@ const Export = () => {
                   {t}
                 </div>
               ))}
-              <ScrollBar className="bg-foreground/30" />
+              <ScrollBar className="bg-foreground/30">
+                <ScrollAreaThumb className="bg-red-500" />
+              </ScrollBar>
               {/* <ScrollBar orientation="horizontal" className="bg-foreground/30" /> */}
             </ScrollArea>
           </div>

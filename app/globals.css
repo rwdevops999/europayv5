@@ -3,6 +3,10 @@
   themes: light --default, dark --prefersdark;
 }
 
+body.waiting * {
+  cursor: progress;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

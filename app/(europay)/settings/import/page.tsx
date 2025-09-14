@@ -17,18 +17,11 @@ const Import = () => {
         className="w-[99vw] h-[84vh] rounded-sm grid items-start grid-cols-4 gap-x-2"
       >
         <div className="group relative flex flex-col overflow-hidden rounded-md shadow transition-all duration-200 ease-in-out hover:z-30 space-y-2">
-          {/* <PageItemContainer title="countries" border>
-            <ImportCountries />
-          </PageItemContainer>
-          <PageItemContainer title="templates">
-            <ImportTemplates />
-          </PageItemContainer> */}
-        </div>
-        <div className="group relative flex flex-col overflow-hidden rounded-md shadow transition-all duration-200 ease-in-out hover:z-30 space-y-2">
-          <PageItemContainer title="IAM" border>
+          <PageItemContainer title="import IAM" border>
             <ImportIam />
           </PageItemContainer>
         </div>
+        <div className="group relative flex flex-col overflow-hidden rounded-md shadow transition-all duration-200 ease-in-out hover:z-30 space-y-2"></div>
       </div>
     </PageContent>
   );

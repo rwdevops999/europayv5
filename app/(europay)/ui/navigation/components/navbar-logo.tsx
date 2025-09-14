@@ -1,12 +1,13 @@
 "use client";
 
 import { $iam_user_has_action } from "@/app/client/iam-access";
+import { useInit } from "@/hooks/use-init";
 import { useProgressBar } from "@/hooks/use-progress-bar";
 import { useUser } from "@/hooks/use-user";
 import { absoluteUrl } from "@/lib/util";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { startTransition } from "react";
+import React, { startTransition, useEffect } from "react";
 
 const logofile: string = "/images/Europay.png";
 

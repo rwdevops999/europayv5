@@ -7,84 +7,79 @@ export type dbResult = {
 export const servicesandactions: Record<string, string[]> = {
   europay: [
     "Goto Home",
-    "View Dashboard",
-    "View Lists",
-    "View Settings",
-    "View IAM",
-    "View Manual",
+    "Dashboard Menu",
+    "Lists Menu",
+    "Settings Menu",
+    "IAM Menu",
+    "Manual Menu",
     "Access Auth",
-    "View Social Media",
-    "View User",
-    "View Admin",
+    "Social Media",
+    "User Menu",
+    "Admin Menu",
     "Apply",
   ],
 
-  "europay:dashboard": [
-    "Show Environment",
-    "Show Version",
-    "Show Wifi",
-    "Show Country",
-  ],
+  "europay:dashboard": ["Environment", "Version", "Wifi", "Country"],
   "europay:dashboard:country": ["Change"],
 
-  "europay:lists": ["Show Tasks", "Show Jobs", "Show History"],
+  "europay:lists": [
+    "Tasks Submenu",
+    "Jobs Submenu",
+    "History Submenu",
+    "Transactions Submenu",
+    "Export Submenu",
+  ],
 
   "europay:lists:tasks": ["Handle"],
   "europay:lists:jobs": ["Suspend", "Restart", "Remove"],
 
   "europay:settings": [
-    "Show General",
-    "Show Storage",
-    "Show Limits",
-    "Show Export",
-    "Show Import",
+    "General Submenu",
+    "Storage Submenu",
+    "Limits Submenu",
+    "Export Submenu",
+    "Import Submenu",
   ],
-  "europay:settings:general": [
-    "View Toast",
-    "View History",
-    "View OTP",
-    "View Markdown",
-  ],
-  "europay:settings:general:toast": ["Change"],
-  "europay:settings:general:history": ["Change"],
-  "europay:settings:general:otp": ["Change"],
-  "europay:settings:general:markdown": ["Change"],
+  "europay:settings:general": ["View OTP"],
 
-  "europay:settings:storage": ["View Database", "View Selective"],
+  "europay:settings:general:otp": ["Change"],
+
+  "europay:settings:storage": ["Database Section", "Tables Section"],
   "europay:settings:storage:database": [
-    "Clear Full",
+    "Clear Database",
     "Provision Countries",
-    "Clear Work",
+    "Clear Workdata",
     "Load Services",
     "Load Countries",
   ],
-  "europay:settings:storage:selective": ["Select", "Clear"],
+  "europay:settings:storage:tables": ["Select Tables", "Clear Tables"],
 
-  "europay:settings:limits": ["Show Job Limits"],
-  "europay:settings:limits:jobs": ["Task", "Transaction"],
+  "europay:settings:limits": ["Job Limits Section"],
+
+  "europay:settings:limits:jobs": ["Task Limit", "Transaction Limit"],
 
   "europay:settings:export": [
     "Export To View",
     "Export To DB",
     "Copy To Clipboard",
   ],
-  "europay:settings:import": ["Show IAM"],
+  "europay:settings:import": ["Import IAM Section"],
 
   "europay:settings:import:iam": ["Import"],
 
-  "europay:manual": ["Show Chapters"],
+  "europay:manual": ["View Chapters"],
 
-  "europay:authorisation": ["Login", "Logout", "Settings"],
+  "europay:authorisation": ["Login", "Logout", "User Settings"],
 
   "europay:socialmedia": ["Execute"],
 
   "europay:iam": [
-    "Show Services",
-    "Handle Statements",
-    "Handle Policies",
-    "Handle Roles",
-    "Handle Users",
-    "Handle Groups",
+    "Services",
+    "Statements",
+    "Policies",
+    "Roles",
+    "Users",
+    "Groups",
   ],
 
   "europay:iam:statements": ["Delete Managed"],
