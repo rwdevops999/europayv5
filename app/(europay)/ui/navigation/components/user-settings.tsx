@@ -36,17 +36,14 @@ const UserSettings = () => {
     <>
       <div>
         {settingsAllowed && (
-          <div className="-ml-4 flex items-center">
-            <Button
-              name="Settings"
-              size="small"
-              className="bg-transparent hover:border-none hover:shadow-none"
-              icon={<GiSettingsKnobs className="text-white" size={16} />}
-              iconFirst
-              onClick={() =>
-                redirect(absoluteUrl("/usersettings") + `?id=${random}`)
-              }
-            />
+          <div
+            className="cursor-pointer flex space-x-2 items-center"
+            onClick={() => {
+              redirect(absoluteUrl("/usersettings") + `?id=${random}`);
+            }}
+          >
+            <GiSettingsKnobs className="text-white" size={16} />
+            <label className="cursor-pointer">Settings</label>
           </div>
         )}
       </div>

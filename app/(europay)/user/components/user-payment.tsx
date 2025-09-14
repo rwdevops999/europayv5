@@ -14,6 +14,8 @@ import CreditcardIcon from "@/ui/icons/creditcard-icon";
 import NotificationDialog from "@/ui/notification-dialog";
 import { executePayment } from "@/app/server/transaction";
 import { loadBankAccountById } from "@/app/server/bankaccounts";
+import { useTransaction } from "@/hooks/use-transaction";
+import clsx from "clsx";
 
 type tNotificationButton = {
   leftButton?: string;
@@ -37,7 +39,9 @@ enum Pages {
 
 const UserPayment = () => {
   const { user } = useUser();
-  const currentPage = useRef<string>(Pages.EUROPAY);
+  const { transactions, setTransactions } = useTransaction();
+
+  const [currentPage, setCurrentPage] = useState<string>(Pages.EUROPAY);
 
   const [users, setUsers] = useState<tUser[]>([]);
   const [sendInfo, setSendInfo] = useState<boolean>(false);
@@ -49,7 +53,9 @@ const UserPayment = () => {
   const showPaymentRejectedNotification = (
     _message: string,
     _expected: string
-  ): void => {
+  ): boolean => {
+    let hasError: boolean = false;
+
     if (_message !== _expected) {
       let notification: tNotification = {
         _open: true,
@@ -59,7 +65,10 @@ const UserPayment = () => {
       };
 
       setNotification(notification);
+      hasError = true;
     }
+
+    return hasError;
   };
 
   const showInvalidDestinaryNotification = (): void => {
@@ -97,6 +106,7 @@ const UserPayment = () => {
 
   const handleCancelClick = (): void => {
     closeNotificationDialog();
+    setTransactions(transactions + 1);
   };
 
   const loadAllUsers = async (): Promise<void> => {
@@ -119,12 +129,14 @@ const UserPayment = () => {
   }, []);
 
   const handleEuropayPage = (): void => {
-    currentPage.current = Pages.EUROPAY;
+    // currentPage.current = Pages.EUROPAY;
+    setCurrentPage(Pages.EUROPAY);
     location.href = `#${Pages.EUROPAY}`;
   };
 
   const handleBankPage = (): void => {
-    currentPage.current = Pages.BANK;
+    // currentPage.current = Pages.BANK;
+    setCurrentPage(Pages.BANK);
     location.href = `#${Pages.BANK}`;
   };
 
@@ -147,10 +159,14 @@ const UserPayment = () => {
               message.current
             );
 
-            showPaymentRejectedNotification(
+            const hasError: boolean = showPaymentRejectedNotification(
               _message,
               "Client transaction done"
             );
+
+            if (!hasError) {
+              setTransactions(transactions + 1);
+            }
           }
         }
       );
@@ -167,7 +183,14 @@ const UserPayment = () => {
               message.current
             );
 
-            showPaymentRejectedNotification(_message, "Bank transaction done");
+            const hasError: boolean = showPaymentRejectedNotification(
+              _message,
+              "Bank transaction done"
+            );
+
+            if (!hasError) {
+              setTransactions(transactions + 1);
+            }
           }
         }
       );
@@ -213,14 +236,30 @@ const UserPayment = () => {
       <div className="flex w-full justify-center gap-2 py-2 space-x-5">
         <button
           type="button"
-          className="flex items-center space-x-2"
+          className={clsx(
+            "flex items-center space-x-2",
+            {
+              "border-1 border-gray-500": currentPage === Pages.EUROPAY,
+            },
+            {
+              "border-none": currentPage !== Pages.EUROPAY,
+            }
+          )}
           onClick={handleEuropayPage}
         >
           <EuropayIcon />
         </button>
         <button
           type="button"
-          className="flex items-center space-x-2"
+          className={clsx(
+            "flex items-center space-x-2",
+            {
+              "border-1 border-gray-500": currentPage === Pages.BANK,
+            },
+            {
+              "border-none": currentPage !== Pages.BANK,
+            }
+          )}
           onClick={handleBankPage}
         >
           <BankIcon />

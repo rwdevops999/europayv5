@@ -1,7 +1,8 @@
 "use client";
 
 import { loadUserByEmail, loadUserByUsernameOrEmail } from "@/app/server/users";
-import { tTransaction, tUser } from "@/lib/prisma-types";
+import { TransactionStatus } from "@/generated/prisma";
+import { tBankaccount, tTransaction, tUser } from "@/lib/prisma-types";
 import { json, renderDateInfo } from "@/lib/util";
 import ProgressLink from "@/ui/progress-link";
 import clsx from "clsx";
@@ -20,6 +21,7 @@ type TransactionInfo = {
   amount: string;
   symbol: string;
   currency: string;
+  status: TransactionStatus;
 };
 
 const TransactionItem = ({
@@ -37,12 +39,15 @@ const TransactionItem = ({
     amount: new Number(0).toFixed(2),
     symbol: "",
     currency: "",
+    status: TransactionStatus.COMPLETED,
   });
 
   const setupTransactionInfo = async (
     _transaction: tTransaction,
     _user: tUser | null
   ): Promise<void> => {
+    console.log("[setupTransactionInfo]", json(_transaction));
+
     if (user) {
       let inbound: boolean = false;
       let transactionAmount: string = new Number(0).toFixed(2);
@@ -51,41 +56,48 @@ const TransactionItem = ({
       let currencyCode: string = user.address?.country?.currencycode!;
 
       let party: string = "";
-
-      // if (
-      //   user.account?.bankaccounts.some(
-      //     (_bankaccount: tBankaccount) =>
-      //       _bankaccount.IBAN === transaction.receiver
-      //   )
-      // ) {
-      //   party = transaction.receiver!;
-      //   transactionAmount = transaction.receiverAmount.toFixed(2);
-      // } else {
+      const status = _transaction.status;
 
       if (
-        user.email === transaction.receiver ||
-        user.username === transaction.receiver
+        user.account?.bankaccounts.some(
+          (_bankaccount: tBankaccount) =>
+            _bankaccount.IBAN === transaction.receiver
+        )
       ) {
-        inbound = true;
-        transactionAmount = transaction.receiverAmount?.toFixed(2)!;
-        const counterParty: tUser | null = await loadUserByUsernameOrEmail(
-          transaction.sender!
+        console.log(
+          "[setupTransactionInfo]",
+          "IS BANK TRANSACTION",
+          transaction.receiverAmount
         );
-        if (counterParty) {
-          party = `${counterParty.firstname} ${counterParty.lastname}`;
-        }
+        party = transaction.receiver!;
+        transactionAmount = transaction.receiverAmount
+          ? transaction.receiverAmount.toFixed(2)
+          : "0.00";
       } else {
-        inbound = false;
-        transactionAmount = transaction.senderAmount.toFixed(2);
-        const counterParty: tUser | null = await loadUserByUsernameOrEmail(
-          transaction.receiver!
-        );
+        if (
+          user.email === transaction.receiver ||
+          user.username === transaction.receiver
+        ) {
+          inbound = true;
+          transactionAmount = transaction.receiverAmount?.toFixed(2)!;
+          const counterParty: tUser | null = await loadUserByUsernameOrEmail(
+            transaction.sender!
+          );
+          if (counterParty) {
+            party = `${counterParty.firstname} ${counterParty.lastname}`;
+          }
+        } else {
+          inbound = false;
+          transactionAmount = transaction.senderAmount.toFixed(2);
+          const counterParty: tUser | null = await loadUserByUsernameOrEmail(
+            transaction.receiver!
+          );
 
-        if (counterParty) {
-          party = `${counterParty.firstname} ${counterParty.lastname}`;
+          if (counterParty) {
+            party = `${counterParty.firstname} ${counterParty.lastname}`;
+          }
         }
       }
-      // }
 
       const transactionInfo: TransactionInfo = {
         transactionId: _transaction.transactionid,
@@ -95,6 +107,7 @@ const TransactionItem = ({
         amount: transactionAmount,
         symbol: currencySymbol,
         currency: currencyCode,
+        status: status,
       };
 
       setInfo(transactionInfo);
@@ -191,8 +204,9 @@ const TransactionItem = ({
     <div
       className={clsx(
         "mt-1 p-1 border-1 width-[50%]",
-        { "border-success": info.inbound },
-        { "border-error": !info.inbound }
+        { "border-success": info.status === TransactionStatus.COMPLETED },
+        { "border-error": info.status === TransactionStatus.REJECTED },
+        { "border-orange-500": info.status === TransactionStatus.PENDING }
       )}
     >
       <RenderTransactionInfo />

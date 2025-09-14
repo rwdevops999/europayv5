@@ -302,6 +302,7 @@ export const defineSystemUsers = async (): Promise<void> => {
       email: userInfo.email,
       password: userInfo.password ?? "",
       passwordless: userInfo.passwordless,
+      avatar: userInfo.avatar ?? "john.doe.png",
       managed: true,
       system: true,
       type: UserType[

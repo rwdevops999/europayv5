@@ -2,7 +2,7 @@
 
 import { IBANStatus } from "@/generated/prisma";
 import { useUser } from "@/hooks/use-user";
-import { tBankaccount } from "@/lib/prisma-types";
+import { tBankaccount, tUser } from "@/lib/prisma-types";
 import { ScrollBar } from "@/ui/radix/scroll-area";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import clsx from "clsx";
@@ -23,6 +23,7 @@ import NotificationDialog from "@/ui/notification-dialog";
 import { useRouter } from "next/navigation";
 import { absoluteUrl } from "@/lib/util";
 import { useProgressBar } from "@/hooks/use-progress-bar";
+import { loadUserById } from "@/app/server/users";
 
 type tNotificationButton = {
   leftButton?: string;
@@ -102,7 +103,7 @@ const BankAccountList = ({
 };
 
 const BankAccounts = () => {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
 
   const [notification, setNotification] = useState<tNotification | undefined>(
     undefined
@@ -173,7 +174,21 @@ const BankAccounts = () => {
           showInvalidIBANNotification(iban);
         } else {
           if (user && user.account) {
-            await linkBankAccount(iban, user.account.id, status);
+            const bankaccountIsLinked: boolean = user.account.bankaccounts.some(
+              (bankaccount: tBankaccount) => bankaccount.IBAN === iban
+            );
+
+            if (!bankaccountIsLinked) {
+              await linkBankAccount(iban, user.account.id, status).then(
+                async () => {
+                  const reloadedUser: tUser | null = await loadUserById(
+                    user.id
+                  );
+                  setUser(reloadedUser);
+                }
+              );
+            }
+
             clearIBANInput();
             setRefresh((x: number) => x + 1);
           }

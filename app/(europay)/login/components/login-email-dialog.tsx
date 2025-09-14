@@ -100,6 +100,9 @@ const LoginEmailForm = ({
         <p className="m-0 text-[1.25rem] font-bold text-[#212121]">
           Login to your Account
         </p>
+        <p className="m-0 text-[1.25rem] font-bold text-[#212121]">
+          (use your username or email)
+        </p>
         <span className="max-w-[80%] text-center text-xs text-[#8B8E89]">
           Get started with Europay, just apply for an account and enjoy the
           experience.
@@ -108,7 +111,6 @@ const LoginEmailForm = ({
       <br />
       <div className="w-[100%] h-fit relative flex flex-col gap-1.25">
         <label className="ml-5 input w-11/12">
-          <MdAlternateEmail size={16} />
           <input
             id="email"
             data-prevent-modal-close-on-escape="true"

@@ -70,6 +70,8 @@ export const executePayment = async (
   _amount: number,
   _message?: string
 ): Promise<string> => {
+  console.log("EXECUTE PAYMENT", _from, _to);
+
   let paymentOutcome: string = "";
 
   const transactionID: string = generateUUID();
@@ -98,6 +100,7 @@ export const executePayment = async (
   const senderEntity: tUser | null = await loadUserByUsernameOrEmail(_from);
   if (senderEntity) {
     sender = senderEntity.email;
+    isBankTransaction = isLinkedBankOfUser(senderEntity, _to);
     if (senderEntity.account) {
       senderAccountId = senderEntity.account.id;
       senderAccountAmount = senderEntity.account.amount;
@@ -114,7 +117,7 @@ export const executePayment = async (
         email.params = { sender: _from, receiver: _to };
       } else {
         // [TODO] SUPPOSE WE ENTER A BANK ACCOUNT BUT IT IS WRONG OR INVALID ????
-        isBankTransaction = isLinkedBankOfUser(senderEntity, _to);
+        // isBankTransaction = isLinkedBankOfUser(senderEntity, _to);
         if (isBankTransaction) {
           // CASE B
           status = TransactionStatus.COMPLETED;

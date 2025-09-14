@@ -64,15 +64,12 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
     },
   });
 
-  const loadTheTransactions = async (_transactionId: number): Promise<void> => {
+  const loadTheTransaction = async (_transactionId: number): Promise<void> => {
     const transaction: tTransaction | null = await loadTransactionById(
       _transactionId
     );
 
     if (transaction) {
-      let treceiver: tUser | null = transaction.receiverAccount
-        ?.user as tUser | null;
-
       const isBank: boolean = transaction.isBankTransaction;
       isBankTransfer.current = isBank;
 
@@ -131,6 +128,8 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
       };
 
       const getBankInfo = (transaction: tTransaction): BankInfo | undefined => {
+        console.log("[getBankInfo]", json(transaction));
+
         let bankInfo: BankInfo | undefined = undefined;
 
         let tsender: tUser = transaction.senderAccount?.user as tUser;
@@ -138,7 +137,9 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
         if (transaction.isBankTransaction) {
           bankInfo = {
             IBAN: transaction.receiver!,
-            amount: transaction.senderAmount.toString(),
+            amount: transaction.receiverAmount
+              ? transaction.receiverAmount.toFixed(2)
+              : "0.00",
             bankavatar: "bank.png",
             currencysymbol: decode(tsender.address?.country?.symbol),
             currencycode: tsender.address?.country?.currencycode ?? "",
@@ -159,12 +160,14 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
         bank: getBankInfo(transaction),
       };
 
+      console.log("[TR INFO]", json(trInfo));
+
       setTransactionInfo(trInfo);
     }
   };
 
   useEffect(() => {
-    loadTheTransactions(transactionId);
+    loadTheTransaction(transactionId);
   }, [transactionId]);
 
   const TransactionHeader = () => {
@@ -273,7 +276,7 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
           <div className="flex space-x-2 text-sm">
             <div>{transactionInfo?.sender?.amount}</div>
             <div>{transactionInfo?.sender?.currencysymbol}</div>
-            <div>{transactionInfo?.sender?.currencycode}.</div>
+            <div>({transactionInfo?.sender?.currencycode})</div>
           </div>
         </div>
         <div className="space-x-2">
@@ -282,14 +285,14 @@ const TransactionForm = ({ transactionId = 0 }: { transactionId?: number }) => {
             <div className="flex space-x-2 text-sm">
               <div>{transactionInfo.receiver?.amount}</div>
               <div>{transactionInfo.receiver?.currencysymbol}</div>
-              <div>{transactionInfo.receiver?.currencycode}</div>
+              <div>({transactionInfo.receiver?.currencycode})</div>
             </div>
           )}
           {transactionInfo.bank && (
             <div className="flex space-x-2 text-sm">
               <div>{transactionInfo.bank?.amount}</div>
               <div>{transactionInfo.bank?.currencysymbol}</div>
-              <div>{transactionInfo.bank?.currencycode}</div>
+              <div>({transactionInfo.bank?.currencycode})</div>
             </div>
           )}
         </div>

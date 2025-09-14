@@ -90,29 +90,21 @@ const UserAuth = () => {
       {visible && (
         <div>
           {isLoggedIn() && (
-            <div className="-ml-4 flex items-center">
-              <Button
-                name="Log Out"
-                size="small"
-                className="bg-transparent hover:border-none hover:shadow-none"
-                icon={<RiLogoutBoxLine className="text-red-500" size={16} />}
-                iconFirst
-                onClick={doLogout}
-                disabled={!mayLogout}
-              />
+            <div
+              className="cursor-pointer flex space-x-2 items-center"
+              onClick={doLogout}
+            >
+              <RiLogoutBoxLine className="text-red-500" size={16} />
+              <label className="cursor-pointer">Log Out</label>
             </div>
           )}
           {!isLoggedIn() && (
-            <div className="-ml-4 flex items-center">
-              <Button
-                name="Log In"
-                size="small"
-                className="bg-transparent hover:border-none hover:shadow-none"
-                icon={<RiLoginBoxLine className="text-red-500" size={16} />}
-                iconFirst
-                onClick={() => redirect(absoluteUrl("/login"))}
-                disabled={!mayLogin}
-              />
+            <div
+              className="cursor-pointer flex space-x-2 items-center"
+              onClick={() => redirect(absoluteUrl("/login"))}
+            >
+              <RiLogoutBoxLine className="text-red-500" size={16} />
+              <label className="cursor-pointer">Log In</label>
             </div>
           )}
         </div>

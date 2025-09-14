@@ -543,6 +543,7 @@ export const SystemUsers: Record<string, any> = {
     email: "rudi.welter@gmail.com",
     password: "27X11x49@",
     passwordless: false,
+    avatar: "rudi.welter.jpg",
     type: "EUROPAY",
     country: "Belgium",
     addAccount: true,
@@ -550,7 +551,7 @@ export const SystemUsers: Record<string, any> = {
   test: {
     lastname: "Test",
     firstname: "test",
-    email: "rudi.welter@gmail.com",
+    email: "steve.counaert@gmail.com",
     passwordless: true,
     type: "GUEST",
     country: "Belgium",
