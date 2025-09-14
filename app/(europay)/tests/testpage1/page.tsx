@@ -4,6 +4,7 @@ import TestOTPJobs from "./tests/testOTPJobs";
 import CharsSplit from "./tests/chars-split";
 import OtpJobHandling from "./tests/otp-job-handling";
 import PaymentTest from "./tests/payment-test";
+import TestSystemUser from "./tests/test-system-user";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +23,8 @@ const TestPage1 = () => {
       {/* <TestOTPJobs /> */}
       {/* <CreateOtp /> */}
       {/* <OtpJobHandling /> */}
-      <PaymentTest />
+      {/* <PaymentTest /> */}
+      <TestSystemUser />
     </PageContent>
   );
 };

@@ -119,7 +119,7 @@ export const executePayment = async (
           // CASE B
           status = TransactionStatus.COMPLETED;
           statusmessage = "Bank transaction is OK";
-          paymentOutcome = "Payment COMPLETED: Bank transaction done";
+          paymentOutcome = "Bank transaction done";
           createTransaction = true;
 
           const currencySender: string =
@@ -147,7 +147,7 @@ export const executePayment = async (
 
               status = TransactionStatus.COMPLETED;
               statusmessage = "Client transaction is OK";
-              paymentOutcome = "Payment COMPLETED: Client transaction done";
+              paymentOutcome = "Client transaction done";
               receiverAccountId = receiverEntity.account.id;
               receiverAccountAmount = receiverEntity.account.amount;
 

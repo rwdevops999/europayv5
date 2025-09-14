@@ -526,22 +526,33 @@ export const SystemRoles: Record<string, any> = {
 
 // the string in the record will be used for username
 export const SystemUsers: Record<string, any> = {
-  BBB1: {
-    lastname: "Bbb1",
-    firstname: "bbb1",
+  rwdevops999: {
+    lastname: "DevOps",
+    firstname: "Rudi",
     email: "rwdevops999@gmail.com",
     password: "27X11x49@",
     passwordless: false,
     type: "EUROPAY",
     country: "Belgium",
+    addAccount: true,
+    accountAmount: 5000,
   },
-  AAA1: {
-    lastname: "Aaa1",
-    firstname: "aaa1",
+  rwelter: {
+    lastname: "Welter",
+    firstname: "Rudi",
     email: "rudi.welter@gmail.com",
     password: "27X11x49@",
     passwordless: false,
     type: "EUROPAY",
+    country: "Belgium",
+    addAccount: true,
+  },
+  test: {
+    lastname: "Test",
+    firstname: "test",
+    email: "rudi.welter@gmail.com",
+    passwordless: true,
+    type: "GUEST",
     country: "Belgium",
   },
 };
@@ -551,16 +562,16 @@ export const SystemGroups: Record<string, any> = {
     decription: "Clients",
     roles: ["ClientRole"],
     users: [
-      { lastname: "Bbb1", firstname: "bbb1" },
-      { lastname: "Aaa1", firstname: "aaa1" },
+      { lastname: "Welter", firstname: "Rudi" },
+      { lastname: "DevOps", firstname: "Rudi" },
     ],
   },
   DEFAULT: {
     decription: "Default",
     roles: ["DefaultRole"],
     users: [
-      { lastname: "Bbb1", firstname: "bbb1" },
-      { lastname: "Aaa1", firstname: "aaa1" },
+      { lastname: "Welter", firstname: "Rudi" },
+      { lastname: "DevOps", firstname: "Rudi" },
     ],
   },
   ADMINS: {
@@ -572,9 +583,6 @@ export const SystemGroups: Record<string, any> = {
       "AdminRole",
       "IamAdminRole",
     ],
-    users: [
-      { lastname: "Bbb1", firstname: "bbb1" },
-      { lastname: "Aaa1", firstname: "aaa1" },
-    ],
+    users: [{ lastname: "Welter", firstname: "Rudi" }],
   },
 };

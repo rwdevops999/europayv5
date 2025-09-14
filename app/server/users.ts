@@ -80,8 +80,12 @@ export const createUser = async (
       data: _user,
       ...cWhatToSelectFromUser,
     })
-    .then((value: tUser) => (result = value))
+    .then((value: tUser) => {
+      console.log("[createUser] : RESULT", value.id);
+      result = value;
+    })
     .catch((error: any) => {
+      console.log("[createUser] : error", json(error));
       result = error.code;
     });
 
@@ -263,7 +267,7 @@ export const loadUserByUsernameOrEmail = async (
       ...cWhatToSelectFromUser,
     })
     .then(async (value: tUser | null) => {
-      if (value) {
+      if (value && !value.passwordless) {
         value.password = await decrypt(value.password);
       }
       result = value;
@@ -278,14 +282,25 @@ export const defineSystemUsers = async (): Promise<void> => {
   const userNames: string[] = Object.keys(SystemUsers);
 
   for (let userName of userNames) {
+    console.log("CREATE USER", userName);
     const userInfo: any = SystemUsers[userName];
+
+    let accountcreation: any = {};
+    if (userInfo.addAccount) {
+      accountcreation = {
+        create: {
+          amount: userInfo.accountAmount ?? 0,
+          status: AccountStatus.OPEN,
+        },
+      };
+    }
 
     const create: tUserCreate = {
       username: userName,
       lastname: userInfo.lastname,
       firstname: userInfo.firstname,
       email: userInfo.email,
-      password: userInfo.password,
+      password: userInfo.password ?? "",
       passwordless: userInfo.passwordless,
       managed: true,
       system: true,
@@ -301,15 +316,14 @@ export const defineSystemUsers = async (): Promise<void> => {
           },
         },
       },
-      account: {
-        create: {
-          amount: 0,
-          status: AccountStatus.OPEN,
-        },
-      },
+      account: accountcreation,
     };
 
-    await createUser(create);
+    console.log("CREATE INFO", json(create));
+
+    await createUser(create)
+      .then(() => console.log("USER CREATED", userName))
+      .catch((reason: any) => console.log("USER NOT CREATED", json(reason)));
   }
 };
 

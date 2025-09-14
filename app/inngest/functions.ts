@@ -12,7 +12,7 @@ import { absoluteUrl } from "@/lib/util";
 import { taskKey, TaskPollerJobName, transactionKey } from "@/lib/constants";
 import { setOtpStatus } from "../server/otp";
 import { countNonCompletedTasks } from "../server/tasks";
-import { countTransactions } from "../server/transaction";
+import { getNrOfTransactions } from "../server/transaction";
 
 const createOTPJob = inngest.createFunction(
   {
@@ -130,7 +130,7 @@ const transactionPoller = inngest.createFunction(
     await step.sleep("delay-job", delayexpression);
 
     await step.run("complete-job", async () => {
-      const transactions: number = await countTransactions(userid);
+      const transactions: number = await getNrOfTransactions(userid);
 
       await changeJobStatus(jobid, JobStatus.COMPLETED).then(async () => {
         await fetch(

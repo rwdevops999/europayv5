@@ -203,5 +203,13 @@
     "content": "Enter a valid amount (1 digit or more)",
     "managed": true,
     "parameters": "{}"
+  },
+  {
+    "role": "NOTIFICATION",
+    "name": "PAYMENT_MESSAGE",
+    "description": "Payment is REJECTED",
+    "content": "${message}",
+    "managed": true,
+    "parameters": "{message: #variable}"
   }
 ]

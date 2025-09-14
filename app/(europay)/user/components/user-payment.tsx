@@ -46,6 +46,22 @@ const UserPayment = () => {
     undefined
   );
 
+  const showPaymentRejectedNotification = (
+    _message: string,
+    _expected: string
+  ): void => {
+    if (_message !== _expected) {
+      let notification: tNotification = {
+        _open: true,
+        _template: "PAYMENT_MESSAGE",
+        _params: { message: _message },
+        _buttonnames: { leftButton: "Ok" },
+      };
+
+      setNotification(notification);
+    }
+  };
+
   const showInvalidDestinaryNotification = (): void => {
     let notification: tNotification = {
       _open: true,
@@ -124,11 +140,16 @@ const UserPayment = () => {
       await loadUserById(userId.current).then(
         async (recipient: tUser | null) => {
           if (user && recipient) {
-            await executePayment(
+            const _message: string = await executePayment(
               user.email,
               recipient.email,
               amount.current,
               message.current
+            );
+
+            showPaymentRejectedNotification(
+              _message,
+              "Client transaction done"
             );
           }
         }
@@ -139,12 +160,14 @@ const UserPayment = () => {
       await loadBankAccountById(bankId.current).then(
         async (recipient: tBankaccount | null) => {
           if (user && recipient) {
-            await executePayment(
+            const _message = await executePayment(
               user.email,
               recipient.IBAN,
               amount.current,
               message.current
             );
+
+            showPaymentRejectedNotification(_message, "Bank transaction done");
           }
         }
       );
