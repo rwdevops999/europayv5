@@ -22,7 +22,14 @@ const UserTransactionsList = () => {
     if (user && user.account) {
       transactions = await loadTransactionByAccountId(user.account.id);
 
+      console.log("TRANSACTION LOADED");
       setLoadedTransactions(transactions);
+
+      const element = document.getElementById("key0");
+      if (element) {
+        console.log("SCROLL TO 0");
+        element.scrollIntoView();
+      }
     }
   };
 
@@ -31,6 +38,7 @@ const UserTransactionsList = () => {
   }, []);
 
   useEffect(() => {
+    console.log("[UserTransactionsList]:UE[transactions]");
     loadUserTransactions();
   }, [transactions]);
 
@@ -38,6 +46,7 @@ const UserTransactionsList = () => {
     <div className="h-[78vh] border-1 border-yellow-500">
       <div>
         <ScrollArea className="overflow-auto h-[640px] w-[100%]">
+          <div id={"key0"} key={"key" + 0}></div>
           {loadedTransactions.map((_transaction: tTransaction) => (
             <div className="text-xs w-[97%]" key={_transaction.id}>
               <TransactionItem transaction={_transaction} user={user} />
