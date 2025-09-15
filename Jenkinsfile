@@ -1,5 +1,7 @@
 @Library("shared-library@master") _
 
+def isValid = true
+
 pipeline {
   agent {label 'macos'}
 
@@ -13,7 +15,57 @@ pipeline {
         sh 'pnpm -v'
       }
     }
-  }
+
+		// stage("init") {
+		// 	steps {
+		// 		// build job: 'DockerCompose', parameters: [string(name: 'COMPOSE', value: 'DOWN' )], wait: true 
+		// 	    sh 'pnpm install --frozen-lockfile'
+		// 	}
+     
+    //   post {
+    //     failure {
+    //       script {
+    //         isValid = false
+    //       }
+    //     }
+    //   }
+    // }
+
+    // stage("build") {
+    //   when {
+    //     expression {
+    //       isValid
+    //     }
+    //   }
+
+    //   steps {
+    //     sh 'pnpm build'
+    //   }
+
+    //   post {
+    //     failure {
+    //       script {
+    //         isValid = false
+    //       }
+    //     }
+    //   }
+    // }
+
+    stage("package") {
+      when {
+        expression {
+          isValid
+        }
+      }
+
+      steps {
+        sh '''
+          echo ${DOCKERHUB_ACCESSKEY_USR}
+          echo ${DOCKERHUB_ACCESSKEY_PWD}
+        '''
+      }
+    }
+	}
 
   post {
     success {
@@ -22,7 +74,6 @@ pipeline {
 
     failure {
       mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
-
     }
   }
 }
