@@ -16,7 +16,6 @@ pipeline {
   
   stages {
     stage("info") {
-  tools {nodejs "nodejs" docker "docker"}
       steps {
         sh 'node -v'
         sh 'npm install -g pnpm@latest-10'
