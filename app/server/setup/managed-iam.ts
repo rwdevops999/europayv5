@@ -535,7 +535,7 @@ export const SystemUsers: Record<string, any> = {
     type: "EUROPAY",
     country: "Belgium",
     addAccount: true,
-    accountAmount: 5000,
+    accountAmount: 2000,
   },
   rwelter: {
     lastname: "Welter",
@@ -547,6 +547,7 @@ export const SystemUsers: Record<string, any> = {
     type: "EUROPAY",
     country: "Belgium",
     addAccount: true,
+    accountAmount: 5000,
   },
   test: {
     lastname: "Test",

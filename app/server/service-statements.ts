@@ -14,11 +14,7 @@ import {
 import { ServiceStatementInfo } from "./setup/services-and-actions";
 import { getServiceIdByName } from "./services";
 import { getServiceActionIdByName } from "./service-actions";
-import {
-  AllowedSystemServiceStatements,
-  ManagedPolicies,
-} from "./setup/managed-iam";
-import { definePolicies } from "./policies";
+import { AllowedSystemServiceStatements } from "./setup/managed-iam";
 
 export const loadServiceStatements = async (): Promise<tServiceStatement[]> => {
   let result: tServiceStatement[] = [];

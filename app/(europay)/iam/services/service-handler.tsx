@@ -7,7 +7,7 @@ import { DataTable } from "@/ui/datatable/data-table";
 import PageItemContainer from "@/ui/page-item-container";
 import ServiceSelect from "@/ui/service-select";
 import { useEffect, useState } from "react";
-import { columns } from "./table/columns";
+import { columns, initialTableState } from "./table/columns";
 import { DataTableToolbar } from "./table/data-table-toolbar";
 
 const ServiceHandler = ({
@@ -82,10 +82,7 @@ const ServiceHandler = ({
             columns={columns}
             Toolbar={DataTableToolbar}
             expandAll={serviceId === undefined ? false : true}
-            paginationState={{
-              pageIndex: 0, //custom initial page index
-              pageSize: 10, //custom default page size
-            }}
+            initialState={initialTableState}
           />
         </PageItemContainer>
       </div>

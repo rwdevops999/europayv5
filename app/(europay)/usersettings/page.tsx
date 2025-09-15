@@ -1,20 +1,17 @@
-"use client";
+import { Suspense } from "react";
+import LoadingSpinner from "@/ui/loading-spinner";
+import HandleUserSettings from "./handle-user-settings";
 
-import { useEffect, useState } from "react";
-import StartSettings from "./components/start-settings";
-import { useSearchParams } from "next/navigation";
-import { json } from "@/lib/util";
-
-const UserSettingsDialog = () => {
-  const searchParams = useSearchParams();
-
-  const id = searchParams?.get("id");
-
-  const renderComponent = () => {
-    return <StartSettings open={id} />;
-  };
-
-  return <>{renderComponent()}</>;
+const UserSettingsDialog = ({
+  searchParams,
+}: {
+  searchParams: Promise<{ id?: string }>;
+}) => {
+  return (
+    <Suspense fallback={<LoadingSpinner label="Loading User Settings ..." />}>
+      <HandleUserSettings searchParams={searchParams} />
+    </Suspense>
+  );
 };
 
 export default UserSettingsDialog;
