@@ -12,25 +12,22 @@ pipeline {
   //   IMAGE_TAG = 'latest'
   // }
 
-  // tools { nodejs "nodejs" }
-  
   stages {
     stage("info") {
       steps {
         sh 'node -v'
-        // sh 'npm install -g pnpm@latest-10'
         sh 'pnpm -v'
         sh 'docker -v'
       }
     }
 
-    // stage("build production application") {
-    //   steps {
-    //     sh 'pnpm install --no-frozen-lockfile'
-    //     sh 'npx prisma generate'
-    //     sh 'pnpm build'
-    //   }
-    // }
+    stage("build prisma and production application") {
+      steps {
+        sh 'pnpm install --no-frozen-lockfile'
+        sh 'npx prisma generate'
+        sh 'pnpm build'
+      }
+    }
 
 		// stage("init") {
 		// 	steps {

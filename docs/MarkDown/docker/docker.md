@@ -388,3 +388,28 @@ search docker and install Docker Pipeline
 Then in 'Manage Jenkins > Tools', Add Docker
 Give a name
 and Install Automatically, Download from docker
+
+## [JENKINS] Problem
+
+Things like node, pnpm and docker are not known in the pipeline.
+(e.g. node: command not found).
+
+Go on your local machine and type:
+
+which node => /usr/local/bin/node
+which pnpm => /usr/local/bin/pnpm
+which docker => /usr/local/bin/docker
+
+Go to
+
+Jenkins > Node > macos > Configure
+
+By Node Properties, select Environment variables
+
+and ADD:
+
+Name: PATH+NODE
+Value: /usr/local/bin
+(because node, pnpm and docker reside all three in /usr/local/bin).
+
+and SAVE.
