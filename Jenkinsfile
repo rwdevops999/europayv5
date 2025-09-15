@@ -1,4 +1,4 @@
-@Library("shard-library@master") _
+@Library("shared-library@master") _
 
 pipeline {
   agent {label 'macos'}
@@ -19,7 +19,7 @@ pipeline {
 
     failure {
       mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
-      
+
     }
   }
 }
