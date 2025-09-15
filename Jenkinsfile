@@ -12,9 +12,14 @@ pipeline {
     IMAGE_TAG = 'latest'
   }
 
+  tools {
+    nodejs "nodejs" 
+    docker "docker"
+  }
+
   stages {
     stage("info") {
-      // tools {nodejs "nodejs"}
+  tools {nodejs "nodejs" docker "docker"}
       steps {
         sh 'node -v'
         sh 'npm install -g pnpm@latest-10'
@@ -88,8 +93,8 @@ pipeline {
     failure {
       mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
     }
-    // always {
-    //   sh 'docker logout'
-    // }
+    always {
+      sh 'docker logout'
+    }
   }
 }
