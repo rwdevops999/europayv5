@@ -3,7 +3,7 @@
 def isValid = true
 
 pipeline {
-  agent {any}
+  agent {label 'macos'}
 
 	environment {
     	// PATH = "/usr/local/bin:${env.PATH}"
@@ -12,10 +12,7 @@ pipeline {
     IMAGE_TAG = 'latest'
   }
 
-  // tools {
-  //   nodejs "nodejs" 
-  //   docker "docker"
-  // }
+  tools { nodejs "nodejs" }
 
   stages {
     stage("info") {

@@ -103,7 +103,7 @@ jenkins/jenkins:jdk21 (found in DockerHub => Docker pull command)
 
 Run Jenkins image
 
-docker run --privileged -u 0 -p 8080:8080 -p 50000:50000 -v /Users/rudiwelter/.jenkins:/var/jenkins_home jenkins/jenkins:jdk21
+docker run --privileged -u 0 -p 8080:8080 -p 50000:50000 -v /Users/rudiwelter/.jenkins:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock jenkins/jenkins:jdk21
 
 downloads the image and starts the container (can take a while).
 
