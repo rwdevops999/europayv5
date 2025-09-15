@@ -3,6 +3,8 @@
 pipeline {
   agent {label 'macos'}
 
+  tools {nodejs "nodejs"}
+
   stages {
     stage("info") {
       steps {
