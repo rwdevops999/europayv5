@@ -15,6 +15,11 @@ pipeline {
   tools { nodejs "nodejs" }
   
   stages {
+    stage('Initialize'){
+        def dockerHome = tool 'myDocker'
+        env.PATH = "${dockerHome}/bin:${env.PATH}"
+    }
+
     stage("info") {
       steps {
         sh 'node -v'
@@ -23,13 +28,13 @@ pipeline {
       }
     }
 
-    stage("build production application") {
-      steps {
-        sh 'pnpm install --no-frozen-lockfile'
-        sh 'npx prisma generate'
-        sh 'pnpm build'
-      }
-    }
+    // stage("build production application") {
+    //   steps {
+    //     sh 'pnpm install --no-frozen-lockfile'
+    //     sh 'npx prisma generate'
+    //     sh 'pnpm build'
+    //   }
+    // }
 
 		// stage("init") {
 		// 	steps {
@@ -83,11 +88,11 @@ pipeline {
 
   post {
     success {
-      mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
+      // mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
     }
 
     failure {
-      mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
+      // mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
     }
     always {
       sh 'docker logout'
