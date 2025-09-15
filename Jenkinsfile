@@ -13,7 +13,7 @@ pipeline {
   }
 
   tools { nodejs "nodejs" }
-
+  
   stages {
     stage("info") {
   tools {nodejs "nodejs" docker "docker"}
