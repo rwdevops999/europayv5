@@ -15,13 +15,6 @@ pipeline {
   tools { nodejs "nodejs" }
   
   stages {
-    stage('Initialize'){
-        steps {
-          def dockerHome = tool 'myDocker'
-          env.PATH = "${dockerHome}/bin:${env.PATH}"
-        }
-    }
-
     stage("info") {
       steps {
         sh 'node -v'
