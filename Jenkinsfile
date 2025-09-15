@@ -10,6 +10,7 @@ pipeline {
     DOCKERHUB_ACCESSKEY = credentials('DockerHubUserPassword')
     IMAGE_NAME = 'rwdevops999/europay'
     IMAGE_TAG = 'latest'
+    DATABASE_URL="postgresql://postgres:postgres@localhost:5432/europayv5_db?schema=public&pool_timeout=0"
   }
 
   tools {nodejs "nodejs"}
@@ -25,9 +26,9 @@ pipeline {
 
     stage("build production application") {
       steps {
-        sh 'npx prisma db push'
         sh 'pnpm install --no-frozen-lockfile'
-        sh 'pnpm build'
+        sh 'npx prisma db push'
+        // sh 'pnpm build'
       }
     }
 
