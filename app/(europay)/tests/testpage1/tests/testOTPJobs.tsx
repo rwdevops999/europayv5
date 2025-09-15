@@ -1,7 +1,6 @@
 "use client";
 
 import Button from "@/ui/button";
-import moment from "moment";
 import { createOTP } from "@/app/server/otp";
 import { tOTPCreate } from "@/lib/prisma-types";
 
