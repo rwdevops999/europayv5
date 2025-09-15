@@ -5,12 +5,13 @@ def isValid = true
 pipeline {
   agent {label 'macos'}
 
-	// environment {
-  //   	// PATH = "/usr/local/bin:${env.PATH}"
-  //   DOCKERHUB_ACCESSKEY = credentials('DockerHubUserPassword')
-  //   IMAGE_NAME = 'rwdevops999/europay'
-  //   IMAGE_TAG = 'latest'
-  // }
+	environment {
+    DATABASE_URL='postgresql://postgres:postgres@localhost:5432/europayv5_db?schema=public&pool_timeout=0'
+    	// PATH = "/usr/local/bin:${env.PATH}"
+    DOCKERHUB_ACCESSKEY = credentials('DockerHubUserPassword')
+    IMAGE_NAME = 'rwdevops999/europay'
+    IMAGE_TAG = 'latest'
+  }
 
   stages {
     stage("info") {
