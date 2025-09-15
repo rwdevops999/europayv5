@@ -19,6 +19,7 @@ pipeline {
 
     failure {
       mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
+      
     }
   }
 }
