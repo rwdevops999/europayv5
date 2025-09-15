@@ -14,7 +14,7 @@ pipeline {
 
   stages {
     stage("info") {
-      tools {nodejs "nodejs"}
+      // tools {nodejs "nodejs"}
       steps {
         sh 'node -v'
         sh 'npm install -g pnpm@latest-10'
@@ -88,9 +88,8 @@ pipeline {
     failure {
       mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
     }
-    always {
-      tools {docker "docker"}
-      sh 'docker logout'
-    }
+    // always {
+    //   sh 'docker logout'
+    // }
   }
 }
