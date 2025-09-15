@@ -3,7 +3,7 @@
 def isValid = true
 
 pipeline {
-  agent {label 'macos'}
+  agent any
 
 	environment {
     	// PATH = "/usr/local/bin:${env.PATH}"
