@@ -5,6 +5,12 @@ def isValid = true
 pipeline {
   agent {label 'macos'}
 
+	environment {
+    	// PATH = "/usr/local/bin:${env.PATH}"
+    USER = 'rwdevops999'
+    IMAGE = 'europay'
+  }
+
   tools {nodejs "nodejs"}
 
   stages {
@@ -65,8 +71,8 @@ pipeline {
 
       steps {
         sh '''
-          echo $DOCKERHUB_ACCESSKEY_USR
-          echo $DOCKERHUB_ACCESSKEY_PWD
+					docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}
+					docker build . -t ${IMAGE}
         '''
       }
     }
