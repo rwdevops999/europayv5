@@ -10,7 +10,7 @@ pipeline {
       steps {
         sh 'node -v'
         sh 'npm install -g pnpm@latest-10 --legace-peer-deps'
-        sh 'npm -v'
+        sh 'pnpm -v'
       }
     }
   }
