@@ -12,8 +12,7 @@ pipeline {
     IMAGE_TAG = 'latest'
   }
 
-  tools {nodejs "nodejs"}
-  tools {docker "docker"}
+  tools {nodejs "nodejs", docker "docker"}
 
   stages {
     stage("info") {
