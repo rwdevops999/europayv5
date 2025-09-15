@@ -12,10 +12,9 @@ pipeline {
     IMAGE_TAG = 'latest'
   }
 
-  tools {nodejs "nodejs" docker "docker"}
-
   stages {
     stage("info") {
+      tools {nodejs "nodejs"}
       steps {
         sh 'node -v'
         sh 'npm install -g pnpm@latest-10'
@@ -90,6 +89,7 @@ pipeline {
       mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
     }
     always {
+      tools {docker "docker"}
       sh 'docker logout'
     }
   }
