@@ -3,7 +3,7 @@
 def isValid = true
 
 pipeline {
-  agent any
+  agent { label 'macos' }
 
 	environment {
     	// PATH = "/usr/local/bin:${env.PATH}"
@@ -20,6 +20,7 @@ pipeline {
         sh 'node -v'
         sh 'npm install -g pnpm@latest-10'
         sh 'pnpm -v'
+        sh 'docker -v'
       }
     }
 
@@ -91,8 +92,8 @@ pipeline {
       sh 'echo "FAILURE"'
       // mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
     }
-    always {
-      sh 'docker logout'
-    }
+    // always {
+    //   sh 'docker logout'
+    // }
   }
 }
