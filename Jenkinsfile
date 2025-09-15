@@ -9,7 +9,7 @@ pipeline {
     stage("info") {
       steps {
         sh 'node -v'
-        sh 'npm i pnpm'
+        sh 'npm i pnpm --legacy-peer-deps'
         sh 'pnpm -v'
       }
     }
