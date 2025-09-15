@@ -17,8 +17,7 @@ pipeline {
   stages {
     stage("info") {
       steps {
-        sh 'pwd'
-        sh 'ls -all'
+        sh 'echo $PATH'
         sh 'node -v'
         // sh 'npm install -g pnpm@latest-10'
         // sh 'pnpm -v'
