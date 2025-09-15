@@ -3,23 +3,23 @@
 def isValid = true
 
 pipeline {
-  agent any
+  agent {label 'macos'}
 
-	environment {
-    	// PATH = "/usr/local/bin:${env.PATH}"
-    DOCKERHUB_ACCESSKEY = credentials('DockerHubUserPassword')
-    IMAGE_NAME = 'rwdevops999/europay'
-    IMAGE_TAG = 'latest'
-  }
+	// environment {
+  //   	// PATH = "/usr/local/bin:${env.PATH}"
+  //   DOCKERHUB_ACCESSKEY = credentials('DockerHubUserPassword')
+  //   IMAGE_NAME = 'rwdevops999/europay'
+  //   IMAGE_TAG = 'latest'
+  // }
 
-  tools { nodejs "nodejs" }
+  // tools { nodejs "nodejs" }
   
   stages {
     stage("info") {
       steps {
         sh 'node -v'
-        sh 'npm install -g pnpm@latest-10'
-        sh 'pnpm -v'
+        // sh 'npm install -g pnpm@latest-10'
+        // sh 'pnpm -v'
         sh 'docker -v'
       }
     }
