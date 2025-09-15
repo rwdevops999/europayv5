@@ -18,14 +18,14 @@ pipeline {
     stage("info") {
       steps {
         sh 'node -v'
-        sh 'npm install -g pnpm@latest-10 --legace-peer-deps'
+        sh 'npm install -g pnpm@latest-10'
         sh 'pnpm -v'
       }
     }
 
     stage("build production application") {
       steps {
-        sh 'pnpm install'
+        sh 'pnpm install --no-frozen-lockfile'
         sh 'pnpm build'
       }
     }
