@@ -25,6 +25,7 @@ pipeline {
 
     stage("build production application") {
       steps {
+        sh 'npx prisma db push'
         sh 'pnpm install --no-frozen-lockfile'
         sh 'pnpm build'
       }
