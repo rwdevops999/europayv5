@@ -319,3 +319,54 @@ In HTTPS Url enter the git repository URL (https://github.com/rwdevops999/europa
 Click 'Validate' => it should say 'Credentials ok. Connected to https://github.com/rwdevops999/europayv5.'
 
 SAVE
+
+## [JENKINS] Add NodeJS
+
+Goto Manage Jenkins > Plugins > Available plugins
+Search for 'nodejs'
+Select the plugin => INSTALL
+
+It should show something like:
+
+...
+NodeJS Success
+...
+
+Restart JENKINS
+
+In Manage Jenkins > Tools > Add NodeJS and give it a name (e.g. nodejs)
+
+## [JENKINS] Restart
+
+http://localhost:8080/restart
+
+## [JENKINS] Emailing
+
+Use the mailer plugin.
+
+In Manage Jenkins > System
+
+Add 'System admin email address'.
+Then go to the bottom of this screen to "Email Notification Section".
+
+Set the smtp server (e.g. smtp.gmail.com).
+Go to the advanced part.
+
+Check use SMTP authentication:
+
+## [GOOGLE] Setup gmail
+
+Follow the video "https://www.youtube.com/watch?v=y5IasMFYdBc"
+
+## [JENKINS]
+
+SMTP Authentication
+
+Username: email address (rwdevops999@gmail.com)
+password: generated password from gmail in step above
+Use SSL on port 465
+Reply To Address: an email address (rwdevops999@gmail.com)
+
+Test it and it should say (Email was successfully sent)
+
+SAVE
