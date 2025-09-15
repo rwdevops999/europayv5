@@ -25,10 +25,11 @@ pipeline {
 
     stage("build production application") {
       steps {
+        sh 'pnpm install --frozen-lockfile'
         sh 'pnpm build'
       }
     }
-    
+
 		// stage("init") {
 		// 	steps {
 		// 		// build job: 'DockerCompose', parameters: [string(name: 'COMPOSE', value: 'DOWN' )], wait: true 

@@ -378,3 +378,13 @@ Manage Jenkins > Plugins > Available plugins
 Search for 'blue ocean'
 
 Setup BlueOcean (Aggregator) installs everything for blue ocean.
+
+## [JENKINS] Docker
+
+In 'Manage Jenkins > Plugins'
+
+search docker and install Docker Pipeline
+
+Then in 'Manage Jenkins > Tools', Add Docker
+Give a name
+and Install Automatically, Download from docker
