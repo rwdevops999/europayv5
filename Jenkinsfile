@@ -13,6 +13,7 @@ pipeline {
   }
 
   tools {nodejs "nodejs"}
+  tools {docker "docker"}
 
   stages {
     stage("info") {
@@ -27,7 +28,7 @@ pipeline {
       steps {
         sh 'pnpm install --no-frozen-lockfile'
         sh 'npx prisma generate'
-        // sh 'pnpm build'
+        sh 'pnpm build'
       }
     }
 
