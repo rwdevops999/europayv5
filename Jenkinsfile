@@ -26,7 +26,7 @@ pipeline {
     stage("build production application") {
       steps {
         sh 'pnpm install'
-:       sh 'pnpm build'
+        sh 'pnpm build'
       }
     }
 
