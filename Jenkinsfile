@@ -58,10 +58,15 @@ pipeline {
         }
       }
 
+			environment {
+			  DOCKERHUB_ACCESSKEY = credentials('DockerHubUserPassword')
+			  // KEYCHAIN_PSW = credentials('keychain')
+			}
+
       steps {
         sh '''
-          echo ${DOCKERHUB_ACCESSKEY_USR}
-          echo ${DOCKERHUB_ACCESSKEY_PWD}
+          echo $DOCKERHUB_ACCESSKEY_USR
+          echo $DOCKERHUB_ACCESSKEY_PWD
         '''
       }
     }
