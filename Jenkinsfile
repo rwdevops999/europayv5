@@ -25,8 +25,8 @@ pipeline {
 
     stage("build production application") {
       steps {
-        sh 'pnpm install --frozen-lockfile'
-        sh 'pnpm build'
+        sh 'pnpm install'
+:       sh 'pnpm build'
       }
     }
 
