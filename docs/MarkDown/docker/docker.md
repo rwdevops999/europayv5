@@ -370,3 +370,11 @@ Reply To Address: an email address (rwdevops999@gmail.com)
 Test it and it should say (Email was successfully sent)
 
 SAVE
+
+## [JENKINS] Blue Ocean
+
+Manage Jenkins > Plugins > Available plugins
+
+Search for 'blue ocean'
+
+Setup BlueOcean (Aggregator) installs everything for blue ocean.

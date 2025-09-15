@@ -7,8 +7,9 @@ pipeline {
 
 	environment {
     	// PATH = "/usr/local/bin:${env.PATH}"
-    USER = 'rwdevops999'
-    IMAGE = 'europay'
+    DOCKERHUB_ACCESSKEY = credentials('DockerHubUserPassword')
+    IMAGE_NAME = 'rwdevops999/europay'
+    IMAGE_TAG = 'latest'
   }
 
   tools {nodejs "nodejs"}
@@ -22,6 +23,12 @@ pipeline {
       }
     }
 
+    stage("build production application") {
+      steps {
+        sh 'pnpm build'
+      }
+    }
+    
 		// stage("init") {
 		// 	steps {
 		// 		// build job: 'DockerCompose', parameters: [string(name: 'COMPOSE', value: 'DOWN' )], wait: true 
@@ -45,7 +52,8 @@ pipeline {
     //   }
 
     //   steps {
-    //     sh 'pnpm build'
+		// 		sh 'docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}'
+    //     sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
     //   }
 
     //   post {
@@ -57,25 +65,18 @@ pipeline {
     //   }
     // }
 
-    stage("package") {
-      when {
-        expression {
-          isValid
-        }
-      }
+    // stage("package") {
+    //   when {
+    //     expression {
+    //       isValid
+    //     }
+    //   }
 
-			environment {
-			  DOCKERHUB_ACCESSKEY = credentials('DockerHubUserPassword')
-			  // KEYCHAIN_PSW = credentials('keychain')
-			}
-
-      steps {
-        sh '''
-					docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}
-					docker build . -t ${IMAGE}
-        '''
-      }
-    }
+    //   steps {
+    //     sh '''
+    //     '''
+    //   }
+    // }
 	}
 
   post {
@@ -85,6 +86,9 @@ pipeline {
 
     failure {
       mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
+    }
+    always {
+      sh 'docker logout'
     }
   }
 }
