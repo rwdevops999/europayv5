@@ -16,8 +16,10 @@ pipeline {
   
   stages {
     stage('Initialize'){
-        def dockerHome = tool 'myDocker'
-        env.PATH = "${dockerHome}/bin:${env.PATH}"
+        steps {
+          def dockerHome = tool 'myDocker'
+          env.PATH = "${dockerHome}/bin:${env.PATH}"
+        }
     }
 
     stage("info") {
@@ -88,10 +90,12 @@ pipeline {
 
   post {
     success {
+      sh 'echo "SUCCESS"'
       // mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
     }
 
     failure {
+      sh 'echo "FAILURE"'
       // mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
     }
     always {
