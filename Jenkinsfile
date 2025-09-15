@@ -82,18 +82,18 @@ pipeline {
     // }
 	}
 
-  post {
-    success {
-      sh 'echo "SUCCESS"'
-      // mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
-    }
+  // post {
+  //   success {
+  //     sh 'echo "SUCCESS"'
+  //     // mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
+  //   }
 
-    failure {
-      sh 'echo "FAILURE"'
-      // mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
-    }
-    // always {
-    //   sh 'docker logout'
-    // }
-  }
+  //   failure {
+  //     sh 'echo "FAILURE"'
+  //     // mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
+  //   }
+  //   // always {
+  //   //   sh 'docker logout'
+  //   // }
+  // }
 }
