@@ -2,7 +2,7 @@
 
 # NextJS
 
-## Production build
+## [NEXTJS] Production build
 
 Create a NextJS production build
 
@@ -14,7 +14,7 @@ pnpm build
 
 What we expect in docker is the application (node), Inngest (look also for this as standalone docker), Traeffik (reverse proxy) and PostgreSQL (database).
 
-## create Dockerfile
+## [DOCKER] create Dockerfile
 
 ```docker
 # use a node image (at this moment 23-alpine is the latest)
@@ -50,23 +50,23 @@ CMD [ "pnpm", "start" ]
 
 ## Docker commands
 
-### build docker image from Dockerfile
+### [DOCKER] build docker image from Dockerfile
 
 docker build -t app-name .
 
-### list docker images
+### [DOCKER] list docker images
 
 docker image ls
 
 RESPOSITORY TAG IMAGE ID CREATED SIZE
 app-name latest 99e9680f0632 8 minutes ago 983MB
 
-### remove image
+### [DOCKER] remove image
 
 docker image rm 99e9680f0632 --force
 docker rmi #image:latest
 
-### run docker image
+### [DOCKER] run docker image
 
 docker run -d -p 3000:3000 app-name
 
@@ -77,19 +77,19 @@ The second port is the port on the container
 
 e.g: docker run -d -p 800:3000 app-name => http://localhost:800/
 
-### connect to container
+### [DOCKER] connect to container
 
 BROWSER: http://localhost:3000/
 
-### view docker containers
+### [DOCKER] view docker containers
 
 docker ps
 
-### stop docker container
+### [DOCKER] stop docker container
 
 docker stop #containerId
 
-### remove all stopped containers
+### [DOCKER] remove all stopped containers
 
 docker container prune
 or
@@ -97,7 +97,7 @@ docker container prune -f (or --force) => VERBOSE
 
 # JENKINS
 
-## image (LTS)
+## [JENKINS] image (LTS)
 
 jenkins/jenkins:jdk21 (found in DockerHub => Docker pull command)
 
@@ -111,7 +111,7 @@ This show us a logging (the logging can also be found in Docker Desktop).
 Important here is initial password (can also be found in .../.jenkins/secrets/initialAdminPassword). This is needed to login in
 in Jenkins the first time.
 
-## Open Jenkins
+## [JENKINS] Open Jenkins
 
 localhost:8080
 
@@ -121,7 +121,7 @@ Install suggested plugins
 Create an Admin user (for me, rwdevops999, 27X...@).
 URL: http://localhost:8080/
 
-## macos agent
+## [JENKINS] macos agent
 
 Select in Jenkins 'Build Executor Status'
 Select 'New Node' and enter the name 'macos' (and select Permanent Agent) and 'Create' it.
@@ -163,7 +163,7 @@ Nice to change:
 
 And then 'Save'.
 
-### Java versions
+### [JENKINS] Java versions
 
 Jenkins (Manage Jenkins > System Information > java.runtime.version = 21.08)
 macos (macos > System Information > 20)
@@ -181,7 +181,7 @@ Check again:
 
 macos > System Information > java.runtime.version => 21.08 (dus OK).
 
-### Shared libraries
+### [JENKINS] Shared libraries
 
 Code: under github (https://github.com/rwdevops999/Jenkins.git on master branch).
 
@@ -206,3 +206,116 @@ Now the library can be used in the Jenkinsfile:
 @Library("shared-library@master") \_
 
 ATTENTION: the '\_' is mandatory (it is like a wildcard).
+
+## [JENKINS] Setting up a pipeline (using GitHub)
+
+First of all, the code must be under GitHub (https://github.com/rwdevops999/europayv5.git).
+
+### [GITHUB] Create GitHub App (this is not the code under github).
+
+Go to Settings (avatar > Settings).
+Go in the left menu to 'Developer Settings'.
+On top of the left menu, we see 'GitHub Apps'
+
+Select 'New Github App'
+
+Enter a App Name (just a name, later used in Jenkins, e.g. jenkins-europay)
+Enter the Homepage URL (is the github home URL, e.g. https://github.com/rwdevops999/)
+We need to setup a webhook (see webhook)
+
+Webhook section:
+
+active on,
+Webhook URL (proxy URL from SMEE): https://smee.io/cFurHV5OJDrmMKD
+
+"Repository" permissions:
+
+- Administration: read-only
+- Checks: read-write
+- Commit statuses: read-write
+- Contents: read-only
+- Metadata: read-only (is already set for you)
+- Pull Requests: read-only
+
+"Subscribe Events":
+
+- Check run
+- Check suite
+- Pull Request
+- Push
+- Repository
+
+"Only for this account"
+
+Dan: "Create GitHub App"
+
+We see the detail page: 'Settings' 'Developer' 'settings' 'GitHub Apps' 'jenkins-europay'
+IT SAYS: Registration successful. You must generate a private key in order to install your GitHub App.
+
+Generate the private key:
+
+Under the section "Private Keys" > Generate a private key.
+Your private key is stored in your downloads folder.
+
+In Chrome, select settings (3 dots right top > Settings > Downloads shows the location).
+Copy this pem file to a safe location.
+We need to change the key into a different format:
+
+'openssl pkcs8 -topk8 -inform PEM -outform PEM -in downloaded.pem -out anothername.pem -nocrypt'
+
+example:
+
+```bash
+openssl pkcs8 -topk8 -inform PEM -outform PEM -in jenkins-europay.2025-09-15.private-key.pem -out converted-jenkins-europay.pem -nocrypt
+```
+
+That generates the converted PEM.
+
+### [GITHUB] Install GitHub App
+
+On the details page (where the private key was generated), Click on 'Install App' and choose the account (in my case rwdevops999, this is the organisation).
+Select here:
+
+- only selected repositories (NOT ALL) and select the repository (where the code lives).
+
+It shows the permissions (those we gave above) => INSTALL
+
+It shows: 'Okay, jenkins-europay was installed on the @rwdevops999 account.'
+
+### [GITHUB] Webhook
+
+We use a webhook provider (smee.io).
+In Smee, Start a new channnel:
+
+This gives a Proxy URL (https://smee.io/cFurHV5OJDrmMKD).
+
+Also, install the cli client (npm install --global smee-client).
+Startup in terminal the client (smee -u https://smee.io/cFurHV5OJDrmMKD).
+
+## [JENKINS] Setup credentials for GitHub
+
+In Jenkins > Manage Jenkins > Credentials > (global) > Add Credentials
+
+Kind: GitHub App
+ID: Give this the same name as the github app (jenkins-europay)
+Description: an explanation
+App ID: => Go back to GitHub/Details page of the app. In the About section we the App ID: 1955905
+Key: => Open the converted PEM file in an editor. Copy all and paste it here.
+
+Click on "Test Connection".
+We should see something like: "-'Success, Remaining rate limit: 4999'.
+
+=> CREATE
+
+## [JENKINS] Create a job
+
+Go to the dashboard. => 'Create a job'.
+Enter a name (europay) => Multibranch pipeline => OK.
+
+Under 'Branch Sources': Add source 'GitHub'
+Select the just added credentials.
+
+In HTTPS Url enter the git repository URL (https://github.com/rwdevops999/europayv5.git)
+Click 'Validate' => it should say 'Credentials ok. Connected to https://github.com/rwdevops999/europayv5.'
+
+SAVE
