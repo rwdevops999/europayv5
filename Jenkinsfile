@@ -17,10 +17,12 @@ pipeline {
   stages {
     stage("info") {
       steps {
-        sh 'node -v'
+        sh 'pwd'
+        sh 'ls -all'
+        // sh 'node -v'
         // sh 'npm install -g pnpm@latest-10'
         // sh 'pnpm -v'
-        sh 'docker -v'
+        // sh 'docker -v'
       }
     }
 
