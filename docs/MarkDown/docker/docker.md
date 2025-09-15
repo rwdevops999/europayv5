@@ -165,10 +165,10 @@ And then 'Save'.
 
 ### [JENKINS] Java versions
 
-Jenkins (Manage Jenkins > System Information > java.runtime.version = 21.08)
+Jenkins (Manage Jenkins > System Information > java.runtime.version = 17)
 macos (macos > System Information > 20)
 
-We gaan macos ook op 21 zetten.
+We gaan macos ook op 17 zetten.
 
 Select by macos > Configure > Advanced (Under Host Key Verification Strategy)
 
