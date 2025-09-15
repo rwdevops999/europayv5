@@ -9,7 +9,7 @@ pipeline {
     stage("info") {
       steps {
         sh 'node -v'
-        // sh 'pnpm -v'
+        sh 'pnpm -v'
       }
     }
   }
