@@ -97,13 +97,23 @@ docker container prune -f (or --force) => VERBOSE
 
 # JENKINS
 
-## [JENKINS] image (LTS)
+## [JENKINS] image
 
-jenkins/jenkins:jdk21 (found in DockerHub => Docker pull command)
+jenkins/jenkins:jdk17
 
 Run Jenkins image
 
-docker run -d --privileged -u 0 -p 8080:8080 -p 50000:50000 -v $HOME/.jenkins/:/var/jenkins_home -v $(which docker):/usr/bin/docker\ -v /var/run/docker.sock:/var/run/docker.sock jenkins/jenkins:latest
+docker run \
+--privileged \
+-d \
+-u root \
+-p 9000:8080 \
+-p 50000:50000 \
+--restart=on-failure \
+-v jenkins_home:/var/jenkins_home \
+-v /var/run/docker.sock:/var/run/docker.sock \
+--name jenkins \
+jenkins/jenkins:lts-jdk17
 
 downloads the image and starts the container (can take a while).
 
@@ -113,12 +123,12 @@ in Jenkins the first time.
 
 ## [JENKINS] Open Jenkins
 
-localhost:8080
+localhost:9000
 
 Here we must enter the initialAdminPassword
 Install suggested plugins
 
-Create an Admin user (for me, rwdevops999, 27X...@).
+Create an Admin user (for me, admin, admin).
 URL: http://localhost:8080/
 
 ## [JENKINS] macos agent
@@ -225,8 +235,8 @@ We need to setup a webhook (see webhook)
 
 Webhook section:
 
-active on,
-Webhook URL (proxy URL from SMEE): https://smee.io/cFurHV5OJDrmMKD
+<!-- active on,
+Webhook URL (proxy URL from SMEE): https://smee.io/cFurHV5OJDrmMKD -->
 
 "Repository" permissions:
 
@@ -309,10 +319,23 @@ We should see something like: "-'Success, Remaining rate limit: 4999'.
 
 => CREATE
 
-## [JENKINS] Create a job
+## [JENKINS] Create a job (pipeline)
 
 Go to the dashboard. => 'Create a job'.
-Enter a name (europay) => Multibranch pipeline => OK.
+Enter a name (europay) => Pipeline => OK.
+
+Under triggers select:
+
+"GitHub hook trigger"
+
+For the pipeline definition select: Pipeline script from SCM
+
+By SCM select: Git
+Enter the Repository URL: https://github.com/rwdevops999/europayv5.git
+and by credential the GitHub App
+
+As Branch Specifier: (see the branch in GitHub) \*/main
+Script path must be 'Jenkinsfile'
 
 Under 'Branch Sources': Add source 'GitHub'
 Select the just added credentials.
@@ -322,7 +345,7 @@ Click 'Validate' => it should say 'Credentials ok. Connected to https://github.c
 
 SAVE
 
-## [JENKINS] Add NodeJS
+<!-- ## [JENKINS] Add NodeJS
 
 Goto Manage Jenkins > Plugins > Available plugins
 Search for 'nodejs'
@@ -336,7 +359,7 @@ NodeJS Success
 
 Restart JENKINS
 
-In Manage Jenkins > Tools > Add NodeJS and give it a name (e.g. nodejs)
+In Manage Jenkins > Tools > Add NodeJS and give it a name (e.g. nodejs) -->
 
 ## [JENKINS] Restart
 
@@ -348,7 +371,6 @@ Use the mailer plugin.
 
 In Manage Jenkins > System
 
-Add 'System admin email address'.
 Then go to the bottom of this screen to "Email Notification Section".
 
 Set the smtp server (e.g. smtp.gmail.com).
@@ -394,7 +416,7 @@ Search for 'blue ocean'
 
 Setup BlueOcean (Aggregator) installs everything for blue ocean.
 
-## [JENKINS] Docker
+<!-- ## [JENKINS] Docker
 
 In 'Manage Jenkins > Plugins'
 
@@ -402,7 +424,7 @@ search docker and install Docker Pipeline
 
 Then in 'Manage Jenkins > Tools', Add Docker
 Give a name
-and Install Automatically, Download from docker
+and Install Automatically, Download from docker -->
 
 ## [JENKINS] Problem
 
