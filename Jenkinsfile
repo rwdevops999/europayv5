@@ -22,11 +22,12 @@ pipeline {
       }
     }
 
-    stage("email") {
-      steps {
-        mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
-      }      
-    }
+    // stage("email") {
+    //   steps {
+    //     mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
+    //   }      
+    // }
+    
     // stage("build prisma and production application") {
     //   steps {
     //     sh 'pnpm install --no-frozen-lockfile'
