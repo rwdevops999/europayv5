@@ -25,79 +25,79 @@ pipeline {
       }
     }
 
-    stage("build prisma and production application") {
-      steps {
-        sh 'pnpm install --no-frozen-lockfile'
-        sh 'npx prisma generate'
-        sh 'pnpm build'
-      }
+    // stage("build prisma and production application") {
+    //   steps {
+    //     sh 'pnpm install --no-frozen-lockfile'
+    //     sh 'npx prisma generate'
+    //     sh 'pnpm build'
+    //   }
 
-      post {
-        failure {
-          script {
-            isValid = false
-          }
-        }
-      }
-    }
+    //   post {
+    //     failure {
+    //       script {
+    //         isValid = false
+    //       }
+    //     }
+    //   }
+    // }
 
-    stage("package") {
-      when {
-        expression {
-          isValid
-        }
-      }
+    // stage("package") {
+    //   when {
+    //     expression {
+    //       isValid
+    //     }
+    //   }
 
-      steps {
-        sh '''
-					security unlock-keychain -p ${KEYCHAIN_PSW}
-					docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}
-					docker build . -t ${IMAGE}
-        '''
-      }
+    //   steps {
+    //     sh '''
+		// 			security unlock-keychain -p ${KEYCHAIN_PSW}
+		// 			docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}
+		// 			docker build . -t ${IMAGE}
+    //     '''
+    //   }
 
-      post {
-        failure {
-          script {
-            isValid = false
-          }
-        }
-      }
-    }
+    //   post {
+    //     failure {
+    //       script {
+    //         isValid = false
+    //       }
+    //     }
+    //   }
+    // }
 
-    stage("publish") {
-      when {
-        expression {
-          isValid
-    		}
-			}
+    // stage("publish") {
+    //   when {
+    //     expression {
+    //       isValid
+    // 		}
+		// 	}
 
-			steps {
-				sh '''
-					docker logout registry-1.docker.io
-					docker tag ${IMAGE} ${USER}/${IMAGE}
-					docker push ${USER}/${IMAGE}
-				'''
-			}
+		// 	steps {
+		// 		sh '''
+		// 			docker logout registry-1.docker.io
+		// 			docker tag ${IMAGE} ${USER}/${IMAGE}
+		// 			docker push ${USER}/${IMAGE}
+		// 		'''
+		// 	}
 
-			post {
-				success {
-					sh '''
-						docker rmi -f ${IMAGE}:latest
-						docker rmi -f ${USER}/${IMAGE}:latest
-					'''					
-			        script {
-        			    isValid = true
-        			}
-				}
+		// 	post {
+		// 		success {
+		// 			sh '''
+		// 				docker rmi -f ${IMAGE}:latest
+		// 				docker rmi -f ${USER}/${IMAGE}:latest
+		// 			'''					
+		// 	        script {
+    //     			    isValid = true
+    //     			}
+		// 		}
 
-				failure {
-			    script {
-            isValid = false
-        	}
-				}
-			}
-    }
+		// 		failure {
+		// 	    script {
+    //         isValid = false
+    //     	}
+		// 		}
+		// 	}
+    // }
 
 		// stage("init") {
 		// 	steps {
@@ -149,19 +149,19 @@ pipeline {
     // }
 	}
 
-  post {
-    success {
-      sh 'echo "SUCCESS"'
-      // mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
-    }
+  // post {
+  //   success {
+  //     sh 'echo "SUCCESS"'
+  //     // mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
+  //   }
 
-    failure {
-      sh 'echo "FAILURE"'
-      // mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
-    }
-    always {
-      sh 'docker logout'
-    }
-  }
+  //   failure {
+  //     sh 'echo "FAILURE"'
+  //     // mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
+  //   }
+  //   always {
+  //     sh 'docker logout'
+  //   }
+  // }
 }
 
