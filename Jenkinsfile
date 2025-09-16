@@ -9,7 +9,7 @@ pipeline {
     DATABASE_URL='postgresql://postgres:postgres@localhost:5432/europayv5_db?schema=public&pool_timeout=0'
     	// PATH = "/usr/local/bin:${env.PATH}"
     DOCKERHUB_ACCESSKEY = credentials('DockerHubUserPassword')
-  	// KEYCHAIN_PSW = credentials('keychain')
+  	KEYCHAIN_PSW = credentials('keychain')
     USER = 'rwdevops999'
     IMAGE_NAME = 'europayXXX'
     // IMAGE_NAME = 'europay'
@@ -50,7 +50,8 @@ pipeline {
 
       steps {
         sh '''
-          echo "LOGING IN"
+          echo "LOGGING IN"
+					security unlock-keychain -p ${KEYCHAIN_PSW}
 					docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}
         '''
 					// docker build . -t ${IMAGE}
