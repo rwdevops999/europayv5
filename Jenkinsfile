@@ -50,6 +50,7 @@ pipeline {
 
       steps {
         sh '''
+          echo "LOGING IN"
 					docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}
         '''
 					// docker build . -t ${IMAGE}
