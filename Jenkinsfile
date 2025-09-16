@@ -41,29 +41,29 @@ pipeline {
       }
     }
 
-    // stage("package") {
-    //   when {
-    //     expression {
-    //       isValid
-    //     }
-    //   }
+    stage("package") {
+      when {
+        expression {
+          isValid
+        }
+      }
 
-    //   steps {
-    //     sh '''
-		// 			security unlock-keychain -p ${KEYCHAIN_PSW}
-		// 			docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}
-		// 			docker build . -t ${IMAGE}
-    //     '''
-    //   }
+      steps {
+        sh '''
+					security unlock-keychain -p ${KEYCHAIN_PSW}
+					docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}
+					docker build . -t ${IMAGE}
+        '''
+      }
 
-    //   post {
-    //     failure {
-    //       script {
-    //         isValid = false
-    //       }
-    //     }
-    //   }
-    // }
+      post {
+        failure {
+          script {
+            isValid = false
+          }
+        }
+      }
+    }
 
     // stage("publish") {
     //   when {
