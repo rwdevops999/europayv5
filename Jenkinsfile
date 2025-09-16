@@ -50,7 +50,7 @@ pipeline {
 
       steps {
         sh '''
-					security unlock-keychain -p ${KEYCHAIN_PSW}
+					security unlock-keychain  ~/Library/Keychains/login.keychain-db -p ${KEYCHAIN_PSW}
 					docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}
 					docker build . -t ${IMAGE}
         '''
