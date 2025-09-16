@@ -25,21 +25,21 @@ pipeline {
       }
     }
 
-    stage("build prisma and production application") {
-      steps {
-        sh 'pnpm install --no-frozen-lockfile'
-        sh 'npx prisma generate'
-        sh 'pnpm build'
-      }
+    // stage("build prisma and production application") {
+    //   steps {
+    //     sh 'pnpm install --no-frozen-lockfile'
+    //     sh 'npx prisma generate'
+    //     sh 'pnpm build'
+    //   }
 
-      post {
-        failure {
-          script {
-            isValid = false
-          }
-        }
-      }
-    }
+    //   post {
+    //     failure {
+    //       script {
+    //         isValid = false
+    //       }
+    //     }
+    //   }
+    // }
 
     stage("package") {
       when {
@@ -51,8 +51,8 @@ pipeline {
       steps {
         sh '''
 					docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}
-					docker build . -t ${IMAGE}
         '''
+					// docker build . -t ${IMAGE}
       }
 
       post {
