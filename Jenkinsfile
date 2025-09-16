@@ -22,13 +22,28 @@ pipeline {
       }
     }
 
-    stage("build prisma and production application") {
+    stage("email") {
       steps {
-        sh 'pnpm install --no-frozen-lockfile'
-        sh 'npx prisma generate'
-        sh 'pnpm build'
-      }
+        mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
+      }      
     }
+    // stage("build prisma and production application") {
+    //   steps {
+    //     sh 'pnpm install --no-frozen-lockfile'
+    //     sh 'npx prisma generate'
+    //     sh 'pnpm build'
+    //   }
+
+    //   post {
+    //     failure {
+    //       script {
+    //         isValid = false
+    //       }
+    //     }
+    //   }
+    // }
+
+
 
 		// stage("init") {
 		// 	steps {
