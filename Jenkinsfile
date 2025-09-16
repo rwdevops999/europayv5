@@ -28,7 +28,6 @@ pipeline {
     //   }      
     // }
 
-
     // stage("build prisma and production application") {
     //   steps {
     //     sh 'pnpm install --no-frozen-lockfile'
