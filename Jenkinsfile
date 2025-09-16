@@ -9,7 +9,10 @@ pipeline {
     DATABASE_URL='postgresql://postgres:postgres@localhost:5432/europayv5_db?schema=public&pool_timeout=0'
     	// PATH = "/usr/local/bin:${env.PATH}"
     DOCKERHUB_ACCESSKEY = credentials('DockerHubUserPassword')
-    IMAGE_NAME = 'rwdevops999/europay'
+  	KEYCHAIN_PSW = credentials('keychain')
+    USER = 'rwdevops999'
+    IMAGE_NAME = 'europayXXX'
+    // IMAGE_NAME = 'europay'
     IMAGE_TAG = 'latest'
   }
 
@@ -22,29 +25,79 @@ pipeline {
       }
     }
 
-    stage("email") {
+    stage("build prisma and production application") {
       steps {
-        mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
-      }      
+        sh 'pnpm install --no-frozen-lockfile'
+        sh 'npx prisma generate'
+        sh 'pnpm build'
+      }
+
+      post {
+        failure {
+          script {
+            isValid = false
+          }
+        }
+      }
     }
 
-    // stage("build prisma and production application") {
-    //   steps {
-    //     sh 'pnpm install --no-frozen-lockfile'
-    //     sh 'npx prisma generate'
-    //     sh 'pnpm build'
-    //   }
+    stage("package") {
+      when {
+        expression {
+          isValid
+        }
+      }
 
-    //   post {
-    //     failure {
-    //       script {
-    //         isValid = false
-    //       }
-    //     }
-    //   }
-    // }
+      steps {
+        sh '''
+					security unlock-keychain -p ${KEYCHAIN_PSW}
+					docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}
+					docker build . -t ${IMAGE}
+        '''
+      }
 
+      post {
+        failure {
+          script {
+            isValid = false
+          }
+        }
+      }
+    }
 
+    stage("publish") {
+      when {
+        expression {
+          isValid
+    		}
+			}
+
+			steps {
+				sh '''
+					docker logout registry-1.docker.io
+					docker tag ${IMAGE} ${USER}/${IMAGE}
+					docker push ${USER}/${IMAGE}
+				'''
+			}
+
+			post {
+				success {
+					sh '''
+						docker rmi -f ${IMAGE}:latest
+						docker rmi -f ${USER}/${IMAGE}:latest
+					'''					
+			        script {
+        			    isValid = true
+        			}
+				}
+
+				failure {
+			    script {
+            isValid = false
+        	}
+				}
+			}
+    }
 
 		// stage("init") {
 		// 	steps {
@@ -96,18 +149,18 @@ pipeline {
     // }
 	}
 
-  // post {
-  //   success {
-  //     sh 'echo "SUCCESS"'
-  //     // mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
-  //   }
+  post {
+    success {
+      sh 'echo "SUCCESS"'
+      // mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
+    }
 
-  //   failure {
-  //     sh 'echo "FAILURE"'
-  //     // mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
-  //   }
-  //   // always {
-  //   //   sh 'docker logout'
-  //   // }
-  // }
+    failure {
+      sh 'echo "FAILURE"'
+      // mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
+    }
+    always {
+      sh 'docker logout'
+    }
+  }
 }
