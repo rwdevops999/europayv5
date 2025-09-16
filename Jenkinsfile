@@ -22,6 +22,7 @@ pipeline {
       }
     }
 
+
     // stage("email") {
     //   steps {
     //     mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
