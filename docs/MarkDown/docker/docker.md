@@ -290,7 +290,9 @@ In Smee, Start a new channnel:
 This gives a Proxy URL (https://smee.io/cFurHV5OJDrmMKD).
 
 Also, install the cli client (npm install --global smee-client).
-Startup in terminal the client (smee -u https://smee.io/cFurHV5OJDrmMKD).
+Startup in terminal the client:
+
+smee -u https://smee.io/cFurHV5OJDrmMKD -t http://192.168.0.100:9000/github-webhook/
 
 ## [JENKINS] Setup credentials for GitHub
 
