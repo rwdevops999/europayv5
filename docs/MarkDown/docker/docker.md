@@ -356,7 +356,20 @@ Check use SMTP authentication:
 
 ## [GOOGLE] Setup gmail
 
-Follow the video "https://www.youtube.com/watch?v=y5IasMFYdBc"
+Follow the video "https://www.youtube.com/watch?v=y5IasMFYdBc" to retrieve a gmail app password.
+
+Then:
+
+Manage Jenkins > System > Extended E-mail Notification
+
+SMTP Server: smtp.gmail.com
+SMTP Port: 465
+Advanced > Use SSL and create credentials (Username and Password)
+
+- Username = gmail user (e.g. email address)
+- Password = password received from gmail app (as told in video)
+
+SAVE
 
 ## [JENKINS]
 
