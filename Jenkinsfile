@@ -27,7 +27,6 @@ pipeline {
     stage("build prisma and production application") {
       steps {
         sh 'pnpm install --no-frozen-lockfile'
-        sh 'npx prisma generate'
         sh 'pnpm build'
       }
 
@@ -74,8 +73,8 @@ pipeline {
 			}
 
 			steps {
+					// docker logout registry-1.docker.io
 				sh '''
-					docker logout registry-1.docker.io
 					docker tag ${IMAGE_NAME} ${USER}/${IMAGE_NAME}
 					docker push ${USER}/${IMAGE_NAME}
 				'''

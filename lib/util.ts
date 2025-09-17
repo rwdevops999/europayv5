@@ -22,7 +22,7 @@ import { v4 as uuidv4 } from "uuid";
 export const absoluteUrl = (path: string, useEnv: boolean = true): string => {
   let urlStart: string | undefined = process.env.NEXT_PUBLIC_APP_URL;
   if (!(urlStart && useEnv)) {
-    urlStart = "http://localhost:3000";
+    urlStart = `http://localhost:${process.env.NEXT_PUBLIC_SERVER_PORT}`;
   }
 
   return `${urlStart}${path}`;

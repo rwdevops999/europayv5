@@ -53,7 +53,7 @@ export const columns: ColumnDef<Data>[] = [
                   <label>🇵</label>
                   <AppLink
                     className="text-blue-400 underline"
-                    href={`http://localhost:3000/iam/policies/id=${row.original.id}`}
+                    href={`http://localhost:${process.env.NEXT_PUBLIC_SERVER_PORT}/iam/policies/id=${row.original.id}`}
                   >
                     {row.original.name}
                   </AppLink>
@@ -64,7 +64,7 @@ export const columns: ColumnDef<Data>[] = [
                   <label>🇷</label>
                   <AppLink
                     className="text-blue-400 underline"
-                    href={`http://localhost:3000/iam/roles/id=${row.original.id}`}
+                    href={`http://localhost:${process.env.NEXT_PUBLIC_SERVER_PORT}/iam/roles/id=${row.original.id}`}
                   >
                     {row.original.name}
                   </AppLink>
@@ -75,7 +75,7 @@ export const columns: ColumnDef<Data>[] = [
                   <label>🇺</label>
                   <AppLink
                     className="text-blue-400 underline"
-                    href={`http://localhost:3000/iam/users/id=${row.original.id}`}
+                    href={`http://localhost:${process.env.NEXT_PUBLIC_SERVER_PORT}/iam/users/id=${row.original.id}`}
                   >
                     {row.original.name}
                   </AppLink>

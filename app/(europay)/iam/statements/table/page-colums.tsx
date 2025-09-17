@@ -56,7 +56,7 @@ export const columns: ColumnDef<Data>[] = [
               <>
                 <AppLink
                   className="text-blue-400 underline"
-                  href={`http://localhost:3000/iam/services/id=${row.original.extra?.serviceId}`}
+                  href={`http://localhost:${process.env.NEXT_PUBLIC_SERVER_PORT}/iam/services/id=${row.original.extra?.serviceId}`}
                 >
                   {row.original.extra?.action}
                 </AppLink>

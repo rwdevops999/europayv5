@@ -91,7 +91,10 @@ export const handleUserCreationFinish = async (
       destination: application.email,
       template: "ACCOUNT_CREATED",
       asHTML: true,
-      params: { email: application.email, url: "http://localhost:3000/login" },
+      params: {
+        email: application.email,
+        url: "http://localhost:${process.env.NEXT_PUBLIC_SERVER_PORT}/login",
+      },
     };
 
     await sendEmail(_email).then(async () => {
