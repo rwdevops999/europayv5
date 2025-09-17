@@ -8,7 +8,7 @@ pipeline {
   options {
     skipDefaultCheckout(true)
   }
-  
+
 	environment {
     DATABASE_URL='postgresql://postgres:postgres@localhost:5432/europayv5_db?schema=public&pool_timeout=0'
     	// PATH = "/usr/local/bin:${env.PATH}"
@@ -30,21 +30,21 @@ pipeline {
       }
     }
 
-    stage("build prisma and production application") {
-      steps {
-        sh 'pnpm install --no-frozen-lockfile'
-        sh 'npx prisma generate'
-        sh 'pnpm build'
-      }
+    // stage("build prisma and production application") {
+    //   steps {
+    //     sh 'pnpm install --no-frozen-lockfile'
+    //     sh 'npx prisma generate'
+    //     sh 'pnpm build'
+    //   }
 
-      post {
-        failure {
-          script {
-            isValid = false
-          }
-        }
-      }
-    }
+    //   post {
+    //     failure {
+    //       script {
+    //         isValid = false
+    //       }
+    //     }
+    //   }
+    // }
 
     stage("package") {
       when {
@@ -59,7 +59,7 @@ pipeline {
           echo ${KEYCHAIN_PSW}
 					security unlock-keychain -p ${KEYCHAIN_PSW}
 					docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}
-					docker build . -t ${IMAGE}
+					docker build . -t ${IMAGE_NAME}
         '''
       }
 
