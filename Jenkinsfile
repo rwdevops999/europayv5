@@ -5,10 +5,9 @@ def isValid = true
 pipeline {
   agent {label 'macos'}
 
-  // options {
-  //   // skipDefaultCheckout(true)
-  // }
-
+  options {
+    skipDefaultCheckout(true)
+  }
 
 	environment {
     DATABASE_URL='postgresql://postgres:postgres@localhost:5432/europayv5_db?schema=public&pool_timeout=0'
