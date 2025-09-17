@@ -12,7 +12,7 @@ services:
       - --entrypoints.web.address=:80
     ports:
       - 80:80
-      - 8080:8080
+      - 6000:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
@@ -83,19 +83,19 @@ services:
   #       export spring_profiles_active=docker &&
   #       ./mvnw spring-boot:run"
 
-  frontend:
-    # image: rwdevops999/topfrontend:latest
-    image: rwdevops999/europay:latest
-    container_name: frontend
-    depends_on:
-      postgres:
-        condition: service_healthy
+  # frontend:
+  #   # image: rwdevops999/topfrontend:latest
+  #   image: rwdevops999/europay:latest
+  #   container_name: frontend
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
 
-    ports:
-      - 3000:3000
-    labels:
-      traefik.http.routers.client.rule: Host(`localhost`)
-      traefik.http.services.client.loadbalancer.server.port: 3000
+  #   ports:
+  #     - 3000:3000
+  #   labels:
+  #     traefik.http.routers.client.rule: Host(`localhost`)
+  #     traefik.http.services.client.loadbalancer.server.port: 3000
 
 volumes:
   postgres:
