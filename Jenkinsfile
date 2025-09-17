@@ -18,6 +18,7 @@ pipeline {
     IMAGE_NAME = 'europayxxx'
     // IMAGE_NAME = 'europay'
     IMAGE_TAG = 'latest'
+
   }
 
   stages {
