@@ -5,13 +5,8 @@ def isValid = true
 pipeline {
   agent {label 'macos'}
 
-  // options {
-  //   skipDefaultCheckout(true)
-  // }
-
 	environment {
     DATABASE_URL='postgresql://postgres:postgres@localhost:5432/europayv5_db?schema=public&pool_timeout=0'
-    	// PATH = "/usr/local/bin:${env.PATH}"
     DOCKERHUB_ACCESSKEY = credentials('DockerHubUserPassword')
   	KEYCHAIN = credentials('keychain')
     USER = 'rwdevops999'
@@ -29,21 +24,21 @@ pipeline {
       }
     }
 
-    // stage("build prisma and production application") {
-    //   steps {
-    //     sh 'pnpm install --no-frozen-lockfile'
-    //     sh 'npx prisma generate'
-    //     sh 'pnpm build'
-    //   }
+    stage("build prisma and production application") {
+      steps {
+        sh 'pnpm install --no-frozen-lockfile'
+        sh 'npx prisma generate'
+        sh 'pnpm build'
+      }
 
-    //   post {
-    //     failure {
-    //       script {
-    //         isValid = false
-    //       }
-    //     }
-    //   }
-    // }
+      post {
+        failure {
+          script {
+            isValid = false
+          }
+        }
+      }
+    }
 
     stage("package") {
       when {
@@ -106,4 +101,3 @@ pipeline {
 			}
     }
 }
-
