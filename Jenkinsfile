@@ -15,8 +15,7 @@ pipeline {
     DOCKERHUB_ACCESSKEY = credentials('DockerHubUserPassword')
   	KEYCHAIN = credentials('keychain')
     USER = 'rwdevops999'
-    IMAGE_NAME = 'europayxxx'
-    // IMAGE_NAME = 'europay'
+    IMAGE_NAME = 'europay'
     IMAGE_TAG = 'latest'
   }
 
