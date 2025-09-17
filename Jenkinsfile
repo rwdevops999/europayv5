@@ -5,9 +5,9 @@ def isValid = true
 pipeline {
   agent {label 'macos'}
 
-  options {
-    skipDefaultCheckout(true)
-  }
+  // options {
+  //   skipDefaultCheckout(true)
+  // }
 
 	environment {
     DATABASE_URL='postgresql://postgres:postgres@localhost:5432/europayv5_db?schema=public&pool_timeout=0'
@@ -89,6 +89,7 @@ pipeline {
 			post {
 				success {
 					sh '''
+            echo "Removing images"
 						docker rmi -f ${IMAGE_NAME}:latest
 						docker rmi -f ${USER}/${IMAGE_NAME}:latest
 					'''					
@@ -104,70 +105,5 @@ pipeline {
 				}
 			}
     }
-
-		// stage("init") {
-		// 	steps {
-		// 		// build job: 'DockerCompose', parameters: [string(name: 'COMPOSE', value: 'DOWN' )], wait: true 
-		// 	    sh 'pnpm install --frozen-lockfile'
-		// 	}
-     
-    //   post {
-    //     failure {
-    //       script {
-    //         isValid = false
-    //       }
-    //     }
-    //   }
-    // }
-
-    // stage("build") {
-    //   when {
-    //     expression {
-    //       isValid
-    //     }
-    //   }
-
-    //   steps {
-		// 		sh 'docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}'
-    //     sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
-    //   }
-
-    //   post {
-    //     failure {
-    //       script {
-    //         isValid = false
-    //       }
-    //     }
-    //   }
-    // }
-
-    // stage("package") {
-    //   when {
-    //     expression {
-    //       isValid
-    //     }
-    //   }
-
-    //   steps {
-    //     sh '''
-    //     '''
-    //   }
-    // }
-	}
-
-  // post {
-  //   success {
-  //     sh 'echo "SUCCESS"'
-  //     // mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
-  //   }
-
-  //   failure {
-  //     sh 'echo "FAILURE"'
-  //     // mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
-  //   }
-  //   always {
-  //     sh 'docker logout'
-  //   }
-  // }
 }
 

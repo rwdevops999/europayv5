@@ -382,6 +382,8 @@ Check use SMTP authentication:
 
 Follow the video "https://www.youtube.com/watch?v=y5IasMFYdBc" to retrieve a gmail app password.
 
+App password: ecvn muxk rrvp vjan
+
 Then:
 
 Manage Jenkins > System > Extended E-mail Notification
