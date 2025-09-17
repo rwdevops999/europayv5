@@ -22,6 +22,7 @@ pipeline {
         sh 'node -v'
         sh 'pnpm -v'
         sh 'docker -v'
+        sh 'git -v'
       }
     }
 
