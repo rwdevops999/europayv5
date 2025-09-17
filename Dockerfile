@@ -8,10 +8,11 @@ WORKDIR  /europay
 # copy package.json to /europay
 COPY package*.json  ./
 
-COPY .next .next
+COPY . .
 
 RUN npm install -g pnpm
 
+ENV CI=true
 RUN pnpm install
 
 EXPOSE 3000
