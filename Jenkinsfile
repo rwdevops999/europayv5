@@ -6,7 +6,7 @@ pipeline {
   agent {label 'macos'}
 
   options {
-    skipDefaultCheckout(true)
+    // skipDefaultCheckout(true)
   }
 
 	environment {
@@ -18,7 +18,6 @@ pipeline {
     IMAGE_NAME = 'europayxxx'
     // IMAGE_NAME = 'europay'
     IMAGE_TAG = 'latest'
-
   }
 
   stages {
@@ -73,39 +72,39 @@ pipeline {
       }
     }
 
-    // stage("publish") {
-    //   when {
-    //     expression {
-    //       isValid
-    // 		}
-		// 	}
+    stage("publish") {
+      when {
+        expression {
+          isValid
+    		}
+			}
 
-		// 	steps {
-		// 		sh '''
-		// 			docker logout registry-1.docker.io
-		// 			docker tag ${IMAGE} ${USER}/${IMAGE}
-		// 			docker push ${USER}/${IMAGE}
-		// 		'''
-		// 	}
+			steps {
+				sh '''
+					docker logout registry-1.docker.io
+					docker tag ${IMAGE_NAME} ${USER}/${IMAGE_NAME}
+					docker push ${USER}/${IMAGE_NAME}
+				'''
+			}
 
-		// 	post {
-		// 		success {
-		// 			sh '''
-		// 				docker rmi -f ${IMAGE}:latest
-		// 				docker rmi -f ${USER}/${IMAGE}:latest
-		// 			'''					
-		// 	        script {
-    //     			    isValid = true
-    //     			}
-		// 		}
+			post {
+				success {
+					sh '''
+						docker rmi -f ${IMAGE_NAME}:latest
+						docker rmi -f ${USER}/${IMAGE_NAME}:latest
+					'''					
+			        script {
+        			    isValid = true
+        			}
+				}
 
-		// 		failure {
-		// 	    script {
-    //         isValid = false
-    //     	}
-		// 		}
-		// 	}
-    // }
+				failure {
+			    script {
+            isValid = false
+        	}
+				}
+			}
+    }
 
 		// stage("init") {
 		// 	steps {
