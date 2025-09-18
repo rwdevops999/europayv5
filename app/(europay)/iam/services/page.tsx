@@ -3,6 +3,7 @@ import { absoluteUrl } from "@/lib/util";
 import { tService } from "@/lib/prisma-types";
 import PageContent from "@/ui/page-content";
 import ServiceHandler from "./service-handler";
+import { NOOP } from "@/lib/constants";
 
 const IamServicesPage = async ({
   params,
@@ -13,9 +14,11 @@ const IamServicesPage = async ({
 
   let services: tService[] = [];
 
-  await loadServices().then((values: tService[]) => {
-    services = values;
-  });
+  await loadServices()
+    .then((values: tService[]) => {
+      services = values;
+    })
+    .catch(NOOP);
 
   return (
     <PageContent

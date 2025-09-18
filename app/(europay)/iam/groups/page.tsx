@@ -6,6 +6,7 @@ import { absoluteUrl } from "@/lib/util";
 import { tGroup, tPolicy, tRole, tUser } from "@/lib/prisma-types";
 import PageContent from "@/ui/page-content";
 import GroupHandler from "./group-handler";
+import { NOOP } from "@/lib/constants";
 
 const IamGroupsPage = async ({ params }: { params: Promise<any> }) => {
   let groupId: number | undefined;
@@ -37,22 +38,26 @@ const IamGroupsPage = async ({ params }: { params: Promise<any> }) => {
     groupId = value;
 
     if (groupId) {
-      await loadGroupById(groupId).then(async (_group: tGroup | null) => {
-        if (_group) {
-          linkedPolicies = _group.policies.map(
-            (_policy: tPolicy) => _policy.id
-          );
-          linkedRoles = _group.roles.map((_role: tRole) => _role.id);
-          linkedUsers = _group.users.map((_user: tUser) => _user.id);
-        }
-        groups = _group ? [_group] : [];
-        await loadAdditionalData();
-      });
+      await loadGroupById(groupId)
+        .then(async (_group: tGroup | null) => {
+          if (_group) {
+            linkedPolicies = _group.policies.map(
+              (_policy: tPolicy) => _policy.id
+            );
+            linkedRoles = _group.roles.map((_role: tRole) => _role.id);
+            linkedUsers = _group.users.map((_user: tUser) => _user.id);
+          }
+          groups = _group ? [_group] : [];
+          await loadAdditionalData();
+        })
+        .catch(NOOP);
     } else {
-      await loadGroups().then(async (_groups: tGroup[]) => {
-        groups = _groups;
-        await loadAdditionalData();
-      });
+      await loadGroups()
+        .then(async (_groups: tGroup[]) => {
+          groups = _groups;
+          await loadAdditionalData();
+        })
+        .catch(NOOP);
     }
   });
 

@@ -58,3 +58,5 @@ export const cDefaultPeriodValues: tPeriodValues = {
   previous: undefined,
   current: undefined,
 };
+
+export const NOOP = () => {};

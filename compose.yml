@@ -20,16 +20,16 @@ services:
   postgres:
     image: postgres
     container_name: postgres
-    depends_on:
-      - proxy
     restart: always
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
       - POSTGRES_DB=europay_db
       - POSTGRES_PASSWORD=admin
       - POSTGRES_USER=postgres
+    depends_on:
+      - proxy
     ports:
-      - 2345:5432
+      - 5432:5432
     volumes:
       - postgres:/var/lib/postgres/data
     labels:
@@ -104,6 +104,7 @@ services:
     labels:
       traefik.http.routers.client.rule: Host(`localhost`)
       traefik.http.services.client.loadbalancer.server.port: 8828
+      # traefik.frontend.rule: Path:/postgresql/
 
 volumes:
   postgres:

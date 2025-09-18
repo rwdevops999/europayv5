@@ -5,6 +5,7 @@ import { absoluteUrl } from "@/lib/util";
 import { tPolicy, tRole, tService } from "@/lib/prisma-types";
 import PageContent from "@/ui/page-content";
 import RoleHandler from "./role-handler";
+import { NOOP } from "@/lib/constants";
 
 const IamRolesPage = async ({ params }: { params: Promise<any> }) => {
   let services: tService[] = [];
@@ -19,13 +20,15 @@ const IamRolesPage = async ({ params }: { params: Promise<any> }) => {
   await params.then(async (value: any) => {
     roleId = value;
 
-    await loadServices().then(async (values: tService[]) => {
-      services = values;
-      await loadRoles().then(async (values: tRole[]) => {
-        roles = values;
-        await loadPolicies().then((values: tPolicy[]) => (policies = values));
-      });
-    });
+    await loadServices()
+      .then(async (values: tService[]) => {
+        services = values;
+        await loadRoles().then(async (values: tRole[]) => {
+          roles = values;
+          await loadPolicies().then((values: tPolicy[]) => (policies = values));
+        });
+      })
+      .catch(NOOP);
   });
 
   /**

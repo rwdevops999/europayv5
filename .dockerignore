@@ -1,6 +1,12 @@
 node_modules/
+.next/
+.git/
+.gitignore
 
 Dockerfile*
+dock.sh
+compose.yml
+Jenkinsfile
 
 .dockerignore
 

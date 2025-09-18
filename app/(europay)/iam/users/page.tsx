@@ -8,6 +8,7 @@ import PageContent from "@/ui/page-content";
 import { absoluteUrl } from "@/lib/util";
 import { loadGroups } from "@/app/server/groups";
 import { Group } from "@/generated/prisma";
+import { NOOP } from "@/lib/constants";
 
 const IamUsersPage = async ({ params }: { params: Promise<any> }) => {
   let userId: number | undefined;
@@ -45,20 +46,26 @@ const IamUsersPage = async ({ params }: { params: Promise<any> }) => {
     userId = value;
 
     if (userId) {
-      await loadUserById(userId).then(async (_user: tUser | null) => {
-        if (_user) {
-          linkedPolicies = _user.policies.map((_policy: tPolicy) => _policy.id);
-          linkedRoles = _user.roles.map((_role: tRole) => _role.id);
-          linkedGroups = _user.groups.map((_group: Group) => _group.id);
-        }
-        users = _user ? [_user] : [];
-        await loadAdditionalData();
-      });
+      await loadUserById(userId)
+        .then(async (_user: tUser | null) => {
+          if (_user) {
+            linkedPolicies = _user.policies.map(
+              (_policy: tPolicy) => _policy.id
+            );
+            linkedRoles = _user.roles.map((_role: tRole) => _role.id);
+            linkedGroups = _user.groups.map((_group: Group) => _group.id);
+          }
+          users = _user ? [_user] : [];
+          await loadAdditionalData();
+        })
+        .catch(NOOP);
     } else {
-      await loadUsers().then(async (_users: tUser[]) => {
-        users = _users;
-        await loadAdditionalData();
-      });
+      await loadUsers()
+        .then(async (_users: tUser[]) => {
+          users = _users;
+          await loadAdditionalData();
+        })
+        .catch(NOOP);
     }
   });
 

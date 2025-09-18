@@ -4,6 +4,7 @@ import { absoluteUrl } from "@/lib/util";
 import { tService, tServiceStatement } from "@/lib/prisma-types";
 import PageContent from "@/ui/page-content";
 import ServiceStatementHandler from "./service-statement-handler";
+import { NOOP } from "@/lib/constants";
 
 /**
  * the param contains a statement id or undefined.
@@ -25,12 +26,14 @@ const IamStatementsPage = async ({ params }: { params: Promise<any[]> }) => {
   await params.then(async (values: any[]) => {
     statementId = values[0];
     serviceId = values[1];
-    await loadServices().then(async (values: tService[]) => {
-      services = values;
-      await loadServiceStatements().then((values: tServiceStatement[]) => {
-        servicestatements = values;
-      });
-    });
+    await loadServices()
+      .then(async (values: tService[]) => {
+        services = values;
+        await loadServiceStatements().then((values: tServiceStatement[]) => {
+          servicestatements = values;
+        });
+      })
+      .catch(NOOP);
   });
 
   /**

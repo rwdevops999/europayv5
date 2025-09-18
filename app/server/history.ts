@@ -4,13 +4,15 @@ import { tHistory, tTemplate } from "@/lib/prisma-types";
 import prisma from "@/lib/prisma";
 import { HistoryType } from "@/generated/prisma";
 import { fillTemplate, loadTemplateByName } from "./templates";
+import { NOOP } from "@/lib/constants";
 
 export const loadHistory = async (): Promise<tHistory[]> => {
   let result: tHistory[] = [];
 
   await prisma.history
     .findMany()
-    .then((values: tHistory[]) => (result = values));
+    .then((values: tHistory[]) => (result = values))
+    .catch(NOOP);
 
   return result;
 };
