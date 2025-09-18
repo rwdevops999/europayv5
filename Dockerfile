@@ -6,7 +6,7 @@ RUN npm install --global corepack@latest
 FROM base as deps
 
 WORKDIR  /europay
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
+COPY package.json package-lock.json* pnpm-lock.yaml* ./
 RUN \
   if [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
   elif [ -f package-lock.json ]; then npm ci --legacy-peer-deps; \
@@ -31,7 +31,7 @@ WORKDIR /europay
 
 ENV NODE_ENV=production
 # ENV DATABASE_URL=postgres://postgres:5432/europayv5_db
-ENV DATABASE_URL="postgresql://postgres:postgres@postgres:5432/europayv5_dbx2?schema=public&pool_timeout=0"
+ENV DATABASE_URL="postgresql://postgres:postgres@postgres:5432/europay_db?schema=public&pool_timeout=0"
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs

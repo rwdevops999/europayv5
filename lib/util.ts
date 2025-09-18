@@ -20,10 +20,17 @@ import { v4 as uuidv4 } from "uuid";
  * @returns the basolute url ("http://localhost:3000/.../path")
  */
 export const absoluteUrl = (path: string, useEnv: boolean = true): string => {
+  console.log(
+    "AURL",
+    process.env.NEXT_PUBLIC_APP_URL,
+    process.env.NEXT_PUBLIC_SERVER_PORT
+  );
   let urlStart: string | undefined = process.env.NEXT_PUBLIC_APP_URL;
   if (!(urlStart && useEnv)) {
     urlStart = `http://localhost:${process.env.NEXT_PUBLIC_SERVER_PORT}`;
   }
+
+  console.log("AURL: result ", `${urlStart}${path}`);
 
   return `${urlStart}${path}`;
 };
