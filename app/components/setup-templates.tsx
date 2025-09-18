@@ -32,11 +32,21 @@ const SetupTemplates = ({
 
     const dbTemplates: number = await getDBTemplatesCount();
 
+    console.log("UPLOAD TEMPLATES:", process.env.NEXT_PUBLIC_TEMPLATE_FILE);
     const fileTemplates: number = await getFileTemplatesCount(
       process.env.NEXT_PUBLIC_TEMPLATE_FILE
     );
 
     result = dbTemplates === 0 || dbTemplates < fileTemplates;
+
+    console.log(
+      "[TEMPLATES] upload needed",
+      result,
+      "DB",
+      dbTemplates,
+      "file",
+      fileTemplates
+    );
 
     return result;
   };

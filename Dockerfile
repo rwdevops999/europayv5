@@ -32,6 +32,7 @@ WORKDIR /europay
 ENV NODE_ENV=production
 # ENV DATABASE_URL=postgres://postgres:5432/europayv5_db
 ENV DATABASE_URL="postgresql://postgres:postgres@postgres:5432/europay_db?schema=public&pool_timeout=0"
+# ENV NEXT_PUBLIC_TEMPLATE_FILE="/europay/templates/templates.json"
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -43,6 +44,9 @@ COPY --from=builder /europay/package.json ./
 COPY --from=builder /europay/public ./public
 COPY --from=builder /europay/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /europay/.next ./.next
+
+COPY --from=builder /europay/templates ./templates
+COPY --from=builder /europay/setup ./setup
 
 RUN npx prisma generate
 

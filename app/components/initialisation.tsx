@@ -39,6 +39,7 @@ const Initialisation = () => {
   const [initIam, setInitIam] = useState<boolean>(false);
   const [showCursor, setShowCursor] = useState<boolean>(false);
 
+  console.log("INITIALISATION");
   return (
     <>
       <SetupTemplates proceed={setInitServices} />
