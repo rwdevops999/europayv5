@@ -22,7 +22,9 @@ pipeline {
         sh 'pnpm -v'
         sh 'docker -v'
         sh 'git -v'
-        env.isRunning = false;
+        script {
+          env.isRunning = false;
+        }
       }
     }
 
