@@ -3,6 +3,7 @@
 def isValid = true
 def isRun = true
 def _isRun = false
+def BUILD_FULL = -9
 
 pipeline {
   agent {label 'macos'}
@@ -47,8 +48,13 @@ pipeline {
   stage("test0") {
       steps {
         script {
-          _isRun = sh(script: "docker container inspect -f {{.State.Running}} 'europayapp'", returnStdout: false)
-          sh ("echo ${_isRun}")
+          // _isRun = sh(script: "docker container inspect -f {{.State.Running}} 'europayapp'", returnStdout: false)
+          // sh ("echo ${_isRun}")
+          BUILD_FULL = sh (
+            script: "git log -1 --pretty=%B | grep '\\[jenkins-full]'",
+            returnStatus: true
+          ) == 0
+          echo "Build full flag: ${BUILD_FULL}"
         }
         // _isRun = sh(script: $(docker container inspect -f '{{.State.Running}}' 'europayapp') = "true")
       }
