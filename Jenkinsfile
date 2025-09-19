@@ -46,6 +46,7 @@ pipeline {
 
   stage("test0") {
       steps {
+        sh(script: "ls -all")
         sh '''
           _isRun=true     
         '''
