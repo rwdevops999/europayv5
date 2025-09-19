@@ -1,6 +1,7 @@
 // @Library("shared-library@master") _
 
 def isValid = true
+def isRunning = true
 
 pipeline {
   agent {label 'macos'}
@@ -12,7 +13,6 @@ pipeline {
     USER = 'rwdevops999'
     IMAGE_NAME = 'europay'
     IMAGE_TAG = 'latest'
-    isRunning = true
   }
 
   stages {
@@ -23,7 +23,7 @@ pipeline {
         sh 'docker -v'
         sh 'git -v'
         script {
-          env.isRunning = false;
+          isRunning = false;
         }
       }
     }
@@ -45,7 +45,7 @@ pipeline {
   stage("test1") {
       when {
         expression {
-          env.isRunning
+          isRunning
         }
       }
 
@@ -57,7 +57,7 @@ pipeline {
   stage("test2") {
       when {
         expression {
-          ! env.isRunning
+          ! isRunning
         }
       }
 
