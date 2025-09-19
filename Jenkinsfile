@@ -40,7 +40,7 @@ pipeline {
           #!/bin/bash
           set isRunning = false
         fi
-        echo "RESULT ${isRunning}"
+        ${isRunning}=isRunning
       '''
     }
   }
