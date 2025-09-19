@@ -2,7 +2,7 @@
 
 def isValid = true
 def isRun = true
-def _isRun = ""
+def _isRun = false
 
 pipeline {
   agent {label 'macos'}
@@ -47,7 +47,7 @@ pipeline {
   stage("test0") {
       steps {
         script {
-          _isRun = sh(script: 'docker container inspect -f {{.State.Running}} "europayapp"', returnStdout: false)
+          _isRun = sh(script: "docker container inspect -f {{.State.Running}} 'europayapp'", returnStdout: false)
           println ">>>" _isRun
         }
         // _isRun = sh(script: $(docker container inspect -f '{{.State.Running}}' 'europayapp') = "true")
