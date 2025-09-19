@@ -12,7 +12,7 @@ pipeline {
     USER = 'rwdevops999'
     IMAGE_NAME = 'europay'
     IMAGE_TAG = 'latest'
-    isRunning = false
+    // isRunning = false
   }
 
   stages {
@@ -22,20 +22,21 @@ pipeline {
         sh 'pnpm -v'
         sh 'docker -v'
         sh 'git -v'
+        env.isRunning = false;
       }
     }
 
   stage("exists") {
     steps {
-      sh '''#!/bin/bash
-        if [ "$(  docker container inspect -f '{{.State.Status}}' 'europayapp')" = "running" ];
-        then 
-          echo "Container IS running"
-          $env.isRunning = true
-        else
-          echo "Container IS NOT running"
-        fi
-      '''
+      // sh '''#!/bin/bash
+      //   if [ "$(  docker container inspect -f '{{.State.Status}}' 'europayapp')" = "running" ];
+      //   then 
+      //     echo "Container IS running"
+      //     $env.isRunning = true
+      //   else
+      //     echo "Container IS NOT running"
+      //   fi
+      // '''
       sh 'echo ENV ${env.isRunning}'
     }
   }
