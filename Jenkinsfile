@@ -12,6 +12,7 @@ pipeline {
     USER = 'rwdevops999'
     IMAGE_NAME = 'europay'
     IMAGE_TAG = 'latest'
+    isRunning = false
   }
 
   stages {
@@ -34,7 +35,7 @@ pipeline {
         else
           echo "Container IS NOT running"
         fi
-        echo "Container running = ${env.isRunning}"
+        echo Container running = ${env.isRunning}
       '''
     }
   }
