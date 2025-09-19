@@ -54,7 +54,7 @@ pipeline {
             script: "docker container inspect -f {{.State.Running}} 'europayapp'",
             returnStatus: true
           ) == 0
-          echo "Build full flag: ${BUILD_FULL}"
+          echo "FLAGGIE: ${BUILD_FULL}"
         }
         // _isRun = sh(script: $(docker container inspect -f '{{.State.Running}}' 'europayapp') = "true")
       }
