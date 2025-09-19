@@ -32,7 +32,7 @@ pipeline {
         then 
           isRunning = true
         fi
-        echo "Container running = $isRunning"
+        echo Container running = $isRunning
       '''
     }
   }
