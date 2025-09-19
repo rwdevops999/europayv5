@@ -32,11 +32,11 @@ pipeline {
         then 
           echo "Container IS running"
           #!/bin/bash
-          export isRunning true
+          export isRunning false
         else
           echo "Container IS NOT running"
           #!/bin/bash
-          export isRunning false
+          export isRunning true
         fi
         echo RESULT \$isRunning
       '''
