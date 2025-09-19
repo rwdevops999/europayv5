@@ -34,11 +34,11 @@ pipeline {
         then 
           echo "Container IS running"
           #!/bin/bash
-          def isRunning = true
+          isRunning = true
         else
-          #!/bin/bash
-          def isRunning = false
           echo "Container IS NOT running"
+          #!/bin/bash
+          isRunning = false
         fi
         echo "RESULT ${isRunning}"
       '''
