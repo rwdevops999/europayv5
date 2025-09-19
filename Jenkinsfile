@@ -12,6 +12,7 @@ pipeline {
     USER = 'rwdevops999'
     IMAGE_NAME = 'europay'
     IMAGE_TAG = 'latest'
+    isRunning = false
   }
 
   stages {
@@ -29,10 +30,9 @@ pipeline {
       sh '''
         if [ "$( docker container inspect -f '{{.State.Status}}' 'europayapp' )" = "running" ];
         then 
-          echo "IS UP"
-        else 
-          echo "IS DOWN"
+          isRunning = true
         fi
+        echo "Container running = \$isRunning"
       '''
     }
   }
