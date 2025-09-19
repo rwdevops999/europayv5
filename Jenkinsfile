@@ -1,9 +1,7 @@
 // @Library("shared-library@master") _
 
 def isValid = true
-def isRun = true
-def _isRun = false
-def BUILD_FULL = -9
+def isRunning = -1
 
 pipeline {
   agent {label 'macos'}
@@ -48,13 +46,11 @@ pipeline {
   stage("test0") {
       steps {
         script {
-          // _isRun = sh(script: "docker container inspect -f {{.State.Running}} 'europayapp'", returnStdout: false)
-          // sh ("echo ${_isRun}")
-          BUILD_FULL = sh (
+          isRunning = sh (
             script: "docker container inspect -f {{.State.Running}} 'europayapp'",
             returnStatus: true
           ) == 0
-          echo "FLAGGIE: ${BUILD_FULL}"
+          echo "is running: ${isRunning}"
         }
         // _isRun = sh(script: $(docker container inspect -f '{{.State.Running}}' 'europayapp') = "true")
       }
@@ -62,7 +58,7 @@ pipeline {
 
   stage("test1") {
       steps {
-        println BUILD_FULL
+        println isRunning
       }
   }
 
