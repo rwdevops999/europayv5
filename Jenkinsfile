@@ -1,7 +1,7 @@
 // @Library("shared-library@master") _
 
 def isValid = true
-def isRun = true
+def _isRun = true
 
 pipeline {
   agent {label 'macos'}
@@ -46,7 +46,7 @@ pipeline {
   stage("test0") {
       steps {
         sh '''
-          echo "TEST0";
+          _isRun=true     
         '''
       }
   }
