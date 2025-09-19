@@ -25,22 +25,30 @@ pipeline {
       }
     }
 
-  stage("exists") {
-    steps {
-      sh '''
-        if [ "$(  docker container inspect -f '{{.State.Status}}' 'europayapp')" = "running" ];
-        then 
-          echo "Container IS running"
-          #!/bin/bash
-          export isRun=true
-        else
-          echo "Container IS NOT running"
-          #!/bin/bash
-          export isRun=false
-        fi
-        echo RESULT \$isRun
-      '''
-    }
+  // stage("exists") {
+  //   steps {
+  //     sh '''
+  //       if [ "$(  docker container inspect -f '{{.State.Status}}' 'europayapp')" = "running" ];
+  //       then 
+  //         echo "Container IS running"
+  //         #!/bin/bash
+  //         export isRun=true
+  //       else
+  //         echo "Container IS NOT running"
+  //         #!/bin/bash
+  //         export isRun=false
+  //       fi
+  //       echo RESULT \$isRun
+  //     '''
+  //   }
+  // }
+
+  stage("test0") {
+      steps {
+        sh '''
+          echo "TEST0";
+        '''
+      }
   }
 
   stage("test1") {
