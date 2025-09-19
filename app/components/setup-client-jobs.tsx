@@ -63,6 +63,7 @@ const SetupClientJobs = ({
 
     if (job) {
       if (job.status === JobStatus.RUNNING) {
+        console.log("[startupLob] SUSPEND INNGEST JOB");
         await suspendInngestJob(TaskPollerJobName, {
           jobid: job.id,
           delayexpression: "",
@@ -96,6 +97,7 @@ const SetupClientJobs = ({
   const taskListenerFunction = async (data: any): Promise<void> => {
     const { key, value } = data;
 
+    console.log("[taskListener]", key, taskKey);
     if (key === taskKey) {
       if (value > 0) {
         setTaskAvailable(value > 0);

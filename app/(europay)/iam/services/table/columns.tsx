@@ -35,12 +35,7 @@ export const columns: ColumnDef<Data>[] = [
                 }}
               />
             ) : (
-              <Button
-                style="ghost"
-                size={"extrasmall"}
-                name={"📬"}
-                className="border-0 opacity-0 hover:cursor-default"
-              />
+              <div className="ml-4">&nbsp;</div>
             )}
             {row.original.name}
           </div>

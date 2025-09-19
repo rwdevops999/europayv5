@@ -30,9 +30,7 @@ FROM base AS runner
 WORKDIR /europay
 
 ENV NODE_ENV=production
-# ENV DATABASE_URL=postgres://postgres:5432/europayv5_db
 ENV DATABASE_URL="postgresql://postgres:postgres@postgres:5432/europay_db?schema=public&pool_timeout=0"
-# ENV NEXT_PUBLIC_TEMPLATE_FILE="/europay/templates/templates.json"
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -53,12 +51,4 @@ RUN npx prisma generate
 
 EXPOSE 3000
 
-# # SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-# CMD ["./start.sh"]
-# ENTRYPOINT ["./start.sh"]
-# CMD ["sh", "-c", "pnpm jobs"]
 CMD npx prisma db push && pnpm start
-# CMD ["sh", "-c", "pnpm jobs"]
-# CMD ["./start.sh"]
-# CMD ./start.sh
-# SHELL ["/bin/bash", "-c"]

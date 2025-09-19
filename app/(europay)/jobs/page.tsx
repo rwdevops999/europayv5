@@ -49,6 +49,8 @@ const JobsPage = () => {
       if (job) {
         if (job.status !== JobStatus.SUSPENDED) {
           const jobname: string = job.jobname;
+          console.log("[suspendSelectedJobs] SUSPEND INNGEST JOB");
+
           await suspendInngestJob(jobname, {
             jobid: job.id,
             delayexpression: "",
@@ -78,6 +80,7 @@ const JobsPage = () => {
       if (job) {
         if (job.status !== JobStatus.SUSPENDED) {
           const jobname: string = job.jobname;
+          console.log("[removeSelectedJobs] SUSPEND INNGEST JOB");
           await suspendInngestJob(jobname, {
             jobid: job.id,
             delayexpression: "",

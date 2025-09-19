@@ -13,29 +13,17 @@ const AppLink = ({
   disabled = false,
   ...props
 }: React.ComponentProps<typeof Link> & { disabled?: boolean }) => {
-  if (process.env.NODE_ENV === "development") {
-    return (
-      <ProgressLink
-        href={href.toString()}
-        className={className}
-        disabled={disabled}
-      >
-        {children}
-      </ProgressLink>
-    );
-  } else {
-    return (
-      <Link
-        href={href}
-        className={clsx("", {
-          "text-gray-500 hover:bg-transparent": disabled,
-        })}
-        {...props}
-      >
-        {children}
-      </Link>
-    );
-  }
+  // if (process.env.NODE_ENV === "development") {
+  return (
+    <ProgressLink
+      href={href.toString()}
+      className={className}
+      disabled={disabled}
+    >
+      {children}
+    </ProgressLink>
+  );
 };
+// };
 
 export default AppLink;
