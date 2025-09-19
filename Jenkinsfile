@@ -23,7 +23,7 @@ pipeline {
         sh 'docker -v'
         sh 'git -v'
         script {
-          env.isRunning = false;
+          env.isRunning = true;
         }
       }
     }
@@ -39,23 +39,32 @@ pipeline {
       //     echo "Container IS NOT running"
       //   fi
       // '''
-      script {
-        sh 'echo ENV ${env.isRunning}'
-      }
     }
   }
 
-  // stage("test") {
-  //     when {
-  //       expression {
-  //         isRunning
-  //       }
-  //     }
+  stage("test1") {
+      when {
+        expression {
+          isRunning
+        }
+      }
 
-  //     steps {
-  //       sh "echo RUNNING"
-  //     }
-  // }
+      steps {
+        sh "echo RUNNING"
+      }
+  }
+
+  stage("test2") {
+      when {
+        expression {
+          ! isRunning
+        }
+      }
+
+      steps {
+        sh "echo NOT RUNNING"
+      }
+  }
   //   stage("build prisma and production application") {
   //     steps {
   //       sh 'pnpm install --no-frozen-lockfile'
