@@ -44,28 +44,35 @@ pipeline {
   }
 
   stage("test1") {
-      when {
-        expression {
-          isRun
-        }
-      }
-
       steps {
-        sh "echo RUNNING"
+        println isRun
       }
   }
 
-  stage("test2") {
-      when {
-        expression {
-          ! isRun
-        }
-      }
 
-      steps {
-        sh "echo NOT RUNNING"
-      }
-  }
+  // stage("test1") {
+  //     when {
+  //       expression {
+  //         isRun
+  //       }
+  //     }
+
+  //     steps {
+  //       sh "echo RUNNING"
+  //     }
+  // }
+
+  // stage("test2") {
+  //     when {
+  //       expression {
+  //         ! isRun
+  //       }
+  //     }
+
+  //     steps {
+  //       sh "echo NOT RUNNING"
+  //     }
+  // }
   //   stage("build prisma and production application") {
   //     steps {
   //       sh 'pnpm install --no-frozen-lockfile'
