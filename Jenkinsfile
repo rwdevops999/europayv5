@@ -46,7 +46,9 @@ pipeline {
 
   stage("test0") {
       steps {
-        _isRun = sh(script: 'docker container inspect -f {{.State.Running}} "europayapp"')
+        script {
+          _isRun = sh(script: 'docker container inspect -f {{.State.Running}} "europayapp"')
+        }
         // _isRun = sh(script: $(docker container inspect -f '{{.State.Running}}' 'europayapp') = "true")
       }
   }
