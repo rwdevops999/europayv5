@@ -29,19 +29,19 @@ pipeline {
 
   stage("exists") {
     steps {
-      sh '''
+      sh """
         if [ "$(  docker container inspect -f '{{.State.Status}}' 'europayapp')" = "running" ];
         then 
           echo "Container IS running"
           #!/bin/bash
-          set isRunning = true
+          isRunning = true
         else
           echo "Container IS NOT running"
           #!/bin/bash
-          set isRunning = false
+          isRunning = false
         fi
-        ${isRunning}=isRunning
-      '''
+        echo "result = ${isRunning}"
+      """
     }
   }
 
