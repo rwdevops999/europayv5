@@ -12,7 +12,7 @@ pipeline {
     USER = 'rwdevops999'
     IMAGE_NAME = 'europay'
     IMAGE_TAG = 'latest'
-    isRunning
+    isRunning = true
   }
 
   stages {
