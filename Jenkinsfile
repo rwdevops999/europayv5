@@ -1,7 +1,6 @@
-// @Library("shared-library@master") _
+@Library("shared-library@master") _
 
 def isValid = true
-def isRunning = ""
 
 pipeline {
   agent {label 'macos'}
@@ -13,7 +12,7 @@ pipeline {
     USER = 'rwdevops999'
     IMAGE_NAME = 'europay'
     IMAGE_TAG = 'latest'
-  }
+ }
 
   stages {
     stage("info") {
@@ -46,7 +45,7 @@ pipeline {
   stage("test") {
       when {
         expression {
-          isRunning = "running"
+          env.isRunning
         }
       }
 
