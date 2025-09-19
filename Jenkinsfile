@@ -1,7 +1,7 @@
 // @Library("shared-library@master") _
 
 def isValid = true
-def isRunning = true
+def isRunning = false
 
 pipeline {
   agent {label 'macos'}
@@ -22,8 +22,8 @@ pipeline {
         sh 'pnpm -v'
         sh 'docker -v'
         sh 'git -v'
-        echo isRunning // printing via Groovy works
-        sh 'echo $isRunning' // printing in shell does not work
+        // echo isRunning // printing via Groovy works
+        sh "echo $isRunning" // printing in shell does not work
       }
     }
 
