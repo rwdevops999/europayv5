@@ -39,7 +39,9 @@ pipeline {
       //     echo "Container IS NOT running"
       //   fi
       // '''
-      sh 'echo ENV ${env.isRunning}'
+      script {
+        sh 'echo ENV ${env.isRunning}'
+      }
     }
   }
 
