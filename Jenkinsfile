@@ -38,6 +38,7 @@ pipeline {
           #!/bin/bash
           export isRunning = false
         fi
+        echo RESULT \$isRunning
       '''
     }
   }
