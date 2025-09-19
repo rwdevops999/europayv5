@@ -23,10 +23,7 @@ pipeline {
         sh 'docker -v'
         sh 'git -v'
         echo isRunning // printing via Groovy works
-        sh 'echo $isRuuning' // printing in shell does not work
-        // script {
-        //   isRunning = true;
-        // }
+        sh 'echo $isRunning' // printing in shell does not work
       }
     }
 
