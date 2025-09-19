@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "jobs": "npx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/inngest",
-    "jobsp": "npx inngest-cli@latest"
+    "jobs": "npx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/inngest"
   },
   "dependencies": {
     "@prisma/client": "^6.12.0",

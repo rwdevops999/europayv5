@@ -24,80 +24,92 @@ pipeline {
       }
     }
 
-    stage("build prisma and production application") {
-      steps {
-        sh 'pnpm install --no-frozen-lockfile'
-        sh 'pnpm build'
-      }
-
-      post {
-        failure {
-          script {
-            isValid = false
-          }
-        }
-      }
-    }
-
-    stage("package") {
-      when {
-        expression {
-          isValid
-        }
-      }
-
-      steps {
-        sh '''
-          echo $KEYCHAIN_PSW
-          echo ${KEYCHAIN_PSW}
-					security unlock-keychain -p ${KEYCHAIN_PSW}
-					docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}
-					docker build . -t ${IMAGE_NAME}
-        '''
-      }
-
-      post {
-        failure {
-          script {
-            isValid = false
-          }
-        }
-      }
-    }
-
-    stage("publish") {
-      when {
-        expression {
-          isValid
-    		}
-			}
-
-			steps {
-					// docker logout registry-1.docker.io
-				sh '''
-					docker tag ${IMAGE_NAME} ${USER}/${IMAGE_NAME}
-					docker push ${USER}/${IMAGE_NAME}
-				'''
-			}
-
-			post {
-				success {
-					sh '''
-            echo "Removing images"
-						docker rmi -f ${IMAGE_NAME}:latest
-						docker rmi -f ${USER}/${IMAGE_NAME}:latest
-					'''					
-			        script {
-        			    isValid = true
-        			}
-				}
-
-				failure {
-			    script {
-            isValid = false
-        	}
-				}
-			}
+  stage("exists") {
+    steps {
+      sh '''
+        if [ "$( docker container inspect -f '{{.State.Status}}' 'europayapp' )" = "running" ];
+        then 
+          echo "IS UP"
+        else 
+          echo "IS DOWN"
+        fi
+      '''
     }
   }
+  //   stage("build prisma and production application") {
+  //     steps {
+  //       sh 'pnpm install --no-frozen-lockfile'
+  //       sh 'pnpm build'
+  //     }
+
+  //     post {
+  //       failure {
+  //         script {
+  //           isValid = false
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   stage("package") {
+  //     when {
+  //       expression {
+  //         isValid
+  //       }
+  //     }
+
+  //     steps {
+  //       sh '''
+  //         echo $KEYCHAIN_PSW
+  //         echo ${KEYCHAIN_PSW}
+	// 				security unlock-keychain -p ${KEYCHAIN_PSW}
+	// 				docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}
+	// 				docker build . -t ${IMAGE_NAME}
+  //       '''
+  //     }
+
+  //     post {
+  //       failure {
+  //         script {
+  //           isValid = false
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   stage("publish") {
+  //     when {
+  //       expression {
+  //         isValid
+  //   		}
+	// 		}
+
+	// 		steps {
+	// 				// docker logout registry-1.docker.io
+	// 			sh '''
+	// 				docker tag ${IMAGE_NAME} ${USER}/${IMAGE_NAME}
+	// 				docker push ${USER}/${IMAGE_NAME}
+	// 			'''
+	// 		}
+
+	// 		post {
+	// 			success {
+	// 				sh '''
+  //           echo "Removing images"
+	// 					docker rmi -f ${IMAGE_NAME}:latest
+	// 					docker rmi -f ${USER}/${IMAGE_NAME}:latest
+	// 				'''					
+	// 		        script {
+  //       			    isValid = true
+  //       			}
+	// 			}
+
+	// 			failure {
+	// 		    script {
+  //           isValid = false
+  //       	}
+	// 			}
+	// 		}
+  //   }
+  // }
 }
