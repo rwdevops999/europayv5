@@ -28,7 +28,7 @@ pipeline {
   stage("exists") {
     steps {
       sh '''
-        set isRunning=docker container inspect -f '{{.State.Status}}' 'europayapp'
+        set isRunning=docker container inspect -f '{{.State.Status}}' 'europayapp' = "running'
       '''
 
       // def isRunning = sh(( docker container inspect -f '{{.State.Status}}' 'europayapp' ) = "running" ];
