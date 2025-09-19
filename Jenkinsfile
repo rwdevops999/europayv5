@@ -34,11 +34,11 @@ pipeline {
         then 
           echo "Container IS running"
           #!/bin/bash
-          isRunning = true
+          set isRunning = true
         else
           echo "Container IS NOT running"
           #!/bin/bash
-          isRunning = false
+          set isRunning = false
         fi
         echo "RESULT ${isRunning}"
       '''
