@@ -23,7 +23,7 @@ pipeline {
         sh 'docker -v'
         sh 'git -v'
         script {
-          isRunning = false;
+          isRunning = true;
         }
       }
     }
