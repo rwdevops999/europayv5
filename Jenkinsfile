@@ -1,4 +1,4 @@
-@Library("shared-library@master") _
+// @Library("shared-library@master") _
 
 def isValid = true
 
@@ -12,7 +12,7 @@ pipeline {
     USER = 'rwdevops999'
     IMAGE_NAME = 'europay'
     IMAGE_TAG = 'latest'
- }
+  }
 
   stages {
     stage("info") {
@@ -26,37 +26,28 @@ pipeline {
 
   stage("exists") {
     steps {
-      script {
-        env.isRunning=sh(docker container inspect -f '{{.State.Status}}' 'europayapp') = "running"
-      }
-      // sh '''
-      // env.SCRIPT_RET
-      //   set isRunning=docker container inspect -f '{{.State.Status}}' 'europayapp' = "running"
-      // '''
-
-      // def isRunning = sh(( docker container inspect -f '{{.State.Status}}' 'europayapp' ) = "running" ];
-      // sh(docker image ls);
-      // sh '''#!/bin/bash
-      //   if [ "$( docker container inspect -f '{{.State.Status}}' 'europayapp' )" = "running" ];
-      //   then 
-      //     echo "SET ISRUNNING"
-      //   fi
-      //   echo Container running = $isRunning
-      // '''
+      sh '''#!/bin/bash
+        if [ "$( docker container inspect -f '{{.State.Status}}' 'europayapp' )" = "running" ];
+        then 
+          echo "Container IS running"
+          $env.isRunning = true
+        fi
+        echo Container running = $env.isRunning
+      '''
     }
   }
 
-  stage("test") {
-      when {
-        expression {
-          env.isRunning
-        }
-      }
+  // stage("test") {
+  //     when {
+  //       expression {
+  //         isRunning
+  //       }
+  //     }
 
-      steps {
-        sh "echo RUNNING"
-      }
-  }
+  //     steps {
+  //       sh "echo RUNNING"
+  //     }
+  // }
   //   stage("build prisma and production application") {
   //     steps {
   //       sh 'pnpm install --no-frozen-lockfile'
