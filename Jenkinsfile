@@ -1,6 +1,7 @@
 // @Library("shared-library@master") _
 
 def isValid = true
+def isRun = true
 def _isRun = true
 
 pipeline {
