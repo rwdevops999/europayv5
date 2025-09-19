@@ -39,6 +39,7 @@ pipeline {
           $isRunning = false
           echo "Container IS NOT running"
         fi
+        echo "RESULT ${isRunning}"
       '''
     }
   }
