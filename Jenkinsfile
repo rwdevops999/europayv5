@@ -63,7 +63,7 @@ pipeline {
   }
 
 
-  stage("test1") {
+  stage("test2") {
       when {
         expression {
           isRunning
@@ -75,7 +75,7 @@ pipeline {
       }
   }
 
-  stage("test2") {
+  stage("test3") {
       when {
         expression {
           ! isRunning
@@ -86,7 +86,7 @@ pipeline {
         sh "echo NOT RUNNING"
       }
   }
-  
+
   //   stage("build prisma and production application") {
   //     steps {
   //       sh 'pnpm install --no-frozen-lockfile'
