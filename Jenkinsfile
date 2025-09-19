@@ -22,9 +22,12 @@ pipeline {
         sh 'pnpm -v'
         sh 'docker -v'
         sh 'git -v'
-        script {
-          isRunning = true;
-        }
+        isRunning = true // this is Groovy
+        echo isRunning // printing via Groovy works
+        sh 'echo $isRuuning' // printing in shell does not work
+        // script {
+        //   isRunning = true;
+        // }
       }
     }
 
