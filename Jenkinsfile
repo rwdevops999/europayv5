@@ -1,7 +1,7 @@
 // @Library("shared-library@master") _
 
 def isValid = true
-def isRunning = false
+def isRunning = true
 
 pipeline {
   agent {label 'macos'}
@@ -36,6 +36,7 @@ pipeline {
           #!/bin/bash
           $isRunning = true
         else
+          $isRunning = false
           echo "Container IS NOT running"
         fi
       '''
