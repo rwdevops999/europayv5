@@ -1,4 +1,4 @@
-// @Library("shared-library@master") _
+@Library("shared-library@master") _
 
 def isValid = true
 def isRunning = false
@@ -37,17 +37,17 @@ pipeline {
     }
   }
 
-  stage("test") {
-      when {
-        expression {
-          isRunning
-        }
-      }
+  // stage("test") {
+  //     when {
+  //       expression {
+  //         isRunning
+  //       }
+  //     }
 
-      steps {
-        sh "echo RUNNING"
-      }
-  }
+  //     steps {
+  //       sh "echo RUNNING"
+  //     }
+  // }
   //   stage("build prisma and production application") {
   //     steps {
   //       sh 'pnpm install --no-frozen-lockfile'
@@ -124,5 +124,5 @@ pipeline {
 	// 		}
   //   }
   // }
-}
+  }
 }
