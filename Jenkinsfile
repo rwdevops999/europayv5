@@ -30,9 +30,9 @@ pipeline {
       sh '''
         if [ "$( docker container inspect -f '{{.State.Status}}' 'europayapp' )" = "running" ];
         then 
-          isRunning = true
+          $isRunning = true
         fi
-        echo Container running = $isRunning
+        echo "Container running = $isRunning"
       '''
     }
   }
