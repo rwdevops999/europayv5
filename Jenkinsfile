@@ -48,7 +48,7 @@ pipeline {
   stage("test1") {
       when {
         expression {
-          isRunning
+          isRunning = true
         }
       }
 
@@ -60,7 +60,7 @@ pipeline {
   stage("test2") {
       when {
         expression {
-          ! isRunning
+          isRunning = false
         }
       }
 
