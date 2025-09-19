@@ -35,8 +35,8 @@ pipeline {
         else
           echo "Container IS NOT running"
         fi
-        echo Container running = ${env.isRunning}
       '''
+      sh 'echo ENV ${env.isRunning}'
     }
   }
 
