@@ -2,7 +2,7 @@
 
 def isValid = true
 def isRun = true
-def _isRun = true
+def _isRun = false
 
 pipeline {
   agent {label 'macos'}
@@ -54,7 +54,7 @@ pipeline {
 
   stage("test1") {
       steps {
-        println isRun
+        println _isRun
       }
   }
 
