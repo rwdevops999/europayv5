@@ -1,6 +1,7 @@
 // @Library("shared-library@master") _
 
 def isValid = true
+def isRunning = false
 
 pipeline {
   agent {label 'macos'}
@@ -12,7 +13,6 @@ pipeline {
     USER = 'rwdevops999'
     IMAGE_NAME = 'europay'
     IMAGE_TAG = 'latest'
-    isRunning = false
   }
 
   stages {
@@ -30,9 +30,9 @@ pipeline {
       sh '''#!/bin/bash
         if [ "$( docker container inspect -f '{{.State.Status}}' 'europayapp' )" = "running" ];
         then 
-          set ${env.isRunning}=true
+          set isRunning=true
         fi
-        echo "Container running = ${env.isRunning}"
+        echo "Container running = ${isRunning}"
       '''
     }
   }
