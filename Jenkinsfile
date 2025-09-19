@@ -22,8 +22,6 @@ pipeline {
         sh 'pnpm -v'
         sh 'docker -v'
         sh 'git -v'
-        // echo isRunning // printing via Groovy works
-        sh "echo $isRunning" // printing in shell does not work
       }
     }
 
@@ -34,13 +32,12 @@ pipeline {
         then 
           echo "Container IS running"
           #!/bin/bash
-          isRunning = true
+          export isRunning = true
         else
           echo "Container IS NOT running"
           #!/bin/bash
-          isRunning = false
+          export isRunning = false
         fi
-        echo "result = ${isRunning}"
       '''
     }
   }
