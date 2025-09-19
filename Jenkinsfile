@@ -1,7 +1,7 @@
 // @Library("shared-library@master") _
 
 def isValid = true
-def isRunning = false
+def isRunning = ""
 
 pipeline {
   agent {label 'macos'}
@@ -28,7 +28,7 @@ pipeline {
   stage("exists") {
     steps {
       sh '''
-        set result=docker container inspect -f '{{.State.Status}}' 'europayapp'
+        set isRunning=docker container inspect -f '{{.State.Status}}' 'europayapp'
       '''
 
       // def isRunning = sh(( docker container inspect -f '{{.State.Status}}' 'europayapp' ) = "running" ];
@@ -43,17 +43,17 @@ pipeline {
     }
   }
 
-  // stage("test") {
-  //     when {
-  //       expression {
-  //         isRunning
-  //       }
-  //     }
+  stage("test") {
+      when {
+        expression {
+          isRunning = "running"
+        }
+      }
 
-  //     steps {
-  //       sh "echo RUNNING"
-  //     }
-  // }
+      steps {
+        sh "echo RUNNING"
+      }
+  }
   //   stage("build prisma and production application") {
   //     steps {
   //       sh 'pnpm install --no-frozen-lockfile'
