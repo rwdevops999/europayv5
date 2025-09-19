@@ -40,6 +40,7 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=deps /europay/node_modules ./node_modules
 
 COPY --from=builder /europay/start.sh ./
+RUN chmod +x ./start.sh
 COPY --from=builder /europay/package.json ./
 COPY --from=builder /europay/public ./public
 COPY --from=builder /europay/prisma ./prisma
@@ -54,5 +55,10 @@ EXPOSE 3000
 
 # # SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # CMD ["./start.sh"]
-CMD ["sh", "-c", "npx prisma db push && pnpm start"]
+# ENTRYPOINT ["./start.sh"]
+# CMD ["sh", "-c", "pnpm jobs"]
+CMD npx prisma db push && pnpm start
+# CMD ["sh", "-c", "pnpm jobs"]
+# CMD ["./start.sh"]
+# CMD ./start.sh
 # SHELL ["/bin/bash", "-c"]

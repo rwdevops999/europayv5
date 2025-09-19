@@ -227,7 +227,8 @@ export let menu: MenuItem[] = [
     url: "#",
     title: "Tests",
     disabled: false,
-    visible: process.env.NODE_ENV !== "production",
+    // visible: process.env.NODE_ENV !== "production",
+    visible: true,
     icon: <GrTest size={16} />,
     subItems: [
       {

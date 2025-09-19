@@ -145,7 +145,5 @@ export const getFileTemplatesCount = async (
     result = templates.length;
   }
 
-  console.log("[getFileTemplatesCount]", filename);
-
   return result;
 };

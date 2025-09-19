@@ -86,6 +86,9 @@ services:
   frontend:
     image: rwdevops999/europay:latest
     container_name: europayapp
+    environment:
+      - INNGEST_DEV=1
+      - INNGEST_BASE_URL=http://host.docker.internal:8288
     depends_on:
       postgres:
         condition: service_healthy
@@ -94,16 +97,16 @@ services:
       - 3000:3000
     labels:
       traefik.http.routers.client.rule: Host(`localhost`)
-      traefik.http.services.client.loadbalancer.server.port: 3001
+      traefik.http.services.client.loadbalancer.server.port: 3000
 
   inngest:
-    image: inngest/inngest:v0.27.0
-    command: "inngest dev -u http://app:3000/api/inngest"
+    image: inngest/inngest:v1.11.10
+    command: "inngest dev -u http://host.docker.internal:3000/api/inngest"
     ports:
       - "8288:8288"
     labels:
       traefik.http.routers.client.rule: Host(`localhost`)
-      traefik.http.services.client.loadbalancer.server.port: 8828
+      traefik.http.services.client.loadbalancer.server.port: 8288
 
 volumes:
   postgres:
