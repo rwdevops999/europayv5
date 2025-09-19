@@ -62,7 +62,7 @@ pipeline {
 
   stage("test1") {
       steps {
-        println _isRun
+        println BUILD_FULL
       }
   }
 
