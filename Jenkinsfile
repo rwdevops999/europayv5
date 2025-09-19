@@ -1,7 +1,7 @@
 // @Library("shared-library@master") _
 
 def isValid = true
-def isRunning = true
+def isRun = true
 
 pipeline {
   agent {label 'macos'}
@@ -32,13 +32,13 @@ pipeline {
         then 
           echo "Container IS running"
           #!/bin/bash
-          export isRunning false
+          isRun=true
         else
           echo "Container IS NOT running"
           #!/bin/bash
-          export isRunning true
+          isRun=false
         fi
-        echo RESULT \$isRunning
+        echo RESULT \$isRun
       '''
     }
   }
@@ -46,7 +46,7 @@ pipeline {
   stage("test1") {
       when {
         expression {
-          isRunning = true
+          isRun
         }
       }
 
@@ -58,7 +58,7 @@ pipeline {
   stage("test2") {
       when {
         expression {
-          isRunning = false
+          ! isRun
         }
       }
 
