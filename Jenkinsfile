@@ -51,7 +51,7 @@ pipeline {
           // _isRun = sh(script: "docker container inspect -f {{.State.Running}} 'europayapp'", returnStdout: false)
           // sh ("echo ${_isRun}")
           BUILD_FULL = sh (
-            script: "git log -1 --pretty=%B | grep '\\[jenkins-full]'",
+            script: "docker container inspect -f {{.State.Running}} 'europayapp'",
             returnStatus: true
           ) == 0
           echo "Build full flag: ${BUILD_FULL}"
