@@ -43,7 +43,7 @@ pipeline {
   //   }
   // }
 
-  stage("test0") {
+  stage("check container is running") {
       steps {
         script {
           isRunning = sh (
@@ -52,18 +52,10 @@ pipeline {
           ) == 0
           echo "is running: ${isRunning}"
         }
-        // _isRun = sh(script: $(docker container inspect -f '{{.State.Running}}' 'europayapp') = "true")
       }
   }
 
-  stage("test1") {
-      steps {
-        println isRunning
-      }
-  }
-
-
-  stage("test2") {
+  stage("when running bring it down") {
       when {
         expression {
           isRunning
@@ -71,21 +63,33 @@ pipeline {
       }
 
       steps {
-        sh "echo RUNNING"
+        sh "docker compose down"
       }
   }
 
-  stage("test3") {
-      when {
-        expression {
-          ! isRunning
-        }
-      }
+  // stage("test2") {
+  //     when {
+  //       expression {
+  //         isRunning
+  //       }
+  //     }
 
-      steps {
-        sh "echo NOT RUNNING"
-      }
-  }
+  //     steps {
+  //       sh "echo RUNNING"
+  //     }
+  // }
+
+  // stage("test3") {
+  //     when {
+  //       expression {
+  //         ! isRunning
+  //       }
+  //     }
+
+  //     steps {
+  //       sh "echo NOT RUNNING"
+  //     }
+  // }
 
   //   stage("build prisma and production application") {
   //     steps {
