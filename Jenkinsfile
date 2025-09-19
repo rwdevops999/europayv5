@@ -29,7 +29,7 @@ pipeline {
     steps {
       sh '''#!/bin/bash
         echo ${isRunning}
-        val=\$( docker container inspect -f '{{.State.Status}}' 'europayapp' )" = "running"
+        val=\$( docker container inspect -f '{{.State.Status}}' 'europayapp' ) = "running"
         echo Container running = $val
       '''
     }
