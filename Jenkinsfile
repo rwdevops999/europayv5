@@ -25,25 +25,7 @@ pipeline {
       }
     }
 
-  // stage("exists") {
-  //   steps {
-  //     sh '''
-  //       if [ "$(  docker container inspect -f '{{.State.Status}}' 'europayapp')" = "running" ];
-  //       then 
-  //         echo "Container IS running"
-  //         #!/bin/bash
-  //         export isRun=true
-  //       else
-  //         echo "Container IS NOT running"
-  //         #!/bin/bash
-  //         export isRun=false
-  //       fi
-  //       echo RESULT \$isRun
-  //     '''
-  //   }
-  // }
-
-  stage("check container is running") {
+    stage("check container is running") {
       steps {
         script {
           isRunning = sh (
@@ -53,9 +35,9 @@ pipeline {
           echo "is running: ${isRunning}"
         }
       }
-  }
+    }
 
-  stage("when running bring it down") {
+    stage("when container is running bring it down") {
       when {
         expression {
           isRunning
@@ -67,105 +49,100 @@ pipeline {
       }
   }
 
-  // stage("test2") {
-  //     when {
-  //       expression {
-  //         isRunning
-  //       }
-  //     }
+    stage("build image") {
+      environment {
+        DOCKERHUB_ACCESSKEY = credentials('DockerHubUserPassword')
+        KEYCHAIN_PSW = credentials('keychain')
+      }
 
-  //     steps {
-  //       sh "echo RUNNING"
-  //     }
-  // }
+		  steps {
+        sh '''
+          security unlock-keychain -p ${KEYCHAIN_PSW}
+          docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}
+          docker build . -t ${IMAGE_NAME}
+        '''
+      }
 
-  // stage("test3") {
-  //     when {
-  //       expression {
-  //         ! isRunning
-  //       }
-  //     }
+      post {
+        failure {
+          script {
+            isValid = false
+          }
+        }
+      }
+    }
 
-  //     steps {
-  //       sh "echo NOT RUNNING"
-  //     }
-  // }
+    stage("tag image and delete untagged image") {
+      when {
+        expression {
+          isValid
+        }
+      }
 
-  //   stage("build prisma and production application") {
-  //     steps {
-  //       sh 'pnpm install --no-frozen-lockfile'
-  //       sh 'pnpm build'
-  //     }
+ 		  steps {
+        sh '''
+ 					docker tag ${IMAGE_NAME} ${USER}/${IMAGE_NAME}
+          docker rmi ${IMAGE_NAME}:latest
+        '''
+      }
 
-  //     post {
-  //       failure {
-  //         script {
-  //           isValid = false
-  //         }
-  //       }
-  //     }
-  //   }
+      post {
+        failure {
+          script {
+            isValid = false
+          }
+        }
+      }
+    }
+  
+    stage("publish to Dockerhub") {
+      when {
+        expression {
+          isValid
+        }
+      }
 
-  //   stage("package") {
-  //     when {
-  //       expression {
-  //         isValid
-  //       }
-  //     }
+ 		  steps {
+        sh '''
+ 					docker push ${USER}/${IMAGE_NAME}
+        '''
+      }
 
-  //     steps {
-  //       sh '''
-  //         echo $KEYCHAIN_PSW
-  //         echo ${KEYCHAIN_PSW}
-	// 				security unlock-keychain -p ${KEYCHAIN_PSW}
-	// 				docker login -u ${DOCKERHUB_ACCESSKEY_USR} -p ${DOCKERHUB_ACCESSKEY_PSW}
-	// 				docker build . -t ${IMAGE_NAME}
-  //       '''
-  //     }
+      post {
+        failure {
+          script {
+            isValid = false
+          }
+        }
+      }
+    }
+  
+    stage("when container was running bring it up") {
+      when {
+        expression {
+          isRunning
+        }
+      }
 
-  //     post {
-  //       failure {
-  //         script {
-  //           isValid = false
-  //         }
-  //       }
-  //     }
-  //   }
+      steps {
+        sh "docker compose up"
+      }
+    }
 
-  //   stage("publish") {
-  //     when {
-  //       expression {
-  //         isValid
-  //   		}
-	// 		}
+    post {
+        success {
+    	    mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
+        }
 
-	// 		steps {
-	// 				// docker logout registry-1.docker.io
-	// 			sh '''
-	// 				docker tag ${IMAGE_NAME} ${USER}/${IMAGE_NAME}
-	// 				docker push ${USER}/${IMAGE_NAME}
-	// 			'''
-	// 		}
+        failure {
+	        mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
+        }
 
-	// 		post {
-	// 			success {
-	// 				sh '''
-  //           echo "Removing images"
-	// 					docker rmi -f ${IMAGE_NAME}:latest
-	// 					docker rmi -f ${USER}/${IMAGE_NAME}:latest
-	// 				'''					
-	// 		        script {
-  //       			    isValid = true
-  //       			}
-	// 			}
-
-	// 			failure {
-	// 		    script {
-  //           isValid = false
-  //       	}
-	// 			}
-	// 		}
-  //   }
-  // }
+        always {
+          sh '''
+					  docker logout registry-1.docker.io
+          '''
+        }
+    }
   }
 }
