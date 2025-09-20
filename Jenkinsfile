@@ -121,8 +121,21 @@ pipeline {
       }
 
       steps {
-        sh "docker compose up"
+        sh "docker compose up -d"
       }
+    }
+  }
+
+  stage("Application check") {
+    when {
+      isRunning
+    }
+            
+    steps {
+      sh '''
+        chmod 777 servercheck.sh
+        ./servercheck.sh
+      '''
     }
   }
 
