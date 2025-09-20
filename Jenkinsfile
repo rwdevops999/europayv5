@@ -15,6 +15,7 @@ pipeline {
     IMAGE_TAG = 'latest'
   }
 
+
   stages {
     stage("info") {
       steps {
