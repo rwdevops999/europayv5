@@ -128,21 +128,21 @@ pipeline {
         sh "docker compose up"
       }
     }
+  }
 
-    post {
-        success {
-    	    mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
-        }
+  post {
+    success {
+      mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
+    }
 
-        failure {
-	        mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
-        }
+    failure {
+      mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
+    }
 
-        always {
-          sh '''
-					  docker logout registry-1.docker.io
-          '''
-        }
+    always {
+      sh '''
+        docker logout registry-1.docker.io
+      '''
     }
   }
 }
