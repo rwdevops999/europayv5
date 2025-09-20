@@ -52,7 +52,7 @@ pipeline {
     stage("build image") {
       environment {
         DOCKERHUB_ACCESSKEY = credentials('DockerHubUserPassword')
-        KEYCHAIN_PSW = credentials('keychain')
+        KEYCHAIN = credentials('keychain')
       }
 
 		  steps {
