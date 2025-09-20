@@ -8,8 +8,8 @@ pipeline {
 
 	environment {
     DATABASE_URL='postgresql://postgres:postgres@localhost:5432/europayv5_db?schema=public&pool_timeout=0'
-    DOCKERHUB_ACCESSKEY = credentials('DockerHubUserPassword')
-  	KEYCHAIN = credentials('keychain')
+    DOCKERHUB_ACCESSKEY = credentials('DockerhubCredentials')
+  	KEYCHAIN = credentials('KeychainCredentials')
     USER = 'rwdevops999'
     IMAGE_NAME = 'europay'
     IMAGE_TAG = 'latest'
