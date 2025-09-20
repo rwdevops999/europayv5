@@ -1,4 +1,4 @@
-@Library("shared-library@master") _
+// @Library("shared-library@master") _
 
 def isValid = true
 def isRunning = -1
@@ -131,13 +131,13 @@ pipeline {
   }
 
   post {
-    success {
-      mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
-    }
+    // success {
+    //   mailTo(to: 'rudi.welter@gmail.com', attachLog: false)
+    // }
 
-    failure {
-      mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
-    }
+    // failure {
+    //   mailTo(to: 'rudi.welter@gmail.com', attachLog: true)
+    // }
 
     always {
       sh '''
