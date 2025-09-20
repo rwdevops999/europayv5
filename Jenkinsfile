@@ -51,11 +51,6 @@ pipeline {
   }
 
     stage("build image") {
-      environment {
-        DOCKERHUB_ACCESSKEY = credentials('DockerHubUserPassword')
-        KEYCHAIN = credentials('keychain')
-      }
-
 		  steps {
         sh '''
           security unlock-keychain -p ${KEYCHAIN_PSW}
