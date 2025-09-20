@@ -127,7 +127,9 @@ pipeline {
 
     stage("Application check") {
       when {
-        isRunning
+        expression {
+          isRunning
+        }
       }
             
       steps {
