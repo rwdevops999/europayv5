@@ -16,6 +16,7 @@ export const servicesandactions: Record<string, string[]> = {
     "User Menu",
     "Admin Menu",
     "Apply",
+    "API Menu",
   ],
 
   "europay:dashboard": ["Environment", "Version", "Wifi", "Country"],

@@ -244,6 +244,11 @@ export const AllowedSystemServiceStatements: Record<string, any> = {
     service: "europay",
     actions: ["Manual Menu"],
   },
+  ShowAPIMenu: {
+    description: "Show API menu",
+    service: "europay",
+    actions: ["API Menu"],
+  },
   ShowIAMMenu: {
     description: "Show IAM menu",
     service: "europay",
@@ -396,7 +401,7 @@ export const SystemPolicies: Record<string, any> = {
   },
   ClientDefaultPolicy: {
     description: "Default client",
-    statement: ["ShowSocialMedia", "ShowUserMenu"],
+    statement: ["ShowSocialMedia", "ShowUserMenu", "ShowAPIMenu"],
   },
   DefaultPolicy: {
     description: "Default",

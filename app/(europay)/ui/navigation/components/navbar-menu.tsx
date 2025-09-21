@@ -167,6 +167,9 @@ const NavbarMenu = () => {
       true
     );
 
+    // API
+    newmenu[7].visible = $iam_user_has_action(user, "europay", "API Menu");
+
     setAdaptedMenu(newmenu);
   };
 

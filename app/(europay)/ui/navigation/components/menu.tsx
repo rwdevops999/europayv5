@@ -10,7 +10,12 @@ import { LuClipboardList, LuHistory, LuLayoutDashboard } from "react-icons/lu";
 import { MdSettingsAccessibility } from "react-icons/md";
 import { PiExportFill, PiSpeedometerDuotone } from "react-icons/pi";
 import { RiAdminFill, RiPoliceBadgeLine } from "react-icons/ri";
-import { TbDatabaseExport, TbDatabaseImport, TbTestPipe } from "react-icons/tb";
+import {
+  TbApi,
+  TbDatabaseExport,
+  TbDatabaseImport,
+  TbTestPipe,
+} from "react-icons/tb";
 
 export interface MenuItem {
   title: string;
@@ -222,6 +227,13 @@ export let menu: MenuItem[] = [
     visible: true,
     icon: <GiBookCover size={16} />,
     subItems: [],
+  },
+  {
+    url: absoluteUrl("/api"),
+    title: "API",
+    disabled: false,
+    visible: true,
+    icon: <TbApi size={16} />,
   },
   {
     url: "#",
