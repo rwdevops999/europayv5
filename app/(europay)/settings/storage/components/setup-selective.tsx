@@ -1,6 +1,8 @@
 "use client";
 
+import { $iam_user_has_action } from "@/app/client/iam-access";
 import { cleanDbTables } from "@/app/server/app-tables";
+import { useUser } from "@/hooks/use-user";
 import { json } from "@/lib/util";
 import Button from "@/ui/button";
 import { JSX, useState } from "react";
@@ -29,6 +31,8 @@ const tooltips: Record<string, string> = {
 };
 
 const SetupSelective = () => {
+  const { user } = useUser();
+
   const [selected, setSelected] =
     useState<Record<string, boolean>>(selectiveTables);
 
@@ -93,7 +97,13 @@ const SetupSelective = () => {
     resetAll();
   };
 
-  return (
+  const allowTableSelect: boolean = $iam_user_has_action(
+    user,
+    "europay:settings:storage:selective",
+    "Select"
+  );
+
+  return allowTableSelect ? (
     <div className="block space-y-1">
       {Object.keys(selected).map((value: string) => (
         <div key={value}>
@@ -106,10 +116,17 @@ const SetupSelective = () => {
           className="bg-ep-button w-[50%]"
           size="small"
           onClick={clearSelection}
+          disabled={
+            !$iam_user_has_action(
+              user,
+              "europay:settings:storage:selective",
+              "Clear"
+            )
+          }
         />
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default SetupSelective;

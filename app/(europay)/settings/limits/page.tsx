@@ -26,10 +26,12 @@ const LimitSettingsPage = () => {
             <SetupJob
               jobname={"Task"}
               env={process.env.NEXT_PUBLIC_LIMIT_TASKPOLLER ?? "5'"}
+              accessAction="Task"
             />
             <SetupJob
               jobname={"Transaction"}
               env={process.env.NEXT_PUBLIC_LIMIT_TRANSACTIONPOLLER ?? "10'"}
+              accessAction="Transaction"
             />
           </PageItemContainer>
         </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { $iam_user_has_action } from "@/app/client/iam-access";
 import { cleanDbTables } from "@/app/server/app-tables";
 import { dbResult } from "@/app/server/data/db-tables";
 import {
@@ -7,12 +8,15 @@ import {
   loadCountriesToDB,
   loadServicesToDB,
 } from "@/app/server/setup";
+import { useUser } from "@/hooks/use-user";
 import Button from "@/ui/button";
 import { Separator } from "@/ui/radix/separator";
 import { useState } from "react";
 import { BsDatabaseFillGear } from "react-icons/bs";
 
 const SetupDatabase = () => {
+  const { user } = useUser();
+
   const [provision, setProvision] = useState<boolean>(true);
   const [numServices, setNumServices] = useState<number>(0);
   const [numCountries, setNumCountries] = useState<number>(0);
@@ -53,6 +57,32 @@ const SetupDatabase = () => {
     setNumCountries(await loadCountriesToDB());
   };
 
+  const allowLoadServices: boolean = $iam_user_has_action(
+    user,
+    "europay:settings:storage:database",
+    "Load Services"
+  );
+  const allowLoadCountries: boolean = $iam_user_has_action(
+    user,
+    "europay:settings:storage:database",
+    "Load Countries"
+  );
+  const allowClearWorkingTables: boolean = $iam_user_has_action(
+    user,
+    "europay:settings:storage:database",
+    "Clear Work"
+  );
+  const allowProvisionManual: boolean = $iam_user_has_action(
+    user,
+    "europay:settings:storage:database",
+    "Provision"
+  );
+  const allowClearFullDatabase: boolean = $iam_user_has_action(
+    user,
+    "europay:settings:storage:database",
+    "Clear Full"
+  );
+
   return (
     <div>
       <div className="flex items-baseline space-x-2">
@@ -67,6 +97,7 @@ const SetupDatabase = () => {
               className="bg-ep-button w-[80%]"
               size="small"
               onClick={clearFullDatabase}
+              disabled={!allowClearFullDatabase}
             />
           </div>
           <div>
@@ -76,6 +107,7 @@ const SetupDatabase = () => {
                 checked={provision}
                 className="checkbox checkbox-xs rounded-sm"
                 onChange={(e) => handleProvisioningChange(e)}
+                disabled={!allowProvisionManual}
               />
               Provision data
             </label>
@@ -87,7 +119,8 @@ const SetupDatabase = () => {
               name="Clear work data"
               className="bg-ep-button w-[80%]"
               size="small"
-              onClick={clearWorkDatabase}
+              disabled={!allowClearWorkingTables}
+              onClick={!clearWorkDatabase}
             />
           </div>
         </div>
@@ -98,7 +131,7 @@ const SetupDatabase = () => {
               name={`Load services (${numServices})`}
               className="bg-ep-button w-[80%]"
               size="small"
-              disabled={provision}
+              disabled={provision && !allowLoadServices}
               onClick={loadServices}
             />
           </div>
@@ -108,7 +141,7 @@ const SetupDatabase = () => {
               name={`Load countries (${numCountries})`}
               className="bg-ep-button w-[80%]"
               size="small"
-              disabled={provision}
+              disabled={provision && !allowLoadCountries}
               onClick={loadCountries}
             />
           </div>

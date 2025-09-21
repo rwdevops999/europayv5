@@ -1,15 +1,32 @@
 "use client";
 
 import { tTimingGroup } from "@/app/client/data/timings-data";
+import { $iam_user_has_action } from "@/app/client/iam-access";
 import { updateSetting } from "@/app/server/settings";
 import { useJob } from "@/hooks/use-job";
+import { useUser } from "@/hooks/use-user";
 import { tSetting } from "@/lib/prisma-types";
 import { JSX, useEffect, useState } from "react";
 import ReactHtmlParser from "react-html-parser";
 
-const SetupJob = ({ jobname, env }: { jobname: string; env: string }) => {
+const SetupJob = ({
+  jobname,
+  env,
+  accessAction,
+}: {
+  jobname: string;
+  env: string;
+  accessAction: string;
+}) => {
   const { setJobTiming, getJobTimings, getJobTimingNotation, displayInfo } =
     useJob();
+  const { user } = useUser();
+
+  const allowed: boolean = $iam_user_has_action(
+    user,
+    "europay:settings:limits:jobs",
+    accessAction
+  );
 
   const fulljobname = `${jobname}Poller`;
 
@@ -67,7 +84,7 @@ const SetupJob = ({ jobname, env }: { jobname: string; env: string }) => {
   }, [jobname]);
 
   const renderComponent = () => {
-    return (
+    return allowed ? (
       <div>
         <div>
           <div className="block space-y-2 mt-3">
@@ -97,7 +114,7 @@ const SetupJob = ({ jobname, env }: { jobname: string; env: string }) => {
           </div>
         </div>
       </div>
-    );
+    ) : null;
   };
 
   return <>{renderComponent()}</>;

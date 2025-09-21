@@ -9,9 +9,19 @@ import { json } from "@/lib/util";
 import { JSX, useEffect, useState } from "react";
 import { CgPassword } from "react-icons/cg";
 import { decode } from "html-entities";
+import { useUser } from "@/hooks/use-user";
+import { $iam_user_has_action } from "@/app/client/iam-access";
 
 const SetupOTP = () => {
+  const { user } = useUser();
+
   const { getTimings, setTiming, getTimingNotation } = useOTPSettings();
+
+  const allowChangeOTP: boolean = $iam_user_has_action(
+    user,
+    "europay:settings:general:otp",
+    "Change"
+  );
 
   const TimingGroup = ({ group }: { group: tTimingGroup }): JSX.Element => {
     console.log("[TimingGroup]", json(group), decode(group.notation));
@@ -50,7 +60,7 @@ const SetupOTP = () => {
   }, []);
 
   const renderComponent = () => {
-    return (
+    return allowChangeOTP ? (
       <div>
         <div>
           <div className="flex space-x-2 items-center text-sm">
@@ -83,7 +93,7 @@ const SetupOTP = () => {
           </div>
         </div>
       </div>
-    );
+    ) : null;
   };
 
   return <>{renderComponent()}</>;
