@@ -86,6 +86,22 @@ const JobActionButtons = ({
     }
   };
 
+  const allowRemoveJobs: boolean = $iam_user_has_action(
+    user,
+    "europay:lists:jobs",
+    "Remove"
+  );
+  const allowRestartJobs: boolean = $iam_user_has_action(
+    user,
+    "europay:lists:jobs",
+    "Restart"
+  );
+  const allowSuspendJobs: boolean = $iam_user_has_action(
+    user,
+    "europay:lists:jobs",
+    "Suspend"
+  );
+
   return (
     <>
       <div className="ml-2 flex items-center space-x-2">
@@ -95,7 +111,9 @@ const JobActionButtons = ({
           name="Suspend"
           size="small"
           onClick={suspendJobs}
-          disabled={!maySuspend || selectedJobsSize === 0}
+          disabled={
+            !allowSuspendJobs && (!maySuspend || selectedJobsSize === 0)
+          }
         />
         <Button
           intent="success"
@@ -103,7 +121,9 @@ const JobActionButtons = ({
           name="Restart"
           size="small"
           onClick={restartJobs}
-          disabled={!mayRestart || selectedJobsSize === 0}
+          disabled={
+            !allowRestartJobs && (!mayRestart || selectedJobsSize === 0)
+          }
         />
         <Button
           intent="error"
@@ -111,7 +131,7 @@ const JobActionButtons = ({
           name="Remove"
           size="small"
           onClick={removeJobs}
-          disabled={!mayRemove || selectedJobsSize === 0}
+          disabled={!allowSuspendJobs && (!mayRemove || selectedJobsSize === 0)}
         />
       </div>
       <ConfirmDialog

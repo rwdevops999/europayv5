@@ -22,6 +22,8 @@ import TemplateAlert, { tAlert } from "@/ui/template-alert";
 import { useRouter } from "next/navigation";
 import { JSX, ReactNode, startTransition, useEffect, useState } from "react";
 import { IoCalendarOutline } from "react-icons/io5";
+import { useUser } from "@/hooks/use-user";
+import { $iam_user_has_action } from "@/app/client/iam-access";
 
 const months = [
   "January",
@@ -45,6 +47,7 @@ const TaskForm = ({
   taskId?: number;
   depth: number;
 }) => {
+  const { user } = useUser();
   const { setTaskAvailable } = useTask();
 
   const [selectedTask, setSelectedTask] = useState<tTask | null>(null);
@@ -368,6 +371,12 @@ const TaskForm = ({
     }
   };
 
+  const allowHandleTasks: boolean = $iam_user_has_action(
+    user,
+    "europay:lists:tasks",
+    "Handle"
+  );
+
   const Buttons = (): JSX.Element => {
     return (
       <div className="flex flex-col">
@@ -380,7 +389,7 @@ const TaskForm = ({
           className="bg-cancel"
           type="button"
         />
-        {!isTaskCompleted() && (
+        {allowHandleTasks && !isTaskCompleted() && (
           <Button
             name="Execute"
             intent={"neutral"}

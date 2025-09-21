@@ -35,8 +35,7 @@ const NavbarMenu = () => {
       newmenu[1].subItems[0].visible = $iam_user_has_action(
         user,
         "europay:lists",
-        "Show Tasks",
-        true
+        "Show Tasks"
       );
       // Jobs
       newmenu[1].subItems[1].visible = $iam_user_has_action(
@@ -50,20 +49,23 @@ const NavbarMenu = () => {
       newmenu[1].subItems[2].visible = $iam_user_has_action(
         user,
         "europay:lists",
-        "Show Transactions",
-        true
+        "Show Transactions"
       );
 
       // History
       newmenu[1].subItems[3].visible = $iam_user_has_action(
         user,
         "europay:lists",
-        "Show History",
-        true
+        "Show History"
       );
 
       // Exports
-      // newmenu[1].subItems[4].visible = $iam_user_has_action(user, "Show History", true);
+      // newmenu[1].subItems[4].visible = $iam_user_has_action(
+      //   user,
+      //   "europay:lists",
+      //   "Show Exports",
+      //   true
+      // );
     }
 
     // Settings
@@ -78,40 +80,35 @@ const NavbarMenu = () => {
       newmenu[2].subItems[0].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show General",
-        true
+        "Show General"
       );
 
       // Storage
       newmenu[2].subItems[1].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show Storage",
-        true
+        "Show Storage"
       );
 
       // Limits
       newmenu[2].subItems[2].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show Limits",
-        true
+        "Show Limits"
       );
 
       // Export
       newmenu[2].subItems[3].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show Export",
-        true
+        "Show Export"
       );
 
       // Import
       newmenu[2].subItems[4].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show Import",
-        true
+        "Show Import"
       );
     }
 
