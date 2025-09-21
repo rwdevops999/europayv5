@@ -25,7 +25,7 @@ const RenderApply = () => {
 
   const [openApplyDialog, setOpenApplyDialog] = useState<boolean>(false);
 
-  const ApplyDisabled: boolean = !$iam_user_has_action(
+  const ApplyAllowed: boolean = $iam_user_has_action(
     user,
     "europay",
     "Apply",
@@ -105,7 +105,7 @@ const RenderApply = () => {
           className="bg-custom"
           size="large"
           onClick={handleOpenApplyDialog}
-          disabled={ApplyDisabled}
+          disabled={!ApplyAllowed}
         />
       )}
       <ApplyDialog

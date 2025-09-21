@@ -24,12 +24,7 @@ const NavbarMenu = () => {
     );
 
     // Lists menu
-    newmenu[1].visible = $iam_user_has_action(
-      user,
-      "europay",
-      "View Lists",
-      true
-    );
+    newmenu[1].visible = $iam_user_has_action(user, "europay", "View Lists");
     if (newmenu[1].visible && newmenu[1].subItems) {
       // Tasks
       newmenu[1].subItems[0].visible = $iam_user_has_action(
@@ -69,12 +64,7 @@ const NavbarMenu = () => {
     }
 
     // Settings
-    newmenu[2].visible = $iam_user_has_action(
-      user,
-      "europay",
-      "View Settings",
-      true
-    );
+    newmenu[2].visible = $iam_user_has_action(user, "europay", "View Settings");
     if (newmenu[2].visible && newmenu[2].subItems) {
       // General
       newmenu[2].subItems[0].visible = $iam_user_has_action(
@@ -113,20 +103,10 @@ const NavbarMenu = () => {
     }
 
     // Admin
-    newmenu[3].visible = $iam_user_has_action(
-      user,
-      "europay",
-      "View Admin",
-      true
-    );
+    newmenu[3].visible = $iam_user_has_action(user, "europay", "View Admin");
 
     // User
-    newmenu[4].visible = $iam_user_has_action(
-      user,
-      "europay",
-      "View User",
-      true
-    );
+    newmenu[4].visible = $iam_user_has_action(user, "europay", "View User");
 
     // IAM
     newmenu[5].visible = $iam_user_has_action(

@@ -12,7 +12,6 @@ export const servicesandactions: Record<string, string[]> = {
     "Settings Menu",
     "IAM Menu",
     "Manual Menu",
-    "Access Auth",
     "Social Media",
     "User Menu",
     "Admin Menu",
@@ -23,10 +22,10 @@ export const servicesandactions: Record<string, string[]> = {
   "europay:dashboard:country": ["Change"],
 
   "europay:lists": [
-    "Tasks Submenu",
-    "Jobs Submenu",
+    "Task Submenu",
+    "Job Submenu",
     "History Submenu",
-    "Transactions Submenu",
+    "Transaction Submenu",
     "Export Submenu",
   ],
 
@@ -47,7 +46,7 @@ export const servicesandactions: Record<string, string[]> = {
   "europay:settings:storage": ["Database Section", "Tables Section"],
   "europay:settings:storage:database": [
     "Clear Database",
-    "Provision Countries",
+    "Provision",
     "Clear Workdata",
     "Load Services",
     "Load Countries",

@@ -27,18 +27,12 @@ export const AllowedSystemServiceStatements: Record<string, any> = {
   ShowIAMEntities: {
     description: "Show IAM item",
     service: "europay:iam",
-    actions: [
-      "Handle Groups",
-      "Handle Users",
-      "Handle Roles",
-      "Handle Policies",
-      "Handle Statements",
-    ],
+    actions: ["Groups", "Users", "Roles", "Policies", "Statements"],
   },
   ShowIAMServices: {
     description: "Show services submenu",
     service: "europay:iam",
-    actions: ["Show Services"],
+    actions: ["Services"],
   },
   ExecuteSocialMedia: {
     description: "Execute social media item",
@@ -53,12 +47,12 @@ export const AllowedSystemServiceStatements: Record<string, any> = {
   AuthorisationSetting: {
     description: "User settings",
     service: "europay:authorisation",
-    actions: ["Settings"],
+    actions: ["User Settings"],
   },
   ManualShowChapters: {
     description: "View chapters",
     service: "europay:manual",
-    actions: ["Show Chapters"],
+    actions: ["View Chapters"],
   },
   ImportIAM: {
     description: "Import IAM data",
@@ -68,7 +62,7 @@ export const AllowedSystemServiceStatements: Record<string, any> = {
   ImportShowIAM: {
     description: "View IAM import",
     service: "europay:settings:import",
-    actions: ["Show IAM"],
+    actions: ["Import IAM Section"],
   },
   ExportData: {
     description: "Export data",
@@ -78,22 +72,17 @@ export const AllowedSystemServiceStatements: Record<string, any> = {
   ChangeJobLimits: {
     description: "Change job limits",
     service: "europay:settings:limits:jobs",
-    actions: ["Transaction", "Task"],
-  },
-  LimitsShowJobs: {
-    description: "Show job limit section",
-    service: "europay:settings:limits",
-    actions: ["Transaction", "Show Job Limits"],
+    actions: ["Task Limit", "Transaction Limit"],
   },
   ClearSelectedTables: {
     description: "Clear entities",
-    service: "europay:settings:storage:selective",
-    actions: ["Clear"],
+    service: "europay:settings:storage:tables",
+    actions: ["Clear Tables"],
   },
   SelectTables: {
     description: "Select entities",
-    service: "europay:settings:storage:selective",
-    actions: ["Select"],
+    service: "europay:settings:storage:tables",
+    actions: ["Select Tables"],
   },
   LoadDependencies: {
     description: "Select services and countries",
@@ -103,92 +92,62 @@ export const AllowedSystemServiceStatements: Record<string, any> = {
   ClearWorkingTables: {
     description: "Clear working tables",
     service: "europay:settings:storage:database",
-    actions: ["Clear Work"],
+    actions: ["Clear Workdata"],
   },
-  ProvisionCountries: {
-    description: "Provision countries after clear",
+  ProvisionManual: {
+    description: "Provision manually after clear",
     service: "europay:settings:storage:database",
-    actions: ["Provision Countries"],
+    actions: ["Provision"],
   },
   ClearAllTables: {
     description: "Clear all tables",
     service: "europay:settings:storage:database",
-    actions: ["Clear Full"],
+    actions: ["Clear Database"],
   },
-  StorageShowSelective: {
-    description: "View selective section",
+  StorageShowTables: {
+    description: "View tables section",
     service: "europay:settings:storage",
-    actions: ["View Selective"],
+    actions: ["Tables Section"],
   },
   StorageShowDatabase: {
     description: "View database section",
     service: "europay:settings:storage",
-    actions: ["View Database"],
-  },
-  ChangeMarkdownSettings: {
-    description: "Change markdown settings",
-    service: "europay:settings:general:markdown",
-    actions: ["Change"],
+    actions: ["Database Section"],
   },
   ChangeOTPSettings: {
     description: "Change OTP settings",
     service: "europay:settings:general:otp",
     actions: ["Change"],
   },
-  ChangeHistorySettings: {
-    description: "Change history settings",
-    service: "europay:settings:general:history",
-    actions: ["Change"],
-  },
-  ChangeToastSettings: {
-    description: "Change toast settings",
-    service: "europay:settings:general:toast",
-    actions: ["Change"],
-  },
-  GeneralShowToast: {
-    description: "View toast section",
-    service: "europay:settings:general",
-    actions: ["View Toast"],
-  },
-  GeneralShowMarkdown: {
-    description: "View markdown section",
-    service: "europay:settings:general",
-    actions: ["View Markdown"],
-  },
   GeneralShowOTP: {
     description: "View OTP section",
     service: "europay:settings:general",
     actions: ["View OTP"],
   },
-  GeneralShowHistory: {
-    description: "View history section",
-    service: "europay:settings:general",
-    actions: ["View History"],
-  },
   ShowSettingsImportMenu: {
     description: "Show import submenu",
     service: "europay:settings",
-    actions: ["Show Import"],
+    actions: ["Import Submenu"],
   },
   ShowSettingsExportMenu: {
     description: "Show export submenu",
     service: "europay:settings",
-    actions: ["Show Export"],
+    actions: ["Export Submenu"],
   },
   ShowSettingsLimitsMenu: {
     description: "Show limits submenu",
     service: "europay:settings",
-    actions: ["Show Limits"],
+    actions: ["Limits Submenu"],
   },
   ShowSettingsStorageMenu: {
     description: "Show storage submenu",
     service: "europay:settings",
-    actions: ["Show Storage"],
+    actions: ["Storage Submenu"],
   },
   ShowSettingsGeneralMenu: {
     description: "Show general submenu",
     service: "europay:settings",
-    actions: ["Show General"],
+    actions: ["General Submenu"],
   },
   RemoveJobs: {
     description: "Remove jobs",
@@ -213,17 +172,27 @@ export const AllowedSystemServiceStatements: Record<string, any> = {
   ShowListsHistoryMenu: {
     description: "Show history submenu",
     service: "europay:lists",
-    actions: ["Show History"],
+    actions: ["History Submenu"],
   },
   ShowListsJobsMenu: {
     description: "Show jobs submenu",
     service: "europay:lists",
-    actions: ["Show Jobs"],
+    actions: ["Jobs Submenu"],
   },
   ShowListsTasksMenu: {
     description: "Show tasks submenu",
     service: "europay:lists",
-    actions: ["Show Tasks"],
+    actions: ["Tasks Submenu"],
+  },
+  ShowListsTransactionsMenu: {
+    description: "Show transactions submenu",
+    service: "europay:lists",
+    actions: ["Transaction Submenu"],
+  },
+  ShowListsExportsMenu: {
+    description: "Show exports submenu",
+    service: "europay:lists",
+    actions: ["Export Submenu"],
   },
   DashboardCountryChange: {
     description: "Change country",
@@ -233,22 +202,22 @@ export const AllowedSystemServiceStatements: Record<string, any> = {
   DashboardShowCountry: {
     description: "Show country section",
     service: "europay:dashboard",
-    actions: ["Show Country"],
+    actions: ["Country"],
   },
   DashboardShowWifi: {
     description: "Show wifi section",
     service: "europay:dashboard",
-    actions: ["Show Wifi"],
+    actions: ["Wifi"],
   },
   DashboardShowVersion: {
     description: "Show version section",
     service: "europay:dashboard",
-    actions: ["Show Version"],
+    actions: ["Version"],
   },
   DashboardShowEnvironment: {
     description: "Show environment section",
     service: "europay:dashboard",
-    actions: ["Show Environment"],
+    actions: ["Environment"],
   },
   AllowApply: {
     description: "ApplyForAnAccount",
@@ -258,47 +227,42 @@ export const AllowedSystemServiceStatements: Record<string, any> = {
   ShowAdminMenu: {
     description: "Show admin menu",
     service: "europay",
-    actions: ["View Admin"],
+    actions: ["Admin Menu"],
   },
   ShowUserMenu: {
     description: "Show user menu",
     service: "europay",
-    actions: ["View User"],
+    actions: ["User Menu"],
   },
   ShowSocialMedia: {
     description: "Show social media icons",
     service: "europay",
-    actions: ["View Social Media"],
-  },
-  AccessAuthAllowed: {
-    description: "Access authorisation",
-    service: "europay",
-    actions: ["Access Auth"],
+    actions: ["Social Media"],
   },
   ShowManualMenu: {
     description: "Show manual menu",
     service: "europay",
-    actions: ["View Manual"],
+    actions: ["Manual Menu"],
   },
   ShowIAMMenu: {
     description: "Show IAM menu",
     service: "europay",
-    actions: ["View IAM"],
+    actions: ["IAM Menu"],
   },
   ShowSettingsMenu: {
     description: "Show settings menu",
     service: "europay",
-    actions: ["View Settings"],
+    actions: ["Settings Menu"],
   },
   ShowListsMenu: {
     description: "Show lists menu",
     service: "europay",
-    actions: ["View Lists"],
+    actions: ["Lists Menu"],
   },
   ShowDashboardMenu: {
     description: "Show dashboard menu",
     service: "europay",
-    actions: ["View Dashboard"],
+    actions: ["Dashboard Menu"],
   },
   GotoHome: {
     description: "Enable home visit",
@@ -353,10 +317,6 @@ export const SystemPolicies: Record<string, any> = {
     description: "Job limits",
     statement: ["ChangeJobLimits"],
   },
-  LimitsPolicy: {
-    description: "Limits settings",
-    statement: ["LimitsShowJobs"],
-  },
   SelectivePolicy: {
     description: "Selective tables",
     statement: ["SelectTables", "ClearSelectedTables"],
@@ -365,18 +325,14 @@ export const SystemPolicies: Record<string, any> = {
     description: "Database",
     statement: [
       "ClearAllTables",
-      "ProvisionCountries",
+      "ProvisionManual",
       "ClearWorkingTables",
       "LoadDependencies",
     ],
   },
   StoragePolicy: {
     description: "Storage",
-    statement: ["StorageShowDatabase", "StorageShowSelective"],
-  },
-  MarkdownSettingsPolicy: {
-    description: "Markdown settings",
-    statement: ["ChangeMarkdownSettings"],
+    statement: ["StorageShowDatabase", "StorageShowTables"],
   },
   OTPSettingsPolicy: {
     description: "OTP settings",
@@ -386,18 +342,9 @@ export const SystemPolicies: Record<string, any> = {
     description: "History settings",
     statement: ["ChangeHistorySettings"],
   },
-  ToastSettingsPolicy: {
-    description: "Toast settings",
-    statement: ["ChangeToastSettings"],
-  },
   GeneralPolicy: {
     description: "General settings",
-    statement: [
-      "GeneralShowHistory",
-      "GeneralShowOTP",
-      "GeneralShowToast",
-      "GeneralShowMarkdown",
-    ],
+    statement: ["GeneralShowOTP"],
   },
   SettingsPolicy: {
     description: "Settings",
@@ -426,6 +373,14 @@ export const SystemPolicies: Record<string, any> = {
     description: "Tasks view",
     statement: ["ShowListsTasksMenu"],
   },
+  TransactionsViewPolicy: {
+    description: "Transaction view",
+    statement: ["ShowListsTransactionsMenu"],
+  },
+  ExportsViewPolicy: {
+    description: "Export view",
+    statement: ["ShowListsExportsMenu"],
+  },
   DashboardCountryPolicy: {
     description: "Dashboard country",
     statement: ["DashboardCountryChange"],
@@ -449,7 +404,7 @@ export const SystemPolicies: Record<string, any> = {
   },
   DefaultPolicy: {
     description: "Default",
-    statement: ["ShowManualMenu", "AccessAuthAllowed", "AllowApply"],
+    statement: ["ShowManualMenu", "AllowApply"],
   },
   IAMViewPolicy: { description: "IAM view", statement: ["ShowIAMMenu"] },
   SettingsViewPolicy: {
@@ -485,13 +440,9 @@ export const SystemRoles: Record<string, any> = {
       "SettingsViewPolicy",
       "SettingsPolicy",
       "GeneralPolicy",
-      "ToastSettingsPolicy",
-      "HistorySettingsPolicy",
       "OTPSettingsPolicy",
-      "MarkdownSettingsPolicy",
       "DatabasePolicy",
       "SelectivePolicy",
-      "LimitsPolicy",
       "JobLimitsPolicy",
       "ExportPolicy",
       "ImportPolicy",
