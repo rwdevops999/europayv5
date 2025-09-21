@@ -27,6 +27,8 @@ import ServiceStatementForm, {
 } from "./service-statement-form";
 import Dialog from "@/ui/dialog";
 import { useToastSettings } from "@/hooks/use-toast-settings";
+import { $iam_user_has_action } from "@/app/client/iam-access";
+import { useUser } from "@/hooks/use-user";
 
 /**
  * is called to providing the UI for handling the statements.
@@ -50,6 +52,7 @@ const ServiceStatementHandler = ({
 }) => {
   const { push } = useRouter();
   const { isToastOn, getToastDuration } = useToastSettings();
+  const { user } = useUser();
 
   const [tableData, setTableData] = useState<Data[]>([]);
 
@@ -185,7 +188,11 @@ const ServiceStatementHandler = ({
         setAlert(alert);
       } else if (statement.extra?.managed) {
         // replace this allowedToDeleteManaged by $iam function
-        const allowedToDeleteManaged: boolean = false;
+        const allowedToDeleteManaged: boolean = $iam_user_has_action(
+          user,
+          "europay:iam:statements",
+          "Delete Managed"
+        );
 
         if (allowedToDeleteManaged) {
           const alert: tAlert | undefined = isStatementInPolicy(

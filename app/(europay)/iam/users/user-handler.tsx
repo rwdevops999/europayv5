@@ -19,6 +19,8 @@ import { DataTable } from "@/ui/datatable/data-table";
 import { columns, initialTableState } from "./table/page-colums";
 import { DataTableToolbar } from "./table/page-data-table-toolbar";
 import { Group } from "@/generated/prisma";
+import { $iam_user_has_action } from "@/app/client/iam-access";
+import { useUser } from "@/hooks/use-user";
 
 /**
  * is called to providing the UI for handling the users.
@@ -45,6 +47,7 @@ const UserHandler = ({
 }) => {
   const { push } = useRouter();
   const { isToastOn, getToastDuration } = useToastSettings();
+  const { user } = useUser();
 
   const [tableData, setTableData] = useState<Data[]>([]);
   const [entity, setEntity] = useState<UserEntity>(defaultUserEntity);
@@ -120,29 +123,33 @@ const UserHandler = ({
   const [linkedRoles, setLinkedRoles] = useState<number[]>([]);
   const [linkedGroups, setLinkedGroups] = useState<number[]>([]);
 
-  const handleAction = async (action: string, user: Data) => {
+  const handleAction = async (action: string, _user: Data) => {
     if (action === DATATABLE_ACTION_DELETE) {
-      if (user.extra?.system) {
+      if (_user.extra?.system) {
         const alert: tAlert = {
           template: "UNABLE_TO_DELETE_SYSTEM",
           params: { iamType: "User" },
         };
         setAlert(alert);
-      } else if (user.extra?.managed) {
+      } else if (_user.extra?.managed) {
         // replace this allowedToDeleteManaged by $iam function
-        const allowedToDeleteManaged: boolean = false;
+        const allowedToDeleteManaged: boolean = $iam_user_has_action(
+          user,
+          "europay:iam:users",
+          "Delete Managed"
+        );
 
         if (allowedToDeleteManaged) {
           const alert: tAlert | undefined = userInGroup(
-            user.id,
+            _user.id,
             "UNABLE_TO_DELETE_LINKED"
           );
 
           if (alert) {
             setAlert(alert);
           } else {
-            await deleteUser(user.id).then(() =>
-              processDeletedUser(`${user.name} ${user.description}`)
+            await deleteUser(_user.id).then(() =>
+              processDeletedUser(`${_user.name} ${_user.description}`)
             );
           }
         } else {
@@ -154,20 +161,20 @@ const UserHandler = ({
         }
       } else {
         const alert: tAlert | undefined = userInGroup(
-          user.id,
+          _user.id,
           "UNABLE_TO_DELETE_LINKED"
         );
 
         if (alert) {
           setAlert(alert);
         } else {
-          await deleteUser(user.id).then(() =>
-            processDeletedUser(`${user.name} ${user.description}`)
+          await deleteUser(_user.id).then(() =>
+            processDeletedUser(`${_user.name} ${_user.description}`)
           );
         }
       }
     } else {
-      if (user.extra?.system) {
+      if (_user.extra?.system) {
         const alert: tAlert = {
           template: "UNABLE_TO_UPDATE_SYSTEM",
           params: { iamType: "User" },
@@ -175,7 +182,7 @@ const UserHandler = ({
         setAlert(alert);
       } else {
         const appuser: tUser | undefined = users.find(
-          (_user: tUser) => _user.id === user.id
+          (_user: tUser) => _user.id === _user.id
         );
 
         if (appuser) {

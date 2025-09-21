@@ -7,8 +7,6 @@ import { $iam_user_has_action } from "@/app/client/iam-access";
 import { useUser } from "@/hooks/use-user";
 import { useEffect, useState } from "react";
 
-const iamvisible: boolean = true;
-
 const NavbarMenu = () => {
   const { user } = useUser();
 
@@ -153,40 +151,35 @@ const NavbarMenu = () => {
       newmenu[5].subItems[1].visible = $iam_user_has_action(
         user,
         "europay:iam",
-        "Handle Statements",
-        iamvisible
+        "Handle Statements"
       );
 
       // Policies
       newmenu[5].subItems[2].visible = $iam_user_has_action(
         user,
         "europay:iam",
-        "Handle Policies",
-        iamvisible
+        "Handle Policies"
       );
 
       // Roles
       newmenu[5].subItems[3].visible = $iam_user_has_action(
         user,
         "europay:iam",
-        "Handle Roles",
-        iamvisible
+        "Handle Roles"
       );
 
       // Users
       newmenu[5].subItems[4].visible = $iam_user_has_action(
         user,
         "europay:iam",
-        "Handle Users",
-        iamvisible
+        "Handle Users"
       );
 
       // Groups
       newmenu[5].subItems[5].visible = $iam_user_has_action(
         user,
         "europay:iam",
-        "Handle Groups",
-        iamvisible
+        "Handle Groups"
       );
     }
 

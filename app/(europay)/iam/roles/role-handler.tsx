@@ -18,6 +18,8 @@ import Dialog from "@/ui/dialog";
 import { DataTable } from "@/ui/datatable/data-table";
 import { columns, initialTableState } from "./table/page-colums";
 import { DataTableToolbar } from "./table/page-data-table-toolbar";
+import { $iam_user_has_action } from "@/app/client/iam-access";
+import { useUser } from "@/hooks/use-user";
 
 /**
  * is called to providing the UI for handling the policies.
@@ -38,6 +40,7 @@ const RoleHandler = ({
 }) => {
   const { push } = useRouter();
   const { isToastOn, getToastDuration } = useToastSettings();
+  const { user } = useUser();
 
   const [entity, setEntity] = useState<RoleEntity>(defaultRoleEntity);
   const [linkedPolicies, setLinkedPolicies] = useState<number[]>([]);
@@ -123,7 +126,11 @@ const RoleHandler = ({
         setAlert(alert);
       } else if (role.extra?.managed) {
         // replace this allowedToDeleteManaged by $iam function
-        const allowedToDeleteManaged: boolean = false;
+        const allowedToDeleteManaged: boolean = $iam_user_has_action(
+          user,
+          "europay:iam:roles",
+          "Delete Managed"
+        );
 
         if (allowedToDeleteManaged) {
           const alert: tAlert | undefined = roleInDependency(

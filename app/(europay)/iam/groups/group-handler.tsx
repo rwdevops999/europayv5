@@ -21,6 +21,8 @@ import Dialog from "@/ui/dialog";
 import { DataTable } from "@/ui/datatable/data-table";
 import { columns, initialTableState } from "./table/page-colums";
 import { DataTableToolbar } from "./table/page-data-table-toolbar";
+import { $iam_user_has_action } from "@/app/client/iam-access";
+import { useUser } from "@/hooks/use-user";
 
 /**
  * is called to providing the UI for handling the groups.
@@ -45,6 +47,7 @@ const GroupHandler = ({
 }) => {
   const { push } = useRouter();
   const { isToastOn, getToastDuration } = useToastSettings();
+  const { user } = useUser();
 
   const [tableData, setTableData] = useState<Data[]>([]);
   const [entity, setEntity] = useState<GroupEntity>(defaultGroupEntity);
@@ -110,7 +113,11 @@ const GroupHandler = ({
         setAlert(alert);
       } else if (group.extra?.managed) {
         // replace this allowedToDeleteManaged by $iam function
-        const allowedToDeleteManaged: boolean = false;
+        const allowedToDeleteManaged: boolean = $iam_user_has_action(
+          user,
+          "europay:iam:groups",
+          "Delete Managed"
+        );
 
         if (allowedToDeleteManaged) {
           await deleteGroup(group.id).then(() =>

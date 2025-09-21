@@ -46,7 +46,16 @@ export const columns: ColumnDef<Data>[] = [
                     onClick: row.getToggleExpandedHandler(),
                   }}
                 />
-              ) : null}
+              ) : (
+                <Button
+                  name={"📪"}
+                  size="small"
+                  className="-ml-3 -mt-2 border-0 hover:bg-transparent"
+                  {...{
+                    onClick: row.getToggleExpandedHandler(),
+                  }}
+                />
+              )}
             </div>
             <div>
               {row.original.extra?.subject === "Policy" && (
