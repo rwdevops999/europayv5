@@ -14,7 +14,8 @@ const ManualPages = () => {
   const showChapters: boolean = $iam_user_has_action(
     user,
     "europay:manual",
-    "Show Chapters"
+    "Show Chapters",
+    true
   );
 
   return (

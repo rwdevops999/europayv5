@@ -81,15 +81,14 @@ const UserAuth = () => {
   const mayLogout: boolean = $iam_user_has_action(
     user,
     "europay:authorisation",
-    "Logout",
-    true
+    "Logout"
   );
 
   return (
     <>
       {visible && (
         <div>
-          {isLoggedIn() && (
+          {isLoggedIn() && mayLogout && (
             <div
               className="cursor-pointer flex space-x-2 items-center"
               onClick={doLogout}
@@ -98,7 +97,7 @@ const UserAuth = () => {
               <label className="cursor-pointer">Log Out</label>
             </div>
           )}
-          {!isLoggedIn() && (
+          {!isLoggedIn() && mayLogin && (
             <div
               className="cursor-pointer flex space-x-2 items-center"
               onClick={() => redirect(absoluteUrl("/login"))}
