@@ -1,14 +1,18 @@
 "use client";
 
-import { createPat } from "@/app/server/pat";
+import { createPat, deletePatById } from "@/app/server/pat";
 import { loadUserById } from "@/app/server/users";
+import { TokenStatus } from "@/generated/prisma";
 import { useUser } from "@/hooks/use-user";
-import { tUser } from "@/lib/prisma-types";
+import { tUser, tUserPat, tUserUpdate } from "@/lib/prisma-types";
 import { generatePAT, json, renderDateInfo } from "@/lib/util";
 import Button from "@/ui/button";
+import { ScrollArea, ScrollBar } from "@/ui/radix/scroll-area";
 import { Separator } from "@/ui/radix/separator";
-import React, { JSX, useState } from "react";
+import clsx from "clsx";
+import React, { JSX, useEffect, useState } from "react";
 import { BsClipboard2, BsClipboard2Check } from "react-icons/bs";
+import { CiWallet, CiWarning } from "react-icons/ci";
 
 const dayToMilliseconds: number = 24 * 60 * 60 * 1000;
 
@@ -175,7 +179,7 @@ const PersonalAccessTokens = () => {
         <Separator />
         <div className="m-1 flex justify-center">
           <Button
-            type="submit"
+            type="button"
             size="small"
             className="bg-custom"
             name="Generate new token"
@@ -186,14 +190,89 @@ const PersonalAccessTokens = () => {
     );
   };
 
+  const ExpirationDate = ({ pat }: { pat: tUserPat }): JSX.Element => {
+    if (pat.expirationDate) {
+      return (
+        <label>Expire: {renderDateInfo(pat.expirationDate.toString())}</label>
+      );
+    }
+
+    return (
+      <div className="flex items-center space-x-1 text-orange-400">
+        <CiWarning size={14} />
+        <label>This token has no expiration date</label>
+      </div>
+    );
+  };
+
+  const handleDeletePat = async (patid: number): Promise<void> => {
+    await deletePatById(patid).then(async () => {
+      if (user) {
+        setUser(await loadUserById(user.id));
+      }
+    });
+  };
+
+  const PATItem = ({ pat }: { pat: tUserPat }): JSX.Element => {
+    return (
+      <div className="m-1 border-1 border-cancel">
+        <div className="m-1 flex items-center justify-between">
+          <label
+            className={clsx(
+              "text-xs font-bold",
+              { "text-blue-600": pat.tokenStatus === TokenStatus.ACTIVE },
+              { "text-cancel/30": pat.tokenStatus === TokenStatus.VOID }
+            )}
+          >
+            {pat.tokenName}
+          </label>
+          <Button
+            type="button"
+            name="Delete"
+            size="extrasmall"
+            intent="secondary"
+            style="ghost"
+            onClick={() => handleDeletePat(pat.id)}
+          />
+        </div>
+        <div className="m-1">
+          <label className="text-xs">
+            <ExpirationDate pat={pat} />
+          </label>
+        </div>
+      </div>
+    );
+  };
+
   const PATList = (): JSX.Element => {
-    return <div className="m-1 border-1 border-yellow-500">LIST</div>;
+    const [pats, setPats] = useState<tUserPat[]>([]);
+
+    useEffect(() => {
+      if (user) {
+        // Need sorting ???
+        console.log("[USER PATS]", json(user.pats));
+        setPats(user.pats);
+      }
+    }, [user]);
+
+    return (
+      <div className="m-1 border-1 border-cancel">
+        {/* <ScrollArea className="overflow-auto max-h-[61px] h-[2000px] w-[100%]"> */}
+        {pats.map((pat: tUserPat) => (
+          <div key={pat.id}>
+            <PATItem pat={pat} />
+          </div>
+        ))}
+        {/* <ScrollBar className="bg-foreground/30" />
+        </ScrollArea> */}
+      </div>
+    );
   };
 
   return (
-    <div className="h-[78vh] border-1 border-yellow-500">
+    <div>
       <PATEntry />
-      <PATList />
+      {user && user.pats.length > 0 && <PATList />}
     </div>
   );
 };

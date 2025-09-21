@@ -460,3 +460,5 @@ export const cWhatToSelectFromBankaccount: WhatToSelectFromBankaccount = {
 
 export type tBankaccount =
   Prisma.BankAccountGetPayload<WhatToSelectFromBankaccount>;
+
+export type tUserPat = Prisma.UserPATGetPayload<{}>;

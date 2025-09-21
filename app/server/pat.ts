@@ -24,3 +24,11 @@ export const createPat = async (
     },
   });
 };
+
+export const deletePatById = async (_id: number): Promise<void> => {
+  await prisma.userPAT.delete({
+    where: {
+      id: _id,
+    },
+  });
+};
