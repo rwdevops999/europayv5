@@ -201,8 +201,6 @@ const defineServiceStatement = async (
 };
 
 export const defineSystemServiceStatements = async (): Promise<void> => {
-  // TRUNCATE ServiceStatements => doest also ServiceStatementAction
-
   const statementNames: string[] = Object.keys(AllowedSystemServiceStatements);
 
   for (let statementName of statementNames) {

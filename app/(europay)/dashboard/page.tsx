@@ -14,13 +14,14 @@ const Dashboard = () => {
   const { user } = useUser();
 
   const hasAccess = (_component: string): boolean => {
-    return $iam_user_has_action(user, "europay:dashboard", _component);
+    return $iam_user_has_action(user, "europay:dashboard", _component, true);
   };
 
   const canChangeCountry: boolean = $iam_user_has_action(
     user,
     "europay:dashboard:country",
-    "Change"
+    "Change",
+    true
   );
 
   const environmentVisible: boolean = hasAccess("Environment");

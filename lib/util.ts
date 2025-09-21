@@ -205,10 +205,16 @@ export const validEmail = (_email: string) => {
   return re.test(_email);
 };
 
-export const generateClientId = (): string => {
+export const generatePAT = (): string => {
+  const pat: string = uuidv4().replaceAll("-", "");
+
+  return pat;
+};
+
+export const generateClientSecret = (): string => {
   const params: string[] = uuidv4().split("-");
 
-  return params[params.length - 1];
+  return "CS" + params[params.length - 1];
 };
 
 export const renderDateInfo = (dateValue: string): string => {

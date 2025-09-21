@@ -6,7 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 export const initialTableState = {
   pagination: {
     pageIndex: 0, //custom initial page index
-    pageSize: 15, //custom default page size
+    pageSize: 12, //custom default page size
   },
 };
 

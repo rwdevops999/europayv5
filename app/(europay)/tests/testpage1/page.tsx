@@ -5,6 +5,7 @@ import CharsSplit from "./tests/chars-split";
 import OtpJobHandling from "./tests/otp-job-handling";
 import PaymentTest from "./tests/payment-test";
 import TestSystemUser from "./tests/test-system-user";
+import TestPAT from "./tests/test-pat";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,8 @@ const TestPage1 = () => {
       {/* <CreateOtp /> */}
       {/* <OtpJobHandling /> */}
       {/* <PaymentTest /> */}
-      <TestSystemUser />
+      {/* <TestSystemUser /> */}
+      <TestPAT />
     </PageContent>
   );
 };

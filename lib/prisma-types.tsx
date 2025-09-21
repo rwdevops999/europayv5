@@ -270,6 +270,7 @@ type WhatToSelectFromUser = {
     };
     account: WhatToSelectFromAccount;
     settings: WhatToSelectFromUsersetting;
+    pats: boolean;
   };
 };
 export const cWhatToSelectFromUser: WhatToSelectFromUser = {
@@ -286,6 +287,7 @@ export const cWhatToSelectFromUser: WhatToSelectFromUser = {
     },
     account: cWhatToSelectFromAccount,
     settings: cWhatToSelectFromUsersetting,
+    pats: true,
   },
 };
 export type tUser = Prisma.UserGetPayload<WhatToSelectFromUser>;

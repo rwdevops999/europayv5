@@ -9,6 +9,7 @@ import {
 import prisma from "@/lib/prisma";
 import { SystemRoles } from "./setup/managed-iam";
 import { getPolicyIdByName } from "./policies";
+import { json } from "@/lib/util";
 /**
  * create a role
  * @param _role the role to create
@@ -88,24 +89,26 @@ export const defineSystemRoles = async (): Promise<void> => {
 
     const policies: string[] = roleInfo.policy;
 
+    console.log("ROLE: ", roleName, "with POLICIES: ", json(policies));
+
     const policyids: any[] = [];
     for (let policyName of policies) {
       policyids.push({
         id: await getPolicyIdByName(policyName),
       });
-
-      const create: tRoleCreate = {
-        name: roleName,
-        description: roleInfo.description,
-        managed: true,
-        system: true,
-        policies: {
-          connect: policyids,
-        },
-      };
-
-      await createRole(create);
     }
+
+    const create: tRoleCreate = {
+      name: roleName,
+      description: roleInfo.description,
+      managed: true,
+      system: true,
+      policies: {
+        connect: policyids,
+      },
+    };
+
+    await createRole(create);
   }
 };
 

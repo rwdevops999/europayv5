@@ -177,12 +177,12 @@ export const AllowedSystemServiceStatements: Record<string, any> = {
   ShowListsJobsMenu: {
     description: "Show jobs submenu",
     service: "europay:lists",
-    actions: ["Jobs Submenu"],
+    actions: ["Job Submenu"],
   },
   ShowListsTasksMenu: {
     description: "Show tasks submenu",
     service: "europay:lists",
-    actions: ["Tasks Submenu"],
+    actions: ["Task Submenu"],
   },
   ShowListsTransactionsMenu: {
     description: "Show transactions submenu",
@@ -337,10 +337,6 @@ export const SystemPolicies: Record<string, any> = {
   OTPSettingsPolicy: {
     description: "OTP settings",
     statement: ["ChangeOTPSettings"],
-  },
-  HistorySettingsPolicy: {
-    description: "History settings",
-    statement: ["ChangeHistorySettings"],
   },
   GeneralPolicy: {
     description: "General settings",

@@ -102,19 +102,19 @@ export const defineSystemPolicies = async (): Promise<void> => {
       statementids.push({
         id: await getServiceStatementIdByName(statementName),
       });
-
-      const create: tPolicyCreate = {
-        name: policyName,
-        description: policyInfo.description,
-        managed: true,
-        system: true,
-        servicestatements: {
-          connect: statementids,
-        },
-      };
-
-      await createPolicy(create);
     }
+
+    const create: tPolicyCreate = {
+      name: policyName,
+      description: policyInfo.description,
+      managed: true,
+      system: true,
+      servicestatements: {
+        connect: statementids,
+      },
+    };
+
+    await createPolicy(create);
   }
 };
 

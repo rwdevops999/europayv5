@@ -1,11 +1,16 @@
 "use client";
 
 import { useUser } from "@/hooks/use-user";
+import { json } from "@/lib/util";
 
 const cid: string = "UserNavInfo";
 
 const UserInfo = () => {
   const { user, isLoggedIn } = useUser();
+
+  if (isLoggedIn()) {
+    console.log("USER LOGGED IN", json(user));
+  }
 
   const getUserName = (): string => {
     let name: string = "";

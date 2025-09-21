@@ -17,8 +17,7 @@ const UserSettings = () => {
   const settingsAllowed: boolean = $iam_user_has_action(
     user,
     "europay:authorisation",
-    "User Settings",
-    true
+    "User Settings"
   );
 
   const redirect = (href: string) => {

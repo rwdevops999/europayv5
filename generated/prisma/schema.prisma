@@ -185,12 +185,30 @@ model User {
   account      Account?
   settings     UserSetting[]
 
+  pats UserPAT[]
+
   @@unique([firstname, lastname])
 }
 
 enum UserType {
   EUROPAY
   GUEST
+}
+
+model UserPAT {
+  id             Int         @id @default(autoincrement())
+  tokenName      String
+  token          String
+  createDate     DateTime?   @default(now())
+  expirationDate DateTime
+  tokenStatus    TokenStatus
+  userId         Int // Foreign key
+  user           User        @relation(fields: [userId], references: [id]) // Relation field
+}
+
+enum TokenStatus {
+  ACTIVE
+  VOID
 }
 
 model UserSetting {

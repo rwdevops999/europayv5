@@ -235,6 +235,16 @@ exports.Prisma.UserScalarFieldEnum = {
   updateDate: 'updateDate'
 };
 
+exports.Prisma.UserPATScalarFieldEnum = {
+  id: 'id',
+  tokenName: 'tokenName',
+  token: 'token',
+  createDate: 'createDate',
+  expirationDate: 'expirationDate',
+  tokenStatus: 'tokenStatus',
+  userId: 'userId'
+};
+
 exports.Prisma.UserSettingScalarFieldEnum = {
   id: 'id',
   key: 'key',
@@ -398,6 +408,11 @@ exports.UserType = exports.$Enums.UserType = {
   GUEST: 'GUEST'
 };
 
+exports.TokenStatus = exports.$Enums.TokenStatus = {
+  ACTIVE: 'ACTIVE',
+  VOID: 'VOID'
+};
+
 exports.AccountStatus = exports.$Enums.AccountStatus = {
   OPEN: 'OPEN',
   CLOSED: 'CLOSED',
@@ -468,6 +483,7 @@ exports.Prisma.ModelName = {
   Country: 'Country',
   Address: 'Address',
   User: 'User',
+  UserPAT: 'UserPAT',
   UserSetting: 'UserSetting',
   Group: 'Group',
   Export: 'Export',

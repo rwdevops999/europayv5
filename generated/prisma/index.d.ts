@@ -69,6 +69,11 @@ export type Address = $Result.DefaultSelection<Prisma.$AddressPayload>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model UserPAT
+ * 
+ */
+export type UserPAT = $Result.DefaultSelection<Prisma.$UserPATPayload>
+/**
  * Model UserSetting
  * 
  */
@@ -155,6 +160,14 @@ export const UserType: {
 };
 
 export type UserType = (typeof UserType)[keyof typeof UserType]
+
+
+export const TokenStatus: {
+  ACTIVE: 'ACTIVE',
+  VOID: 'VOID'
+};
+
+export type TokenStatus = (typeof TokenStatus)[keyof typeof TokenStatus]
 
 
 export const AccountStatus: {
@@ -257,6 +270,10 @@ export const TemplateRole: typeof $Enums.TemplateRole
 export type UserType = $Enums.UserType
 
 export const UserType: typeof $Enums.UserType
+
+export type TokenStatus = $Enums.TokenStatus
+
+export const TokenStatus: typeof $Enums.TokenStatus
 
 export type AccountStatus = $Enums.AccountStatus
 
@@ -525,6 +542,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userPAT`: Exposes CRUD operations for the **UserPAT** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserPATS
+    * const userPATS = await prisma.userPAT.findMany()
+    * ```
+    */
+  get userPAT(): Prisma.UserPATDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.userSetting`: Exposes CRUD operations for the **UserSetting** model.
@@ -1086,6 +1113,7 @@ export namespace Prisma {
     Country: 'Country',
     Address: 'Address',
     User: 'User',
+    UserPAT: 'UserPAT',
     UserSetting: 'UserSetting',
     Group: 'Group',
     Export: 'Export',
@@ -1115,7 +1143,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "service" | "serviceAction" | "serviceStatementAction" | "serviceStatement" | "template" | "policy" | "setting" | "role" | "country" | "address" | "user" | "userSetting" | "group" | "export" | "account" | "accountApply" | "task" | "oTP" | "history" | "job" | "transaction" | "bankAccount"
+      modelProps: "service" | "serviceAction" | "serviceStatementAction" | "serviceStatement" | "template" | "policy" | "setting" | "role" | "country" | "address" | "user" | "userPAT" | "userSetting" | "group" | "export" | "account" | "accountApply" | "task" | "oTP" | "history" | "job" | "transaction" | "bankAccount"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1930,6 +1958,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserPAT: {
+        payload: Prisma.$UserPATPayload<ExtArgs>
+        fields: Prisma.UserPATFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserPATFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPATPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserPATFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPATPayload>
+          }
+          findFirst: {
+            args: Prisma.UserPATFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPATPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserPATFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPATPayload>
+          }
+          findMany: {
+            args: Prisma.UserPATFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPATPayload>[]
+          }
+          create: {
+            args: Prisma.UserPATCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPATPayload>
+          }
+          createMany: {
+            args: Prisma.UserPATCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserPATCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPATPayload>[]
+          }
+          delete: {
+            args: Prisma.UserPATDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPATPayload>
+          }
+          update: {
+            args: Prisma.UserPATUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPATPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserPATDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserPATUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserPATUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPATPayload>[]
+          }
+          upsert: {
+            args: Prisma.UserPATUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPATPayload>
+          }
+          aggregate: {
+            args: Prisma.UserPATAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserPAT>
+          }
+          groupBy: {
+            args: Prisma.UserPATGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserPATGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserPATCountArgs<ExtArgs>
+            result: $Utils.Optional<UserPATCountAggregateOutputType> | number
           }
         }
       }
@@ -2854,6 +2956,7 @@ export namespace Prisma {
     country?: CountryOmit
     address?: AddressOmit
     user?: UserOmit
+    userPAT?: UserPATOmit
     userSetting?: UserSettingOmit
     group?: GroupOmit
     export?: ExportOmit
@@ -3207,6 +3310,7 @@ export namespace Prisma {
     roles: number
     groups: number
     settings: number
+    pats: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3214,6 +3318,7 @@ export namespace Prisma {
     roles?: boolean | UserCountOutputTypeCountRolesArgs
     groups?: boolean | UserCountOutputTypeCountGroupsArgs
     settings?: boolean | UserCountOutputTypeCountSettingsArgs
+    pats?: boolean | UserCountOutputTypeCountPatsArgs
   }
 
   // Custom InputTypes
@@ -3253,6 +3358,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountSettingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserSettingWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPatsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserPATWhereInput
   }
 
 
@@ -15070,6 +15182,7 @@ export namespace Prisma {
     groups?: boolean | User$groupsArgs<ExtArgs>
     account?: boolean | User$accountArgs<ExtArgs>
     settings?: boolean | User$settingsArgs<ExtArgs>
+    pats?: boolean | User$patsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -15141,6 +15254,7 @@ export namespace Prisma {
     groups?: boolean | User$groupsArgs<ExtArgs>
     account?: boolean | User$accountArgs<ExtArgs>
     settings?: boolean | User$settingsArgs<ExtArgs>
+    pats?: boolean | User$patsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -15155,6 +15269,7 @@ export namespace Prisma {
       groups: Prisma.$GroupPayload<ExtArgs>[]
       account: Prisma.$AccountPayload<ExtArgs> | null
       settings: Prisma.$UserSettingPayload<ExtArgs>[]
+      pats: Prisma.$UserPATPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -15574,6 +15689,7 @@ export namespace Prisma {
     groups<T extends User$groupsArgs<ExtArgs> = {}>(args?: Subset<T, User$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     account<T extends User$accountArgs<ExtArgs> = {}>(args?: Subset<T, User$accountArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     settings<T extends User$settingsArgs<ExtArgs> = {}>(args?: Subset<T, User$settingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSettingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pats<T extends User$patsArgs<ExtArgs> = {}>(args?: Subset<T, User$patsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPATPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16142,6 +16258,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.pats
+   */
+  export type User$patsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPAT
+     */
+    select?: UserPATSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPAT
+     */
+    omit?: UserPATOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPATInclude<ExtArgs> | null
+    where?: UserPATWhereInput
+    orderBy?: UserPATOrderByWithRelationInput | UserPATOrderByWithRelationInput[]
+    cursor?: UserPATWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserPATScalarFieldEnum | UserPATScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16157,6 +16297,1128 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UserPAT
+   */
+
+  export type AggregateUserPAT = {
+    _count: UserPATCountAggregateOutputType | null
+    _avg: UserPATAvgAggregateOutputType | null
+    _sum: UserPATSumAggregateOutputType | null
+    _min: UserPATMinAggregateOutputType | null
+    _max: UserPATMaxAggregateOutputType | null
+  }
+
+  export type UserPATAvgAggregateOutputType = {
+    id: number | null
+    userId: number | null
+  }
+
+  export type UserPATSumAggregateOutputType = {
+    id: number | null
+    userId: number | null
+  }
+
+  export type UserPATMinAggregateOutputType = {
+    id: number | null
+    tokenName: string | null
+    token: string | null
+    createDate: Date | null
+    expirationDate: Date | null
+    tokenStatus: $Enums.TokenStatus | null
+    userId: number | null
+  }
+
+  export type UserPATMaxAggregateOutputType = {
+    id: number | null
+    tokenName: string | null
+    token: string | null
+    createDate: Date | null
+    expirationDate: Date | null
+    tokenStatus: $Enums.TokenStatus | null
+    userId: number | null
+  }
+
+  export type UserPATCountAggregateOutputType = {
+    id: number
+    tokenName: number
+    token: number
+    createDate: number
+    expirationDate: number
+    tokenStatus: number
+    userId: number
+    _all: number
+  }
+
+
+  export type UserPATAvgAggregateInputType = {
+    id?: true
+    userId?: true
+  }
+
+  export type UserPATSumAggregateInputType = {
+    id?: true
+    userId?: true
+  }
+
+  export type UserPATMinAggregateInputType = {
+    id?: true
+    tokenName?: true
+    token?: true
+    createDate?: true
+    expirationDate?: true
+    tokenStatus?: true
+    userId?: true
+  }
+
+  export type UserPATMaxAggregateInputType = {
+    id?: true
+    tokenName?: true
+    token?: true
+    createDate?: true
+    expirationDate?: true
+    tokenStatus?: true
+    userId?: true
+  }
+
+  export type UserPATCountAggregateInputType = {
+    id?: true
+    tokenName?: true
+    token?: true
+    createDate?: true
+    expirationDate?: true
+    tokenStatus?: true
+    userId?: true
+    _all?: true
+  }
+
+  export type UserPATAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserPAT to aggregate.
+     */
+    where?: UserPATWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserPATS to fetch.
+     */
+    orderBy?: UserPATOrderByWithRelationInput | UserPATOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserPATWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserPATS from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserPATS.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserPATS
+    **/
+    _count?: true | UserPATCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UserPATAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserPATSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserPATMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserPATMaxAggregateInputType
+  }
+
+  export type GetUserPATAggregateType<T extends UserPATAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserPAT]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserPAT[P]>
+      : GetScalarType<T[P], AggregateUserPAT[P]>
+  }
+
+
+
+
+  export type UserPATGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserPATWhereInput
+    orderBy?: UserPATOrderByWithAggregationInput | UserPATOrderByWithAggregationInput[]
+    by: UserPATScalarFieldEnum[] | UserPATScalarFieldEnum
+    having?: UserPATScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserPATCountAggregateInputType | true
+    _avg?: UserPATAvgAggregateInputType
+    _sum?: UserPATSumAggregateInputType
+    _min?: UserPATMinAggregateInputType
+    _max?: UserPATMaxAggregateInputType
+  }
+
+  export type UserPATGroupByOutputType = {
+    id: number
+    tokenName: string
+    token: string
+    createDate: Date | null
+    expirationDate: Date
+    tokenStatus: $Enums.TokenStatus
+    userId: number
+    _count: UserPATCountAggregateOutputType | null
+    _avg: UserPATAvgAggregateOutputType | null
+    _sum: UserPATSumAggregateOutputType | null
+    _min: UserPATMinAggregateOutputType | null
+    _max: UserPATMaxAggregateOutputType | null
+  }
+
+  type GetUserPATGroupByPayload<T extends UserPATGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserPATGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserPATGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserPATGroupByOutputType[P]>
+            : GetScalarType<T[P], UserPATGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserPATSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tokenName?: boolean
+    token?: boolean
+    createDate?: boolean
+    expirationDate?: boolean
+    tokenStatus?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userPAT"]>
+
+  export type UserPATSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tokenName?: boolean
+    token?: boolean
+    createDate?: boolean
+    expirationDate?: boolean
+    tokenStatus?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userPAT"]>
+
+  export type UserPATSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tokenName?: boolean
+    token?: boolean
+    createDate?: boolean
+    expirationDate?: boolean
+    tokenStatus?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userPAT"]>
+
+  export type UserPATSelectScalar = {
+    id?: boolean
+    tokenName?: boolean
+    token?: boolean
+    createDate?: boolean
+    expirationDate?: boolean
+    tokenStatus?: boolean
+    userId?: boolean
+  }
+
+  export type UserPATOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tokenName" | "token" | "createDate" | "expirationDate" | "tokenStatus" | "userId", ExtArgs["result"]["userPAT"]>
+  export type UserPATInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserPATIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserPATIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $UserPATPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserPAT"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      tokenName: string
+      token: string
+      createDate: Date | null
+      expirationDate: Date
+      tokenStatus: $Enums.TokenStatus
+      userId: number
+    }, ExtArgs["result"]["userPAT"]>
+    composites: {}
+  }
+
+  type UserPATGetPayload<S extends boolean | null | undefined | UserPATDefaultArgs> = $Result.GetResult<Prisma.$UserPATPayload, S>
+
+  type UserPATCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserPATFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserPATCountAggregateInputType | true
+    }
+
+  export interface UserPATDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserPAT'], meta: { name: 'UserPAT' } }
+    /**
+     * Find zero or one UserPAT that matches the filter.
+     * @param {UserPATFindUniqueArgs} args - Arguments to find a UserPAT
+     * @example
+     * // Get one UserPAT
+     * const userPAT = await prisma.userPAT.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserPATFindUniqueArgs>(args: SelectSubset<T, UserPATFindUniqueArgs<ExtArgs>>): Prisma__UserPATClient<$Result.GetResult<Prisma.$UserPATPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserPAT that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserPATFindUniqueOrThrowArgs} args - Arguments to find a UserPAT
+     * @example
+     * // Get one UserPAT
+     * const userPAT = await prisma.userPAT.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserPATFindUniqueOrThrowArgs>(args: SelectSubset<T, UserPATFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserPATClient<$Result.GetResult<Prisma.$UserPATPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserPAT that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPATFindFirstArgs} args - Arguments to find a UserPAT
+     * @example
+     * // Get one UserPAT
+     * const userPAT = await prisma.userPAT.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserPATFindFirstArgs>(args?: SelectSubset<T, UserPATFindFirstArgs<ExtArgs>>): Prisma__UserPATClient<$Result.GetResult<Prisma.$UserPATPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserPAT that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPATFindFirstOrThrowArgs} args - Arguments to find a UserPAT
+     * @example
+     * // Get one UserPAT
+     * const userPAT = await prisma.userPAT.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserPATFindFirstOrThrowArgs>(args?: SelectSubset<T, UserPATFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserPATClient<$Result.GetResult<Prisma.$UserPATPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserPATS that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPATFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserPATS
+     * const userPATS = await prisma.userPAT.findMany()
+     * 
+     * // Get first 10 UserPATS
+     * const userPATS = await prisma.userPAT.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userPATWithIdOnly = await prisma.userPAT.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserPATFindManyArgs>(args?: SelectSubset<T, UserPATFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPATPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserPAT.
+     * @param {UserPATCreateArgs} args - Arguments to create a UserPAT.
+     * @example
+     * // Create one UserPAT
+     * const UserPAT = await prisma.userPAT.create({
+     *   data: {
+     *     // ... data to create a UserPAT
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserPATCreateArgs>(args: SelectSubset<T, UserPATCreateArgs<ExtArgs>>): Prisma__UserPATClient<$Result.GetResult<Prisma.$UserPATPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserPATS.
+     * @param {UserPATCreateManyArgs} args - Arguments to create many UserPATS.
+     * @example
+     * // Create many UserPATS
+     * const userPAT = await prisma.userPAT.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserPATCreateManyArgs>(args?: SelectSubset<T, UserPATCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserPATS and returns the data saved in the database.
+     * @param {UserPATCreateManyAndReturnArgs} args - Arguments to create many UserPATS.
+     * @example
+     * // Create many UserPATS
+     * const userPAT = await prisma.userPAT.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserPATS and only return the `id`
+     * const userPATWithIdOnly = await prisma.userPAT.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserPATCreateManyAndReturnArgs>(args?: SelectSubset<T, UserPATCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPATPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserPAT.
+     * @param {UserPATDeleteArgs} args - Arguments to delete one UserPAT.
+     * @example
+     * // Delete one UserPAT
+     * const UserPAT = await prisma.userPAT.delete({
+     *   where: {
+     *     // ... filter to delete one UserPAT
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserPATDeleteArgs>(args: SelectSubset<T, UserPATDeleteArgs<ExtArgs>>): Prisma__UserPATClient<$Result.GetResult<Prisma.$UserPATPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserPAT.
+     * @param {UserPATUpdateArgs} args - Arguments to update one UserPAT.
+     * @example
+     * // Update one UserPAT
+     * const userPAT = await prisma.userPAT.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserPATUpdateArgs>(args: SelectSubset<T, UserPATUpdateArgs<ExtArgs>>): Prisma__UserPATClient<$Result.GetResult<Prisma.$UserPATPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserPATS.
+     * @param {UserPATDeleteManyArgs} args - Arguments to filter UserPATS to delete.
+     * @example
+     * // Delete a few UserPATS
+     * const { count } = await prisma.userPAT.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserPATDeleteManyArgs>(args?: SelectSubset<T, UserPATDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserPATS.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPATUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserPATS
+     * const userPAT = await prisma.userPAT.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserPATUpdateManyArgs>(args: SelectSubset<T, UserPATUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserPATS and returns the data updated in the database.
+     * @param {UserPATUpdateManyAndReturnArgs} args - Arguments to update many UserPATS.
+     * @example
+     * // Update many UserPATS
+     * const userPAT = await prisma.userPAT.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserPATS and only return the `id`
+     * const userPATWithIdOnly = await prisma.userPAT.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserPATUpdateManyAndReturnArgs>(args: SelectSubset<T, UserPATUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPATPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserPAT.
+     * @param {UserPATUpsertArgs} args - Arguments to update or create a UserPAT.
+     * @example
+     * // Update or create a UserPAT
+     * const userPAT = await prisma.userPAT.upsert({
+     *   create: {
+     *     // ... data to create a UserPAT
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserPAT we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserPATUpsertArgs>(args: SelectSubset<T, UserPATUpsertArgs<ExtArgs>>): Prisma__UserPATClient<$Result.GetResult<Prisma.$UserPATPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserPATS.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPATCountArgs} args - Arguments to filter UserPATS to count.
+     * @example
+     * // Count the number of UserPATS
+     * const count = await prisma.userPAT.count({
+     *   where: {
+     *     // ... the filter for the UserPATS we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserPATCountArgs>(
+      args?: Subset<T, UserPATCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserPATCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserPAT.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPATAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserPATAggregateArgs>(args: Subset<T, UserPATAggregateArgs>): Prisma.PrismaPromise<GetUserPATAggregateType<T>>
+
+    /**
+     * Group by UserPAT.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPATGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserPATGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserPATGroupByArgs['orderBy'] }
+        : { orderBy?: UserPATGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserPATGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserPATGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserPAT model
+   */
+  readonly fields: UserPATFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserPAT.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserPATClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserPAT model
+   */
+  interface UserPATFieldRefs {
+    readonly id: FieldRef<"UserPAT", 'Int'>
+    readonly tokenName: FieldRef<"UserPAT", 'String'>
+    readonly token: FieldRef<"UserPAT", 'String'>
+    readonly createDate: FieldRef<"UserPAT", 'DateTime'>
+    readonly expirationDate: FieldRef<"UserPAT", 'DateTime'>
+    readonly tokenStatus: FieldRef<"UserPAT", 'TokenStatus'>
+    readonly userId: FieldRef<"UserPAT", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserPAT findUnique
+   */
+  export type UserPATFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPAT
+     */
+    select?: UserPATSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPAT
+     */
+    omit?: UserPATOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPATInclude<ExtArgs> | null
+    /**
+     * Filter, which UserPAT to fetch.
+     */
+    where: UserPATWhereUniqueInput
+  }
+
+  /**
+   * UserPAT findUniqueOrThrow
+   */
+  export type UserPATFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPAT
+     */
+    select?: UserPATSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPAT
+     */
+    omit?: UserPATOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPATInclude<ExtArgs> | null
+    /**
+     * Filter, which UserPAT to fetch.
+     */
+    where: UserPATWhereUniqueInput
+  }
+
+  /**
+   * UserPAT findFirst
+   */
+  export type UserPATFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPAT
+     */
+    select?: UserPATSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPAT
+     */
+    omit?: UserPATOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPATInclude<ExtArgs> | null
+    /**
+     * Filter, which UserPAT to fetch.
+     */
+    where?: UserPATWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserPATS to fetch.
+     */
+    orderBy?: UserPATOrderByWithRelationInput | UserPATOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserPATS.
+     */
+    cursor?: UserPATWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserPATS from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserPATS.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserPATS.
+     */
+    distinct?: UserPATScalarFieldEnum | UserPATScalarFieldEnum[]
+  }
+
+  /**
+   * UserPAT findFirstOrThrow
+   */
+  export type UserPATFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPAT
+     */
+    select?: UserPATSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPAT
+     */
+    omit?: UserPATOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPATInclude<ExtArgs> | null
+    /**
+     * Filter, which UserPAT to fetch.
+     */
+    where?: UserPATWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserPATS to fetch.
+     */
+    orderBy?: UserPATOrderByWithRelationInput | UserPATOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserPATS.
+     */
+    cursor?: UserPATWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserPATS from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserPATS.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserPATS.
+     */
+    distinct?: UserPATScalarFieldEnum | UserPATScalarFieldEnum[]
+  }
+
+  /**
+   * UserPAT findMany
+   */
+  export type UserPATFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPAT
+     */
+    select?: UserPATSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPAT
+     */
+    omit?: UserPATOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPATInclude<ExtArgs> | null
+    /**
+     * Filter, which UserPATS to fetch.
+     */
+    where?: UserPATWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserPATS to fetch.
+     */
+    orderBy?: UserPATOrderByWithRelationInput | UserPATOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserPATS.
+     */
+    cursor?: UserPATWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserPATS from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserPATS.
+     */
+    skip?: number
+    distinct?: UserPATScalarFieldEnum | UserPATScalarFieldEnum[]
+  }
+
+  /**
+   * UserPAT create
+   */
+  export type UserPATCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPAT
+     */
+    select?: UserPATSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPAT
+     */
+    omit?: UserPATOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPATInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserPAT.
+     */
+    data: XOR<UserPATCreateInput, UserPATUncheckedCreateInput>
+  }
+
+  /**
+   * UserPAT createMany
+   */
+  export type UserPATCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserPATS.
+     */
+    data: UserPATCreateManyInput | UserPATCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserPAT createManyAndReturn
+   */
+  export type UserPATCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPAT
+     */
+    select?: UserPATSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPAT
+     */
+    omit?: UserPATOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserPATS.
+     */
+    data: UserPATCreateManyInput | UserPATCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPATIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserPAT update
+   */
+  export type UserPATUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPAT
+     */
+    select?: UserPATSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPAT
+     */
+    omit?: UserPATOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPATInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserPAT.
+     */
+    data: XOR<UserPATUpdateInput, UserPATUncheckedUpdateInput>
+    /**
+     * Choose, which UserPAT to update.
+     */
+    where: UserPATWhereUniqueInput
+  }
+
+  /**
+   * UserPAT updateMany
+   */
+  export type UserPATUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserPATS.
+     */
+    data: XOR<UserPATUpdateManyMutationInput, UserPATUncheckedUpdateManyInput>
+    /**
+     * Filter which UserPATS to update
+     */
+    where?: UserPATWhereInput
+    /**
+     * Limit how many UserPATS to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserPAT updateManyAndReturn
+   */
+  export type UserPATUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPAT
+     */
+    select?: UserPATSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPAT
+     */
+    omit?: UserPATOmit<ExtArgs> | null
+    /**
+     * The data used to update UserPATS.
+     */
+    data: XOR<UserPATUpdateManyMutationInput, UserPATUncheckedUpdateManyInput>
+    /**
+     * Filter which UserPATS to update
+     */
+    where?: UserPATWhereInput
+    /**
+     * Limit how many UserPATS to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPATIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserPAT upsert
+   */
+  export type UserPATUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPAT
+     */
+    select?: UserPATSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPAT
+     */
+    omit?: UserPATOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPATInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserPAT to update in case it exists.
+     */
+    where: UserPATWhereUniqueInput
+    /**
+     * In case the UserPAT found by the `where` argument doesn't exist, create a new UserPAT with this data.
+     */
+    create: XOR<UserPATCreateInput, UserPATUncheckedCreateInput>
+    /**
+     * In case the UserPAT was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserPATUpdateInput, UserPATUncheckedUpdateInput>
+  }
+
+  /**
+   * UserPAT delete
+   */
+  export type UserPATDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPAT
+     */
+    select?: UserPATSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPAT
+     */
+    omit?: UserPATOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPATInclude<ExtArgs> | null
+    /**
+     * Filter which UserPAT to delete.
+     */
+    where: UserPATWhereUniqueInput
+  }
+
+  /**
+   * UserPAT deleteMany
+   */
+  export type UserPATDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserPATS to delete
+     */
+    where?: UserPATWhereInput
+    /**
+     * Limit how many UserPATS to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserPAT without action
+   */
+  export type UserPATDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPAT
+     */
+    select?: UserPATSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPAT
+     */
+    omit?: UserPATOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPATInclude<ExtArgs> | null
   }
 
 
@@ -28742,6 +30004,19 @@ export namespace Prisma {
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+  export const UserPATScalarFieldEnum: {
+    id: 'id',
+    tokenName: 'tokenName',
+    token: 'token',
+    createDate: 'createDate',
+    expirationDate: 'expirationDate',
+    tokenStatus: 'tokenStatus',
+    userId: 'userId'
+  };
+
+  export type UserPATScalarFieldEnum = (typeof UserPATScalarFieldEnum)[keyof typeof UserPATScalarFieldEnum]
+
+
   export const UserSettingScalarFieldEnum: {
     id: 'id',
     key: 'key',
@@ -29027,6 +30302,20 @@ export namespace Prisma {
    * Reference to a field of type 'UserType[]'
    */
   export type ListEnumUserTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TokenStatus'
+   */
+  export type EnumTokenStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TokenStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'TokenStatus[]'
+   */
+  export type ListEnumTokenStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TokenStatus[]'>
     
 
 
@@ -29900,6 +31189,7 @@ export namespace Prisma {
     groups?: GroupListRelationFilter
     account?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     settings?: UserSettingListRelationFilter
+    pats?: UserPATListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -29926,6 +31216,7 @@ export namespace Prisma {
     groups?: GroupOrderByRelationAggregateInput
     account?: AccountOrderByWithRelationInput
     settings?: UserSettingOrderByRelationAggregateInput
+    pats?: UserPATOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -29956,6 +31247,7 @@ export namespace Prisma {
     groups?: GroupListRelationFilter
     account?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     settings?: UserSettingListRelationFilter
+    pats?: UserPATListRelationFilter
   }, "id" | "id" | "username" | "firstname_lastname">
 
   export type UserOrderByWithAggregationInput = {
@@ -30004,6 +31296,73 @@ export namespace Prisma {
     type?: EnumUserTypeWithAggregatesFilter<"User"> | $Enums.UserType
     createDate?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     updateDate?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  }
+
+  export type UserPATWhereInput = {
+    AND?: UserPATWhereInput | UserPATWhereInput[]
+    OR?: UserPATWhereInput[]
+    NOT?: UserPATWhereInput | UserPATWhereInput[]
+    id?: IntFilter<"UserPAT"> | number
+    tokenName?: StringFilter<"UserPAT"> | string
+    token?: StringFilter<"UserPAT"> | string
+    createDate?: DateTimeNullableFilter<"UserPAT"> | Date | string | null
+    expirationDate?: DateTimeFilter<"UserPAT"> | Date | string
+    tokenStatus?: EnumTokenStatusFilter<"UserPAT"> | $Enums.TokenStatus
+    userId?: IntFilter<"UserPAT"> | number
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type UserPATOrderByWithRelationInput = {
+    id?: SortOrder
+    tokenName?: SortOrder
+    token?: SortOrder
+    createDate?: SortOrderInput | SortOrder
+    expirationDate?: SortOrder
+    tokenStatus?: SortOrder
+    userId?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type UserPATWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: UserPATWhereInput | UserPATWhereInput[]
+    OR?: UserPATWhereInput[]
+    NOT?: UserPATWhereInput | UserPATWhereInput[]
+    tokenName?: StringFilter<"UserPAT"> | string
+    token?: StringFilter<"UserPAT"> | string
+    createDate?: DateTimeNullableFilter<"UserPAT"> | Date | string | null
+    expirationDate?: DateTimeFilter<"UserPAT"> | Date | string
+    tokenStatus?: EnumTokenStatusFilter<"UserPAT"> | $Enums.TokenStatus
+    userId?: IntFilter<"UserPAT"> | number
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type UserPATOrderByWithAggregationInput = {
+    id?: SortOrder
+    tokenName?: SortOrder
+    token?: SortOrder
+    createDate?: SortOrderInput | SortOrder
+    expirationDate?: SortOrder
+    tokenStatus?: SortOrder
+    userId?: SortOrder
+    _count?: UserPATCountOrderByAggregateInput
+    _avg?: UserPATAvgOrderByAggregateInput
+    _max?: UserPATMaxOrderByAggregateInput
+    _min?: UserPATMinOrderByAggregateInput
+    _sum?: UserPATSumOrderByAggregateInput
+  }
+
+  export type UserPATScalarWhereWithAggregatesInput = {
+    AND?: UserPATScalarWhereWithAggregatesInput | UserPATScalarWhereWithAggregatesInput[]
+    OR?: UserPATScalarWhereWithAggregatesInput[]
+    NOT?: UserPATScalarWhereWithAggregatesInput | UserPATScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"UserPAT"> | number
+    tokenName?: StringWithAggregatesFilter<"UserPAT"> | string
+    token?: StringWithAggregatesFilter<"UserPAT"> | string
+    createDate?: DateTimeNullableWithAggregatesFilter<"UserPAT"> | Date | string | null
+    expirationDate?: DateTimeWithAggregatesFilter<"UserPAT"> | Date | string
+    tokenStatus?: EnumTokenStatusWithAggregatesFilter<"UserPAT"> | $Enums.TokenStatus
+    userId?: IntWithAggregatesFilter<"UserPAT"> | number
   }
 
   export type UserSettingWhereInput = {
@@ -31503,6 +32862,7 @@ export namespace Prisma {
     groups?: GroupCreateNestedManyWithoutUsersInput
     account?: AccountCreateNestedOneWithoutUserInput
     settings?: UserSettingCreateNestedManyWithoutUsersInput
+    pats?: UserPATCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -31529,6 +32889,7 @@ export namespace Prisma {
     groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
     account?: AccountUncheckedCreateNestedOneWithoutUserInput
     settings?: UserSettingUncheckedCreateNestedManyWithoutUsersInput
+    pats?: UserPATUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -31554,6 +32915,7 @@ export namespace Prisma {
     groups?: GroupUpdateManyWithoutUsersNestedInput
     account?: AccountUpdateOneWithoutUserNestedInput
     settings?: UserSettingUpdateManyWithoutUsersNestedInput
+    pats?: UserPATUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -31580,6 +32942,7 @@ export namespace Prisma {
     groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
     account?: AccountUncheckedUpdateOneWithoutUserNestedInput
     settings?: UserSettingUncheckedUpdateManyWithoutUsersNestedInput
+    pats?: UserPATUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -31639,6 +33002,72 @@ export namespace Prisma {
     type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
     createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updateDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type UserPATCreateInput = {
+    tokenName: string
+    token: string
+    createDate?: Date | string | null
+    expirationDate: Date | string
+    tokenStatus: $Enums.TokenStatus
+    user: UserCreateNestedOneWithoutPatsInput
+  }
+
+  export type UserPATUncheckedCreateInput = {
+    id?: number
+    tokenName: string
+    token: string
+    createDate?: Date | string | null
+    expirationDate: Date | string
+    tokenStatus: $Enums.TokenStatus
+    userId: number
+  }
+
+  export type UserPATUpdateInput = {
+    tokenName?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
+    user?: UserUpdateOneRequiredWithoutPatsNestedInput
+  }
+
+  export type UserPATUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    tokenName?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
+    userId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type UserPATCreateManyInput = {
+    id?: number
+    tokenName: string
+    token: string
+    createDate?: Date | string | null
+    expirationDate: Date | string
+    tokenStatus: $Enums.TokenStatus
+    userId: number
+  }
+
+  export type UserPATUpdateManyMutationInput = {
+    tokenName?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
+  }
+
+  export type UserPATUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    tokenName?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
+    userId?: IntFieldUpdateOperationsInput | number
   }
 
   export type UserSettingCreateInput = {
@@ -33178,7 +34607,17 @@ export namespace Prisma {
     none?: UserSettingWhereInput
   }
 
+  export type UserPATListRelationFilter = {
+    every?: UserPATWhereInput
+    some?: UserPATWhereInput
+    none?: UserPATWhereInput
+  }
+
   export type UserSettingOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserPATOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -33265,6 +34704,93 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserTypeFilter<$PrismaModel>
     _max?: NestedEnumUserTypeFilter<$PrismaModel>
+  }
+
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type EnumTokenStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TokenStatus | EnumTokenStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TokenStatus[] | ListEnumTokenStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TokenStatus[] | ListEnumTokenStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTokenStatusFilter<$PrismaModel> | $Enums.TokenStatus
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type UserPATCountOrderByAggregateInput = {
+    id?: SortOrder
+    tokenName?: SortOrder
+    token?: SortOrder
+    createDate?: SortOrder
+    expirationDate?: SortOrder
+    tokenStatus?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type UserPATAvgOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type UserPATMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tokenName?: SortOrder
+    token?: SortOrder
+    createDate?: SortOrder
+    expirationDate?: SortOrder
+    tokenStatus?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type UserPATMinOrderByAggregateInput = {
+    id?: SortOrder
+    tokenName?: SortOrder
+    token?: SortOrder
+    createDate?: SortOrder
+    expirationDate?: SortOrder
+    tokenStatus?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type UserPATSumOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type EnumTokenStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TokenStatus | EnumTokenStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TokenStatus[] | ListEnumTokenStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TokenStatus[] | ListEnumTokenStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTokenStatusWithAggregatesFilter<$PrismaModel> | $Enums.TokenStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTokenStatusFilter<$PrismaModel>
+    _max?: NestedEnumTokenStatusFilter<$PrismaModel>
   }
 
   export type UserSettingCountOrderByAggregateInput = {
@@ -33428,17 +34954,6 @@ export namespace Prisma {
     not?: NestedEnumAccountStatusFilter<$PrismaModel> | $Enums.AccountStatus
   }
 
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
   export type TransactionListRelationFilter = {
     every?: TransactionWhereInput
     some?: TransactionWhereInput
@@ -33522,20 +35037,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAccountStatusFilter<$PrismaModel>
     _max?: NestedEnumAccountStatusFilter<$PrismaModel>
-  }
-
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type EnumGenderNullableFilter<$PrismaModel = never> = {
@@ -34768,6 +36269,13 @@ export namespace Prisma {
     connect?: UserSettingWhereUniqueInput | UserSettingWhereUniqueInput[]
   }
 
+  export type UserPATCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserPATCreateWithoutUserInput, UserPATUncheckedCreateWithoutUserInput> | UserPATCreateWithoutUserInput[] | UserPATUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserPATCreateOrConnectWithoutUserInput | UserPATCreateOrConnectWithoutUserInput[]
+    createMany?: UserPATCreateManyUserInputEnvelope
+    connect?: UserPATWhereUniqueInput | UserPATWhereUniqueInput[]
+  }
+
   export type AddressUncheckedCreateNestedOneWithoutUserInput = {
     create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput>
     connectOrCreate?: AddressCreateOrConnectWithoutUserInput
@@ -34802,6 +36310,13 @@ export namespace Prisma {
     create?: XOR<UserSettingCreateWithoutUsersInput, UserSettingUncheckedCreateWithoutUsersInput> | UserSettingCreateWithoutUsersInput[] | UserSettingUncheckedCreateWithoutUsersInput[]
     connectOrCreate?: UserSettingCreateOrConnectWithoutUsersInput | UserSettingCreateOrConnectWithoutUsersInput[]
     connect?: UserSettingWhereUniqueInput | UserSettingWhereUniqueInput[]
+  }
+
+  export type UserPATUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserPATCreateWithoutUserInput, UserPATUncheckedCreateWithoutUserInput> | UserPATCreateWithoutUserInput[] | UserPATUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserPATCreateOrConnectWithoutUserInput | UserPATCreateOrConnectWithoutUserInput[]
+    createMany?: UserPATCreateManyUserInputEnvelope
+    connect?: UserPATWhereUniqueInput | UserPATWhereUniqueInput[]
   }
 
   export type EnumUserTypeFieldUpdateOperationsInput = {
@@ -34880,6 +36395,20 @@ export namespace Prisma {
     deleteMany?: UserSettingScalarWhereInput | UserSettingScalarWhereInput[]
   }
 
+  export type UserPATUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserPATCreateWithoutUserInput, UserPATUncheckedCreateWithoutUserInput> | UserPATCreateWithoutUserInput[] | UserPATUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserPATCreateOrConnectWithoutUserInput | UserPATCreateOrConnectWithoutUserInput[]
+    upsert?: UserPATUpsertWithWhereUniqueWithoutUserInput | UserPATUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserPATCreateManyUserInputEnvelope
+    set?: UserPATWhereUniqueInput | UserPATWhereUniqueInput[]
+    disconnect?: UserPATWhereUniqueInput | UserPATWhereUniqueInput[]
+    delete?: UserPATWhereUniqueInput | UserPATWhereUniqueInput[]
+    connect?: UserPATWhereUniqueInput | UserPATWhereUniqueInput[]
+    update?: UserPATUpdateWithWhereUniqueWithoutUserInput | UserPATUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserPATUpdateManyWithWhereWithoutUserInput | UserPATUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserPATScalarWhereInput | UserPATScalarWhereInput[]
+  }
+
   export type AddressUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput>
     connectOrCreate?: AddressCreateOrConnectWithoutUserInput
@@ -34950,6 +36479,42 @@ export namespace Prisma {
     update?: UserSettingUpdateWithWhereUniqueWithoutUsersInput | UserSettingUpdateWithWhereUniqueWithoutUsersInput[]
     updateMany?: UserSettingUpdateManyWithWhereWithoutUsersInput | UserSettingUpdateManyWithWhereWithoutUsersInput[]
     deleteMany?: UserSettingScalarWhereInput | UserSettingScalarWhereInput[]
+  }
+
+  export type UserPATUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserPATCreateWithoutUserInput, UserPATUncheckedCreateWithoutUserInput> | UserPATCreateWithoutUserInput[] | UserPATUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserPATCreateOrConnectWithoutUserInput | UserPATCreateOrConnectWithoutUserInput[]
+    upsert?: UserPATUpsertWithWhereUniqueWithoutUserInput | UserPATUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserPATCreateManyUserInputEnvelope
+    set?: UserPATWhereUniqueInput | UserPATWhereUniqueInput[]
+    disconnect?: UserPATWhereUniqueInput | UserPATWhereUniqueInput[]
+    delete?: UserPATWhereUniqueInput | UserPATWhereUniqueInput[]
+    connect?: UserPATWhereUniqueInput | UserPATWhereUniqueInput[]
+    update?: UserPATUpdateWithWhereUniqueWithoutUserInput | UserPATUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserPATUpdateManyWithWhereWithoutUserInput | UserPATUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserPATScalarWhereInput | UserPATScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutPatsInput = {
+    create?: XOR<UserCreateWithoutPatsInput, UserUncheckedCreateWithoutPatsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPatsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
+  export type EnumTokenStatusFieldUpdateOperationsInput = {
+    set?: $Enums.TokenStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutPatsNestedInput = {
+    create?: XOR<UserCreateWithoutPatsInput, UserUncheckedCreateWithoutPatsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPatsInput
+    upsert?: UserUpsertWithoutPatsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPatsInput, UserUpdateWithoutPatsInput>, UserUncheckedUpdateWithoutPatsInput>
   }
 
   export type UserCreateNestedManyWithoutSettingsInput = {
@@ -35162,10 +36727,6 @@ export namespace Prisma {
 
   export type EnumAccountStatusFieldUpdateOperationsInput = {
     set?: $Enums.AccountStatus
-  }
-
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
   }
 
   export type UserUpdateOneWithoutAccountNestedInput = {
@@ -35641,6 +37202,48 @@ export namespace Prisma {
     _min?: NestedEnumUserTypeFilter<$PrismaModel>
     _max?: NestedEnumUserTypeFilter<$PrismaModel>
   }
+
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type NestedEnumTokenStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TokenStatus | EnumTokenStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TokenStatus[] | ListEnumTokenStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TokenStatus[] | ListEnumTokenStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTokenStatusFilter<$PrismaModel> | $Enums.TokenStatus
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTokenStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TokenStatus | EnumTokenStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TokenStatus[] | ListEnumTokenStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TokenStatus[] | ListEnumTokenStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTokenStatusWithAggregatesFilter<$PrismaModel> | $Enums.TokenStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTokenStatusFilter<$PrismaModel>
+    _max?: NestedEnumTokenStatusFilter<$PrismaModel>
+  }
   export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -35672,17 +37275,6 @@ export namespace Prisma {
     not?: NestedEnumAccountStatusFilter<$PrismaModel> | $Enums.AccountStatus
   }
 
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -35707,20 +37299,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAccountStatusFilter<$PrismaModel>
     _max?: NestedEnumAccountStatusFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedEnumGenderNullableFilter<$PrismaModel = never> = {
@@ -36426,6 +38004,7 @@ export namespace Prisma {
     groups?: GroupCreateNestedManyWithoutUsersInput
     account?: AccountCreateNestedOneWithoutUserInput
     settings?: UserSettingCreateNestedManyWithoutUsersInput
+    pats?: UserPATCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPoliciesInput = {
@@ -36451,6 +38030,7 @@ export namespace Prisma {
     groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
     account?: AccountUncheckedCreateNestedOneWithoutUserInput
     settings?: UserSettingUncheckedCreateNestedManyWithoutUsersInput
+    pats?: UserPATUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPoliciesInput = {
@@ -36651,6 +38231,7 @@ export namespace Prisma {
     groups?: GroupCreateNestedManyWithoutUsersInput
     account?: AccountCreateNestedOneWithoutUserInput
     settings?: UserSettingCreateNestedManyWithoutUsersInput
+    pats?: UserPATCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRolesInput = {
@@ -36676,6 +38257,7 @@ export namespace Prisma {
     groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
     account?: AccountUncheckedCreateNestedOneWithoutUserInput
     settings?: UserSettingUncheckedCreateNestedManyWithoutUsersInput
+    pats?: UserPATUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRolesInput = {
@@ -36873,6 +38455,7 @@ export namespace Prisma {
     groups?: GroupCreateNestedManyWithoutUsersInput
     account?: AccountCreateNestedOneWithoutUserInput
     settings?: UserSettingCreateNestedManyWithoutUsersInput
+    pats?: UserPATCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAddressInput = {
@@ -36898,6 +38481,7 @@ export namespace Prisma {
     groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
     account?: AccountUncheckedCreateNestedOneWithoutUserInput
     settings?: UserSettingUncheckedCreateNestedManyWithoutUsersInput
+    pats?: UserPATUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAddressInput = {
@@ -36968,6 +38552,7 @@ export namespace Prisma {
     groups?: GroupUpdateManyWithoutUsersNestedInput
     account?: AccountUpdateOneWithoutUserNestedInput
     settings?: UserSettingUpdateManyWithoutUsersNestedInput
+    pats?: UserPATUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAddressInput = {
@@ -36993,6 +38578,7 @@ export namespace Prisma {
     groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
     account?: AccountUncheckedUpdateOneWithoutUserNestedInput
     settings?: UserSettingUncheckedUpdateManyWithoutUsersNestedInput
+    pats?: UserPATUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AddressCreateWithoutUserInput = {
@@ -37153,6 +38739,33 @@ export namespace Prisma {
     create: XOR<UserSettingCreateWithoutUsersInput, UserSettingUncheckedCreateWithoutUsersInput>
   }
 
+  export type UserPATCreateWithoutUserInput = {
+    tokenName: string
+    token: string
+    createDate?: Date | string | null
+    expirationDate: Date | string
+    tokenStatus: $Enums.TokenStatus
+  }
+
+  export type UserPATUncheckedCreateWithoutUserInput = {
+    id?: number
+    tokenName: string
+    token: string
+    createDate?: Date | string | null
+    expirationDate: Date | string
+    tokenStatus: $Enums.TokenStatus
+  }
+
+  export type UserPATCreateOrConnectWithoutUserInput = {
+    where: UserPATWhereUniqueInput
+    create: XOR<UserPATCreateWithoutUserInput, UserPATUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserPATCreateManyUserInputEnvelope = {
+    data: UserPATCreateManyUserInput | UserPATCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AddressUpsertWithoutUserInput = {
     update: XOR<AddressUpdateWithoutUserInput, AddressUncheckedUpdateWithoutUserInput>
     create: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput>
@@ -37294,6 +38907,153 @@ export namespace Prisma {
     value?: StringFilter<"UserSetting"> | string
   }
 
+  export type UserPATUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserPATWhereUniqueInput
+    update: XOR<UserPATUpdateWithoutUserInput, UserPATUncheckedUpdateWithoutUserInput>
+    create: XOR<UserPATCreateWithoutUserInput, UserPATUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserPATUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserPATWhereUniqueInput
+    data: XOR<UserPATUpdateWithoutUserInput, UserPATUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserPATUpdateManyWithWhereWithoutUserInput = {
+    where: UserPATScalarWhereInput
+    data: XOR<UserPATUpdateManyMutationInput, UserPATUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserPATScalarWhereInput = {
+    AND?: UserPATScalarWhereInput | UserPATScalarWhereInput[]
+    OR?: UserPATScalarWhereInput[]
+    NOT?: UserPATScalarWhereInput | UserPATScalarWhereInput[]
+    id?: IntFilter<"UserPAT"> | number
+    tokenName?: StringFilter<"UserPAT"> | string
+    token?: StringFilter<"UserPAT"> | string
+    createDate?: DateTimeNullableFilter<"UserPAT"> | Date | string | null
+    expirationDate?: DateTimeFilter<"UserPAT"> | Date | string
+    tokenStatus?: EnumTokenStatusFilter<"UserPAT"> | $Enums.TokenStatus
+    userId?: IntFilter<"UserPAT"> | number
+  }
+
+  export type UserCreateWithoutPatsInput = {
+    username?: string | null
+    lastname: string
+    firstname: string
+    avatar?: string | null
+    phone?: string | null
+    email: string
+    password: string
+    passwordless?: boolean | null
+    attemps?: number | null
+    blocked?: boolean | null
+    managed?: boolean | null
+    system?: boolean | null
+    loggedinDate?: Date | string | null
+    type?: $Enums.UserType
+    createDate?: Date | string | null
+    updateDate?: Date | string | null
+    address?: AddressCreateNestedOneWithoutUserInput
+    policies?: PolicyCreateNestedManyWithoutUsersInput
+    roles?: RoleCreateNestedManyWithoutUsersInput
+    groups?: GroupCreateNestedManyWithoutUsersInput
+    account?: AccountCreateNestedOneWithoutUserInput
+    settings?: UserSettingCreateNestedManyWithoutUsersInput
+  }
+
+  export type UserUncheckedCreateWithoutPatsInput = {
+    id?: number
+    username?: string | null
+    lastname: string
+    firstname: string
+    avatar?: string | null
+    phone?: string | null
+    email: string
+    password: string
+    passwordless?: boolean | null
+    attemps?: number | null
+    blocked?: boolean | null
+    managed?: boolean | null
+    system?: boolean | null
+    loggedinDate?: Date | string | null
+    type?: $Enums.UserType
+    createDate?: Date | string | null
+    updateDate?: Date | string | null
+    address?: AddressUncheckedCreateNestedOneWithoutUserInput
+    policies?: PolicyUncheckedCreateNestedManyWithoutUsersInput
+    roles?: RoleUncheckedCreateNestedManyWithoutUsersInput
+    groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
+    account?: AccountUncheckedCreateNestedOneWithoutUserInput
+    settings?: UserSettingUncheckedCreateNestedManyWithoutUsersInput
+  }
+
+  export type UserCreateOrConnectWithoutPatsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPatsInput, UserUncheckedCreateWithoutPatsInput>
+  }
+
+  export type UserUpsertWithoutPatsInput = {
+    update: XOR<UserUpdateWithoutPatsInput, UserUncheckedUpdateWithoutPatsInput>
+    create: XOR<UserCreateWithoutPatsInput, UserUncheckedCreateWithoutPatsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPatsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPatsInput, UserUncheckedUpdateWithoutPatsInput>
+  }
+
+  export type UserUpdateWithoutPatsInput = {
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    lastname?: StringFieldUpdateOperationsInput | string
+    firstname?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    passwordless?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    attemps?: NullableIntFieldUpdateOperationsInput | number | null
+    blocked?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    managed?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    system?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    loggedinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updateDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: AddressUpdateOneWithoutUserNestedInput
+    policies?: PolicyUpdateManyWithoutUsersNestedInput
+    roles?: RoleUpdateManyWithoutUsersNestedInput
+    groups?: GroupUpdateManyWithoutUsersNestedInput
+    account?: AccountUpdateOneWithoutUserNestedInput
+    settings?: UserSettingUpdateManyWithoutUsersNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPatsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    lastname?: StringFieldUpdateOperationsInput | string
+    firstname?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    passwordless?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    attemps?: NullableIntFieldUpdateOperationsInput | number | null
+    blocked?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    managed?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    system?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    loggedinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updateDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: AddressUncheckedUpdateOneWithoutUserNestedInput
+    policies?: PolicyUncheckedUpdateManyWithoutUsersNestedInput
+    roles?: RoleUncheckedUpdateManyWithoutUsersNestedInput
+    groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
+    account?: AccountUncheckedUpdateOneWithoutUserNestedInput
+    settings?: UserSettingUncheckedUpdateManyWithoutUsersNestedInput
+  }
+
   export type UserCreateWithoutSettingsInput = {
     username?: string | null
     lastname: string
@@ -37316,6 +39076,7 @@ export namespace Prisma {
     roles?: RoleCreateNestedManyWithoutUsersInput
     groups?: GroupCreateNestedManyWithoutUsersInput
     account?: AccountCreateNestedOneWithoutUserInput
+    pats?: UserPATCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSettingsInput = {
@@ -37341,6 +39102,7 @@ export namespace Prisma {
     roles?: RoleUncheckedCreateNestedManyWithoutUsersInput
     groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
     account?: AccountUncheckedCreateNestedOneWithoutUserInput
+    pats?: UserPATUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSettingsInput = {
@@ -37444,6 +39206,7 @@ export namespace Prisma {
     roles?: RoleCreateNestedManyWithoutUsersInput
     account?: AccountCreateNestedOneWithoutUserInput
     settings?: UserSettingCreateNestedManyWithoutUsersInput
+    pats?: UserPATCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGroupsInput = {
@@ -37469,6 +39232,7 @@ export namespace Prisma {
     roles?: RoleUncheckedCreateNestedManyWithoutUsersInput
     account?: AccountUncheckedCreateNestedOneWithoutUserInput
     settings?: UserSettingUncheckedCreateNestedManyWithoutUsersInput
+    pats?: UserPATUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGroupsInput = {
@@ -37546,6 +39310,7 @@ export namespace Prisma {
     roles?: RoleCreateNestedManyWithoutUsersInput
     groups?: GroupCreateNestedManyWithoutUsersInput
     settings?: UserSettingCreateNestedManyWithoutUsersInput
+    pats?: UserPATCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountInput = {
@@ -37571,6 +39336,7 @@ export namespace Prisma {
     roles?: RoleUncheckedCreateNestedManyWithoutUsersInput
     groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
     settings?: UserSettingUncheckedCreateNestedManyWithoutUsersInput
+    pats?: UserPATUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountInput = {
@@ -37726,6 +39492,7 @@ export namespace Prisma {
     roles?: RoleUpdateManyWithoutUsersNestedInput
     groups?: GroupUpdateManyWithoutUsersNestedInput
     settings?: UserSettingUpdateManyWithoutUsersNestedInput
+    pats?: UserPATUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountInput = {
@@ -37751,6 +39518,7 @@ export namespace Prisma {
     roles?: RoleUncheckedUpdateManyWithoutUsersNestedInput
     groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
     settings?: UserSettingUncheckedUpdateManyWithoutUsersNestedInput
+    pats?: UserPATUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TransactionUpsertWithWhereUniqueWithoutSenderAccountInput = {
@@ -38401,6 +40169,7 @@ export namespace Prisma {
     groups?: GroupUpdateManyWithoutUsersNestedInput
     account?: AccountUpdateOneWithoutUserNestedInput
     settings?: UserSettingUpdateManyWithoutUsersNestedInput
+    pats?: UserPATUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPoliciesInput = {
@@ -38426,6 +40195,7 @@ export namespace Prisma {
     groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
     account?: AccountUncheckedUpdateOneWithoutUserNestedInput
     settings?: UserSettingUncheckedUpdateManyWithoutUsersNestedInput
+    pats?: UserPATUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutPoliciesInput = {
@@ -38538,6 +40308,7 @@ export namespace Prisma {
     groups?: GroupUpdateManyWithoutUsersNestedInput
     account?: AccountUpdateOneWithoutUserNestedInput
     settings?: UserSettingUpdateManyWithoutUsersNestedInput
+    pats?: UserPATUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRolesInput = {
@@ -38563,6 +40334,7 @@ export namespace Prisma {
     groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
     account?: AccountUncheckedUpdateOneWithoutUserNestedInput
     settings?: UserSettingUncheckedUpdateManyWithoutUsersNestedInput
+    pats?: UserPATUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRolesInput = {
@@ -38667,6 +40439,15 @@ export namespace Prisma {
     updateDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     county?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type UserPATCreateManyUserInput = {
+    id?: number
+    tokenName: string
+    token: string
+    createDate?: Date | string | null
+    expirationDate: Date | string
+    tokenStatus: $Enums.TokenStatus
   }
 
   export type PolicyUpdateWithoutUsersInput = {
@@ -38787,6 +40568,32 @@ export namespace Prisma {
     value?: StringFieldUpdateOperationsInput | string
   }
 
+  export type UserPATUpdateWithoutUserInput = {
+    tokenName?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
+  }
+
+  export type UserPATUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    tokenName?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
+  }
+
+  export type UserPATUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    tokenName?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
+  }
+
   export type UserUpdateWithoutSettingsInput = {
     username?: NullableStringFieldUpdateOperationsInput | string | null
     lastname?: StringFieldUpdateOperationsInput | string
@@ -38809,6 +40616,7 @@ export namespace Prisma {
     roles?: RoleUpdateManyWithoutUsersNestedInput
     groups?: GroupUpdateManyWithoutUsersNestedInput
     account?: AccountUpdateOneWithoutUserNestedInput
+    pats?: UserPATUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSettingsInput = {
@@ -38834,6 +40642,7 @@ export namespace Prisma {
     roles?: RoleUncheckedUpdateManyWithoutUsersNestedInput
     groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
     account?: AccountUncheckedUpdateOneWithoutUserNestedInput
+    pats?: UserPATUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutSettingsInput = {
@@ -38946,6 +40755,7 @@ export namespace Prisma {
     roles?: RoleUpdateManyWithoutUsersNestedInput
     account?: AccountUpdateOneWithoutUserNestedInput
     settings?: UserSettingUpdateManyWithoutUsersNestedInput
+    pats?: UserPATUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGroupsInput = {
@@ -38971,6 +40781,7 @@ export namespace Prisma {
     roles?: RoleUncheckedUpdateManyWithoutUsersNestedInput
     account?: AccountUncheckedUpdateOneWithoutUserNestedInput
     settings?: UserSettingUncheckedUpdateManyWithoutUsersNestedInput
+    pats?: UserPATUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutGroupsInput = {
