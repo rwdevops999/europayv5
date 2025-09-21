@@ -43,7 +43,7 @@ const UserTransactionsList = () => {
   }, [transactions]);
 
   return (
-    <div className="h-[78vh] border-1 border-yellow-500">
+    <div className="h-[78vh]">
       <div>
         <ScrollArea className="overflow-auto h-[640px] w-[100%]">
           <div id={"key0"} key={"key" + 0}></div>

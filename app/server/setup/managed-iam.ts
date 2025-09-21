@@ -425,7 +425,10 @@ export const SystemRoles: Record<string, any> = {
       "GroupDeletePolicy",
     ],
   },
-  AdminRole: { description: "Admin", policy: ["AdminDefaultPolicy"] },
+  AdminRole: {
+    description: "Admin",
+    policy: ["AdminDefaultPolicy", "TransactionsViewPolicy"],
+  },
   ClientRole: {
     description: "Client",
     policy: ["ClientDefaultPolicy", "SocialMediaPolicy", "AuthSettingsPolicy"],

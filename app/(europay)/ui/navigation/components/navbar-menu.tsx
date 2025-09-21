@@ -30,21 +30,20 @@ const NavbarMenu = () => {
       newmenu[1].subItems[0].visible = $iam_user_has_action(
         user,
         "europay:lists",
-        "Tasks Submenu"
+        "Task Submenu"
       );
       // Jobs
       newmenu[1].subItems[1].visible = $iam_user_has_action(
         user,
         "europay:lists",
-        "Jobs Submenu",
-        true
+        "Job Submenu"
       );
 
       // Transactions
       newmenu[1].subItems[2].visible = $iam_user_has_action(
         user,
         "europay:lists",
-        "Transactions Submenu"
+        "Transaction Submenu"
       );
 
       // History
