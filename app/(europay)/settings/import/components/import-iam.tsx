@@ -1,9 +1,11 @@
 "use client";
 
+import { $iam_user_has_action } from "@/app/client/iam-access";
 import { IamData } from "@/app/server/data/exportdata";
 import { loadExportedData, loadExportNames } from "@/app/server/export";
 import { importIamData } from "@/app/server/import";
 import { JsonValue } from "@/generated/prisma/runtime/library";
+import { useUser } from "@/hooks/use-user";
 import { json } from "@/lib/util";
 import Button from "@/ui/button";
 import React, { useEffect, useRef, useState } from "react";
@@ -13,8 +15,14 @@ import { MdManageAccounts } from "react-icons/md";
 const ImportIam = () => {
   const [enabled, setEnabled] = useState<boolean>(false);
   const [loaded, setLoaded] = useState<boolean>(false);
-
+  const { user } = useUser();
   const [exportNames, setExportNames] = useState<string[]>([]);
+
+  const importAllowed: boolean = $iam_user_has_action(
+    user,
+    "europay:settings:import:iam",
+    "Import"
+  );
 
   const loadTheExportNames = async (): Promise<void> => {
     setExportNames(["select name", ...(await loadExportNames())]);
@@ -74,7 +82,7 @@ const ImportIam = () => {
             iconFirst
             className="bg-custom"
             onClick={importData}
-            disabled={!enabled}
+            disabled={!importAllowed && !enabled}
           />
         </div>
         <div className="ml-10">{loaded && <BsDatabaseFillAdd />}</div>

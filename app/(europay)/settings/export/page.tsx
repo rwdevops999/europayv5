@@ -1,5 +1,6 @@
 "use client";
 
+import { $iam_user_has_action } from "@/app/client/iam-access";
 import {
   exportDataToDB,
   exportGroups,
@@ -10,6 +11,7 @@ import {
   exportUsers,
 } from "@/app/server/export";
 import { useMarkdownSettings } from "@/hooks/use-markdown-settings";
+import { useUser } from "@/hooks/use-user";
 import { absoluteUrl } from "@/lib/util";
 import Button from "@/ui/button";
 import PageContent from "@/ui/page-content";
@@ -31,6 +33,7 @@ let keyValue: number = 0;
 
 const Export = () => {
   const { isMarkdownOn } = useMarkdownSettings();
+  const { user } = useUser();
 
   const [copied, setCopied] = useState<boolean>(false);
   const [enabledForExport, setEnabledForExport] = useState<boolean>(true);
@@ -46,6 +49,22 @@ const Export = () => {
   }, [text]);
 
   let disabled: boolean = false;
+
+  const allowedToExportToView: boolean = $iam_user_has_action(
+    user,
+    "europay:settings:export",
+    "Export To View"
+  );
+  const allowedToExportToDB: boolean = $iam_user_has_action(
+    user,
+    "europay:settings:export",
+    "Export To DB"
+  );
+  const allowedCopyToClipboard: boolean = $iam_user_has_action(
+    user,
+    "europay:settings:export",
+    "Copy To Clipboard"
+  );
 
   // MARKDOWN: for use in VSCode with extension Markdown Interactive Checkbox(from Bhnum)
   const handleCopyToClipboard = () => {
@@ -76,28 +95,40 @@ const Export = () => {
               <RiExportLine size={16} />
               <div>Export IAM</div>
             </div>
-            <div className="tooltip tooltip-left" data-tip="copy to clipboad">
-              {copied ? (
-                <BsClipboard2Check
-                  size={16}
-                  className={clsx(
-                    "mr-2",
-                    { "hover:cursor-not-allowed text-background/30": disabled },
-                    { "hover:cursor-pointer hover:bg-foreground/30": !disabled }
-                  )}
-                />
-              ) : (
-                <BsClipboard2
-                  size={16}
-                  className={clsx(
-                    "mr-2",
-                    { "hover:cursor-not-allowed text-background/30": disabled },
-                    { "hover:cursor-pointer hover:bg-foreground/30": !disabled }
-                  )}
-                  onClick={handleCopyToClipboard}
-                />
-              )}
-            </div>
+            {allowedCopyToClipboard && (
+              <div className="tooltip tooltip-left" data-tip="copy to clipboad">
+                {copied ? (
+                  <BsClipboard2Check
+                    size={16}
+                    className={clsx(
+                      "mr-2",
+                      {
+                        "hover:cursor-not-allowed text-background/30": disabled,
+                      },
+                      {
+                        "hover:cursor-pointer hover:bg-foreground/30":
+                          !disabled,
+                      }
+                    )}
+                  />
+                ) : (
+                  <BsClipboard2
+                    size={16}
+                    className={clsx(
+                      "mr-2",
+                      {
+                        "hover:cursor-not-allowed text-background/30": disabled,
+                      },
+                      {
+                        "hover:cursor-pointer hover:bg-foreground/30":
+                          !disabled,
+                      }
+                    )}
+                    onClick={handleCopyToClipboard}
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -506,24 +537,12 @@ const Export = () => {
     >
       <div className="w-[99vw] h-[84vh] grid grid-cols-[20%_80%]">
         <div className="block space-y-1">
-          <div>
-            <ExportServiceStatements />
-          </div>
-          <div>
-            <ExportPolicies />
-          </div>
-          <div>
-            <ExportRoles />
-          </div>
-          <div>
-            <ExportUsers />
-          </div>
-          <div>
-            <ExportGroups />
-          </div>
-          <div>
-            <ExportToDB />
-          </div>
+          <div>{allowedToExportToView && <ExportServiceStatements />}</div>
+          <div>{allowedToExportToView && <ExportPolicies />}</div>
+          <div>{allowedToExportToView && <ExportRoles />}</div>
+          <div>{allowedToExportToView && <ExportUsers />}</div>
+          <div>{allowedToExportToView && <ExportGroups />}</div>
+          <div>{allowedToExportToDB && <ExportToDB />}</div>
         </div>
         <div>
           <DataViewer />
