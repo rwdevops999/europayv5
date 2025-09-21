@@ -15,7 +15,6 @@ import {
 import { ScrollArea, ScrollBar } from "@/ui/radix/scroll-area";
 import { JSX, useEffect, useState } from "react";
 import ReactHtmlParser from "react-html-parser";
-import { useUser } from "@/hooks/use-user";
 
 const AppCountry = ({ canChange = true }: { canChange?: boolean }) => {
   const [countries, setCountries] = useState<tCountry[]>([]);

@@ -17,7 +17,7 @@ const UserSettings = () => {
   const settingsAllowed: boolean = $iam_user_has_action(
     user,
     "europay:authorisation",
-    "Settings",
+    "User Settings",
     true
   );
 

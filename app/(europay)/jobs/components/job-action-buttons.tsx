@@ -24,20 +24,17 @@ const JobActionButtons = ({
   const maySuspend: boolean = $iam_user_has_action(
     user,
     "europay:lists:jobs",
-    "Suspend",
-    true
+    "Suspend"
   );
   const mayRemove: boolean = $iam_user_has_action(
     user,
     "europay:lists:jobs",
-    "Remove",
-    true
+    "Remove"
   );
   const mayRestart: boolean = $iam_user_has_action(
     user,
     "europay:lists:jobs",
-    "Restart",
-    true
+    "Restart"
   );
 
   const openConfirmDialog = (): void => {

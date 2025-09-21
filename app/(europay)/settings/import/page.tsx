@@ -13,7 +13,7 @@ const Import = () => {
   const showImportIAM: boolean = $iam_user_has_action(
     user,
     "europay:settings:import",
-    "Show IAM"
+    "Import IAM Section"
   );
 
   return (

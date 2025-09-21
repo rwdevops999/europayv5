@@ -14,12 +14,12 @@ const StorageSettingsPage = () => {
   const showDatabaseSection: boolean = $iam_user_has_action(
     user,
     "europay:settings:storage",
-    "View Database"
+    "Database Section"
   );
   const showTablesSection: boolean = $iam_user_has_action(
     user,
     "europay:settings:storage",
-    "View Selective"
+    "Tables Section"
   );
 
   return (

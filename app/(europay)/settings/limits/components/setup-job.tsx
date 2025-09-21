@@ -25,7 +25,7 @@ const SetupJob = ({
   const allowed: boolean = $iam_user_has_action(
     user,
     "europay:settings:limits:jobs",
-    accessAction
+    `${accessAction} Limit`
   );
 
   const fulljobname = `${jobname}Poller`;

@@ -99,8 +99,8 @@ const SetupSelective = () => {
 
   const allowTableSelect: boolean = $iam_user_has_action(
     user,
-    "europay:settings:storage:selective",
-    "Select"
+    "europay:settings:storage:tables",
+    "Select Tables"
   );
 
   return allowTableSelect ? (
@@ -119,8 +119,8 @@ const SetupSelective = () => {
           disabled={
             !$iam_user_has_action(
               user,
-              "europay:settings:storage:selective",
-              "Clear"
+              "europay:settings:storage:tables",
+              "Clear Tables"
             )
           }
         />

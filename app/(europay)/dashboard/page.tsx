@@ -14,11 +14,7 @@ const Dashboard = () => {
   const { user } = useUser();
 
   const hasAccess = (_component: string): boolean => {
-    return $iam_user_has_action(
-      user,
-      "europay:dashboard",
-      `Show ${_component}`
-    );
+    return $iam_user_has_action(user, "europay:dashboard", _component);
   };
 
   const canChangeCountry: boolean = $iam_user_has_action(

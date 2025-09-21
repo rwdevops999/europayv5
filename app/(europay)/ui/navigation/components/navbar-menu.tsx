@@ -19,24 +19,24 @@ const NavbarMenu = () => {
     newmenu[0].visible = $iam_user_has_action(
       user,
       "europay",
-      "View Dashboard",
+      "Dashboard Menu",
       true
     );
 
     // Lists menu
-    newmenu[1].visible = $iam_user_has_action(user, "europay", "View Lists");
+    newmenu[1].visible = $iam_user_has_action(user, "europay", "Lists Menu");
     if (newmenu[1].visible && newmenu[1].subItems) {
       // Tasks
       newmenu[1].subItems[0].visible = $iam_user_has_action(
         user,
         "europay:lists",
-        "Show Tasks"
+        "Tasks Submenu"
       );
       // Jobs
       newmenu[1].subItems[1].visible = $iam_user_has_action(
         user,
         "europay:lists",
-        "Show Jobs",
+        "Jobs Submenu",
         true
       );
 
@@ -44,75 +44,75 @@ const NavbarMenu = () => {
       newmenu[1].subItems[2].visible = $iam_user_has_action(
         user,
         "europay:lists",
-        "Show Transactions"
+        "Transactions Submenu"
       );
 
       // History
       newmenu[1].subItems[3].visible = $iam_user_has_action(
         user,
         "europay:lists",
-        "Show History"
+        "History Submenu"
       );
 
       // Exports
       // newmenu[1].subItems[4].visible = $iam_user_has_action(
       //   user,
       //   "europay:lists",
-      //   "Show Exports",
+      //   "Export Submenu",
       //   true
       // );
     }
 
     // Settings
-    newmenu[2].visible = $iam_user_has_action(user, "europay", "View Settings");
+    newmenu[2].visible = $iam_user_has_action(user, "europay", "Settings Menu");
     if (newmenu[2].visible && newmenu[2].subItems) {
       // General
       newmenu[2].subItems[0].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show General"
+        "General Submenu"
       );
 
       // Storage
       newmenu[2].subItems[1].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show Storage"
+        "Storage Submenu"
       );
 
       // Limits
       newmenu[2].subItems[2].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show Limits"
+        "Limits Submenu"
       );
 
       // Export
       newmenu[2].subItems[3].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show Export"
+        "Export Submenu"
       );
 
       // Import
       newmenu[2].subItems[4].visible = $iam_user_has_action(
         user,
         "europay:settings",
-        "Show Import"
+        "Import Submenu"
       );
     }
 
     // Admin
-    newmenu[3].visible = $iam_user_has_action(user, "europay", "View Admin");
+    newmenu[3].visible = $iam_user_has_action(user, "europay", "Admin Menu");
 
     // User
-    newmenu[4].visible = $iam_user_has_action(user, "europay", "View User");
+    newmenu[4].visible = $iam_user_has_action(user, "europay", "User Menu");
 
     // IAM
     newmenu[5].visible = $iam_user_has_action(
       user,
       "europay",
-      "View IAM",
+      "IAM Menu",
       true
     );
     if (newmenu[5].visible && newmenu[5].subItems) {
@@ -120,7 +120,7 @@ const NavbarMenu = () => {
       newmenu[5].subItems[0].visible = $iam_user_has_action(
         user,
         "europay:iam",
-        "Show Services",
+        "Services",
         true
       );
 
@@ -128,35 +128,35 @@ const NavbarMenu = () => {
       newmenu[5].subItems[1].visible = $iam_user_has_action(
         user,
         "europay:iam",
-        "Handle Statements"
+        "Statements"
       );
 
       // Policies
       newmenu[5].subItems[2].visible = $iam_user_has_action(
         user,
         "europay:iam",
-        "Handle Policies"
+        "Policies"
       );
 
       // Roles
       newmenu[5].subItems[3].visible = $iam_user_has_action(
         user,
         "europay:iam",
-        "Handle Roles"
+        "Roles"
       );
 
       // Users
       newmenu[5].subItems[4].visible = $iam_user_has_action(
         user,
         "europay:iam",
-        "Handle Users"
+        "Users"
       );
 
       // Groups
       newmenu[5].subItems[5].visible = $iam_user_has_action(
         user,
         "europay:iam",
-        "Handle Groups"
+        "Groups"
       );
     }
 
@@ -164,7 +164,7 @@ const NavbarMenu = () => {
     newmenu[6].visible = $iam_user_has_action(
       user,
       "europay",
-      "View Manual",
+      "Manual Menu",
       true
     );
 

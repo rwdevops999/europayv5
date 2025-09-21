@@ -13,7 +13,7 @@ const Footer = () => {
   const socialMediaVisible: boolean = $iam_user_has_action(
     user,
     "europay",
-    "View Social Media"
+    "Social Media"
   );
 
   return (

@@ -70,7 +70,7 @@ const SetupDatabase = () => {
   const allowClearWorkingTables: boolean = $iam_user_has_action(
     user,
     "europay:settings:storage:database",
-    "Clear Work"
+    "Clear Workdata"
   );
   const allowProvisionManual: boolean = $iam_user_has_action(
     user,
@@ -80,7 +80,7 @@ const SetupDatabase = () => {
   const allowClearFullDatabase: boolean = $iam_user_has_action(
     user,
     "europay:settings:storage:database",
-    "Clear Full"
+    "Clear Database"
   );
 
   return (
@@ -120,7 +120,7 @@ const SetupDatabase = () => {
               className="bg-ep-button w-[80%]"
               size="small"
               disabled={!allowClearWorkingTables}
-              onClick={!clearWorkDatabase}
+              onClick={clearWorkDatabase}
             />
           </div>
         </div>
