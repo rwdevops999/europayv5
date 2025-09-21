@@ -48,8 +48,6 @@ const Export = () => {
     }
   }, [text]);
 
-  let disabled: boolean = false;
-
   const allowedToExportToView: boolean = $iam_user_has_action(
     user,
     "europay:settings:export",
@@ -68,22 +66,20 @@ const Export = () => {
 
   // MARKDOWN: for use in VSCode with extension Markdown Interactive Checkbox(from Bhnum)
   const handleCopyToClipboard = () => {
-    if (!disabled) {
-      if (isMarkdownOn()) {
-        const newlines: string[] = originalText.current.map((line: string) => {
-          let str: string = `- [ ] ${line}`;
-          return str;
-        });
-        navigator.clipboard.writeText(newlines.join("\n"));
-      } else {
-        navigator.clipboard.writeText(originalText.current.join("\n"));
-      }
-
-      setCopied(true);
-      setTimeout(() => {
-        setCopied(false);
-      }, 2000);
+    if (isMarkdownOn()) {
+      const newlines: string[] = originalText.current.map((line: string) => {
+        let str: string = `- [ ] ${line}`;
+        return str;
+      });
+      navigator.clipboard.writeText(newlines.join("\n"));
+    } else {
+      navigator.clipboard.writeText(originalText.current.join("\n"));
     }
+
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
   };
 
   const DataViewer = (): JSX.Element => {
@@ -96,34 +92,19 @@ const Export = () => {
               <div>Export IAM</div>
             </div>
             {allowedCopyToClipboard && (
-              <div className="tooltip tooltip-left" data-tip="copy to clipboad">
+              <div
+                className="tooltip tooltip-left"
+                data-tip="copy to clipboard"
+              >
                 {copied ? (
                   <BsClipboard2Check
                     size={16}
-                    className={clsx(
-                      "mr-2",
-                      {
-                        "hover:cursor-not-allowed text-background/30": disabled,
-                      },
-                      {
-                        "hover:cursor-pointer hover:bg-foreground/30":
-                          !disabled,
-                      }
-                    )}
+                    className="mr-2 hover:cursor-pointer hover:bg-foreground/30"
                   />
                 ) : (
                   <BsClipboard2
                     size={16}
-                    className={clsx(
-                      "mr-2",
-                      {
-                        "hover:cursor-not-allowed text-background/30": disabled,
-                      },
-                      {
-                        "hover:cursor-pointer hover:bg-foreground/30":
-                          !disabled,
-                      }
-                    )}
+                    className="mr-2 hover:cursor-pointer hover:bg-foreground/30"
                     onClick={handleCopyToClipboard}
                   />
                 )}
@@ -199,7 +180,7 @@ const Export = () => {
             iconFirst
             className="bg-custom"
             onClick={handleExportStatements}
-            disabled={disabled || !enabledForExport}
+            disabled={!enabledForExport}
           />
         </div>
       </div>
@@ -239,7 +220,7 @@ const Export = () => {
             iconFirst
             className="bg-custom"
             onClick={handleExportPolicies}
-            disabled={disabled || !enabledForExport}
+            disabled={!enabledForExport}
           />
         </div>
       </div>
@@ -279,7 +260,7 @@ const Export = () => {
             iconFirst
             className="bg-custom"
             onClick={handleExportRoles}
-            disabled={disabled || !enabledForExport}
+            disabled={!enabledForExport}
           />
         </div>
       </div>
@@ -319,7 +300,7 @@ const Export = () => {
             iconFirst
             className="bg-custom"
             onClick={handleExportUsers}
-            disabled={disabled || !enabledForExport}
+            disabled={!enabledForExport}
           />
         </div>
       </div>
@@ -359,7 +340,7 @@ const Export = () => {
             iconFirst
             className="bg-custom"
             onClick={handleExportGroups}
-            disabled={disabled || !enabledForExport}
+            disabled={!enabledForExport}
           />
         </div>
       </div>
@@ -520,7 +501,7 @@ const Export = () => {
             iconFirst
             className="bg-custom"
             onClick={exportSelection}
-            disabled={disabled || disabledForExportToDB}
+            disabled={disabledForExportToDB}
           />
         </div>
       </div>

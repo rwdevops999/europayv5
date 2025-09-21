@@ -199,7 +199,7 @@ model UserPAT {
   tokenName String
   token String
   createDate DateTime? @default(now())
-  expirationDate DateTime
+  expirationDate DateTime?
   tokenStatus TokenStatus
   userId  Int     // Foreign key
   user    User    @relation(fields: [userId], references: [id]) // Relation field

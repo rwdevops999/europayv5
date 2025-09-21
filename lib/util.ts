@@ -211,12 +211,6 @@ export const generatePAT = (): string => {
   return pat;
 };
 
-export const generateClientSecret = (): string => {
-  const params: string[] = uuidv4().split("-");
-
-  return "CS" + params[params.length - 1];
-};
-
 export const renderDateInfo = (dateValue: string): string => {
   const date = new Date(dateValue);
 

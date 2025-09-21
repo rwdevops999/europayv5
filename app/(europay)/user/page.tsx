@@ -5,6 +5,7 @@ import UserAccount from "./components/user-account";
 import UserTransactionsList from "./components/user-transactions-list";
 import BankAccounts from "./components/bank-accounts";
 import UserPayment from "./components/user-payment";
+import PersonalAccessTokens from "./components/personal-access-tokens";
 
 const UserPage = () => {
   return (
@@ -16,7 +17,7 @@ const UserPage = () => {
     >
       <div
         id="userlayout"
-        className="w-[98vw] h-[84vh] rounded-sm grid flex-1 items-start gap-2 grid-cols-8 border-2 border-purple-500"
+        className="w-[98vw] h-[84vh] rounded-sm grid flex-1 items-start gap-2 grid-cols-8"
       >
         <div className="col-span-2 m-1 group relative flex flex-col overflow-hidden rounded-md shadow transition-all duration-200 ease-in-out hover:z-30 space-y-2">
           <PageItemContainer title="user account" border>
@@ -34,6 +35,11 @@ const UserPage = () => {
         <div className="col-span-2 m-1 group relative flex flex-col overflow-hidden rounded-md shadow transition-all duration-200 ease-in-out hover:z-30 space-y-2">
           <PageItemContainer title="linked banks" border>
             <BankAccounts />
+          </PageItemContainer>
+        </div>
+        <div className="col-span-2 m-1 group relative flex flex-col overflow-hidden rounded-md shadow transition-all duration-200 ease-in-out hover:z-30 space-y-2">
+          <PageItemContainer title="Pesonal access tokens" border>
+            <PersonalAccessTokens />
           </PageItemContainer>
         </div>
       </div>

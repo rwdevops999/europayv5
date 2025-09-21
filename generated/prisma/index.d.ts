@@ -16486,7 +16486,7 @@ export namespace Prisma {
     tokenName: string
     token: string
     createDate: Date | null
-    expirationDate: Date
+    expirationDate: Date | null
     tokenStatus: $Enums.TokenStatus
     userId: number
     _count: UserPATCountAggregateOutputType | null
@@ -16574,7 +16574,7 @@ export namespace Prisma {
       tokenName: string
       token: string
       createDate: Date | null
-      expirationDate: Date
+      expirationDate: Date | null
       tokenStatus: $Enums.TokenStatus
       userId: number
     }, ExtArgs["result"]["userPAT"]>
@@ -31306,7 +31306,7 @@ export namespace Prisma {
     tokenName?: StringFilter<"UserPAT"> | string
     token?: StringFilter<"UserPAT"> | string
     createDate?: DateTimeNullableFilter<"UserPAT"> | Date | string | null
-    expirationDate?: DateTimeFilter<"UserPAT"> | Date | string
+    expirationDate?: DateTimeNullableFilter<"UserPAT"> | Date | string | null
     tokenStatus?: EnumTokenStatusFilter<"UserPAT"> | $Enums.TokenStatus
     userId?: IntFilter<"UserPAT"> | number
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -31317,7 +31317,7 @@ export namespace Prisma {
     tokenName?: SortOrder
     token?: SortOrder
     createDate?: SortOrderInput | SortOrder
-    expirationDate?: SortOrder
+    expirationDate?: SortOrderInput | SortOrder
     tokenStatus?: SortOrder
     userId?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -31331,7 +31331,7 @@ export namespace Prisma {
     tokenName?: StringFilter<"UserPAT"> | string
     token?: StringFilter<"UserPAT"> | string
     createDate?: DateTimeNullableFilter<"UserPAT"> | Date | string | null
-    expirationDate?: DateTimeFilter<"UserPAT"> | Date | string
+    expirationDate?: DateTimeNullableFilter<"UserPAT"> | Date | string | null
     tokenStatus?: EnumTokenStatusFilter<"UserPAT"> | $Enums.TokenStatus
     userId?: IntFilter<"UserPAT"> | number
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -31342,7 +31342,7 @@ export namespace Prisma {
     tokenName?: SortOrder
     token?: SortOrder
     createDate?: SortOrderInput | SortOrder
-    expirationDate?: SortOrder
+    expirationDate?: SortOrderInput | SortOrder
     tokenStatus?: SortOrder
     userId?: SortOrder
     _count?: UserPATCountOrderByAggregateInput
@@ -31360,7 +31360,7 @@ export namespace Prisma {
     tokenName?: StringWithAggregatesFilter<"UserPAT"> | string
     token?: StringWithAggregatesFilter<"UserPAT"> | string
     createDate?: DateTimeNullableWithAggregatesFilter<"UserPAT"> | Date | string | null
-    expirationDate?: DateTimeWithAggregatesFilter<"UserPAT"> | Date | string
+    expirationDate?: DateTimeNullableWithAggregatesFilter<"UserPAT"> | Date | string | null
     tokenStatus?: EnumTokenStatusWithAggregatesFilter<"UserPAT"> | $Enums.TokenStatus
     userId?: IntWithAggregatesFilter<"UserPAT"> | number
   }
@@ -33008,7 +33008,7 @@ export namespace Prisma {
     tokenName: string
     token: string
     createDate?: Date | string | null
-    expirationDate: Date | string
+    expirationDate?: Date | string | null
     tokenStatus: $Enums.TokenStatus
     user: UserCreateNestedOneWithoutPatsInput
   }
@@ -33018,7 +33018,7 @@ export namespace Prisma {
     tokenName: string
     token: string
     createDate?: Date | string | null
-    expirationDate: Date | string
+    expirationDate?: Date | string | null
     tokenStatus: $Enums.TokenStatus
     userId: number
   }
@@ -33027,7 +33027,7 @@ export namespace Prisma {
     tokenName?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
     user?: UserUpdateOneRequiredWithoutPatsNestedInput
   }
@@ -33037,7 +33037,7 @@ export namespace Prisma {
     tokenName?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
     userId?: IntFieldUpdateOperationsInput | number
   }
@@ -33047,7 +33047,7 @@ export namespace Prisma {
     tokenName: string
     token: string
     createDate?: Date | string | null
-    expirationDate: Date | string
+    expirationDate?: Date | string | null
     tokenStatus: $Enums.TokenStatus
     userId: number
   }
@@ -33056,7 +33056,7 @@ export namespace Prisma {
     tokenName?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
   }
 
@@ -33065,7 +33065,7 @@ export namespace Prisma {
     tokenName?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
     userId?: IntFieldUpdateOperationsInput | number
   }
@@ -34706,17 +34706,6 @@ export namespace Prisma {
     _max?: NestedEnumUserTypeFilter<$PrismaModel>
   }
 
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
   export type EnumTokenStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TokenStatus | EnumTokenStatusFieldRefInput<$PrismaModel>
     in?: $Enums.TokenStatus[] | ListEnumTokenStatusFieldRefInput<$PrismaModel>
@@ -34767,20 +34756,6 @@ export namespace Prisma {
   export type UserPATSumOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-  }
-
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type EnumTokenStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -34954,6 +34929,17 @@ export namespace Prisma {
     not?: NestedEnumAccountStatusFilter<$PrismaModel> | $Enums.AccountStatus
   }
 
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
   export type TransactionListRelationFilter = {
     every?: TransactionWhereInput
     some?: TransactionWhereInput
@@ -35037,6 +35023,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAccountStatusFilter<$PrismaModel>
     _max?: NestedEnumAccountStatusFilter<$PrismaModel>
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type EnumGenderNullableFilter<$PrismaModel = never> = {
@@ -36501,10 +36501,6 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
-  }
-
   export type EnumTokenStatusFieldUpdateOperationsInput = {
     set?: $Enums.TokenStatus
   }
@@ -36727,6 +36723,10 @@ export namespace Prisma {
 
   export type EnumAccountStatusFieldUpdateOperationsInput = {
     set?: $Enums.AccountStatus
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
   }
 
   export type UserUpdateOneWithoutAccountNestedInput = {
@@ -37203,36 +37203,11 @@ export namespace Prisma {
     _max?: NestedEnumUserTypeFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
   export type NestedEnumTokenStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TokenStatus | EnumTokenStatusFieldRefInput<$PrismaModel>
     in?: $Enums.TokenStatus[] | ListEnumTokenStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.TokenStatus[] | ListEnumTokenStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumTokenStatusFilter<$PrismaModel> | $Enums.TokenStatus
-  }
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedEnumTokenStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -37275,6 +37250,17 @@ export namespace Prisma {
     not?: NestedEnumAccountStatusFilter<$PrismaModel> | $Enums.AccountStatus
   }
 
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -37299,6 +37285,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAccountStatusFilter<$PrismaModel>
     _max?: NestedEnumAccountStatusFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedEnumGenderNullableFilter<$PrismaModel = never> = {
@@ -38743,7 +38743,7 @@ export namespace Prisma {
     tokenName: string
     token: string
     createDate?: Date | string | null
-    expirationDate: Date | string
+    expirationDate?: Date | string | null
     tokenStatus: $Enums.TokenStatus
   }
 
@@ -38752,7 +38752,7 @@ export namespace Prisma {
     tokenName: string
     token: string
     createDate?: Date | string | null
-    expirationDate: Date | string
+    expirationDate?: Date | string | null
     tokenStatus: $Enums.TokenStatus
   }
 
@@ -38931,7 +38931,7 @@ export namespace Prisma {
     tokenName?: StringFilter<"UserPAT"> | string
     token?: StringFilter<"UserPAT"> | string
     createDate?: DateTimeNullableFilter<"UserPAT"> | Date | string | null
-    expirationDate?: DateTimeFilter<"UserPAT"> | Date | string
+    expirationDate?: DateTimeNullableFilter<"UserPAT"> | Date | string | null
     tokenStatus?: EnumTokenStatusFilter<"UserPAT"> | $Enums.TokenStatus
     userId?: IntFilter<"UserPAT"> | number
   }
@@ -40446,7 +40446,7 @@ export namespace Prisma {
     tokenName: string
     token: string
     createDate?: Date | string | null
-    expirationDate: Date | string
+    expirationDate?: Date | string | null
     tokenStatus: $Enums.TokenStatus
   }
 
@@ -40572,7 +40572,7 @@ export namespace Prisma {
     tokenName?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
   }
 
@@ -40581,7 +40581,7 @@ export namespace Prisma {
     tokenName?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
   }
 
@@ -40590,7 +40590,7 @@ export namespace Prisma {
     tokenName?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
   }
 
