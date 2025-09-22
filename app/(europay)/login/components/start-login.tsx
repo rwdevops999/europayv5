@@ -215,12 +215,14 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
     await loadUserByUsernameOrEmail(_emailOrUsername).then(
       async (user: tUser | null) => {
         if (user) {
+          console.log("set REF(1)", json(user));
           userRef.current = user;
           continueWithUser(user);
         } else {
           // TEST HERE IF IT's and email
           await createUserAsGuest(_emailOrUsername).then(
             (user: tUser | null) => {
+              console.log("set REF(2)", json(user));
               userRef.current = user;
               continueWithUser(user);
             }
@@ -307,6 +309,7 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
         } else {
           const attemps: number = user.attemps ? user.attemps + 1 : 1;
           user.attemps = attemps;
+          console.log("set REF(3)", json(user));
           userRef.current = user;
 
           await updateUserAttemps(user.id, attemps);
@@ -315,6 +318,7 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
             await blockUser(user.id).then(() => {
               user.blocked = true;
               userRef.current = user;
+              console.log("set REF(4)", json(user));
               continueWithUser(user);
             });
           } else {
@@ -327,9 +331,12 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
   };
 
   const loginWithPassword = async (_password: string): Promise<void> => {
+    console.log("[loginWithPassword]");
     setProcessingOn();
     if (userRef.current) {
       const user: tUser = userRef.current;
+
+      console.log("[loginWithPassword]:User", json(user));
 
       if (_password === user.password) {
         setProcessingOff();
@@ -345,6 +352,7 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
           `Welcome ${welcome}`,
           getToastDuration()
         );
+        console.log("LOGIN", json(user));
         login(user);
         back();
         // redirect(absoluteUrl("/dashboard"));
@@ -352,10 +360,12 @@ const StartLogin = ({ doLogin }: { doLogin: boolean }) => {
         const attemps: number = user.attemps ? user.attemps + 1 : 1;
         user.attemps = attemps;
         userRef.current = user;
+        console.log("set REF(5)", json(user));
         await updateUserAttemps(user.id, attemps).then(async () => {
           if (attemps >= MAX_ATTEMPS) {
             await blockUser(user.id).then(() => {
               user.blocked = true;
+              console.log("set REF(6)", json(user));
               userRef.current = user;
               continueWithUser(user);
             });

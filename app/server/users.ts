@@ -5,6 +5,7 @@ import {
   cWhatToSelectFromUser,
   tUser,
   tUserCreate,
+  tUserPat,
   tUserUpdate,
 } from "@/lib/prisma-types";
 import { decrypt, encrypt } from "./encrypt";
@@ -15,6 +16,7 @@ import { SystemUsers } from "./setup/managed-iam";
 export const loadUserById = async (_userId: number): Promise<tUser | null> => {
   let result: tUser | null = null;
 
+  console.log("LOAD USER BY ID", _userId);
   await prisma.user
     .findFirst({
       where: {
@@ -24,8 +26,13 @@ export const loadUserById = async (_userId: number): Promise<tUser | null> => {
     })
     .then(async (value: tUser | null) => {
       if (value) {
+        console.log("LOADED", json(value));
         if (!value.passwordless) {
           value.password = await decrypt(value.password);
+        }
+        for (let i = 0; i < value.pats.length; i++) {
+          value.pats[i].tokenName = await decrypt(value.pats[i].tokenName);
+          value.pats[i].token = await decrypt(value.pats[i].token);
         }
         result = value;
       }
@@ -252,6 +259,7 @@ export const loadUserByUsernameOrEmail = async (
 ): Promise<tUser | null> => {
   let result: tUser | null = null;
 
+  console.log("LOAD USER BY EUN", _value);
   await prisma.user
     .findFirst({
       where: {
@@ -267,11 +275,21 @@ export const loadUserByUsernameOrEmail = async (
       ...cWhatToSelectFromUser,
     })
     .then(async (value: tUser | null) => {
-      if (value && !value.passwordless) {
-        value.password = await decrypt(value.password);
+      if (value) {
+        console.log("LOADED USER BY EUN", json(value));
+        if (!value.passwordless) {
+          value.password = await decrypt(value.password);
+        }
+
+        for (let i = 0; i < value.pats.length; i++) {
+          value.pats[i].tokenName = await decrypt(value.pats[i].tokenName);
+          value.pats[i].token = await decrypt(value.pats[i].token);
+        }
       }
       result = value;
     });
+
+  console.log("[RESULT]", json(result));
 
   return result;
 };

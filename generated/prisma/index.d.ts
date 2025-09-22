@@ -331,7 +331,7 @@ export const IBANStatus: typeof $Enums.IBANStatus
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-  const U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
+  U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
   ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs
 > {
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
@@ -363,6 +363,13 @@ export class PrismaClient<
    * Disconnect from the database
    */
   $disconnect(): $Utils.JsPromise<void>;
+
+  /**
+   * Add a middleware
+   * @deprecated since 4.16.0. For new code, prefer client extensions instead.
+   * @see https://pris.ly/d/extensions
+   */
+  $use(cb: Prisma.Middleware): void
 
 /**
    * Executes a prepared raw query and returns the number of affected rows.
@@ -720,8 +727,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.16.1
-   * Query Engine version: 1c57fdcd7e44b29b9313256c76699e91c3ac3c43
+   * Prisma Client JS version: 6.12.0
+   * Query Engine version: 8047c96bbd92db98a2abc7c9323ce77c02c89dbc
    */
   export type PrismaVersion = {
     client: string
@@ -2892,24 +2899,16 @@ export namespace Prisma {
     /**
      * @example
      * ```
-     * // Shorthand for `emit: 'stdout'`
+     * // Defaults to stdout
      * log: ['query', 'info', 'warn', 'error']
      * 
-     * // Emit as events only
+     * // Emit as events
      * log: [
-     *   { emit: 'event', level: 'query' },
-     *   { emit: 'event', level: 'info' },
-     *   { emit: 'event', level: 'warn' }
-     *   { emit: 'event', level: 'error' }
+     *   { emit: 'stdout', level: 'query' },
+     *   { emit: 'stdout', level: 'info' },
+     *   { emit: 'stdout', level: 'warn' }
+     *   { emit: 'stdout', level: 'error' }
      * ]
-     * 
-     * / Emit as events and log to stdout
-     * og: [
-     *  { emit: 'stdout', level: 'query' },
-     *  { emit: 'stdout', level: 'info' },
-     *  { emit: 'stdout', level: 'warn' }
-     *  { emit: 'stdout', level: 'error' }
-     * 
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
@@ -2924,10 +2923,6 @@ export namespace Prisma {
       timeout?: number
       isolationLevel?: Prisma.TransactionIsolationLevel
     }
-    /**
-     * Instance of a Driver Adapter, e.g., like one provided by `@prisma/adapter-planetscale`
-     */
-    adapter?: runtime.SqlDriverAdapterFactory | null
     /**
      * Global configuration for omitting model fields by default.
      * 
@@ -2977,15 +2972,10 @@ export namespace Prisma {
     emit: 'stdout' | 'event'
   }
 
-  export type CheckIsLogLevel<T> = T extends LogLevel ? T : never;
-
-  export type GetLogType<T> = CheckIsLogLevel<
-    T extends LogDefinition ? T['level'] : T
-  >;
-
-  export type GetEvents<T extends any[]> = T extends Array<LogLevel | LogDefinition>
-    ? GetLogType<T[number]>
-    : never;
+  export type GetLogType<T extends LogLevel | LogDefinition> = T extends LogDefinition ? T['emit'] extends 'event' ? T['level'] : never : never
+  export type GetEvents<T extends any> = T extends Array<LogLevel | LogDefinition> ?
+    GetLogType<T[0]> | GetLogType<T[1]> | GetLogType<T[2]> | GetLogType<T[3]>
+    : never
 
   export type QueryEvent = {
     timestamp: Date
@@ -3025,6 +3015,25 @@ export namespace Prisma {
     | 'runCommandRaw'
     | 'findRaw'
     | 'groupBy'
+
+  /**
+   * These options are being passed into the middleware as "params"
+   */
+  export type MiddlewareParams = {
+    model?: ModelName
+    action: PrismaAction
+    args: any
+    dataPath: string[]
+    runInTransaction: boolean
+  }
+
+  /**
+   * The `T` type makes sure, that the `return proceed` is not forgotten in the middleware implementation
+   */
+  export type Middleware<T = any> = (
+    params: MiddlewareParams,
+    next: (params: MiddlewareParams) => $Utils.JsPromise<T>,
+  ) => $Utils.JsPromise<T>
 
   // tested in getLogLevel.test.ts
   export function getLogLevel(log: Array<LogLevel | LogDefinition>): LogLevel | undefined;
@@ -16314,11 +16323,13 @@ export namespace Prisma {
 
   export type UserPATAvgAggregateOutputType = {
     id: number | null
+    delay: number | null
     userId: number | null
   }
 
   export type UserPATSumAggregateOutputType = {
     id: number | null
+    delay: number | null
     userId: number | null
   }
 
@@ -16328,6 +16339,7 @@ export namespace Prisma {
     token: string | null
     createDate: Date | null
     expirationDate: Date | null
+    delay: number | null
     tokenStatus: $Enums.TokenStatus | null
     userId: number | null
   }
@@ -16338,6 +16350,7 @@ export namespace Prisma {
     token: string | null
     createDate: Date | null
     expirationDate: Date | null
+    delay: number | null
     tokenStatus: $Enums.TokenStatus | null
     userId: number | null
   }
@@ -16348,6 +16361,7 @@ export namespace Prisma {
     token: number
     createDate: number
     expirationDate: number
+    delay: number
     tokenStatus: number
     userId: number
     _all: number
@@ -16356,11 +16370,13 @@ export namespace Prisma {
 
   export type UserPATAvgAggregateInputType = {
     id?: true
+    delay?: true
     userId?: true
   }
 
   export type UserPATSumAggregateInputType = {
     id?: true
+    delay?: true
     userId?: true
   }
 
@@ -16370,6 +16386,7 @@ export namespace Prisma {
     token?: true
     createDate?: true
     expirationDate?: true
+    delay?: true
     tokenStatus?: true
     userId?: true
   }
@@ -16380,6 +16397,7 @@ export namespace Prisma {
     token?: true
     createDate?: true
     expirationDate?: true
+    delay?: true
     tokenStatus?: true
     userId?: true
   }
@@ -16390,6 +16408,7 @@ export namespace Prisma {
     token?: true
     createDate?: true
     expirationDate?: true
+    delay?: true
     tokenStatus?: true
     userId?: true
     _all?: true
@@ -16487,6 +16506,7 @@ export namespace Prisma {
     token: string
     createDate: Date | null
     expirationDate: Date | null
+    delay: number | null
     tokenStatus: $Enums.TokenStatus
     userId: number
     _count: UserPATCountAggregateOutputType | null
@@ -16516,6 +16536,7 @@ export namespace Prisma {
     token?: boolean
     createDate?: boolean
     expirationDate?: boolean
+    delay?: boolean
     tokenStatus?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -16527,6 +16548,7 @@ export namespace Prisma {
     token?: boolean
     createDate?: boolean
     expirationDate?: boolean
+    delay?: boolean
     tokenStatus?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -16538,6 +16560,7 @@ export namespace Prisma {
     token?: boolean
     createDate?: boolean
     expirationDate?: boolean
+    delay?: boolean
     tokenStatus?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -16549,11 +16572,12 @@ export namespace Prisma {
     token?: boolean
     createDate?: boolean
     expirationDate?: boolean
+    delay?: boolean
     tokenStatus?: boolean
     userId?: boolean
   }
 
-  export type UserPATOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tokenName" | "token" | "createDate" | "expirationDate" | "tokenStatus" | "userId", ExtArgs["result"]["userPAT"]>
+  export type UserPATOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tokenName" | "token" | "createDate" | "expirationDate" | "delay" | "tokenStatus" | "userId", ExtArgs["result"]["userPAT"]>
   export type UserPATInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -16575,6 +16599,7 @@ export namespace Prisma {
       token: string
       createDate: Date | null
       expirationDate: Date | null
+      delay: number | null
       tokenStatus: $Enums.TokenStatus
       userId: number
     }, ExtArgs["result"]["userPAT"]>
@@ -17006,6 +17031,7 @@ export namespace Prisma {
     readonly token: FieldRef<"UserPAT", 'String'>
     readonly createDate: FieldRef<"UserPAT", 'DateTime'>
     readonly expirationDate: FieldRef<"UserPAT", 'DateTime'>
+    readonly delay: FieldRef<"UserPAT", 'Int'>
     readonly tokenStatus: FieldRef<"UserPAT", 'TokenStatus'>
     readonly userId: FieldRef<"UserPAT", 'Int'>
   }
@@ -30010,6 +30036,7 @@ export namespace Prisma {
     token: 'token',
     createDate: 'createDate',
     expirationDate: 'expirationDate',
+    delay: 'delay',
     tokenStatus: 'tokenStatus',
     userId: 'userId'
   };
@@ -31307,6 +31334,7 @@ export namespace Prisma {
     token?: StringFilter<"UserPAT"> | string
     createDate?: DateTimeNullableFilter<"UserPAT"> | Date | string | null
     expirationDate?: DateTimeNullableFilter<"UserPAT"> | Date | string | null
+    delay?: IntNullableFilter<"UserPAT"> | number | null
     tokenStatus?: EnumTokenStatusFilter<"UserPAT"> | $Enums.TokenStatus
     userId?: IntFilter<"UserPAT"> | number
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -31318,6 +31346,7 @@ export namespace Prisma {
     token?: SortOrder
     createDate?: SortOrderInput | SortOrder
     expirationDate?: SortOrderInput | SortOrder
+    delay?: SortOrderInput | SortOrder
     tokenStatus?: SortOrder
     userId?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -31332,6 +31361,7 @@ export namespace Prisma {
     token?: StringFilter<"UserPAT"> | string
     createDate?: DateTimeNullableFilter<"UserPAT"> | Date | string | null
     expirationDate?: DateTimeNullableFilter<"UserPAT"> | Date | string | null
+    delay?: IntNullableFilter<"UserPAT"> | number | null
     tokenStatus?: EnumTokenStatusFilter<"UserPAT"> | $Enums.TokenStatus
     userId?: IntFilter<"UserPAT"> | number
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -31343,6 +31373,7 @@ export namespace Prisma {
     token?: SortOrder
     createDate?: SortOrderInput | SortOrder
     expirationDate?: SortOrderInput | SortOrder
+    delay?: SortOrderInput | SortOrder
     tokenStatus?: SortOrder
     userId?: SortOrder
     _count?: UserPATCountOrderByAggregateInput
@@ -31361,6 +31392,7 @@ export namespace Prisma {
     token?: StringWithAggregatesFilter<"UserPAT"> | string
     createDate?: DateTimeNullableWithAggregatesFilter<"UserPAT"> | Date | string | null
     expirationDate?: DateTimeNullableWithAggregatesFilter<"UserPAT"> | Date | string | null
+    delay?: IntNullableWithAggregatesFilter<"UserPAT"> | number | null
     tokenStatus?: EnumTokenStatusWithAggregatesFilter<"UserPAT"> | $Enums.TokenStatus
     userId?: IntWithAggregatesFilter<"UserPAT"> | number
   }
@@ -33009,6 +33041,7 @@ export namespace Prisma {
     token: string
     createDate?: Date | string | null
     expirationDate?: Date | string | null
+    delay?: number | null
     tokenStatus: $Enums.TokenStatus
     user: UserCreateNestedOneWithoutPatsInput
   }
@@ -33019,6 +33052,7 @@ export namespace Prisma {
     token: string
     createDate?: Date | string | null
     expirationDate?: Date | string | null
+    delay?: number | null
     tokenStatus: $Enums.TokenStatus
     userId: number
   }
@@ -33028,6 +33062,7 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delay?: NullableIntFieldUpdateOperationsInput | number | null
     tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
     user?: UserUpdateOneRequiredWithoutPatsNestedInput
   }
@@ -33038,6 +33073,7 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delay?: NullableIntFieldUpdateOperationsInput | number | null
     tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
     userId?: IntFieldUpdateOperationsInput | number
   }
@@ -33048,6 +33084,7 @@ export namespace Prisma {
     token: string
     createDate?: Date | string | null
     expirationDate?: Date | string | null
+    delay?: number | null
     tokenStatus: $Enums.TokenStatus
     userId: number
   }
@@ -33057,6 +33094,7 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delay?: NullableIntFieldUpdateOperationsInput | number | null
     tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
   }
 
@@ -33066,6 +33104,7 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delay?: NullableIntFieldUpdateOperationsInput | number | null
     tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
     userId?: IntFieldUpdateOperationsInput | number
   }
@@ -34724,12 +34763,14 @@ export namespace Prisma {
     token?: SortOrder
     createDate?: SortOrder
     expirationDate?: SortOrder
+    delay?: SortOrder
     tokenStatus?: SortOrder
     userId?: SortOrder
   }
 
   export type UserPATAvgOrderByAggregateInput = {
     id?: SortOrder
+    delay?: SortOrder
     userId?: SortOrder
   }
 
@@ -34739,6 +34780,7 @@ export namespace Prisma {
     token?: SortOrder
     createDate?: SortOrder
     expirationDate?: SortOrder
+    delay?: SortOrder
     tokenStatus?: SortOrder
     userId?: SortOrder
   }
@@ -34749,12 +34791,14 @@ export namespace Prisma {
     token?: SortOrder
     createDate?: SortOrder
     expirationDate?: SortOrder
+    delay?: SortOrder
     tokenStatus?: SortOrder
     userId?: SortOrder
   }
 
   export type UserPATSumOrderByAggregateInput = {
     id?: SortOrder
+    delay?: SortOrder
     userId?: SortOrder
   }
 
@@ -38744,6 +38788,7 @@ export namespace Prisma {
     token: string
     createDate?: Date | string | null
     expirationDate?: Date | string | null
+    delay?: number | null
     tokenStatus: $Enums.TokenStatus
   }
 
@@ -38753,6 +38798,7 @@ export namespace Prisma {
     token: string
     createDate?: Date | string | null
     expirationDate?: Date | string | null
+    delay?: number | null
     tokenStatus: $Enums.TokenStatus
   }
 
@@ -38932,6 +38978,7 @@ export namespace Prisma {
     token?: StringFilter<"UserPAT"> | string
     createDate?: DateTimeNullableFilter<"UserPAT"> | Date | string | null
     expirationDate?: DateTimeNullableFilter<"UserPAT"> | Date | string | null
+    delay?: IntNullableFilter<"UserPAT"> | number | null
     tokenStatus?: EnumTokenStatusFilter<"UserPAT"> | $Enums.TokenStatus
     userId?: IntFilter<"UserPAT"> | number
   }
@@ -40447,6 +40494,7 @@ export namespace Prisma {
     token: string
     createDate?: Date | string | null
     expirationDate?: Date | string | null
+    delay?: number | null
     tokenStatus: $Enums.TokenStatus
   }
 
@@ -40573,6 +40621,7 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delay?: NullableIntFieldUpdateOperationsInput | number | null
     tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
   }
 
@@ -40582,6 +40631,7 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delay?: NullableIntFieldUpdateOperationsInput | number | null
     tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
   }
 
@@ -40591,6 +40641,7 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     createDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delay?: NullableIntFieldUpdateOperationsInput | number | null
     tokenStatus?: EnumTokenStatusFieldUpdateOperationsInput | $Enums.TokenStatus
   }
 

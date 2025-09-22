@@ -1,8 +1,8 @@
 "use client";
 
-import clsx from "clsx";
 import { MenuItem } from "./menu";
 import AppLink from "./app-link";
+import clsx from "clsx";
 
 let openItem: string = "";
 

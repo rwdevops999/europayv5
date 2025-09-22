@@ -5,28 +5,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 
 const {
-  PrismaClientKnownRequestError,
-  PrismaClientUnknownRequestError,
-  PrismaClientRustPanicError,
-  PrismaClientInitializationError,
-  PrismaClientValidationError,
-  getPrismaClient,
-  sqltag,
-  empty,
-  join,
-  raw,
-  skip,
   Decimal,
-  Debug,
   objectEnumValues,
   makeStrictEnum,
-  Extensions,
-  warnOnce,
-  defineDmmfProperty,
   Public,
   getRuntime,
-  createParam,
-} = require('./runtime/wasm-engine-edge.js')
+  skip
+} = require('./runtime/index-browser.js')
 
 
 const Prisma = {}
@@ -35,35 +20,79 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.16.1
- * Query Engine version: 1c57fdcd7e44b29b9313256c76699e91c3ac3c43
+ * Prisma Client JS version: 6.12.0
+ * Query Engine version: 8047c96bbd92db98a2abc7c9323ce77c02c89dbc
  */
 Prisma.prismaVersion = {
-  client: "6.16.1",
-  engine: "1c57fdcd7e44b29b9313256c76699e91c3ac3c43"
+  client: "6.12.0",
+  engine: "8047c96bbd92db98a2abc7c9323ce77c02c89dbc"
 }
 
-Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
-Prisma.PrismaClientUnknownRequestError = PrismaClientUnknownRequestError
-Prisma.PrismaClientRustPanicError = PrismaClientRustPanicError
-Prisma.PrismaClientInitializationError = PrismaClientInitializationError
-Prisma.PrismaClientValidationError = PrismaClientValidationError
+Prisma.PrismaClientKnownRequestError = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`PrismaClientKnownRequestError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)};
+Prisma.PrismaClientUnknownRequestError = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`PrismaClientUnknownRequestError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.PrismaClientRustPanicError = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`PrismaClientRustPanicError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.PrismaClientInitializationError = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`PrismaClientInitializationError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.PrismaClientValidationError = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`PrismaClientValidationError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
 Prisma.Decimal = Decimal
 
 /**
  * Re-export of sql-template-tag
  */
-Prisma.sql = sqltag
-Prisma.empty = empty
-Prisma.join = join
-Prisma.raw = raw
+Prisma.sql = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`sqltag is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.empty = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`empty is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.join = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`join is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.raw = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`raw is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
 Prisma.validator = Public.validator
 
 /**
 * Extensions
 */
-Prisma.getExtensionContext = Extensions.getExtensionContext
-Prisma.defineExtension = Extensions.defineExtension
+Prisma.getExtensionContext = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`Extensions.getExtensionContext is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.defineExtension = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`Extensions.defineExtension is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
 
 /**
  * Shorthand utilities for JSON filtering
@@ -80,11 +109,10 @@ Prisma.NullTypes = {
 
 
 
-
-
 /**
  * Enums
  */
+
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   ReadUncommitted: 'ReadUncommitted',
   ReadCommitted: 'ReadCommitted',
@@ -213,6 +241,7 @@ exports.Prisma.UserPATScalarFieldEnum = {
   token: 'token',
   createDate: 'createDate',
   expirationDate: 'expirationDate',
+  delay: 'delay',
   tokenStatus: 'tokenStatus',
   userId: 'userId'
 };
@@ -391,15 +420,15 @@ exports.AccountStatus = exports.$Enums.AccountStatus = {
   BLOCKED: 'BLOCKED'
 };
 
+exports.Gender = exports.$Enums.Gender = {
+  MALE: 'MALE',
+  COMPLETE: 'COMPLETE'
+};
+
 exports.AccountApplyStatus = exports.$Enums.AccountApplyStatus = {
   CREATED: 'CREATED',
   OPEN: 'OPEN',
   CLOSED: 'CLOSED'
-};
-
-exports.Gender = exports.$Enums.Gender = {
-  MALE: 'MALE',
-  COMPLETE: 'COMPLETE'
 };
 
 exports.TaskStatus = exports.$Enums.TaskStatus = {
@@ -420,16 +449,16 @@ exports.HistoryType = exports.$Enums.HistoryType = {
   ACTION: 'ACTION'
 };
 
-exports.JobModel = exports.$Enums.JobModel = {
-  CLIENT: 'CLIENT',
-  SERVER: 'SERVER'
-};
-
 exports.JobStatus = exports.$Enums.JobStatus = {
   CREATED: 'CREATED',
   RUNNING: 'RUNNING',
   COMPLETED: 'COMPLETED',
   SUSPENDED: 'SUSPENDED'
+};
+
+exports.JobModel = exports.$Enums.JobModel = {
+  CLIENT: 'CLIENT',
+  SERVER: 'SERVER'
 };
 
 exports.TransactionStatus = exports.$Enums.TransactionStatus = {
@@ -468,82 +497,34 @@ exports.Prisma.ModelName = {
   Transaction: 'Transaction',
   BankAccount: 'BankAccount'
 };
+
 /**
- * Create the Client
+ * This is a stub Prisma Client that will error at runtime if called.
  */
-const config = {
-  "generator": {
-    "name": "client",
-    "provider": {
-      "fromEnvVar": null,
-      "value": "prisma-client-js"
-    },
-    "output": {
-      "value": "/Users/rudiwelter/Workdir/MyProjects/europayv5/generated/prisma",
-      "fromEnvVar": null
-    },
-    "config": {
-      "engineType": "library"
-    },
-    "binaryTargets": [
-      {
-        "fromEnvVar": null,
-        "value": "darwin",
-        "native": true
-      }
-    ],
-    "previewFeatures": [],
-    "sourceFilePath": "/Users/rudiwelter/Workdir/MyProjects/europayv5/prisma/schema.prisma",
-    "isCustomOutput": true
-  },
-  "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../.env"
-  },
-  "relativePath": "../../prisma",
-  "clientVersion": "6.16.1",
-  "engineVersion": "1c57fdcd7e44b29b9313256c76699e91c3ac3c43",
-  "datasourceNames": [
-    "db"
-  ],
-  "activeProvider": "postgresql",
-  "inlineDatasources": {
-    "db": {
-      "url": {
-        "fromEnvVar": "DATABASE_URL",
-        "value": null
-      }
-    }
-  },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Service {\n  id          Int    @id @default(autoincrement())\n  servicename String @unique\n\n  serviceactions ServiceAction[]\n\n  servicestatements ServiceStatement[]\n}\n\nmodel ServiceAction {\n  id                Int    @id @default(autoincrement())\n  serviceactionname String @unique\n\n  services Service[]\n\n  serviceStatementActions ServiceStatementAction[]\n}\n\nmodel ServiceStatementAction {\n  id           Int    @id @default(autoincrement())\n  ssactionname String\n\n  createDate DateTime? @default(now())\n  updateDate DateTime? @updatedAt\n\n  servicestatement ServiceStatement @relation(fields: [statementid], references: [id], onUpdate: Cascade, onDelete: Cascade)\n  statementid      Int\n\n  serviceaction   ServiceAction @relation(fields: [serviceactionid], references: [id])\n  serviceactionid Int\n}\n\nenum Permission {\n  ALLOW\n  DENY\n}\n\nmodel ServiceStatement {\n  id Int @id @default(autoincrement())\n\n  ssname      String  @unique\n  description String? @default(\"\")\n\n  permission Permission? @default(ALLOW)\n  managed    Boolean?    @default(false)\n  system     Boolean?    @default(false)\n\n  createDate DateTime? @default(now())\n  updateDate DateTime? @updatedAt\n\n  service   Service @relation(fields: [serviceid], references: [id])\n  serviceid Int\n\n  servicestatementactions ServiceStatementAction[]\n\n  policies Policy[]\n}\n\nmodel Template {\n  id          Int           @id @default(autoincrement())\n  role        TemplateRole? @default(ALL)\n  name        String\n  description String?       @default(\"\")\n  content     String\n  asHtml      Boolean?      @default(false)\n  fromFile    Boolean?      @default(false)\n  parameters  String?       @default(\"\")\n  managed     Boolean?      @default(false)\n}\n\nenum TemplateRole {\n  ALL\n  ALERT\n  EMAIL\n  HISTORY\n  LOGIN\n  TASK\n  NOTIFICATION\n}\n\nmodel Policy {\n  id Int @id @default(autoincrement())\n\n  name        String  @unique\n  description String? @default(\"\")\n\n  managed Boolean? @default(false)\n  system  Boolean? @default(false)\n\n  createDate DateTime? @default(now())\n  updateDate DateTime? @updatedAt\n\n  servicestatements ServiceStatement[]\n\n  roles  Role[]\n  users  User[]\n  groups Group[]\n}\n\nmodel Setting {\n  id      Int    @id @default(autoincrement())\n  type    String\n  subtype String\n  key     String\n  value   String\n}\n\nmodel Role {\n  id Int @id @default(autoincrement())\n\n  name        String  @unique\n  description String? @default(\"\")\n\n  managed Boolean? @default(false)\n  system  Boolean? @default(false)\n\n  createDate DateTime? @default(now())\n  updateDate DateTime? @updatedAt\n\n  policies Policy[]\n  users    User[]\n  groups   Group[]\n}\n\nmodel Country {\n  id           Int       @id @default(autoincrement())\n  name         String    @unique\n  dialCode     String?   @default(\"\")\n  code         String?   @default(\"\")\n  currency     String?   @default(\"\")\n  currencycode String?   @default(\"\")\n  symbol       String?   @default(\"\")\n  addresses    Address[]\n}\n\nmodel Address {\n  id         Int       @id @default(autoincrement())\n  street     String?   @default(\"\")\n  number     String?   @default(\"\")\n  box        String?   @default(\"\")\n  city       String?   @default(\"\")\n  postalcode String    @default(\"\")\n  createDate DateTime? @default(now())\n  updateDate DateTime? @updatedAt\n  county     String?   @default(\"\")\n  country    Country?  @relation(fields: [countryId], references: [id], onDelete: NoAction)\n  countryId  Int?\n  user       User?     @relation(fields: [userId], references: [id])\n  userId     Int?      @unique\n}\n\nmodel User {\n  id           Int      @id @unique @default(autoincrement())\n  username     String?  @unique\n  lastname     String\n  firstname    String\n  avatar       String?  @default(\"\")\n  phone        String?  @default(\"\")\n  email        String\n  password     String\n  passwordless Boolean? @default(false)\n  attemps      Int?     @default(0)\n  blocked      Boolean? @default(false)\n  managed      Boolean? @default(false)\n  system       Boolean? @default(false)\n\n  loggedinDate DateTime?\n  type         UserType      @default(EUROPAY)\n  createDate   DateTime?     @default(now())\n  updateDate   DateTime?     @updatedAt\n  address      Address?\n  policies     Policy[]\n  roles        Role[]\n  groups       Group[]\n  account      Account?\n  settings     UserSetting[]\n\n  pats UserPAT[]\n\n  @@unique([firstname, lastname])\n}\n\nenum UserType {\n  EUROPAY\n  GUEST\n}\n\nmodel UserPAT {\n  id             Int         @id @default(autoincrement())\n  tokenName      String\n  token          String\n  createDate     DateTime?   @default(now())\n  expirationDate DateTime?\n  tokenStatus    TokenStatus\n  userId         Int // Foreign key\n  user           User        @relation(fields: [userId], references: [id]) // Relation field\n}\n\nenum TokenStatus {\n  ACTIVE\n  VOID\n}\n\nmodel UserSetting {\n  id    Int    @id @default(autoincrement())\n  key   String\n  value String\n  users User[]\n}\n\nmodel Group {\n  id          Int      @id @default(autoincrement())\n  name        String   @unique\n  description String?  @default(\"\")\n  managed     Boolean? @default(false)\n  system      Boolean? @default(false)\n\n  createDate DateTime? @default(now())\n  updateDate DateTime? @updatedAt\n  policies   Policy[]\n  roles      Role[]\n  users      User[]\n}\n\nmodel Export {\n  id         Int       @id @default(autoincrement())\n  name       String    @unique\n  content    Json\n  createDate DateTime? @default(now())\n  updateDate DateTime? @updatedAt\n}\n\nmodel Account {\n  id                   Int           @id @default(autoincrement())\n  amount               Float\n  status               AccountStatus @default(OPEN)\n  user                 User?         @relation(fields: [userId], references: [id])\n  userId               Int?          @unique\n  createDate           DateTime      @default(now())\n  updateDate           DateTime      @updatedAt\n  sendertransactions   Transaction[] @relation(\"Sender\")\n  receivertransactions Transaction[] @relation(\"Receiver\")\n  bankaccounts         BankAccount[]\n}\n\nenum AccountStatus {\n  OPEN\n  CLOSED\n  BLOCKED\n}\n\nmodel AccountApply {\n  id Int @id @default(autoincrement())\n\n  username   String?\n  firstname  String\n  lastname   String\n  password   String\n  email      String\n  country    String\n  gender     Gender?            @default(MALE)\n  status     AccountApplyStatus @default(CREATED)\n  createDate DateTime?          @default(now())\n  updateDate DateTime?          @updatedAt\n}\n\nenum AccountApplyStatus {\n  CREATED\n  OPEN\n  CLOSED\n}\n\nenum Gender {\n  MALE\n  COMPLETE\n}\n\nmodel Task {\n  id                Int          @id @default(autoincrement())\n  name              String\n  description       String\n  status            TaskStatus   @default(CREATED)\n  params            Json\n  fromStatus        TaskStatus[]\n  predecessorTaskId Int?         @unique\n  predecessorTask   Task?        @relation(\"linkedTask\", fields: [predecessorTaskId], references: [id])\n  successorTask     Task?        @relation(\"linkedTask\")\n  createDate        DateTime?    @default(now())\n  updateDate        DateTime?    @updatedAt\n}\n\nenum TaskStatus {\n  CREATED\n  OPEN\n  COMPLETE\n}\n\nmodel OTP {\n  id             Int       @id @default(autoincrement())\n  OTP            String\n  email          String\n  userId         Int?\n  status         OTPStatus @default(ONGOING)\n  createDate     DateTime? @default(now())\n  updateDate     DateTime? @updatedAt\n  expirationDate DateTime  @default(now())\n}\n\nenum OTPStatus {\n  ONGOING\n  USED\n  EXPIRED\n}\n\nmodel History {\n  id          Int          @id @default(autoincrement())\n  title       String?      @default(\"\")\n  description String?      @default(\"\")\n  originator  String?      @default(\"\")\n  createDate  DateTime?    @default(now())\n  updateDate  DateTime?    @updatedAt\n  type        HistoryType? @default(INFO)\n}\n\nenum HistoryType {\n  ALL\n  INFO\n  ACTION\n}\n\nmodel Job {\n  id          Int       @id @default(autoincrement())\n  jobname     String\n  status      JobStatus @default(CREATED)\n  description String\n  model       JobModel  @default(CLIENT)\n  data        Json\n  createDate  DateTime? @default(now())\n  updateDate  DateTime? @updatedAt\n}\n\nenum JobModel {\n  CLIENT\n  SERVER\n}\n\nenum JobStatus {\n  CREATED\n  RUNNING\n  COMPLETED\n  SUSPENDED\n}\n\nmodel Transaction {\n  id            Int    @id @default(autoincrement())\n  transactionid String\n\n  status            TransactionStatus @default(PENDING)\n  statusMessage     String            @default(\"\")\n  isBankTransaction Boolean           @default(false)\n\n  senderAmount          Float\n  receiverAmount        Float?\n  senderAccountAmount   Float\n  receiverAccountAmount Float?\n  senderAccount         Account?  @relation(\"Sender\", fields: [senderAccountId], references: [id])\n  senderAccountId       Int\n  receiverAccount       Account?  @relation(\"Receiver\", fields: [receiverAccountId], references: [id])\n  receiverAccountId     Int?\n  sender                String?\n  receiver              String?\n  message               String?\n  createDate            DateTime? @default(now())\n  updateDate            DateTime? @updatedAt\n}\n\nenum TransactionStatus {\n  PENDING\n  REJECTED\n  COMPLETED\n}\n\nmodel BankAccount {\n  id         Int        @id @default(autoincrement())\n  IBAN       String     @unique\n  status     IBANStatus\n  createDate DateTime   @default(now())\n  updateDate DateTime   @updatedAt\n  account    Account?   @relation(fields: [accountId], references: [id])\n  accountId  Int\n}\n\nenum IBANStatus {\n  VALID\n  INVALID\n}\n",
-  "inlineSchemaHash": "4ead3ef203b833a5e46970523117933d827c4a0a2e83eeb6fd16a843ac2c70fa",
-  "copyEngine": true
-}
-config.dirname = '/'
+class PrismaClient {
+  constructor() {
+    return new Proxy(this, {
+      get(target, prop) {
+        let message
+        const runtime = getRuntime()
+        if (runtime.isEdge) {
+          message = `PrismaClient is not configured to run in ${runtime.prettyName}. In order to run Prisma Client on edge runtime, either:
+- Use Prisma Accelerate: https://pris.ly/d/accelerate
+- Use Driver Adapters: https://pris.ly/d/driver-adapters
+`;
+        } else {
+          message = 'PrismaClient is unable to run in this browser environment, or has been bundled for the browser (running in `' + runtime.prettyName + '`).'
+        }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Service\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"servicename\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"serviceactions\",\"kind\":\"object\",\"type\":\"ServiceAction\",\"relationName\":\"ServiceToServiceAction\"},{\"name\":\"servicestatements\",\"kind\":\"object\",\"type\":\"ServiceStatement\",\"relationName\":\"ServiceToServiceStatement\"}],\"dbName\":null},\"ServiceAction\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"serviceactionname\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"services\",\"kind\":\"object\",\"type\":\"Service\",\"relationName\":\"ServiceToServiceAction\"},{\"name\":\"serviceStatementActions\",\"kind\":\"object\",\"type\":\"ServiceStatementAction\",\"relationName\":\"ServiceActionToServiceStatementAction\"}],\"dbName\":null},\"ServiceStatementAction\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"ssactionname\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"servicestatement\",\"kind\":\"object\",\"type\":\"ServiceStatement\",\"relationName\":\"ServiceStatementToServiceStatementAction\"},{\"name\":\"statementid\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"serviceaction\",\"kind\":\"object\",\"type\":\"ServiceAction\",\"relationName\":\"ServiceActionToServiceStatementAction\"},{\"name\":\"serviceactionid\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null},\"ServiceStatement\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"ssname\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"permission\",\"kind\":\"enum\",\"type\":\"Permission\"},{\"name\":\"managed\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"system\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"service\",\"kind\":\"object\",\"type\":\"Service\",\"relationName\":\"ServiceToServiceStatement\"},{\"name\":\"serviceid\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"servicestatementactions\",\"kind\":\"object\",\"type\":\"ServiceStatementAction\",\"relationName\":\"ServiceStatementToServiceStatementAction\"},{\"name\":\"policies\",\"kind\":\"object\",\"type\":\"Policy\",\"relationName\":\"PolicyToServiceStatement\"}],\"dbName\":null},\"Template\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"TemplateRole\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"content\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"asHtml\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"fromFile\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"parameters\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"managed\",\"kind\":\"scalar\",\"type\":\"Boolean\"}],\"dbName\":null},\"Policy\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"managed\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"system\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"servicestatements\",\"kind\":\"object\",\"type\":\"ServiceStatement\",\"relationName\":\"PolicyToServiceStatement\"},{\"name\":\"roles\",\"kind\":\"object\",\"type\":\"Role\",\"relationName\":\"PolicyToRole\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"PolicyToUser\"},{\"name\":\"groups\",\"kind\":\"object\",\"type\":\"Group\",\"relationName\":\"GroupToPolicy\"}],\"dbName\":null},\"Setting\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subtype\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"key\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"Role\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"managed\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"system\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"policies\",\"kind\":\"object\",\"type\":\"Policy\",\"relationName\":\"PolicyToRole\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"RoleToUser\"},{\"name\":\"groups\",\"kind\":\"object\",\"type\":\"Group\",\"relationName\":\"GroupToRole\"}],\"dbName\":null},\"Country\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"dialCode\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"code\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"currency\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"currencycode\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"symbol\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"addresses\",\"kind\":\"object\",\"type\":\"Address\",\"relationName\":\"AddressToCountry\"}],\"dbName\":null},\"Address\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"street\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"number\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"box\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"postalcode\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"county\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"country\",\"kind\":\"object\",\"type\":\"Country\",\"relationName\":\"AddressToCountry\"},{\"name\":\"countryId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AddressToUser\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null},\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastname\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"firstname\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"avatar\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordless\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"attemps\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"blocked\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"managed\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"system\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"loggedinDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"type\",\"kind\":\"enum\",\"type\":\"UserType\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"address\",\"kind\":\"object\",\"type\":\"Address\",\"relationName\":\"AddressToUser\"},{\"name\":\"policies\",\"kind\":\"object\",\"type\":\"Policy\",\"relationName\":\"PolicyToUser\"},{\"name\":\"roles\",\"kind\":\"object\",\"type\":\"Role\",\"relationName\":\"RoleToUser\"},{\"name\":\"groups\",\"kind\":\"object\",\"type\":\"Group\",\"relationName\":\"GroupToUser\"},{\"name\":\"account\",\"kind\":\"object\",\"type\":\"Account\",\"relationName\":\"AccountToUser\"},{\"name\":\"settings\",\"kind\":\"object\",\"type\":\"UserSetting\",\"relationName\":\"UserToUserSetting\"},{\"name\":\"pats\",\"kind\":\"object\",\"type\":\"UserPAT\",\"relationName\":\"UserToUserPAT\"}],\"dbName\":null},\"UserPAT\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"tokenName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"expirationDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"tokenStatus\",\"kind\":\"enum\",\"type\":\"TokenStatus\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToUserPAT\"}],\"dbName\":null},\"UserSetting\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"key\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToUserSetting\"}],\"dbName\":null},\"Group\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"managed\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"system\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"policies\",\"kind\":\"object\",\"type\":\"Policy\",\"relationName\":\"GroupToPolicy\"},{\"name\":\"roles\",\"kind\":\"object\",\"type\":\"Role\",\"relationName\":\"GroupToRole\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"GroupToUser\"}],\"dbName\":null},\"Export\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"content\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Account\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"amount\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"AccountStatus\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AccountToUser\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"sendertransactions\",\"kind\":\"object\",\"type\":\"Transaction\",\"relationName\":\"Sender\"},{\"name\":\"receivertransactions\",\"kind\":\"object\",\"type\":\"Transaction\",\"relationName\":\"Receiver\"},{\"name\":\"bankaccounts\",\"kind\":\"object\",\"type\":\"BankAccount\",\"relationName\":\"AccountToBankAccount\"}],\"dbName\":null},\"AccountApply\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"firstname\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastname\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"country\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"gender\",\"kind\":\"enum\",\"type\":\"Gender\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"AccountApplyStatus\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Task\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"TaskStatus\"},{\"name\":\"params\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"fromStatus\",\"kind\":\"enum\",\"type\":\"TaskStatus\"},{\"name\":\"predecessorTaskId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"predecessorTask\",\"kind\":\"object\",\"type\":\"Task\",\"relationName\":\"linkedTask\"},{\"name\":\"successorTask\",\"kind\":\"object\",\"type\":\"Task\",\"relationName\":\"linkedTask\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"OTP\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"OTP\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"OTPStatus\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"expirationDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"History\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"originator\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"type\",\"kind\":\"enum\",\"type\":\"HistoryType\"}],\"dbName\":null},\"Job\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"jobname\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"JobStatus\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"model\",\"kind\":\"enum\",\"type\":\"JobModel\"},{\"name\":\"data\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Transaction\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"transactionid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"TransactionStatus\"},{\"name\":\"statusMessage\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isBankTransaction\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"senderAmount\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"receiverAmount\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"senderAccountAmount\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"receiverAccountAmount\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"senderAccount\",\"kind\":\"object\",\"type\":\"Account\",\"relationName\":\"Sender\"},{\"name\":\"senderAccountId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"receiverAccount\",\"kind\":\"object\",\"type\":\"Account\",\"relationName\":\"Receiver\"},{\"name\":\"receiverAccountId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"sender\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"receiver\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"BankAccount\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"IBAN\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"IBANStatus\"},{\"name\":\"createDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"account\",\"kind\":\"object\",\"type\":\"Account\",\"relationName\":\"AccountToBankAccount\"},{\"name\":\"accountId\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
-defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
-config.engineWasm = {
-  getRuntime: async () => require('./query_engine_bg.js'),
-  getQueryEngineWasmModule: async () => {
-    const loader = (await import('#wasm-engine-loader')).default
-    const engine = (await loader).default
-    return engine
+        message += `
+If this is unexpected, please open an issue: https://pris.ly/prisma-prisma-bug-report`
+
+        throw new Error(message)
+      }
+    })
   }
 }
-config.compilerWasm = undefined
 
-config.injectableEdgeEnv = () => ({
-  parsed: {
-    DATABASE_URL: typeof globalThis !== 'undefined' && globalThis['DATABASE_URL'] || typeof process !== 'undefined' && process.env && process.env.DATABASE_URL || undefined
-  }
-})
-
-if (typeof globalThis !== 'undefined' && globalThis['DEBUG'] || typeof process !== 'undefined' && process.env && process.env.DEBUG || undefined) {
-  Debug.enable(typeof globalThis !== 'undefined' && globalThis['DEBUG'] || typeof process !== 'undefined' && process.env && process.env.DEBUG || undefined)
-}
-
-const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
-Object.assign(exports, Prisma)
 
+Object.assign(exports, Prisma)
