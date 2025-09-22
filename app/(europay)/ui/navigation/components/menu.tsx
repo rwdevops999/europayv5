@@ -229,7 +229,7 @@ export let menu: MenuItem[] = [
     subItems: [],
   },
   {
-    url: absoluteUrl("/api"),
+    url: absoluteUrl("/apipages"),
     title: "API",
     disabled: false,
     visible: true,
