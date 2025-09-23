@@ -1,6 +1,10 @@
 "use client";
 
-import { createPat, deletePatById } from "@/app/server/pat";
+import {
+  createPat,
+  deletePatById,
+  existPATByTokenname,
+} from "@/app/server/pat";
 import { loadUserById } from "@/app/server/users";
 import { TokenStatus } from "@/generated/prisma";
 import { useUser } from "@/hooks/use-user";
@@ -9,6 +13,7 @@ import { generatePAT, json, renderDateInfo } from "@/lib/util";
 import Button from "@/ui/button";
 import { ScrollArea, ScrollBar } from "@/ui/radix/scroll-area";
 import { Separator } from "@/ui/radix/separator";
+import TemplateAlert, { tAlert } from "@/ui/template-alert";
 import { render } from "@testing-library/react";
 import clsx from "clsx";
 import React, { JSX, useEffect, useRef, useState } from "react";
@@ -199,21 +204,13 @@ const PersonalAccessTokens = () => {
     //   // event.stopPropagation();
     // };
 
-    const setExpirationSelect = (_value: string): void => {
-      const element: HTMLSelectElement = document.getElementById(
-        "expirationselect"
-      ) as HTMLSelectElement;
-
-      if (element) {
-        element.value = _value;
-      }
-    };
-
     const handleChangeTokenName = (
       event: React.ChangeEvent<HTMLInputElement>
     ): void => {
       // setExpirationSelect("7");
       setToken("");
+      setGenerateDisable(event.target.value.length === 0);
+      setDelay("7");
     };
 
     const getResourceName = (): string => {
@@ -298,56 +295,73 @@ const PersonalAccessTokens = () => {
       return result;
     };
 
+    const [alert, setAlert] = useState<tAlert | undefined>(undefined);
+    const [generateDisabled, setGenerateDisable] = useState<boolean>(true);
+
     const handleGenerateNewToken = async (): Promise<void> => {
       console.log("GENERATING NEW PAT");
       const tokenname: string = getTokenName();
 
+      setGenerateDisable(true);
+
+      let valid: boolean = true;
+
       if (tokenname === "") {
-        console.log("[PROBLEMO] tokenname is empty");
+        const alert: tAlert = {
+          template: "EMPTY_TOKEN_NAME",
+          params: {},
+        };
+        setAlert(alert);
+        valid = false;
       } else {
-        console.log("TOKEN NAME IS", tokenname);
-        // [TODO] existing pat which is active is not allowed
+        const exists: boolean = await existPATByTokenname(tokenname);
+        if (exists) {
+          const alert: tAlert = {
+            template: "TOKEN_NAME_USED",
+            params: { tokenname: tokenname },
+          };
+          setAlert(alert);
+          valid = false;
+        }
       }
 
-      const expiration: string = delay;
-      console.log("EXPIRATION IS", expiration);
+      if (valid) {
+        console.log("[VALID PAT] PAT is valid");
+        const expiration: string = delay;
+        console.log("EXPIRATION IS", expiration);
 
-      let d: Date = new Date();
-      const now: number = d.getTime();
-      d.setTime(now + parseInt(expiration) * dayToMilliseconds);
+        let d: Date = new Date();
+        const now: number = d.getTime();
+        d.setTime(now + parseInt(expiration) * dayToMilliseconds);
 
-      const _pat: string = generatePAT();
-      setToken(_pat);
+        const _pat: string = generatePAT();
+        setToken(_pat);
 
-      console.log("[CREATE TOKEN]", tokenname, _pat, delay);
-      if (user) {
-        await createPat(
-          user.id,
-          tokenname,
-          _pat,
-          delay === "0" ? null : d,
-          parseInt(delay)
-        ).then(async () => {
-          setUser(await loadUserById(user.id));
-        });
+        console.log("[CREATE TOKEN]", tokenname, _pat, delay);
+        if (user) {
+          await createPat(
+            user.id,
+            tokenname,
+            _pat,
+            delay === "0" ? null : d,
+            parseInt(delay)
+          ).then(async () => {
+            setUser(await loadUserById(user.id));
+          });
+        }
       }
     };
 
-    return (
-      // <div id="tokename" className="m-1 border-1 border-cancel">
+    const handleCopyToClipboard = () => {
+      console.log("COPY TP CLIPBOARD: GENERATED TOKEN", token);
+      navigator.clipboard.writeText(token);
+      setCopied(true);
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    };
 
-      //   <div className="m-1 flex items-center justify-between">
-      //     <div className="flex items-center space-x-1">
-      //       <label className="text-xs font-bold">Token:</label>
-      //       <input
-      //         id="tokendisplay"
-      //         type="text"
-      //         className="h-8 input"
-      //         disabled={true}
-      //       />
-      //     </div>
-      //   </div>
-      // </div>
+    return (
       <div id="pat" className="m-1 border-1 border-cancel">
         <div className="m-1">
           <fieldset className="fieldset">
@@ -375,8 +389,9 @@ const PersonalAccessTokens = () => {
             <div className="flex items-center">
               <select
                 id="expirationselect"
-                value={pat?.delay?.toString()}
+                value={delay}
                 className="select select-sm w-12/12"
+                disabled={generateDisabled}
                 onChange={(e) => handleExpiration(e.target.value)}
               >
                 {getExpirations(pat?.createDate, pat?.delay).map(
@@ -418,7 +433,7 @@ const PersonalAccessTokens = () => {
               <BsClipboard2
                 size={16}
                 className="mr-2 hover:cursor-pointer hover:bg-foreground/30"
-                //           onClick={handleCopyToClipboard}
+                onClick={handleCopyToClipboard}
               />
             )}
           </div>
@@ -430,8 +445,27 @@ const PersonalAccessTokens = () => {
             size="small"
             className="bg-custom"
             name="Generate new token"
+            disabled={generateDisabled}
             onClick={handleGenerateNewToken}
           />
+        </div>
+        <div className="flex justify-center">
+          <TemplateAlert
+            open={alert ? true : false}
+            template={alert ? alert.template : ""}
+            parameters={alert ? alert.params : {}}
+          >
+            <div className="flex space-x-1">
+              <Button
+                name="OK"
+                intent="neutral"
+                style="soft"
+                size="small"
+                className="bg-custom"
+                onClick={() => setAlert(undefined)}
+              />
+            </div>
+          </TemplateAlert>
         </div>
       </div>
     );

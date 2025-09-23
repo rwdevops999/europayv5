@@ -211,5 +211,21 @@
     "content": "${message}",
     "managed": true,
     "parameters": "{message: #variable}"
+  },
+  {
+    "role": "ALERT",
+    "name": "EMPTY_TOKEN_NAME",
+    "description": "Token name is empty",
+    "content": "Token name is mandatory",
+    "managed": true,
+    "parameters": "{}"
+  },
+  {
+    "role": "ALERT",
+    "name": "TOKEN_NAME_USED",
+    "description": "Token name is already used",
+    "content": "Token name is used ${tokenname}",
+    "managed": true,
+    "parameters": "{tokenname: #variable}"
   }
 ]
