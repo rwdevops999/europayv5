@@ -3,6 +3,7 @@ export type tWebResponse = {
 };
 
 export type tWebPayment = {
+  token: string;
   amount: number;
   sender: string;
   recipient: string;

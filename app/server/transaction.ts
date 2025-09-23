@@ -8,11 +8,12 @@ import {
   tBankaccount,
   tTransaction,
   tUser,
+  tUserPat,
 } from "@/lib/prisma-types";
 import { loadUserByUsernameOrEmail } from "./users";
 import { generateUUID, json, renderDateInfo, validEmail } from "@/lib/util";
 import { tEmail } from "./data/email-data";
-import { TransactionStatus } from "@/generated/prisma";
+import { TokenStatus, TransactionStatus } from "@/generated/prisma";
 import { updateAccountAmount } from "./account";
 
 const createTheTransaction = async (
@@ -64,14 +65,28 @@ const isLinkedBankOfUser = (sender: tUser, _to: string): boolean => {
   return isLinkedBank;
 };
 
+const hasValidPat = (_token: string, _pats: tUserPat[]): boolean => {
+  let result: boolean = false;
+
+  if (_pats.length > 0) {
+    result =
+      _pats.find(
+        (pat: tUserPat) =>
+          (pat.tokenName === _token || pat.token === _token) &&
+          pat.tokenStatus === TokenStatus.ACTIVE
+      ) !== undefined;
+  }
+
+  return result;
+};
+
 export const executePayment = async (
+  _token: string,
   _from: string,
   _to: string,
   _amount: number,
   _message?: string
 ): Promise<string> => {
-  console.log("EXECUTE PAYMENT", _from, _to);
-
   let paymentOutcome: string = "";
 
   const transactionID: string = generateUUID();
@@ -99,137 +114,142 @@ export const executePayment = async (
 
   const senderEntity: tUser | null = await loadUserByUsernameOrEmail(_from);
   if (senderEntity) {
-    sender = senderEntity.email;
-    isBankTransaction = isLinkedBankOfUser(senderEntity, _to);
-    if (senderEntity.account) {
-      senderAccountId = senderEntity.account.id;
-      senderAccountAmount = senderEntity.account.amount;
-      if (_amount > senderEntity.account.amount) {
-        // CASE A
-        status = TransactionStatus.REJECTED;
-        statusmessage = "Account amount not sufficient";
-        paymentOutcome =
-          "Payment REJECTED: Sender has insufficient amount on its account";
-        createTransaction = true;
-
-        email.destination = senderEntity.email;
-        email.template = "TRANSACTION_AMOUNT_INSUFFICIENT";
-        email.params = { sender: _from, receiver: _to };
-      } else {
-        // [TODO] SUPPOSE WE ENTER A BANK ACCOUNT BUT IT IS WRONG OR INVALID ????
-        // isBankTransaction = isLinkedBankOfUser(senderEntity, _to);
-        if (isBankTransaction) {
-          // CASE B
-          status = TransactionStatus.COMPLETED;
-          statusmessage = "Bank transaction is OK";
-          paymentOutcome = "Bank transaction done";
+    const patValid = hasValidPat(_token, senderEntity.pats);
+    if (!patValid) {
+      status = TransactionStatus.REJECTED;
+      statusmessage = "Authentication failed (PAT failure)";
+      paymentOutcome = "401";
+    } else {
+      sender = senderEntity.email;
+      isBankTransaction = isLinkedBankOfUser(senderEntity, _to);
+      if (senderEntity.account) {
+        senderAccountId = senderEntity.account.id;
+        senderAccountAmount = senderEntity.account.amount;
+        if (_amount > senderEntity.account.amount) {
+          // CASE A
+          status = TransactionStatus.REJECTED;
+          statusmessage = "Account amount not sufficient";
+          paymentOutcome = "422";
           createTransaction = true;
 
-          const currencySender: string =
-            senderEntity.address?.country?.currencycode!;
-
-          receiver = _to;
-          receiverAmount = senderAmount;
-          email.destination = sender;
-          email.template = "EMAIL_PAYMENT_TO_BANK";
-          email.params = {
-            sender: sender,
-            sendercurrency: currencySender,
-            amount: `${senderAmount}`,
-            bank: receiver,
-          };
+          email.destination = senderEntity.email;
+          email.template = "TRANSACTION_AMOUNT_INSUFFICIENT";
+          email.params = { sender: _from, receiver: _to };
         } else {
-          const receiverEntity: tUser | null = await loadUserByUsernameOrEmail(
-            _to
-          );
-          if (receiverEntity) {
-            receiver = receiverEntity.email;
-            if (receiverEntity.account) {
-              // CASE E
-              createTransaction = true;
+          // [TODO] SUPPOSE WE ENTER A BANK ACCOUNT BUT IT IS WRONG OR INVALID ????
+          // isBankTransaction = isLinkedBankOfUser(senderEntity, _to);
+          if (isBankTransaction) {
+            // CASE B
+            status = TransactionStatus.COMPLETED;
+            statusmessage = "Bank transaction is OK";
+            paymentOutcome = "200";
+            createTransaction = true;
 
-              status = TransactionStatus.COMPLETED;
-              statusmessage = "Client transaction is OK";
-              paymentOutcome = "Client transaction done";
-              receiverAccountId = receiverEntity.account.id;
-              receiverAccountAmount = receiverEntity.account.amount;
+            const currencySender: string =
+              senderEntity.address?.country?.currencycode!;
 
-              const currencySender: string =
-                senderEntity.address?.country?.currencycode!;
-              const currencyReceiver: string =
-                receiverEntity.address?.country?.currencycode!;
+            receiver = _to;
+            receiverAmount = senderAmount;
+            email.destination = sender;
+            email.template = "EMAIL_PAYMENT_TO_BANK";
+            email.params = {
+              sender: sender,
+              sendercurrency: currencySender,
+              amount: `${senderAmount}`,
+              bank: receiver,
+            };
+          } else {
+            const receiverEntity: tUser | null =
+              await loadUserByUsernameOrEmail(_to);
+            if (receiverEntity) {
+              receiver = receiverEntity.email;
+              if (receiverEntity.account) {
+                // CASE E
+                createTransaction = true;
 
-              if (currencySender === currencyReceiver) {
-                receiverAmount = senderAmount;
+                status = TransactionStatus.COMPLETED;
+                statusmessage = "Client transaction is OK";
+                paymentOutcome = "200";
+                receiverAccountId = receiverEntity.account.id;
+                receiverAccountAmount = receiverEntity.account.amount;
+
+                const currencySender: string =
+                  senderEntity.address?.country?.currencycode!;
+                const currencyReceiver: string =
+                  receiverEntity.address?.country?.currencycode!;
+
+                if (currencySender === currencyReceiver) {
+                  receiverAmount = senderAmount;
+                } else {
+                  await fetch(
+                    `https://v6.exchangerate-api.com/v6/${process.env.CURRENCY_API_KEY}/pair/${currencySender}/${currencyReceiver}/${_amount}`
+                  )
+                    .then((response: Response) => response.json())
+                    .then(
+                      (value: any) => (receiverAmount = value.conversion_result)
+                    );
+                }
+
+                email.destination = receiver;
+                email.cc = sender;
+
+                if (_message) {
+                  email.template = "EMAIL_WITH_TRANSACTION_MESSAGE";
+                  email.params.sendermessage = _message;
+                } else {
+                  email.template = "EMAIL_WITH_TRANSACTION_NO_MESSAGE";
+                }
+
+                const currencySenderSymbol: string = decode(
+                  senderEntity.address?.country?.symbol!
+                );
+
+                email.params = {
+                  receiverfirstname: receiverEntity.firstname,
+                  receiverlastname: receiverEntity.lastname,
+                  senderfirstname: senderEntity.firstname,
+                  senderlastname: senderEntity.lastname,
+                  senderamount: _amount.toFixed(2),
+                  sendercurrencysymbol: currencySenderSymbol,
+                  sendercurrencycode: currencySender,
+                  transactionid: transactionID,
+                  transactiondate: renderDateInfo(new Date().toString()),
+                  transactiondirection: "received",
+                };
               } else {
-                await fetch(
-                  `https://v6.exchangerate-api.com/v6/${process.env.CURRENCY_API_KEY}/pair/${currencySender}/${currencyReceiver}/${_amount}`
-                )
-                  .then((response: Response) => response.json())
-                  .then(
-                    (value: any) => (receiverAmount = value.conversion_result)
-                  );
+                createTransaction = true;
+                // CASE D
+                status = TransactionStatus.REJECTED;
+                statusmessage = "Receiver is a client but has no account";
+                paymentOutcome = "404";
+                email.destination = sender;
+                email.cc = receiver;
+                email.template = "TRANSACTION_PARTY_WITHOUT_ACCOUNT";
+                email.params = { sender: _from, party: _to };
               }
-
-              email.destination = receiver;
-              email.cc = sender;
-
-              if (_message) {
-                email.template = "EMAIL_WITH_TRANSACTION_MESSAGE";
-                email.params.sendermessage = _message;
-              } else {
-                email.template = "EMAIL_WITH_TRANSACTION_NO_MESSAGE";
-              }
-
-              const currencySenderSymbol: string = decode(
-                senderEntity.address?.country?.symbol!
-              );
-
-              email.params = {
-                receiverfirstname: receiverEntity.firstname,
-                receiverlastname: receiverEntity.lastname,
-                senderfirstname: senderEntity.firstname,
-                senderlastname: senderEntity.lastname,
-                senderamount: _amount.toFixed(2),
-                sendercurrencysymbol: currencySenderSymbol,
-                sendercurrencycode: currencySender,
-                transactionid: transactionID,
-                transactiondate: renderDateInfo(new Date().toString()),
-                transactiondirection: "received",
-              };
             } else {
+              // CASE C
               createTransaction = true;
-              // CASE D
               status = TransactionStatus.REJECTED;
-              statusmessage = "Receiver is a client but has no account";
-              paymentOutcome = "Payment REJECTED: Receiver has no account";
+              statusmessage = "Receiver is not a client of Europay";
+              paymentOutcome = "404";
               email.destination = sender;
-              email.cc = receiver;
-              email.template = "TRANSACTION_PARTY_WITHOUT_ACCOUNT";
+              email.template = "TRANSACTION_UNKNOWN_PARTY";
               email.params = { sender: _from, party: _to };
             }
-          } else {
-            // CASE C
-            createTransaction = true;
-            status = TransactionStatus.REJECTED;
-            statusmessage = "Receiver is not a client of Europay";
-            paymentOutcome = "Payment REJECTED: Receiver is no client";
-            email.destination = sender;
-            email.template = "TRANSACTION_UNKNOWN_PARTY";
-            email.params = { sender: _from, party: _to };
           }
         }
-      }
-    } else {
-      createTransaction = false;
-      paymentOutcome = "Payment IGNORED: Sender has no account in Europay";
+      } else {
+        createTransaction = false;
+        paymentOutcome = "404";
 
-      email.destination = sender;
-      email.template = "TRANSACTION_PARTY_WITHOUT_ACCOUNT";
-      email.params = { sender: _from, party: _from };
+        email.destination = sender;
+        email.template = "TRANSACTION_PARTY_WITHOUT_ACCOUNT";
+        email.params = { sender: _from, party: _from };
+      }
     }
   } else {
-    paymentOutcome = "Payment IGNORED: Sender not a client of Europay";
+    paymentOutcome = "404";
     createTransaction = false;
 
     if (validEmail(_to)) {
